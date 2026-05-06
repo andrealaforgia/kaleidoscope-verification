@@ -1,0 +1,56 @@
+# Builder + runtime for the aperture binary.
+#
+# Invoked via docker compose `build.additional_contexts`, so the
+# kaleidoscope source tree is available at the `kaleidoscope` build
+# context (NOT at the default `.` context). The default context is
+# this harness/ directory and is intentionally unused by the build.
+#
+# `--locked` enforces the kaleidoscope Cargo.lock; `--release`
+# matches what an operator would deploy.
+
+# syntax=docker/dockerfile:1.7
+
+FROM rust:1.88-slim-bookworm AS builder
+
+# Build deps for proc-macros, tonic codegen, and reqwest's TLS path.
+# pkg-config + libssl-dev are conservative defaults; if the kaleidoscope
+# tree starts requiring more (protoc, cmake), add here and record the
+# need in a wave-decision.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        ca-certificates pkg-config libssl-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+# Pull the entire kaleidoscope source from the named build context.
+# We avoid the "copy Cargo.toml first, then sources" cache trick
+# because the workspace has multiple member crates and the dependency
+# tree is large — the cargo cache mounts below give us most of the
+# benefit with less Dockerfile churn when the workspace layout shifts.
+COPY --from=kaleidoscope . .
+
+# Build aperture in release mode with --locked. Cache mounts give us
+# warm builds across runs without baking the cache into the image
+# layer. The final binary is copied OUT of the cache mount so it
+# survives into the runtime stage.
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/src/target \
+    cargo build --release -p aperture --locked \
+ && cp /src/target/release/aperture /aperture.bin
+
+# -----------------------------------------------------------------------
+
+FROM debian:bookworm-slim AS runtime
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /aperture.bin /usr/local/bin/aperture
+
+# OTLP gRPC, OTLP HTTP (also serves /healthz and /readyz).
+EXPOSE 4317 4318
+
+ENTRYPOINT ["/usr/local/bin/aperture"]

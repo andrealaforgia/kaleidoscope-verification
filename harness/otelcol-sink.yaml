@@ -1,0 +1,39 @@
+# OpenTelemetry Collector configuration for the downstream sink.
+#
+# Receives OTLP from aperture's ForwardingSink, writes every received
+# request as one JSON line to /captured/otlp-received.jsonl. That file
+# is the ground-truth evidence consumed by per-expectation runners and
+# preserved into expectations/<ID>/evidence/.
+#
+# We deliberately keep a single output file across signals so that a
+# scenario can grep for resourceSpans / resourceLogs / resourceMetrics
+# in one place. Rotation is left at default; runs are short.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  file:
+    path: /captured/otlp-received.jsonl
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [file]
+    logs:
+      receivers: [otlp]
+      exporters: [file]
+    metrics:
+      receivers: [otlp]
+      exporters: [file]
+  telemetry:
+    logs:
+      # Quiet the collector's own logs unless something is wrong;
+      # we only care about its file-exporter output.
+      level: warn

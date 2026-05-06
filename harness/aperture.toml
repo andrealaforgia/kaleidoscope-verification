@@ -1,0 +1,49 @@
+# Aperture configuration for the dockerised harness.
+#
+# Schema follows ADR-0008 (TOML + figment, deny_unknown_fields per
+# nested struct). All transport bind addresses are 0.0.0.0 so the
+# container exposes them on the docker network. The forwarding sink
+# points at the otelcol-sink service on the compose bridge network.
+#
+# Anything not set here takes the schema default from
+# ADR-0008 / aperture::config::defaults. Whenever a slice ships a new
+# knob, this file documents the harness's chosen value explicitly so
+# expectations are reproducible.
+
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+# Kept low on purpose so backpressure expectations (A09) can be
+# triggered with a small client load. Override per-scenario via the
+# APERTURE__TRANSPORT__GRPC__MAX_CONCURRENT_REQUESTS env var.
+max_concurrent_requests = 16
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.sink]
+kind = "forwarding"
+
+[aperture.sink.forwarding]
+# Container DNS: docker compose resolves the service name on the
+# default bridge. The sidecar listens on its own 4317 (gRPC). The
+# scheme is plaintext (TLS knobs default off, see N1).
+endpoint = "http://otelcol-sink:4317"
+timeout_ms = 5000
+
+[aperture.shutdown]
+drain_deadline_ms = 30000
+
+[aperture.security.tls]
+# v0: plaintext only. Setting `enabled = true` produces a single
+# `event=tls_not_supported_in_v0` warn line (US-AP-01 Domain Example #3).
+enabled = false
+cert_path = ""
+key_path = ""
+
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""

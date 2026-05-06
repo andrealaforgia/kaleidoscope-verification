@@ -1,0 +1,41 @@
+# Harness for verifying kaleidoscope expectations.
+#
+# Two services on a single bridge network:
+# - aperture: built from the live kaleidoscope source tree at
+#   ${KALEIDOSCOPE_DIR}.
+# - otelcol-sink: stable third-party OTLP receiver -> file exporter,
+#   provides ground-truth evidence of forwarded payloads.
+#
+# Bring up:    docker compose up -d --build
+# Tear down:   docker compose down --volumes --remove-orphans
+
+name: kaleidoscope-expectations
+
+services:
+  aperture:
+    build:
+      context: .
+      dockerfile: Dockerfile.aperture
+      additional_contexts:
+        kaleidoscope: ${KALEIDOSCOPE_DIR:-../../kaleidoscope}
+    image: kaleidoscope-expectations/aperture:under-test
+    command: ["--config", "/etc/aperture/aperture.toml"]
+    volumes:
+      - ./aperture.toml:/etc/aperture/aperture.toml:ro
+    environment:
+      RUST_LOG: ${APERTURE_LOG:-info}
+    ports:
+      # Host-side ports for direct OTLP traffic in scenario runners.
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - otelcol-sink
+
+  otelcol-sink:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./otelcol-sink.yaml:/etc/otelcol/config.yaml:ro
+      # Host bind so the file-exporter output is visible to
+      # run-expectation.sh without docker cp.
+      - ./.captured:/captured
