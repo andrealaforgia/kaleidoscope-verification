@@ -4,6 +4,7 @@
 # here is transient.
 harness/.captured/
 harness/.snapshot/
+harness/.workspace-build-cache/
 
 # macOS
 .DS_Store

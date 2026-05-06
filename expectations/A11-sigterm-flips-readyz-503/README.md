@@ -2,47 +2,49 @@
 
 ## Surface
 
-Aperture (OTLP ingest gateway). operator/integrator-facing.
+Aperture (OTLP ingest gateway). Operator/integrator-facing.
 
 ## Behaviour
 
-On SIGTERM, /readyz flips to 503 within the documented bound. The bound is to be tightened against an ADR/wave-decision; "circa 100 ms" from the source feed is not yet a falsifiable contract.
+Given aperture is running and `/readyz` returns 200
+When the operator sends `SIGTERM` to the aperture process
+Then the readiness state machine flips to `Draining` before the
+drain orchestrator closes listeners
+And `/readyz` returns 503 with body `draining\n` until the
+listener closes.
 
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+The source-feed wording was "circa 100 ms"; the catalogue tightened
+the contract to "before the drain completes" since no ADR pins a
+hard millisecond bound. The observed transition latency is
+captured in evidence and reported, not asserted as pass/fail.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **A11**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor:
+  [`docs/feature/aperture/slices/slice-08-graceful-shutdown.md`](https://github.com/andrealaforgia/kaleidoscope/blob/6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15/docs/feature/aperture/slices/slice-08-graceful-shutdown.md)
+  and `crates/aperture/src/shutdown.rs:151` ("Flip readiness immediately
+  so /readyz returns 503 \"draining\"").
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-06T23:32 UTC
+- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Kaleidoscope dirty: `no`
+- Method: dockerised harness; the runner confirms `/readyz=200`,
+  sends `SIGTERM` via `docker compose kill -s SIGTERM aperture`,
+  then polls `/readyz` for up to 5 s, capturing the response code
+  and elapsed milliseconds since SIGTERM until 503 is observed.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh A11
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/runner.stdout.txt`](evidence/runner.stdout.txt) — runner log.
+  The transition was observed on the first poll after SIGTERM:
+  `attempt 1 +0ms: code=503`, body `draining`.
+- [`evidence/readyz.1.body.txt`](evidence/readyz.1.body.txt) — the response body byte-for-byte during the drain.
+- [`evidence/aperture.live.stderr.txt`](evidence/aperture.live.stderr.txt) — aperture's stderr; the `event=readiness_changed reason=shutdown_drain ready=false` line preceded the listener close.
 
 ## Issues
 
@@ -50,4 +52,8 @@ None.
 
 ## Notes
 
-None.
+The "0 ms" elapsed reading is the sub-second resolution of bash's
+`SECONDS` arithmetic, not a perf claim. What it tells us is that
+the flip happened before the runner could issue its first
+post-SIGTERM curl, which validates the "before drain completes"
+contract.

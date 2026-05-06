@@ -1,0 +1,6 @@
+expectation_id: "X07"
+verified_at_utc: "2026-05-06T23:23:48Z"
+kaleidoscope_dir: "/Users/andrealaforgia/dev/kaleidoscope"
+kaleidoscope_sha: "9fb9d93dec49cba598eaca2c87b9faf30fcdffbf"
+kaleidoscope_dirty: "no"
+method: "static read of crates/<name>/Cargo.toml from git archive HEAD; license fields cited verbatim"

@@ -2,47 +2,34 @@
 
 ## Surface
 
-Aperture (OTLP ingest gateway). operator/integrator-facing.
+Aperture (OTLP ingest gateway). Operator/integrator-facing.
 
 ## Behaviour
 
-On SIGINT, the same drain orchestration runs as for SIGTERM.
-
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+`SIGINT` triggers the same drain orchestration as `SIGTERM` (A12):
+shutdown_initiated → readiness_changed (drain) → in_flight_drained →
+shutdown_complete, exit code 0.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **A13**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor: `docs/feature/aperture/slices/slice-08-graceful-shutdown.md` and `crates/aperture/src/shutdown.rs`.
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-06T23:33 UTC
+- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Kaleidoscope dirty: `no`
+- Method: identical to A12 except the signal is `SIGINT`. Same
+  poll-for-exited then read ExitCode pattern.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh A13
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/aperture.exit-code.txt`](evidence/aperture.exit-code.txt) — `0`.
+- [`evidence/aperture.live.stderr.txt`](evidence/aperture.live.stderr.txt) — same shape as A12 but
+  `event=shutdown_initiated signal=SIGINT drain_deadline_ms=30000`.
 
 ## Issues
 
@@ -50,4 +37,5 @@ None.
 
 ## Notes
 
-None.
+Same caveat as A12 about `drained_count=0`. The orchestration is
+signal-agnostic; only the recorded `signal` field differs.

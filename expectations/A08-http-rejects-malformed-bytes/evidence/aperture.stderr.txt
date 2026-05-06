@@ -1,0 +1,6 @@
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.063394Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.064383Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.064453Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.064461Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.064489Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-06T23:31:40.534919Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1}

@@ -1,0 +1,9 @@
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.580412Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.581358Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.581486Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.581498Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.581511Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.943624Z","level":"INFO","event":"shutdown_initiated","signal":"SIGINT","drain_deadline_ms":30000}
+aperture-1  | {"timestamp":"2026-05-06T23:33:17.943637Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+aperture-1  | {"timestamp":"2026-05-06T23:33:18.205967Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+aperture-1  | {"timestamp":"2026-05-06T23:33:18.206012Z","level":"INFO","event":"shutdown_complete","exit_code":0}

@@ -1,16 +1,18 @@
 # Issues
 
-One file per failed or partial expectation, named `NNN-slug.md`. Each issue
-links back to the originating expectation and carries a status field
-(`open`, `fixed`, `wontfix`).
+One file per failed or partial expectation, named `NNN-slug.md`. Each
+issue links back to the originating expectation and carries a status
+field (`open`, `fixed`, `wontfix`).
 
-This file is the single feed point for the kaleidoscope-developing session.
+This file is the single feed point for the kaleidoscope-developing
+session.
 
 ## Open
 
 | Issue | Expectations | Title | Opened |
 |---|---|---|---|
-| _none_ | | | |
+| [002](002-env-var-overrides-not-wired-in-figment-loader.md) | A09 (workaround used) and any future expectation needing a per-knob override | env-var overrides not wired in `Config::from_toml_path` | 2026-05-06 |
+| [003](003-grpc-backpressure-load-reproducibility.md) | A09 (gRPC arm reproducibility caveat) | gRPC backpressure refusal not reproducible from `docker run telemetrygen` | 2026-05-06 |
 
 ## Closed
 

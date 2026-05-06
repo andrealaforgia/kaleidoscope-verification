@@ -1,0 +1,12 @@
+step 1: cargo build --workspace --release --locked (host arch arm64)
+  cargo build done
+step 2: surface evidence
+  rustc/cargo:
+    --- rustc / cargo versions ---
+    rustc 1.88.0 (6b00bc388 2025-06-23)
+    cargo 1.88.0 (873a06493 2025-05-10)
+    --- cargo build --workspace --release --locked ---
+  aperture binary:
+    --- aperture binary check ---
+    size=8192008 mode=-rwxr-xr-x path=target/release/aperture
+OK — cargo build --workspace --release produced an executable aperture binary

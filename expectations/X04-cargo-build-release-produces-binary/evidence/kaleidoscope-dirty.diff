@@ -1,0 +1,190 @@
+diff --git a/crates/sieve/src/observability.rs b/crates/sieve/src/observability.rs
+index 7e73d22..b12564a 100644
+--- a/crates/sieve/src/observability.rs
++++ b/crates/sieve/src/observability.rs
+@@ -6,11 +6,13 @@
+ //! operators write dashboards against this vocabulary, changing
+ //! field names is a breaking change.
+ //!
+-//! ## DISTILL state
++//! ## DELIVER state — slice 06
+ //!
+-//! Function bodies panic with `unimplemented!()` until DELIVER. The
+-//! signatures are locked here so the decorator's `accept_traces`
+-//! body can compile against them at every slice.
++//! Every helper is a real `tracing::debug!` / `tracing::info!`
++//! emission. The helpers are kept `pub(crate)` so the decorator
++//! (DEBUG events) and the aggregator's snapshot path (INFO summary)
++//! call them through one named function each — the names ARE the
++//! contract that mutation testing exercises.
+ 
+ #![allow(dead_code)]
+ 
+@@ -20,37 +22,151 @@ pub(crate) const SIEVE_TRACING_TARGET: &str = "sieve";
+ 
+ /// Emit a DEBUG event for a kept error-bearing trace.
+ ///
+-/// Field set: `decision="kept"`, `reason="error_bearing"`,
+-/// `trace_id=<hex>`. Message contains "kept (error-bearing)".
+-pub(crate) fn emit_debug_kept_error_bearing(_trace_id: [u8; 16]) {
+-    unimplemented!("DEBUG kept (error-bearing) event lands at DELIVER slice 06");
++/// Field set: `trace_id=<hex>`. Message: "kept (error-bearing)".
++pub(crate) fn emit_debug_kept_error_bearing(trace_id: [u8; 16]) {
++    tracing::debug!(
++        target: SIEVE_TRACING_TARGET,
++        trace_id = format_trace_id(trace_id),
++        "kept (error-bearing)"
++    );
+ }
+ 
+ /// Emit a DEBUG event for a kept rate-sampled trace.
+ ///
+-/// Field set: `decision="kept"`, `reason="rate_kept"`,
+-/// `trace_id=<hex>`, `rate=<f64>`. Message contains "kept (sampled,
+-/// rate=…)".
+-pub(crate) fn emit_debug_kept_sampled(_trace_id: [u8; 16], _rate: f64) {
+-    unimplemented!("DEBUG kept (sampled) event lands at DELIVER slice 06");
++/// Field set: `trace_id=<hex>`, `rate=<f64>`. Message: "kept
++/// (sampled, rate={rate:.2})".
++pub(crate) fn emit_debug_kept_sampled(trace_id: [u8; 16], rate: f64) {
++    tracing::debug!(
++        target: SIEVE_TRACING_TARGET,
++        trace_id = format_trace_id(trace_id),
++        rate = rate,
++        "kept (sampled, rate={rate:.2})"
++    );
+ }
+ 
+ /// Emit a DEBUG event for a dropped trace.
+ ///
+-/// Field set: `decision="dropped"`, `reason="rate_dropped"`,
+-/// `trace_id=<hex>`, `rate=<f64>`. Message contains "dropped".
+-pub(crate) fn emit_debug_dropped(_trace_id: [u8; 16], _rate: f64) {
+-    unimplemented!("DEBUG dropped event lands at DELIVER slice 06");
++/// Field set: `trace_id=<hex>`, `rate=<f64>`. Message: "dropped
++/// (rate={rate:.2})".
++pub(crate) fn emit_debug_dropped(trace_id: [u8; 16], rate: f64) {
++    tracing::debug!(
++        target: SIEVE_TRACING_TARGET,
++        trace_id = format_trace_id(trace_id),
++        rate = rate,
++        "dropped (rate={rate:.2})"
++    );
+ }
+ 
+ /// Emit the periodic INFO summary.
+ ///
+ /// Field set per ADR-0020 §5: `kept`, `kept_error_bearing`,
+ /// `kept_sampled`, `dropped`, `rate`. Message follows the wording
+-/// locked at slice-06's brief.
++/// locked at slice-06's brief: "kept N traces (E error-bearing, S
++/// sampled at R rate), dropped M traces over the last summary
++/// window".
+ ///
+ /// Called by the timer task on every tick AND by the
+ /// [`crate::__test_summary_tick_now`] test seam.
+-pub(crate) fn emit_summary(_kept_total: u64, _kept_error_bearing: u64, _dropped: u64, _rate: f64) {
+-    unimplemented!("INFO summary event lands at DELIVER slice 06");
++pub(crate) fn emit_summary(kept_total: u64, kept_error_bearing: u64, dropped: u64, rate: f64) {
++    let kept_sampled = kept_total.saturating_sub(kept_error_bearing);
++    tracing::info!(
++        target: SIEVE_TRACING_TARGET,
++        kept = kept_total,
++        kept_error_bearing = kept_error_bearing,
++        kept_sampled = kept_sampled,
++        dropped = dropped,
++        rate = rate,
++        "sieve: kept {kept_total} traces ({kept_error_bearing} error-bearing, \
++         {kept_sampled} sampled at {rate:.2} rate), dropped {dropped} traces \
++         over the last summary window"
++    );
++}
++
++/// Render a 16-byte trace_id as a lowercase hex string.
++///
++/// Operator-facing rendering: dashboards and log lines surface the
++/// trace_id verbatim so an operator can correlate against the
++/// upstream OTel collector / backend.
++fn format_trace_id(trace_id: [u8; 16]) -> String {
++    let mut out = String::with_capacity(32);
++    for byte in trace_id {
++        let hi = HEX_DIGITS[(byte >> 4) as usize];
++        let lo = HEX_DIGITS[(byte & 0x0F) as usize];
++        out.push(hi as char);
++        out.push(lo as char);
++    }
++    out
++}
++
++/// Lowercase hex digit lookup. Pulled out as a constant so the
++/// formatter has no arithmetic mutation surface beyond the literal
++/// table.
++const HEX_DIGITS: &[u8; 16] = b"0123456789abcdef";
++
++#[cfg(test)]
++mod tests {
++    //! Unit tests for the trace_id formatter.
++    //!
++    //! Port-to-port at domain scope per Mandate 2: `format_trace_id`
++    //! is a pure free function whose signature IS its driving port.
++    //! Calling it directly from a test IS port-to-port testing.
++    //!
++    //! Test budget: 1 distinct behaviour × 2 = 2 unit tests max. The
++    //! behaviour is "render every byte as two lowercase hex digits, in
++    //! big-endian order". Variations across boundary bytes are
++    //! parametrised into one table-driven test per Mandate 5.
++
++    use super::*;
++
++    #[test]
++    fn format_trace_id_renders_each_byte_as_two_lowercase_hex_digits() {
++        // The single behaviour is exercised across the boundary bytes
++        // (0x00, 0x0F, 0xF0, 0xFF) and a typical mixed pattern. Any
++        // mutation that perturbs the digit table, the shift, or the
++        // mask is caught by at least one of these cases.
++        let cases: &[(&str, [u8; 16], &str)] = &[
++            (
++                "all zeros render as thirty-two zero digits",
++                [0u8; 16],
++                "00000000000000000000000000000000",
++            ),
++            (
++                "all 0xFF render as thirty-two 'f' digits",
++                [0xFFu8; 16],
++                "ffffffffffffffffffffffffffffffff",
++            ),
++            (
++                "ascending bytes render in big-endian order",
++                [
++                    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, //
++                    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
++                ],
++                "000102030405060708090a0b0c0d0e0f",
++            ),
++            (
++                "high-nibble boundary 0xF0 renders as 'f0'",
++                [
++                    0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
++                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++                ],
++                "f0000000000000000000000000000000",
++            ),
++            (
++                "low-nibble boundary 0x0F renders as '0f'",
++                [
++                    0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
++                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++                ],
++                "0f000000000000000000000000000000",
++            ),
++        ];
++
++        for (label, input, expected) in cases {
++            assert_eq!(
++                format_trace_id(*input),
++                *expected,
++                "case {label}: expected {expected}"
++            );
++        }
++    }
+ }

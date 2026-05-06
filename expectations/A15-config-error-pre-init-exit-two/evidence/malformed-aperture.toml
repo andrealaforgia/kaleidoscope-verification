@@ -1,0 +1,8 @@
+[aperture.transport.grpc]
+bind_addr = "this-is-not-a-valid-socket-addr"
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+
+[aperture.sink]
+kind = "stub"

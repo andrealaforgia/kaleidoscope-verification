@@ -1,0 +1,28 @@
+--- rustc / cargo versions ---
+rustc 1.88.0 (6b00bc388 2025-06-23)
+cargo 1.88.0 (873a06493 2025-05-10)
+--- cargo build --workspace --release --locked ---
+--- target/release listing (top-level) ---
+total 13792
+drwxr-xr-x  18 root root     576 May  6 23:45 .
+drwxr-xr-x   4 root root     128 May  6 23:41 ..
+-rw-r--r--   1 root root       0 May  6 23:41 .cargo-lock
+drwxr-xr-x 191 root root    6112 May  6 23:41 .fingerprint
+-rwxr-xr-x   2 root root 8192008 May  6 23:45 aperture
+-rw-r--r--   1 root root     849 May  6 23:45 aperture.d
+drwxr-xr-x  38 root root    1216 May  6 23:41 build
+drwxr-xr-x 445 root root   14240 May  6 23:45 deps
+drwxr-xr-x   2 root root      64 May  6 23:41 examples
+drwxr-xr-x   2 root root      64 May  6 23:41 incremental
+-rw-r--r--   1 root root     824 May  6 23:45 libaperture.d
+-rw-r--r--   2 root root 3723400 May  6 23:45 libaperture.rlib
+-rw-r--r--   1 root root     363 May  6 23:45 libotlp_conformance_harness.d
+-rw-r--r--   2 root root  635144 May  6 23:45 libotlp_conformance_harness.rlib
+-rw-r--r--   1 root root    1094 May  6 23:45 libsieve.d
+-rw-r--r--   2 root root  254124 May  6 23:45 libsieve.rlib
+-rw-r--r--   1 root root     227 May  6 23:43 libspark.d
+-rw-r--r--   2 root root 1278172 May  6 23:45 libspark.rlib
+--- aperture binary check ---
+size=8192008 mode=-rwxr-xr-x path=target/release/aperture
+-rwxr-xr-x 2 root root 8192008 May  6 23:45 target/release/aperture
+PRESENT_AND_EXECUTABLE

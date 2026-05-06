@@ -2,47 +2,41 @@
 
 ## Surface
 
-Operations / build / supply chain. build-engineer-facing.
+Operations / supply chain. Build-engineer-facing.
 
 ## Behaviour
 
-forbid(unsafe_code) is present in the lib.rs of both spark and aperture, greppable as ground truth.
-
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+`#![forbid(unsafe_code)]` is present at crate root in both
+`crates/spark/src/lib.rs` and `crates/aperture/src/lib.rs`. The
+attribute is greppable and rejects any unsafe block at compile
+time, providing a lint-level guarantee that the crate's public
+surface contains no unsafe Rust.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **X8**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External anchor: the source files themselves at `HEAD`.
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-07T00:34Z
+- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Kaleidoscope dirty: `no`
+- Method: static `git archive HEAD` followed by `grep -nE
+  "forbid.*unsafe_code"` against each crate's `lib.rs`.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/citations.txt`](evidence/citations.txt) — verbatim:
+  ```
+  === crates/spark/src/lib.rs ===
+  59:#![forbid(unsafe_code)]
 
-```
-harness/run-expectation.sh X08
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+  === crates/aperture/src/lib.rs ===
+  29:#![forbid(unsafe_code)]
+  ```
 
 ## Issues
 
@@ -50,4 +44,7 @@ None.
 
 ## Notes
 
-None.
+`crates/otlp-conformance-harness/src/lib.rs` and
+`crates/sieve/src/lib.rs` may also carry the attribute (they are
+out of scope for the source feed item); follow-on expectations can
+extend the surface as the workspace grows.

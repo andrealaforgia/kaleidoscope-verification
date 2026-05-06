@@ -1,0 +1,7 @@
+step 1: waiting for aperture /readyz=200
+  aperture ready
+step 2: POST 32 random-looking garbage bytes to http://localhost:4318/v1/traces
+  response code: 400
+  response body (first 300 bytes):
+otlp violation: rule=WireType::ProtobufDecode signal=Traces framing=HttpProtobuf locus=byte 1 expected="valid protobuf wire bytes per opentelemetry-proto descriptor" observed="invalid varint"
+OK — HTTP 400 with body containing a Rule discriminator

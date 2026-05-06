@@ -1,0 +1,10 @@
+step 1: confirm /readyz=200 with aperture healthy
+  /readyz=200
+step 2: send SIGTERM to aperture container
+step 3: poll /readyz for 503 within 5 s
+  attempt 1 +0ms: code=503
+step 4: assert
+  observed code after SIGTERM: 503
+  elapsed since SIGTERM:       0ms
+  body:                        draining
+OK — /readyz flipped to 503 within 0ms of SIGTERM

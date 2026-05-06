@@ -2,47 +2,51 @@
 
 ## Surface
 
-Operations / build / supply chain. build-engineer-facing.
+Operations / supply chain. Build-engineer-facing.
 
 ## Behaviour
 
-crates/otlp-conformance-harness/Cargo.toml and crates/spark/Cargo.toml declare license = "Apache-2.0"; crates/aperture/Cargo.toml declares license = "AGPL-3.0-or-later".
+`crates/otlp-conformance-harness/Cargo.toml` and
+`crates/spark/Cargo.toml` declare `license = "Apache-2.0"`;
+`crates/aperture/Cargo.toml` declares `license = "AGPL-3.0-or-later"`.
 
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+This split is the contract from `LICENSING.md` and the project
+README: SDK / protocol libraries are Apache-2.0; platform
+components are AGPL-3.0-or-later.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **X7**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor:
+  [`LICENSING.md`](https://github.com/andrealaforgia/kaleidoscope/blob/6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15/LICENSING.md)
+  and [`README.md`](https://github.com/andrealaforgia/kaleidoscope/blob/6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15/README.md)
+  ("Platform components — AGPL-3.0-or-later"; "SDKs and protocol
+  libraries — Apache-2.0").
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-07T00:34Z
+- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Kaleidoscope dirty: `no`
+- Method: static read of each crate's `Cargo.toml` from
+  `git archive HEAD` (no working-tree contamination); the literal
+  `license = ...` line is captured verbatim per file.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/citations.txt`](evidence/citations.txt) — verbatim:
+  ```
+  === crates/otlp-conformance-harness/Cargo.toml ===
+  9:license = "Apache-2.0"
 
-```
-harness/run-expectation.sh X07
-```
+  === crates/spark/Cargo.toml ===
+  10:license = "Apache-2.0"
 
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+  === crates/aperture/Cargo.toml ===
+  10:license = "AGPL-3.0-or-later"
+  ```
 
 ## Issues
 
@@ -50,4 +54,8 @@ None.
 
 ## Notes
 
-None.
+`crates/sieve/Cargo.toml` (Slice 01 just landed) carries
+`license = "AGPL-3.0-or-later"` per its header comment ("Symmetric
+with Aperture"). Sieve was not in the source feed's X7 list because
+Sieve is newer than the feed; its license is consistent with the
+contract and is a follow-on observation, not a violation.

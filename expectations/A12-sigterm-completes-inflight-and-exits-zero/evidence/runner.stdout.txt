@@ -1,0 +1,13 @@
+step 1: confirm aperture ready
+  /readyz=200
+step 2: send SIGTERM
+step 3: wait for container to exit (≤ 35 s; default drain_deadline_ms is 30000)
+  aperture exited with code: 0
+  aperture stderr (last 6 events):
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.088435Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.088477Z","level":"INFO","event":"ready"}
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.472920Z","level":"INFO","event":"shutdown_initiated","signal":"SIGTERM","drain_deadline_ms":30000}
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.472935Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.728108Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+    aperture-1  | {"timestamp":"2026-05-06T23:33:15.728442Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+OK — aperture exited 0 after SIGTERM with drain-related events emitted

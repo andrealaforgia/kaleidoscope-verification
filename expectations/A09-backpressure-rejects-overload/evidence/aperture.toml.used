@@ -1,0 +1,34 @@
+# Per-expectation aperture.toml for A09. Identical to harness/aperture.toml
+# except that max_concurrent_requests is forced to 1 on both transports
+# so a small concurrent burst from the runner deterministically saturates
+# the per-transport semaphore and exercises the refusal path.
+
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 1
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 1
+
+[aperture.sink]
+kind = "forwarding"
+
+[aperture.sink.forwarding]
+endpoint = "http://otelcol-sink:4318"
+timeout_ms = 5000
+
+[aperture.shutdown]
+drain_deadline_ms = 30000
+
+[aperture.security.tls]
+enabled = false
+cert_path = ""
+key_path = ""
+
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""

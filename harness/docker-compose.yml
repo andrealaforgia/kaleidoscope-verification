@@ -21,9 +21,22 @@ services:
     image: kaleidoscope-expectations/aperture:under-test
     command: ["--config", "/etc/aperture/aperture.toml"]
     volumes:
-      - ./aperture.toml:/etc/aperture/aperture.toml:ro
+      # Per-expectation aperture.toml override: when an expectation
+      # ships its own ./aperture.toml in its directory,
+      # run-expectation.sh sets APERTURE_TOML to that absolute path
+      # so compose mounts it instead of the harness default.
+      - ${APERTURE_TOML:-./aperture.toml}:/etc/aperture/aperture.toml:ro
     environment:
+      # RUST_LOG always set; APERTURE__* env vars are listed without
+      # values so they pass through from the calling shell only when
+      # set (per-expectation `.env-overrides` mechanism).
       RUST_LOG: ${APERTURE_LOG:-info}
+      APERTURE__TRANSPORT__GRPC__MAX_CONCURRENT_REQUESTS:
+      APERTURE__TRANSPORT__HTTP__MAX_CONCURRENT_REQUESTS:
+      APERTURE__SHUTDOWN__DRAIN_DEADLINE_MS:
+      APERTURE__SINK__KIND:
+      APERTURE__SINK__FORWARDING__ENDPOINT:
+      APERTURE__SINK__FORWARDING__TIMEOUT_MS:
     ports:
       # Host-side ports for direct OTLP traffic in scenario runners.
       - "4317:4317"

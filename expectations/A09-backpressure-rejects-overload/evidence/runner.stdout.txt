@@ -1,0 +1,20 @@
+step 1: confirm aperture ready
+step 2: gRPC burst (4 PARALLEL telemetrygen containers, cap=1)
+  inspecting per-client telemetrygen stderr for RESOURCE_EXHAUSTED
+    client 1: exit=0 refused=yes
+    client 2: exit=0 refused=no
+    client 3: exit=0 refused=yes
+    client 4: exit=0 refused=yes
+  total gRPC refusals: 3 of 4
+step 3: HTTP burst (4 concurrent POSTs to /v1/traces, cap=1)
+  per-request response codes:
+    request 1: code=400 
+    request 2: code=400 
+    request 3: code=400 
+    request 4: code=503 retry-after: 1
+step 4: snapshot aperture stderr
+  aperture stderr lines mentioning a refusal: 0
+http_503_with_retry_after: 1 of 4
+grpc_resource_exhausted:   observed-3-of-4
+aperture_concurrency_cap_hit_lines: 4
+OK — HTTP arm verified (1 of 4 returned 503 with Retry-After); gRPC arm: observed-3-of-4

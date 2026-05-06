@@ -94,6 +94,28 @@ mkdir -p .captured
 : > .captured/otlp-received.jsonl
 
 export KALEIDOSCOPE_DIR="$SNAPSHOT_DIR"
+
+# Optional per-expectation env-var overrides for aperture (passed
+# through to the container per docker-compose.yml's environment:
+# block). The file is bash-sourced; declare with `export`.
+if [[ -f "$EXP_DIR/.env-overrides" ]]; then
+    echo "sourcing per-expectation env overrides from $EXP_DIR/.env-overrides" >&2
+    cp "$EXP_DIR/.env-overrides" "$EVIDENCE_DIR/.env-overrides.copy"
+    # shellcheck disable=SC1091
+    set -a; . "$EXP_DIR/.env-overrides"; set +a
+fi
+
+# Optional per-expectation aperture.toml: when an expectation ships
+# its own aperture.toml, point compose at it via APERTURE_TOML
+# (consumed by docker-compose.yml's volume substitution). Useful for
+# expectations that need a tighter cap, a different sink, etc.,
+# while issue 002 (env-var loader not wired) blocks the env-var path.
+if [[ -f "$EXP_DIR/aperture.toml" ]]; then
+    export APERTURE_TOML="$EXP_DIR/aperture.toml"
+    echo "using per-expectation aperture.toml: $APERTURE_TOML" >&2
+    cp "$APERTURE_TOML" "$EVIDENCE_DIR/aperture.toml.used"
+fi
+
 docker compose up -d --build
 
 # 3. Run the per-expectation scenario, if present.

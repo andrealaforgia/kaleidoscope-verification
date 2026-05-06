@@ -1,0 +1,10 @@
+step 1: wait for aperture ready
+step 2: snapshot aperture stderr
+# json-shape-report
+kaleidoscope_sha:    94bc536917724c3a34c44cf489c85fbe9bf2e56e
+lines_total:         5
+lines_bad_json:      0
+lines_missing_field: 0
+lines_with_target:   0 (ADR-0009 with_target(false): expected 0)
+lines_with_span:     0 (ADR-0009 with_current_span/with_span_list(false): expected 0)
+OK — 5 aperture stderr lines, all conforming to the ADR-0009 JSON shape
