@@ -28,12 +28,12 @@ flip from `starting` to `ready` is signalled by an
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-06T19:33:37Z
-- Kaleidoscope SHA: `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68`
-- Kaleidoscope dirty: `yes` (the working tree carried unrelated WIP;
-  the build is from `git archive HEAD`. See
-  `evidence/kaleidoscope-dirty.diff` for the working-tree delta that
-  was NOT used for this verification.)
+- Last verified: 2026-05-06T23:11:16Z (re-verification after issue
+  001 fix landed). First verification at SHA
+  `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68` on 2026-05-06T19:33:37Z
+  also passed.
+- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Kaleidoscope dirty: `no`
 - Method: dockerised harness; aperture built from the HEAD snapshot;
   `runner.sh` polls `http://localhost:4318/readyz` until HTTP 200,
   capturing the response code and body verbatim.

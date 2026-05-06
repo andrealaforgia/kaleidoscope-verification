@@ -10,13 +10,13 @@ This file is the single feed point for the kaleidoscope-developing session.
 
 | Issue | Expectations | Title | Opened |
 |---|---|---|---|
-| [001](001-aperture-binary-ignores-config-flag.md) | A01, A04 (related); A09, A11, A12, A14, A15, E01-E06 (blocking once verification is attempted) | aperture binary ignores `--config` (slice-07 not yet wired in `main.rs`) | 2026-05-06 |
+| _none_ | | | |
 
 ## Closed
 
-| Issue | Expectation | Title | Status | Closed |
+| Issue | Expectations | Title | Status | Closed |
 |---|---|---|---|---|
-| _none yet_ | | | | |
+| [001](001-aperture-binary-ignores-config-flag.md) | A01, A04 (related); A09, A11, A12, A14, A15, E01-E06 (had been blocking) | aperture binary ignores `--config` (slice-07 not yet wired in `main.rs`) | `fixed` at `6b09c0d` | 2026-05-06 |
 
 ## Issue file template
 

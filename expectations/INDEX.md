@@ -11,10 +11,15 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-06 after pilot batch (A01, A04, A10 satisfied).
+Last index refresh: 2026-05-06 — pilot batch re-verified at SHA
+`6b09c0d` after issue 001 fix landed. The forwarding chain to the
+otelcol-sink is now exercised end-to-end; the otelcol-sink's
+file-exporter capture is included as independent evidence in A01 and
+A04.
 
-Open issues opened during the pilot:
-[001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md).
+Open issues: none. Closed:
+[001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md)
+(`fixed` at `6b09c0d`).
 
 ---
 

@@ -28,9 +28,11 @@ kind = "forwarding"
 
 [aperture.sink.forwarding]
 # Container DNS: docker compose resolves the service name on the
-# default bridge. The sidecar listens on its own 4317 (gRPC). The
-# scheme is plaintext (TLS knobs default off, see N1).
-endpoint = "http://otelcol-sink:4317"
+# default bridge. ForwardingSink speaks OTLP/HTTP/protobuf
+# (POST <endpoint>/v1/{logs,traces,metrics}), so we point at the
+# otelcol-sink HTTP port (4318), not the gRPC port (4317). Plaintext
+# (TLS knobs default off, see N1).
+endpoint = "http://otelcol-sink:4318"
 timeout_ms = 5000
 
 [aperture.shutdown]

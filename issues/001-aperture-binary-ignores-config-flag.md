@@ -1,9 +1,12 @@
 # 001 — aperture binary ignores `--config` (slice-07 not yet wired in `main.rs`)
 
-- Status: `open`
+- Status: `fixed`
 - Expectations affected: many (see below); none blocked at the
-  pilot stage, but this constrains future verifications.
+  pilot stage, but this constrained future verifications until the
+  fix landed.
 - Opened: 2026-05-06
+- Closed: 2026-05-06 (UTC) at SHA
+  `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
 - Kaleidoscope SHA at observation: `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68`
 
 ## Observed
@@ -99,12 +102,59 @@ cat expectations/A01-otlp-grpc-traces-accepted/evidence/aperture.live.stderr.txt
 
 This is not a defect in the strict sense. The relevant slices
 (slice-07 TLS schema knob; the binary `--config` wiring it folds in)
-have not graduated yet. The kaleidoscope project is honest about this
-in its own slice docs and main.rs comments — it says "Slice 07 lands
-the `--config <path>` figment-driven loader", future tense.
+had not graduated when the issue was raised. The kaleidoscope project
+was honest about this in its own slice docs and main.rs comments —
+"Slice 07 lands the `--config <path>` figment-driven loader",
+future tense.
 
-The reason this issue exists in `kaleidoscope-expectations` is to make
-the constraint visible to the kaleidoscope-developing session: a
-non-trivial slice of the EDD catalogue is gated on slice-07. Once it
-lands, this issue closes and the affected expectations get re-verified
-in batch.
+The reason this issue existed in `kaleidoscope-expectations` was to
+make the constraint visible to the kaleidoscope-developing session: a
+non-trivial slice of the EDD catalogue was gated on the wiring.
+
+## Resolution
+
+Two-step fix-forward, fed back from this catalogue:
+
+1. Commit `1075462` ("fix(aperture): wire --config <path> argv parsing
+   into the binary") was empty: the message described the fix in
+   detail but the commit's tree was identical to its parent. The
+   actual main.rs changes were sitting unstaged in the working tree
+   at the time of `git commit`. `git archive HEAD` produced the
+   pre-fix `main.rs` and the harness re-verification at that SHA
+   showed the same `sink="stub"` outcome as the original observation.
+2. Commit `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+   ("fix(aperture): wire --config <path> argv parsing — actual
+   changes (retry)") landed the real diff: 131 lines in main.rs
+   (parse_argv, --config / --help branches, exit code 2 paths, five
+   unit tests for the argv parser) plus a docstring fix in
+   config/mod.rs and a slice-08-completion post-merge note.
+
+## Verification at fix
+
+Pilot batch re-run at SHA `6b09c0d`:
+
+- **A01** (OTLP/gRPC traces accepted on :4317): aperture's
+  `event=sink_accepted` now reads
+  `sink="forwarding" downstream="http://otelcol-sink:4318" downstream_latency_ms=2`.
+  The otelcol-sink's file-exporter capture
+  ([`expectations/A01-otlp-grpc-traces-accepted/evidence/otlp-received.jsonl`](../expectations/A01-otlp-grpc-traces-accepted/evidence/otlp-received.jsonl))
+  is non-empty (984 bytes) and contains the
+  `service.name=expectation-A01-pilot` resourceSpans. End-to-end
+  forwarding chain proven independently of aperture's own stderr.
+- **A04** (OTLP/HTTP/protobuf traces accepted on :4318): same shape,
+  `sink="forwarding"`, downstream capture present
+  ([`expectations/A04-otlp-http-protobuf-traces-accepted/evidence/otlp-received.jsonl`](../expectations/A04-otlp-http-protobuf-traces-accepted/evidence/otlp-received.jsonl)).
+- **A10** (`/readyz=200`): unaffected by this issue, re-verified
+  green at the new SHA.
+
+## Adjustment to the harness, made during this resolution
+
+The harness's `aperture.toml` initially pointed `forwarding.endpoint`
+at `http://otelcol-sink:4317` — the otelcol-sink's gRPC port.
+ForwardingSink speaks OTLP/HTTP/protobuf
+(`POST <endpoint>/v1/{logs,traces,metrics}`), so the correct port is
+`4318`, the otelcol-sink's HTTP port. The endpoint was corrected to
+`http://otelcol-sink:4318` in the same change set that closed this
+issue. The mismatched-endpoint failure mode produced exit code 1
+with no aperture stderr (the probe failed before the tracing
+subscriber initialised). Worth knowing for future issues.
