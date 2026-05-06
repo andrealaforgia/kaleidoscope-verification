@@ -8,9 +8,9 @@ This file is the single feed point for the kaleidoscope-developing session.
 
 ## Open
 
-| Issue | Expectation | Title | Opened |
+| Issue | Expectations | Title | Opened |
 |---|---|---|---|
-| _none yet_ | | | |
+| [001](001-aperture-binary-ignores-config-flag.md) | A01, A04 (related); A09, A11, A12, A14, A15, E01-E06 (blocking once verification is attempted) | aperture binary ignores `--config` (slice-07 not yet wired in `main.rs`) | 2026-05-06 |
 
 ## Closed
 

@@ -1,0 +1,8 @@
+step 1: waiting for aperture /readyz
+  aperture ready
+step 2: sending one OTLP/HTTP/protobuf trace via telemetrygen
+  telemetrygen exited 0
+step 3: checking aperture stderr for sink_accepted line
+  found: aperture-1  | {"timestamp":"2026-05-06T19:38:05.379369Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":2,"resource.service.name":"expectation-A04-pilot"}
+  observed span_count=2, expected=2
+OK — aperture acked the OTLP/HTTP/protobuf request and emitted sink_accepted with matching span_count and service.name

@@ -3,6 +3,7 @@
 # into expectations/<ID>/evidence/ by run-expectation.sh; what remains
 # here is transient.
 harness/.captured/
+harness/.snapshot/
 
 # macOS
 .DS_Store

@@ -1,0 +1,7 @@
+aperture-1  | {"timestamp":"2026-05-06T19:38:04.984304Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-06T19:38:04.984341Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-06T19:38:04.984391Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-06T19:38:04.984398Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-06T19:38:04.984419Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-06T19:38:05.379301Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":386}
+aperture-1  | {"timestamp":"2026-05-06T19:38:05.379369Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":2,"resource.service.name":"expectation-A04-pilot"}

@@ -1,0 +1,6 @@
+attempt 1: code=200
+final attempts: 1
+final code:     200
+body bytes:
+0000000    r   e   a   d   y  \n                                        
+0000006

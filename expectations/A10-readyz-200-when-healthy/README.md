@@ -2,47 +2,57 @@
 
 ## Surface
 
-Aperture (OTLP ingest gateway). operator/integrator-facing.
+Aperture (OTLP ingest gateway). Operator/integrator-facing.
 
 ## Behaviour
 
-GET /readyz returns HTTP 200 in normal operation.
+Given aperture has started and bound both listeners (gRPC `:4317` and
+HTTP `:4318`)
+When a client issues `GET http://<host>:4318/readyz`
+Then aperture responds HTTP `200` with body `ready\n`.
 
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+Before listeners bind, `/readyz` returns 503 with body `starting\n`. The
+flip from `starting` to `ready` is signalled by an
+`event=readiness_changed` line on aperture's stderr with
+`reason=listeners_bound`.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **A10**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor:
+  [`docs/feature/aperture/slices/slice-02-http-protobuf-and-readiness.md`](https://github.com/andrealaforgia/kaleidoscope/blob/3d3c99f061a3c76d48ac9d2a824612d8bdc37b68/docs/feature/aperture/slices/slice-02-http-protobuf-and-readiness.md)
+  line 9 ("`/readyz` (200 once both listeners are bound, 503 during
+  startup)") and line 43 ("`GET /readyz` returns 503 `\"starting\"`
+  before listeners bind, 200 `\"ready\"` after").
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-06T19:33:37Z
+- Kaleidoscope SHA: `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68`
+- Kaleidoscope dirty: `yes` (the working tree carried unrelated WIP;
+  the build is from `git archive HEAD`. See
+  `evidence/kaleidoscope-dirty.diff` for the working-tree delta that
+  was NOT used for this verification.)
+- Method: dockerised harness; aperture built from the HEAD snapshot;
+  `runner.sh` polls `http://localhost:4318/readyz` until HTTP 200,
+  capturing the response code and body verbatim.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh A10
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml) —
+  pinning record (SHA, dirty flag, host, timestamp).
+- [`evidence/runner.stdout.txt`](evidence/runner.stdout.txt) — runner
+  log: one attempt, code 200.
+- [`evidence/readyz.code.txt`](evidence/readyz.code.txt) — the literal
+  HTTP status code observed (`200`).
+- [`evidence/readyz.body.txt`](evidence/readyz.body.txt) — the
+  response body byte-for-byte (`ready\n`, six bytes).
+- [`evidence/aperture.stderr.txt`](evidence/aperture.stderr.txt) —
+  aperture's structured stderr. The lines `event=listener_bound`
+  (`transport=grpc`, `transport=http`) precede
+  `event=readiness_changed reason=listeners_bound ready=true`,
+  matching the slice-02 contract.
 
 ## Issues
 
@@ -50,4 +60,5 @@ None.
 
 ## Notes
 
-None.
+The captured file `evidence/otlp-received.jsonl` is empty as expected:
+this expectation issues no OTLP traffic.

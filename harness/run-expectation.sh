@@ -67,22 +67,50 @@ host_uname: "${HOST_UNAME}"
 harness_dir: "${HARNESS_DIR}"
 EOF
 
-# 2. Bring the harness up.
+# 2. Snapshot kaleidoscope HEAD into a staging dir.
+#
+# We deliberately DO NOT build from the live working tree:
+# - the working tree may be dirty (the methodology saves the diff as
+#   evidence but does not feed it to the build);
+# - the working tree is a moving target while the parallel
+#   kaleidoscope-developing session is active, so its content can
+#   change mid-context-load (~90 s on a fresh build);
+# - `git archive` excludes `target/`, `mutants.out/`, `.git/`, and
+#   any other gitignored noise, keeping the docker build context
+#   small and pristine.
+SNAPSHOT_DIR="$HARNESS_DIR/.snapshot"
+rm -rf "$SNAPSHOT_DIR"
+mkdir -p "$SNAPSHOT_DIR"
+git -C "$KALEIDOSCOPE_DIR" archive HEAD | tar -x -C "$SNAPSHOT_DIR"
+
+# 3. Bring the harness up. Compose's `additional_contexts` reads
+#    KALEIDOSCOPE_DIR; we redirect it to the snapshot so the build
+#    is reproducible from the recorded SHA, not from whatever the
+#    working tree happens to be at this exact moment.
 cd "$HARNESS_DIR"
 mkdir -p .captured
 # Truncate the otelcol-sink capture file from any previous run so the
 # scenario starts with an empty observed-OTLP stream.
 : > .captured/otlp-received.jsonl
 
-export KALEIDOSCOPE_DIR
+export KALEIDOSCOPE_DIR="$SNAPSHOT_DIR"
 docker compose up -d --build
 
 # 3. Run the per-expectation scenario, if present.
 RUNNER="$EXP_DIR/runner.sh"
 RUNNER_EXIT=0
+# Compose network name. With `name: kaleidoscope-expectations` in
+# docker-compose.yml the default network is named `<project>_default`.
+COMPOSE_NETWORK="kaleidoscope-expectations_default"
+CAPTURED_FILE="$HARNESS_DIR/.captured/otlp-received.jsonl"
+
 if [[ -x "$RUNNER" ]]; then
     echo "running scenario: $RUNNER" >&2
-    if ( cd "$EXP_DIR" && ./runner.sh "$EVIDENCE_DIR" ) \
+    if ( cd "$EXP_DIR" \
+            && HARNESS_DIR="$HARNESS_DIR" \
+               COMPOSE_NETWORK="$COMPOSE_NETWORK" \
+               CAPTURED_FILE="$CAPTURED_FILE" \
+               ./runner.sh "$EVIDENCE_DIR" ) \
             > "$EVIDENCE_DIR/runner.stdout.txt" \
             2> "$EVIDENCE_DIR/runner.stderr.txt"; then
         RUNNER_EXIT=0
