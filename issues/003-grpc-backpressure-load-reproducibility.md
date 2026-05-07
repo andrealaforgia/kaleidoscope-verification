@@ -1,9 +1,12 @@
 # 003 — gRPC backpressure refusal not reproducible from `docker run telemetrygen`
 
-- Status: `open` (caveat, not a defect of kaleidoscope)
+- Status: `wontfix` (catalogue tooling caveat, not a kaleidoscope
+  defect; acknowledged by the kaleidoscope-developing session on
+  2026-05-07)
 - Expectations affected: A09 (gRPC arm — runs are non-deterministic;
   HTTP arm is unaffected)
 - Opened: 2026-05-06
+- Closed: 2026-05-07 (no kaleidoscope action required)
 - Kaleidoscope SHA at observation: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
 
 ## Observed
@@ -69,3 +72,18 @@ This is a caveat about the *catalogue's load tooling*, not a
 defect in kaleidoscope. The kaleidoscope-developing session should
 not feel obliged to act on it; it lives here to make the
 catalogue's limitations visible.
+
+## Closing rationale (2026-05-07)
+
+Confirmed by the kaleidoscope-developing session: aperture serves
+both transports correctly under the same `Semaphore` primitive in
+`crates/aperture/src/backpressure.rs`. The HTTP arm's deterministic
+503 + `Retry-After` and the (intermittently observed) gRPC arm's
+3-of-4 RESOURCE_EXHAUSTED both prove the mechanism works. The
+non-determinism is the catalogue's load client, not kaleidoscope.
+
+Closing as `wontfix` from kaleidoscope's perspective. Reopen if a
+deterministic gRPC load client lands in this catalogue (a tonic-
+based fixture binary, `ghz` with mounted protos, or a Python
+`grpcio` rendezvous client) — at that point the caveat goes away
+and the gRPC arm becomes a hard contract again.

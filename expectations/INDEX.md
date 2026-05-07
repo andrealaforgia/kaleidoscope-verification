@@ -35,11 +35,11 @@ Original-batch dates:
   A15, A16, X04, X07, X08) at SHA `6b09c0d`.
 - 2026-05-07: re-verification of all 17 at SHA `c871b58`.
 
-Open issues:
-[002 — env-var overrides not wired in figment loader](../issues/002-env-var-overrides-not-wired-in-figment-loader.md);
-[003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md).
+Open issues: none.
 Closed:
-[001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md).
+[001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md) (`fixed` at `6b09c0d`);
+[002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);
+[003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md) (`wontfix`, catalogue tooling).
 
 ## Deferred (reason recorded)
 

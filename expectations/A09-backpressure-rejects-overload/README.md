@@ -16,9 +16,10 @@ and on HTTP, the (N+1)th request returns HTTP 503 with header
 And aperture's stderr emits `event=concurrency_cap_hit` with the
 transport, the cap, and the in_flight_at_refusal value.
 
-The harness ships a per-expectation `aperture.toml` that forces
-both caps to 1 (see issue 002 for why env-var overrides are not
-yet usable).
+The harness ships a `.env-overrides` file that pins both caps to
+1 via `APERTURE__TRANSPORT__{GRPC,HTTP}__MAX_CONCURRENT_REQUESTS=1`.
+This works since kaleidoscope `c8d8a55` (issue 002 closed); the
+earlier per-expectation `aperture.toml` workaround was removed.
 
 ## Source
 

@@ -1,10 +1,13 @@
 # 002 — env-var overrides not wired in `Config::from_toml_path`
 
-- Status: `open`
-- Expectations affected: A09 (workaround used), and any future
-  expectation that wants to override one config value without
-  shipping a full `aperture.toml`.
+- Status: `fixed`
+- Expectations affected: A09 (workaround removed; now uses
+  `.env-overrides`), and any future expectation that wants to
+  override one config value without shipping a full
+  `aperture.toml`.
 - Opened: 2026-05-06
+- Closed: 2026-05-07 at SHA `c8d8a55` ("fix(aperture): wire env-var
+  override layer per ADR-0008").
 - Kaleidoscope SHA at observation: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
 
 ## Observed
@@ -87,6 +90,36 @@ listed (without values) in `docker-compose.yml`'s aperture
 ## Notes
 
 This is structurally similar to issue 001: an ADR specifies a
-contract, the implementation doesn't yet honour it. The catalogue's
+contract, the implementation didn't yet honour it. The catalogue's
 job is to make the gap visible and to document the workaround until
 the slice that wires it lands.
+
+## Resolution
+
+The fix landed at kaleidoscope `c8d8a55`
+("fix(aperture): wire env-var override layer per ADR-0008").
+`Config::from_toml_path` now merges the `Env::prefixed("APERTURE__")`
+provider on top of `Toml::file`, so an env var beats the file per
+ADR-0008.
+
+## Verification at fix
+
+A09 was switched from the per-expectation `aperture.toml`
+workaround to a single-file `.env-overrides` carrying:
+
+```
+APERTURE__TRANSPORT__GRPC__MAX_CONCURRENT_REQUESTS=1
+APERTURE__TRANSPORT__HTTP__MAX_CONCURRENT_REQUESTS=1
+```
+
+Re-verification at HEAD post-fix:
+
+- `aperture_concurrency_cap_hit_lines: 4`
+- HTTP arm: 1 of 4 returned 503 with Retry-After header.
+- gRPC arm: 3 of 4 returned RESOURCE_EXHAUSTED.
+
+The cap=1 is taking effect from the env var alone; no per-
+expectation `aperture.toml` is shipped. The `aperture.toml` from
+A09 was removed in the same change set that closes this issue.
+The catalogue's `.env-overrides` machinery is now the canonical
+way to pin per-expectation knobs.
