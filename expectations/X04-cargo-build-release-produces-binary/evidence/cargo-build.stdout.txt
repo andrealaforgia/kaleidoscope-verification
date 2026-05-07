@@ -3,26 +3,30 @@ rustc 1.88.0 (6b00bc388 2025-06-23)
 cargo 1.88.0 (873a06493 2025-05-10)
 --- cargo build --workspace --release --locked ---
 --- target/release listing (top-level) ---
-total 14004
-drwxr-xr-x  18 root root     576 May  7 07:54 .
-drwxr-xr-x   4 root root     128 May  6 23:41 ..
+total 14744
+drwxr-xr-x  22 root root     704 May  7 15:56 .
+drwxr-xr-x   8 root root     256 May  7 09:55 ..
 -rw-r--r--   1 root root       0 May  6 23:41 .cargo-lock
-drwxr-xr-x 191 root root    6112 May  6 23:41 .fingerprint
--rwxr-xr-x   2 root root 8192008 May  7 07:54 aperture
--rw-r--r--   1 root root     849 May  7 07:54 aperture.d
-drwxr-xr-x  38 root root    1216 May  6 23:41 build
-drwxr-xr-x 445 root root   14240 May  7 07:54 deps
+drwxr-xr-x 227 root root    7264 May  7 15:44 .fingerprint
+-rwxr-xr-x   2 root root 8224440 May  7 15:56 aperture
+-rw-r--r--   1 root root     849 May  7 15:56 aperture.d
+drwxr-xr-x  48 root root    1536 May  7 15:44 build
+drwxr-xr-x 520 root root   16640 May  7 15:56 deps
 drwxr-xr-x   2 root root      64 May  6 23:41 examples
 drwxr-xr-x   2 root root      64 May  6 23:41 incremental
--rw-r--r--   1 root root     824 May  7 07:54 libaperture.d
--rw-r--r--   2 root root 3723400 May  7 07:54 libaperture.rlib
--rw-r--r--   1 root root     363 May  7 07:54 libotlp_conformance_harness.d
--rw-r--r--   2 root root  635144 May  7 07:54 libotlp_conformance_harness.rlib
--rw-r--r--   1 root root    1094 May  7 07:54 libsieve.d
--rw-r--r--   2 root root  474512 May  7 07:54 libsieve.rlib
--rw-r--r--   1 root root     227 May  7 07:54 libspark.d
--rw-r--r--   2 root root 1278172 May  7 07:54 libspark.rlib
+-rw-r--r--   1 root root     824 May  7 15:56 libaperture.d
+-rw-r--r--   2 root root 3789576 May  7 15:56 libaperture.rlib
+-rw-r--r--   1 root root     247 May  7 15:56 libcodex.d
+-rw-r--r--   2 root root  129182 May  7 15:44 libcodex.rlib
+-rw-r--r--   1 root root     363 May  7 15:56 libotlp_conformance_harness.d
+-rw-r--r--   2 root root  635144 May  7 15:44 libotlp_conformance_harness.rlib
+-rw-r--r--   1 root root    1094 May  7 15:56 libsieve.d
+-rw-r--r--   2 root root  475322 May  7 15:56 libsieve.rlib
+-rw-r--r--   1 root root     227 May  7 15:56 libspark.d
+-rw-r--r--   2 root root 1277836 May  7 15:44 libspark.rlib
+-rwxr-xr-x   2 root root  522632 May  7 15:44 regenerate-codex-corpus
+-rw-r--r--   1 root root      92 May  7 15:44 regenerate-codex-corpus.d
 --- aperture binary check ---
-size=8192008 mode=-rwxr-xr-x path=target/release/aperture
--rwxr-xr-x 2 root root 8192008 May  7 07:54 target/release/aperture
+size=8224440 mode=-rwxr-xr-x path=target/release/aperture
+-rwxr-xr-x 2 root root 8224440 May  7 15:56 target/release/aperture
 PRESENT_AND_EXECUTABLE

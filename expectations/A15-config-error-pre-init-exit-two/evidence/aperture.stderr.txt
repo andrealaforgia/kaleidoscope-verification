@@ -1,5 +1,5 @@
-aperture-1  | {"timestamp":"2026-05-07T07:54:14.415792Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-07T07:54:14.416910Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-07T07:54:14.416951Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-07T07:54:14.416958Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-07T07:54:14.416977Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-07T15:54:42.922690Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-07T15:54:42.923779Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-07T15:54:42.923828Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-07T15:54:42.923834Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-07T15:54:42.923904Z","level":"INFO","event":"ready"}

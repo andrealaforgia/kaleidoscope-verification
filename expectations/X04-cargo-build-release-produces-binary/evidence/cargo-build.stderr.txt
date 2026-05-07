@@ -11,8 +11,15 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-   Compiling otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
-   Compiling spark v0.1.0 (/src/crates/spark)
+   Compiling proc-macro2-diagnostics v0.10.1
+   Compiling parking_lot_core v0.9.12
+   Compiling getrandom v0.4.2
+   Compiling rustix v1.1.4
+   Compiling figment v0.10.19
+   Compiling parking_lot v0.12.5
+   Compiling pear_codegen v0.2.9
+   Compiling pear v0.2.9
+   Compiling tempfile v3.27.0
    Compiling aperture v0.1.0 (/src/crates/aperture)
    Compiling sieve v0.1.0 (/src/crates/sieve)
-    Finished `release` profile [optimized] target(s) in 4.74s
+    Finished `release` profile [optimized] target(s) in 5.98s

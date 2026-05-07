@@ -34,6 +34,10 @@ Original-batch dates:
 - 2026-05-06: batch 2 (A02, A03, A05, A06, A08, A09, A11, A12, A13,
   A15, A16, X04, X07, X08) at SHA `6b09c0d`.
 - 2026-05-07: re-verification of all 17 at SHA `c871b58`.
+- 2026-05-07: re-verification of all 21 (after batch A) at SHA `c8d8a55`.
+  18/21 green in the batched run; A01, A02, X01 needed individual
+  retries for transient Docker Desktop VM pressure after the heavy
+  cargo workloads. All 21 confirmed green at the same SHA on retry.
 
 Open issues: none.
 Closed:

@@ -3,10 +3,10 @@ step 2: send SIGINT
 step 3: wait for container to exit (≤ 35 s)
   aperture exited with code: 0
   aperture stderr (last 6 events):
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.178713Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.178729Z","level":"INFO","event":"ready"}
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.272577Z","level":"INFO","event":"shutdown_initiated","signal":"SIGINT","drain_deadline_ms":30000}
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.272589Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.525220Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-    aperture-1  | {"timestamp":"2026-05-07T07:54:12.525267Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.549946Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.549980Z","level":"INFO","event":"ready"}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.656671Z","level":"INFO","event":"shutdown_initiated","signal":"SIGINT","drain_deadline_ms":30000}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.656686Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.908814Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+    aperture-1  | {"timestamp":"2026-05-07T15:54:40.908839Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 OK — aperture exited 0 after SIGINT, same drain orchestration as SIGTERM (A12)

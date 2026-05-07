@@ -3,6 +3,6 @@ step 1: waiting for aperture /readyz to return 200
 step 2: sending one metrics payload via telemetrygen (grpc)
   telemetrygen exited 0
 step 3: checking aperture stderr for sink_accepted (signal=metrics)
-  found: aperture-1  | {"timestamp":"2026-05-07T07:53:44.079880Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-A03-pilot"}
+  found: aperture-1  | {"timestamp":"2026-05-07T15:54:13.504362Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":2,"resource.service.name":"expectation-A03-pilot"}
   observed data_point_count=1
 OK — aperture acked metrics on grpc with data_point_count=1 for service expectation-A03-pilot

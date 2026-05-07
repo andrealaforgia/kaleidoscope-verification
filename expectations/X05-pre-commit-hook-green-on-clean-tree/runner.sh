@@ -35,6 +35,7 @@ docker run --rm \
     -v "$CACHE_DIR/cargo-registry:/usr/local/cargo/registry:rw" \
     -v "$CACHE_DIR/cargo-git:/usr/local/cargo/git:rw" \
     -v "$CACHE_DIR/cargo-install:/cache/cargo-install:rw" \
+    -v "$CACHE_DIR/advisory-dbs:/usr/local/cargo/advisory-dbs:rw" \
     -v "$CACHE_DIR/target:/src/target:rw" \
     -e CARGO_INSTALL_ROOT=/cache/cargo-install \
     -e PATH=/cache/cargo-install/bin:/usr/local/cargo/bin:/usr/bin:/bin \

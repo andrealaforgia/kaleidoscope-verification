@@ -134,12 +134,13 @@ if (( SKIP_COMPOSE == 0 )); then
 fi
 
 if (( SKIP_COMPOSE == 0 )); then
-    # Centralised readiness wait. Cold runs (fresh snapshot, fresh
-    # aperture image) sometimes need >30 s before /readyz returns
-    # 200; gating here lets per-runner readiness checks be quick
-    # sanity re-polls.
-    echo "waiting for aperture /readyz=200 (centralised, ≤ 60 s)" >&2
-    READINESS_DEADLINE=$(( SECONDS + 60 ))
+    # Centralised readiness wait. Cold runs (fresh snapshot,
+    # invalidated aperture build cache after a kaleidoscope commit
+    # touches aperture sources) can take >60 s before /readyz
+    # returns 200, so we give 180 s of slack. Subsequent runs hit
+    # the cargo cache and complete in seconds.
+    echo "waiting for aperture /readyz=200 (centralised, ≤ 180 s)" >&2
+    READINESS_DEADLINE=$(( SECONDS + 180 ))
     READY=0
     while (( SECONDS < READINESS_DEADLINE )); do
         if curl -sS --max-time 2 -o /dev/null -w '%{http_code}' \

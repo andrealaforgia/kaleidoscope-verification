@@ -33,7 +33,9 @@ done < <(
     for dir in "$REPO_ROOT"/expectations/*/; do
         readme="$dir/README.md"
         [[ -f "$readme" ]] || continue
-        if grep -q '^- Status: `satisfied`$' "$readme"; then
+        # Tolerate inline annotations after the status backtick,
+        # e.g. "- Status: `satisfied` (with caveat — see Notes)".
+        if grep -qE '^- Status: `satisfied`( |$)' "$readme"; then
             basename "$dir" | cut -d- -f1
         fi
     done | sort
