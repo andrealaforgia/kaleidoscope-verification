@@ -1,5 +1,5 @@
-2026-05-06T23:26:41.126Z	INFO	metrics/metrics.go:32	starting the metrics generator with configuration	{"config": {"WorkerCount":1,"Rate":0,"TotalDuration":0,"ReportingInterval":1000000000,"SkipSettingGRPCLogger":false,"CustomEndpoint":"aperture:4318","Insecure":true,"InsecureSkipVerify":false,"UseHTTP":true,"HTTPPath":"/v1/metrics","Headers":{},"ResourceAttributes":{"service.name":"expectation-A06-pilot"},"TelemetryAttributes":{},"CaFile":"","ClientAuth":{"Enabled":false,"ClientCertFile":"","ClientKeyFile":""},"NumMetrics":1,"MetricName":"gen","MetricType":"Gauge","SpanID":"","TraceID":""}}
-2026-05-06T23:26:41.126Z	INFO	metrics/metrics.go:84	generation of metrics isn't being throttled
-2026-05-06T23:26:41.126Z	INFO	metrics/metrics.go:39	starting HTTP exporter
-2026-05-06T23:26:41.128Z	INFO	metrics/worker.go:108	metrics generated	{"worker": 0, "metrics": 1}
-2026-05-06T23:26:41.128Z	INFO	metrics/worker.go:43	stopping the exporter	{"worker": 0}
+2026-05-07T07:53:53.855Z	INFO	metrics/metrics.go:32	starting the metrics generator with configuration	{"config": {"WorkerCount":1,"Rate":0,"TotalDuration":0,"ReportingInterval":1000000000,"SkipSettingGRPCLogger":false,"CustomEndpoint":"aperture:4318","Insecure":true,"InsecureSkipVerify":false,"UseHTTP":true,"HTTPPath":"/v1/metrics","Headers":{},"ResourceAttributes":{"service.name":"expectation-A06-pilot"},"TelemetryAttributes":{},"CaFile":"","ClientAuth":{"Enabled":false,"ClientCertFile":"","ClientKeyFile":""},"NumMetrics":1,"MetricName":"gen","MetricType":"Gauge","SpanID":"","TraceID":""}}
+2026-05-07T07:53:53.855Z	INFO	metrics/metrics.go:84	generation of metrics isn't being throttled
+2026-05-07T07:53:53.856Z	INFO	metrics/metrics.go:39	starting HTTP exporter
+2026-05-07T07:53:53.857Z	INFO	metrics/worker.go:108	metrics generated	{"worker": 0, "metrics": 1}
+2026-05-07T07:53:53.857Z	INFO	metrics/worker.go:43	stopping the exporter	{"worker": 0}

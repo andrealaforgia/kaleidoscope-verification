@@ -1,0 +1,9 @@
+=== crates/otlp-conformance-harness/Cargo.toml ===
+9:license = "Apache-2.0"
+
+=== crates/spark/Cargo.toml ===
+10:license = "Apache-2.0"
+
+=== crates/aperture/Cargo.toml ===
+10:license = "AGPL-3.0-or-later"
+OK — license manifests match the contract

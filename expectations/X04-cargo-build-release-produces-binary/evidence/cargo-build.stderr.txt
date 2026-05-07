@@ -11,28 +11,8 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-   Compiling serde_core v1.0.228
-   Compiling rustversion v1.0.22
-   Compiling axum-core v0.4.5
-   Compiling serde v1.0.228
-   Compiling serde_json v1.0.149
-   Compiling axum v0.7.9
-   Compiling serde_spanned v0.6.9
-   Compiling toml_datetime v0.6.11
-   Compiling tracing-serde v0.2.0
-   Compiling serde_urlencoded v0.7.1
-   Compiling toml_edit v0.22.27
-   Compiling reqwest v0.12.28
-   Compiling opentelemetry_sdk v0.27.1
-   Compiling tracing-subscriber v0.3.23
-   Compiling opentelemetry-appender-tracing v0.27.0
-   Compiling toml v0.8.23
-   Compiling figment v0.10.19
-   Compiling tonic v0.12.3
-   Compiling opentelemetry-proto v0.27.0
    Compiling otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
-   Compiling opentelemetry-otlp v0.27.0
-   Compiling aperture v0.1.0 (/src/crates/aperture)
    Compiling spark v0.1.0 (/src/crates/spark)
+   Compiling aperture v0.1.0 (/src/crates/aperture)
    Compiling sieve v0.1.0 (/src/crates/sieve)
-    Finished `release` profile [optimized] target(s) in 8.84s
+    Finished `release` profile [optimized] target(s) in 4.74s

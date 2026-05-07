@@ -11,9 +11,29 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-07 — second batch verified at SHA `6b09c0d`
-(A02, A03, A05, A06, A08, A09, A11, A12, A13, A15, A16, X04, X07, X08
-on top of the earlier A01, A04, A10).
+Last index refresh: 2026-05-07.
+
+All 17 satisfied expectations re-verified at SHA `c871b5852356b346b6c1fdc48b8be93514c27d2f`
+via `harness/re-verify-all.sh`; zero regressions across the 14 commits
+between the original satisfaction SHA (`6b09c0d`) and the re-verification
+SHA. Per-expectation `evidence/verification.yaml` carries the latest
+SHA. Each README's "Last verified" line names the original satisfaction
+date for traceability; the re-verification log lives at
+`harness/.re-verify-summary/<ID>.{ok,broken}.txt` (gitignored, regenerated
+on demand).
+
+Discovery walk on the same range surfaced a new candidate prefix:
+**SI** (Sieve), now graduated through Slice 06. Sampling decisions
+(rate-zero drop, non-error rate via xxh3_64), DEBUG per-decision
+events, INFO summary timer, and the `SamplingSink` decorator
+integration with Aperture (ADR-0021) are now observable surfaces.
+Codex DISCUSS+DESIGN closed (ADR-0022 to ADR-0025); no code yet.
+
+Original-batch dates:
+- 2026-05-06: pilot (A01, A04, A10) at SHA `6b09c0d`.
+- 2026-05-06: batch 2 (A02, A03, A05, A06, A08, A09, A11, A12, A13,
+  A15, A16, X04, X07, X08) at SHA `6b09c0d`.
+- 2026-05-07: re-verification of all 17 at SHA `c871b58`.
 
 Open issues:
 [002 — env-var overrides not wired in figment loader](../issues/002-env-var-overrides-not-wired-in-figment-loader.md);

@@ -118,6 +118,32 @@ fi
 
 docker compose up -d --build
 
+# Centralised readiness wait. Cold runs (fresh snapshot, fresh
+# aperture image) sometimes need >30 s before /readyz returns 200,
+# which previously surfaced as a per-runner timeout flake on the
+# first expectation in a re-verify batch. By gating on readiness
+# here, every runner starts with a known-ready aperture and its
+# own 30-s readiness check is a fast sanity re-poll.
+echo "waiting for aperture /readyz=200 (centralised, ≤ 60 s)" >&2
+READINESS_DEADLINE=$(( SECONDS + 60 ))
+READY=0
+while (( SECONDS < READINESS_DEADLINE )); do
+    if curl -sS --max-time 2 -o /dev/null -w '%{http_code}' \
+            http://localhost:4318/readyz 2>/dev/null \
+            | grep -q '^200$'; then
+        READY=1
+        echo "  aperture ready" >&2
+        break
+    fi
+    sleep 1
+done
+if (( READY == 0 )); then
+    echo "aperture never reached /readyz=200 within the centralised window" >&2
+    docker compose logs --no-color aperture > "$EVIDENCE_DIR/aperture.stderr.txt" 2>&1 || true
+    docker compose down --volumes --remove-orphans >/dev/null 2>&1 || true
+    exit 70
+fi
+
 # 3. Run the per-expectation scenario, if present.
 RUNNER="$EXP_DIR/runner.sh"
 RUNNER_EXIT=0

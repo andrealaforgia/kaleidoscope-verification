@@ -1,0 +1,6 @@
+=== crates/spark/src/lib.rs ===
+59:#![forbid(unsafe_code)]
+
+=== crates/aperture/src/lib.rs ===
+29:#![forbid(unsafe_code)]
+OK — forbid(unsafe_code) present in spark and aperture

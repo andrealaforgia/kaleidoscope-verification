@@ -1,4 +1,4 @@
-2026-05-06T23:26:37.508Z	INFO	logs/logs.go:82	generation of logs isn't being throttled
-2026-05-06T23:26:37.508Z	INFO	logs/logs.go:37	starting HTTP exporter
-2026-05-06T23:26:37.512Z	INFO	logs/worker.go:105	logs generated	{"worker": 0, "logs": 1}
-2026-05-06T23:26:37.512Z	INFO	logs/worker.go:49	stopping the exporter	{"worker": 0}
+2026-05-07T07:53:50.552Z	INFO	logs/logs.go:82	generation of logs isn't being throttled
+2026-05-07T07:53:50.552Z	INFO	logs/logs.go:37	starting HTTP exporter
+2026-05-07T07:53:50.554Z	INFO	logs/worker.go:105	logs generated	{"worker": 0, "logs": 1}
+2026-05-07T07:53:50.554Z	INFO	logs/worker.go:49	stopping the exporter	{"worker": 0}

@@ -1,190 +1,102 @@
-diff --git a/crates/sieve/src/observability.rs b/crates/sieve/src/observability.rs
-index 7e73d22..b12564a 100644
---- a/crates/sieve/src/observability.rs
-+++ b/crates/sieve/src/observability.rs
-@@ -6,11 +6,13 @@
- //! operators write dashboards against this vocabulary, changing
- //! field names is a breaking change.
- //!
--//! ## DISTILL state
-+//! ## DELIVER state — slice 06
- //!
--//! Function bodies panic with `unimplemented!()` until DELIVER. The
--//! signatures are locked here so the decorator's `accept_traces`
--//! body can compile against them at every slice.
-+//! Every helper is a real `tracing::debug!` / `tracing::info!`
-+//! emission. The helpers are kept `pub(crate)` so the decorator
-+//! (DEBUG events) and the aggregator's snapshot path (INFO summary)
-+//! call them through one named function each — the names ARE the
-+//! contract that mutation testing exercises.
+diff --git a/docs/presentation/narrative.md b/docs/presentation/narrative.md
+index af62ffb..13277b1 100644
+--- a/docs/presentation/narrative.md
++++ b/docs/presentation/narrative.md
+@@ -1152,6 +1152,64 @@ DESIGN picks up the architecture next.
  
- #![allow(dead_code)]
+ ---
  
-@@ -20,37 +22,151 @@ pub(crate) const SIEVE_TRACING_TARGET: &str = "sieve";
++## Codex — DESIGN closed
++
++Four ADRs lock the architecture. The public surface stays at five
++types plus the doc-hidden test seam discipline already established
++by Spark and Sieve. The corpus is hand-written Rust constants
++generated from the upstream OpenTelemetry semantic-conventions crate
++by an `xtask` regenerator the maintainer runs when the workspace's
++semconv pin moves; the generated artefact is checked in so its
++evolution is visible in pull-request diffs. The Levenshtein
++algorithm for the fuzzy "did you mean" suggestions is thirty lines
++in-tree, no new dependency, well within the licence-audit
++discipline an AGPL crate calls for.
++
++The Spark integration is the one cross-feature touch. Spark adds
++Codex as a runtime dependency, gains an additive `SchemaValidation`
++variant on its already-`#[non_exhaustive]` error type, and exposes
++an opt-in strict-mode builder. The default is warn mode: a single
++`tracing::warn!` event per misconfigured init carrying the report's
++human-readable text via Display rendering. Strict mode flips that
++to a fast `Err` from `init` for CI environments. The default is the
++operationally safe choice for existing Spark deployments rolling out
++the lint.
++
++```mermaid
++flowchart LR
++    SPK[crates/spark]
++    CDX[crates/codex<br/>library, AGPL]
++    OTSEMCONV[opentelemetry-semantic-conventions =0.27<br/>upstream]
++    XTASK[xtask/regenerate_codex_corpus<br/>maintainer ritual]
++    GEN[crates/codex/src/generated/semconv_0_27.rs<br/>checked-in artefact]
++
++    OTSEMCONV -.read at maintainer trigger.-> XTASK
++    XTASK -->|emits| GEN
++    GEN -->|seeds| CDX
++    SPK -->|runtime dep| CDX
++    SPK -.calls at init.-> CDX
++```
++
++The wave surfaced one alignment risk during the architect's work and
++resolved it cleanly. The slice-06 brief from DISCUSS recommended one
++warn event per individual violation; the wave-decisions document
++locked one warn event per init carrying the full report. The
++architect flagged the contradiction; the slice brief was amended to
++match the wave-decisions lock. Q9 wins; the slice brief follows.
++
++The architect approved on iteration one with no blocking issues. The
++recovery-during-stall pattern that has shown up earlier in the
++project (ADR-0017 was the first; this is the second) held cleanly
++again: the agent produced what he could before the watchdog cut him
++off; the orchestrator finalised the remainder; the reviewer's pass
++treated both halves equivalently. The methodology has now had two
++clean recoveries from this pattern, and the cost of each has stayed
++bounded.
++
++DISTILL picks up the acceptance test design next.
++
++---
++
+ ## What is consistent across the four features
  
- /// Emit a DEBUG event for a kept error-bearing trace.
- ///
--/// Field set: `decision="kept"`, `reason="error_bearing"`,
--/// `trace_id=<hex>`. Message contains "kept (error-bearing)".
--pub(crate) fn emit_debug_kept_error_bearing(_trace_id: [u8; 16]) {
--    unimplemented!("DEBUG kept (error-bearing) event lands at DELIVER slice 06");
-+/// Field set: `trace_id=<hex>`. Message: "kept (error-bearing)".
-+pub(crate) fn emit_debug_kept_error_bearing(trace_id: [u8; 16]) {
-+    tracing::debug!(
-+        target: SIEVE_TRACING_TARGET,
-+        trace_id = format_trace_id(trace_id),
-+        "kept (error-bearing)"
-+    );
- }
+ Discipline, not heroics. The methodology is the load-bearing
+diff --git a/docs/presentation/slides.md b/docs/presentation/slides.md
+index 533da17..6e1415c 100644
+--- a/docs/presentation/slides.md
++++ b/docs/presentation/slides.md
+@@ -575,6 +575,28 @@ DESIGN picks up next.
  
- /// Emit a DEBUG event for a kept rate-sampled trace.
- ///
--/// Field set: `decision="kept"`, `reason="rate_kept"`,
--/// `trace_id=<hex>`, `rate=<f64>`. Message contains "kept (sampled,
--/// rate=…)".
--pub(crate) fn emit_debug_kept_sampled(_trace_id: [u8; 16], _rate: f64) {
--    unimplemented!("DEBUG kept (sampled) event lands at DELIVER slice 06");
-+/// Field set: `trace_id=<hex>`, `rate=<f64>`. Message: "kept
-+/// (sampled, rate={rate:.2})".
-+pub(crate) fn emit_debug_kept_sampled(trace_id: [u8; 16], rate: f64) {
-+    tracing::debug!(
-+        target: SIEVE_TRACING_TARGET,
-+        trace_id = format_trace_id(trace_id),
-+        rate = rate,
-+        "kept (sampled, rate={rate:.2})"
-+    );
- }
+ ---
  
- /// Emit a DEBUG event for a dropped trace.
- ///
--/// Field set: `decision="dropped"`, `reason="rate_dropped"`,
--/// `trace_id=<hex>`, `rate=<f64>`. Message contains "dropped".
--pub(crate) fn emit_debug_dropped(_trace_id: [u8; 16], _rate: f64) {
--    unimplemented!("DEBUG dropped event lands at DELIVER slice 06");
-+/// Field set: `trace_id=<hex>`, `rate=<f64>`. Message: "dropped
-+/// (rate={rate:.2})".
-+pub(crate) fn emit_debug_dropped(trace_id: [u8; 16], rate: f64) {
-+    tracing::debug!(
-+        target: SIEVE_TRACING_TARGET,
-+        trace_id = format_trace_id(trace_id),
-+        rate = rate,
-+        "dropped (rate={rate:.2})"
-+    );
- }
++# Codex — DESIGN closed
++
++Four ADRs (0022-0025): public API + crate layout, corpus regeneration ritual, dependency pinning, Spark integration.
++
++Five public types + forbid unsafe. Zero runtime deps. In-tree Levenshtein for suggestions. xtask binary regenerates the corpus from upstream semconv when the pin moves; PR diff visible.
++
++Spark integration is additive on `#[non_exhaustive]` SparkError. Non-breaking. Default-warn / opt-in-strict.
++
++The reviewer approved on iteration one with no blocking issues.
++
++---
++
++# A second clean recovery
++
++The architect stalled mid-write at the same watchdog pattern that hit ADR-0017 earlier in the project. He had completed the wave-decisions and the first two ADRs cleanly; the orchestrator finalised the remaining two ADRs plus the C4 diagrams plus the technology-choices and slice-mapping.
++
++The reviewer's pass treated both halves equivalently. The methodology has now had two clean recoveries from this pattern; the cost of each has stayed bounded.
++
++DISTILL picks up next.
++
++---
++
+ # What is consistent across the four features
  
- /// Emit the periodic INFO summary.
- ///
- /// Field set per ADR-0020 §5: `kept`, `kept_error_bearing`,
- /// `kept_sampled`, `dropped`, `rate`. Message follows the wording
--/// locked at slice-06's brief.
-+/// locked at slice-06's brief: "kept N traces (E error-bearing, S
-+/// sampled at R rate), dropped M traces over the last summary
-+/// window".
- ///
- /// Called by the timer task on every tick AND by the
- /// [`crate::__test_summary_tick_now`] test seam.
--pub(crate) fn emit_summary(_kept_total: u64, _kept_error_bearing: u64, _dropped: u64, _rate: f64) {
--    unimplemented!("INFO summary event lands at DELIVER slice 06");
-+pub(crate) fn emit_summary(kept_total: u64, kept_error_bearing: u64, dropped: u64, rate: f64) {
-+    let kept_sampled = kept_total.saturating_sub(kept_error_bearing);
-+    tracing::info!(
-+        target: SIEVE_TRACING_TARGET,
-+        kept = kept_total,
-+        kept_error_bearing = kept_error_bearing,
-+        kept_sampled = kept_sampled,
-+        dropped = dropped,
-+        rate = rate,
-+        "sieve: kept {kept_total} traces ({kept_error_bearing} error-bearing, \
-+         {kept_sampled} sampled at {rate:.2} rate), dropped {dropped} traces \
-+         over the last summary window"
-+    );
-+}
-+
-+/// Render a 16-byte trace_id as a lowercase hex string.
-+///
-+/// Operator-facing rendering: dashboards and log lines surface the
-+/// trace_id verbatim so an operator can correlate against the
-+/// upstream OTel collector / backend.
-+fn format_trace_id(trace_id: [u8; 16]) -> String {
-+    let mut out = String::with_capacity(32);
-+    for byte in trace_id {
-+        let hi = HEX_DIGITS[(byte >> 4) as usize];
-+        let lo = HEX_DIGITS[(byte & 0x0F) as usize];
-+        out.push(hi as char);
-+        out.push(lo as char);
-+    }
-+    out
-+}
-+
-+/// Lowercase hex digit lookup. Pulled out as a constant so the
-+/// formatter has no arithmetic mutation surface beyond the literal
-+/// table.
-+const HEX_DIGITS: &[u8; 16] = b"0123456789abcdef";
-+
-+#[cfg(test)]
-+mod tests {
-+    //! Unit tests for the trace_id formatter.
-+    //!
-+    //! Port-to-port at domain scope per Mandate 2: `format_trace_id`
-+    //! is a pure free function whose signature IS its driving port.
-+    //! Calling it directly from a test IS port-to-port testing.
-+    //!
-+    //! Test budget: 1 distinct behaviour × 2 = 2 unit tests max. The
-+    //! behaviour is "render every byte as two lowercase hex digits, in
-+    //! big-endian order". Variations across boundary bytes are
-+    //! parametrised into one table-driven test per Mandate 5.
-+
-+    use super::*;
-+
-+    #[test]
-+    fn format_trace_id_renders_each_byte_as_two_lowercase_hex_digits() {
-+        // The single behaviour is exercised across the boundary bytes
-+        // (0x00, 0x0F, 0xF0, 0xFF) and a typical mixed pattern. Any
-+        // mutation that perturbs the digit table, the shift, or the
-+        // mask is caught by at least one of these cases.
-+        let cases: &[(&str, [u8; 16], &str)] = &[
-+            (
-+                "all zeros render as thirty-two zero digits",
-+                [0u8; 16],
-+                "00000000000000000000000000000000",
-+            ),
-+            (
-+                "all 0xFF render as thirty-two 'f' digits",
-+                [0xFFu8; 16],
-+                "ffffffffffffffffffffffffffffffff",
-+            ),
-+            (
-+                "ascending bytes render in big-endian order",
-+                [
-+                    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, //
-+                    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-+                ],
-+                "000102030405060708090a0b0c0d0e0f",
-+            ),
-+            (
-+                "high-nibble boundary 0xF0 renders as 'f0'",
-+                [
-+                    0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
-+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+                ],
-+                "f0000000000000000000000000000000",
-+            ),
-+            (
-+                "low-nibble boundary 0x0F renders as '0f'",
-+                [
-+                    0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
-+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+                ],
-+                "0f000000000000000000000000000000",
-+            ),
-+        ];
-+
-+        for (label, input, expected) in cases {
-+            assert_eq!(
-+                format_trace_id(*input),
-+                *expected,
-+                "case {label}: expected {expected}"
-+            );
-+        }
-+    }
- }
+ Discipline, not heroics.

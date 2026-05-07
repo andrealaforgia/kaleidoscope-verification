@@ -1,7 +1,7 @@
 step 1: wait for aperture ready
 step 2: snapshot aperture stderr
 # json-shape-report
-kaleidoscope_sha:    94bc536917724c3a34c44cf489c85fbe9bf2e56e
+kaleidoscope_sha:    c871b5852356b346b6c1fdc48b8be93514c27d2f
 lines_total:         5
 lines_bad_json:      0
 lines_missing_field: 0

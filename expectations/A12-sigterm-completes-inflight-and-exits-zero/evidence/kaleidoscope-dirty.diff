@@ -1,477 +1,69 @@
-diff --git a/crates/sieve/src/decorator.rs b/crates/sieve/src/decorator.rs
-index cba6111..fd2eb8e 100644
---- a/crates/sieve/src/decorator.rs
-+++ b/crates/sieve/src/decorator.rs
-@@ -6,29 +6,39 @@
- //! sampler type `N`; consumes Aperture's existing `OtlpSink +
- //! Probe` traits; no Aperture-side trait amendment.
- //!
--//! ## DISTILL state
-+//! ## Slice 05 state
- //!
--//! - [`SamplingSink::new`] is `unimplemented!()` (DELIVER slice 01
--//!   lands the timer-task spawn).
--//! - The `OtlpSink::accept` impl panics on `unimplemented!()`
--//!   (DELIVER slices 01–05 land the routing logic).
--//! - The `Probe::probe` impl panics on `unimplemented!()` (DELIVER
--//!   slice 01 lands the delegation).
--//! - The [`__test_summary_tick_now`] test seam is real-but-stub: it
--//!   accepts a `&SamplingSink<S, N>` and panics; DELIVER slice 06
--//!   replaces the body with the synchronous summary emission.
--
--// DISTILL state — fields are populated at DELIVER slice 01.
--#![allow(dead_code)]
-+//! - [`SamplingSink::new`] stores the inner sink and the sampler in
-+//!   `Arc`s and constructs a fresh [`Counters`] aggregator. The
-+//!   timer task that consumes the counters is slice 06's territory;
-+//!   slice 05 leaves the counters as zero-initialised state and does
-+//!   not spawn the task.
-+//! - The `OtlpSink::accept` impl routes per variant: `Logs` and
-+//!   `Metrics` are forwarded to the inner sink unchanged (per Q6 +
-+//!   ADR-0021 §1); `Traces` are grouped by trace_id, the sampler is
-+//!   asked per trace, and a kept-traces-only
-+//!   [`ExportTraceServiceRequest`] is forwarded to the inner sink.
-+//! - The `Probe::probe` impl delegates to the inner sink (per
-+//!   ADR-0021 §6).
-+//! - The per-decision DEBUG events and the counter increments inside
-+//!   `accept_traces` are slice 06's territory; this slice closes the
-+//!   routing and the kept-trace forwarding only.
-+//! - The [`__test_summary_tick_now`] test seam is still
-+//!   `unimplemented!()` (slice 06 lands its body).
+diff --git a/docs/presentation/narrative.md b/docs/presentation/narrative.md
+index af62ffb..13277b1 100644
+--- a/docs/presentation/narrative.md
++++ b/docs/presentation/narrative.md
+@@ -1152,6 +1152,64 @@ DESIGN picks up the architecture next.
  
-+use std::collections::{HashMap, HashSet};
- use std::future::Future;
- use std::pin::Pin;
- use std::sync::Arc;
+ ---
  
- use aperture::ports::{OtlpSink, Probe, ProbeError, SinkError, SinkRecord};
-+use opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest;
-+use opentelemetry_proto::tonic::trace::v1::{ResourceSpans, ScopeSpans, Span};
- 
- use crate::aggregator::Counters;
-+use crate::decision::Decision;
- use crate::sampler::Sampler;
-+use crate::trace_view::TraceView;
- 
- /// `OtlpSink + Probe` decorator adding head-based sampling on the
- /// `Traces` variant; forwards `Logs` / `Metrics` unchanged per
-@@ -40,23 +50,27 @@ use crate::sampler::Sampler;
- /// `HeadSampler` is the v0 concrete and a future tail sampler can
- /// slot in without reshape).
- ///
--/// Constructed via [`SamplingSink::new`]; the timer task is spawned
--/// at construction on the ambient Tokio runtime per ADR-0020 §2.
-+/// Constructed via [`SamplingSink::new`]. Slice 06 will spawn the
-+/// periodic summary task at construction on the ambient Tokio runtime
-+/// (per ADR-0020 §2); slice 05 leaves the counters present and zero.
- pub struct SamplingSink<S, N>
- where
-     S: OtlpSink + Probe,
-     N: Sampler,
- {
-     /// The inner sink the decorator wraps. Held in an `Arc` so the
--    /// timer task can hold a clone without bounding the decorator's
--    /// lifetime to the runtime's tick cadence.
-+    /// timer task (slice 06) can hold a clone without bounding the
-+    /// decorator's lifetime to the runtime's tick cadence.
-     inner: Arc<S>,
- 
-     /// The sampler the decorator consults for `Traces` records.
-     sampler: Arc<N>,
- 
-     /// The aggregator's counters. Held in an `Arc` so the timer task
--    /// can read them concurrently with the hot path.
-+    /// (slice 06) can read them concurrently with the hot path.
-+    /// Slice 05 holds them as zero-initialised state; slice 06 wires
-+    /// the increments and the timer-driven snapshot.
-+    #[allow(dead_code)]
-     counters: Arc<Counters>,
- }
- 
-@@ -67,31 +81,22 @@ where
- {
-     /// Wrap the inner sink with the given sampler.
-     ///
--    /// Spawns the periodic summary timer task on the ambient Tokio
--    /// runtime per ADR-0020 §2. The task runs until the
--    /// `SamplingSink` is dropped (cooperative cancellation via
--    /// `tokio_util::sync::CancellationToken`).
--    ///
--    /// At DISTILL this constructor panics with `unimplemented!()`.
--    /// DELIVER slice 01 lands the real spawn-and-store body.
--    pub fn new(_inner: S, _sampler: N) -> Self {
--        // The construction shape is locked here: pull the tick
--        // interval from `SIEVE_SUMMARY_TICK_MS` (or default to
--        // 60_000), spawn the timer task on the ambient runtime,
--        // store the join handle and the cancellation token. DELIVER
--        // slice 01 replaces this body.
--        unimplemented!("SamplingSink::new lands at DELIVER slice 01");
-+    /// The constructor stores the inner sink, the sampler, and a
-+    /// fresh [`Counters`] aggregator behind `Arc` so the slice-06
-+    /// timer task can read state concurrently with the hot path.
-+    /// Slice 05 does not spawn the task; slice 06 lands the spawn,
-+    /// the join handle, and the cancellation token.
-+    pub fn new(inner: S, sampler: N) -> Self {
-+        Self {
-+            inner: Arc::new(inner),
-+            sampler: Arc::new(sampler),
-+            counters: Arc::new(Counters::new()),
-+        }
-     }
- }
- 
- // =========================================================================
- // `OtlpSink` and `Probe` impls — the integration point with Aperture.
--//
--// At DISTILL the bodies are `unimplemented!()`. The trait impls
--// themselves exist so the `invariant_sampling_sink_is_otlp_sink_and_probe`
--// test compiles: that test asserts at the type level that
--// `SamplingSink<S, N>: OtlpSink + Probe` whenever `S: OtlpSink +
--// Probe + Send + Sync + 'static` and `N: Sampler`.
- // =========================================================================
- 
- impl<S, N> OtlpSink for SamplingSink<S, N>
-@@ -101,17 +106,28 @@ where
- {
-     fn accept<'a>(
-         &'a self,
--        _record: SinkRecord,
-+        record: SinkRecord,
-     ) -> Pin<Box<dyn Future<Output = Result<(), SinkError>> + Send + 'a>> {
-         Box::pin(async move {
--            // DELIVER slices 01-05 land the routing body:
--            //   - SinkRecord::Logs / SinkRecord::Metrics →
--            //     forward to inner unchanged (slice 05).
--            //   - SinkRecord::Traces → group by trace_id, ask
--            //     sampler per trace, emit DEBUG event per decision,
--            //     forward kept-traces-only envelope to inner
--            //     (slices 01-04).
--            unimplemented!("SamplingSink::accept lands at DELIVER slices 01-05");
-+            match record {
-+                // Per ADR-0021 §1: traces are grouped by trace_id,
-+                // the sampler is asked per trace, and a
-+                // kept-traces-only envelope is forwarded.
-+                SinkRecord::Traces(req) => self.accept_traces(req).await,
-+                // Per Q6 + ADR-0021 §1: logs pass through to the
-+                // inner sink unchanged. The decorator does not
-+                // unpack the envelope.
-+                SinkRecord::Logs(req) => self.inner.accept(SinkRecord::Logs(req)).await,
-+                // Per Q6 + ADR-0021 §1: metrics pass through to the
-+                // inner sink unchanged.
-+                SinkRecord::Metrics(req) => self.inner.accept(SinkRecord::Metrics(req)).await,
-+                // `SinkRecord` is `#[non_exhaustive]`. A future
-+                // Aperture-side variant will pass through this arm
-+                // verbatim — the right v0 posture is "Sieve only
-+                // mutates Traces; every other variant passes through
-+                // unchanged".
-+                other => self.inner.accept(other).await,
-+            }
-         })
-     }
- }
-@@ -122,13 +138,143 @@ where
-     N: Sampler,
- {
-     fn probe<'a>(&'a self) -> Pin<Box<dyn Future<Output = Result<(), ProbeError>> + Send + 'a>> {
--        Box::pin(async move {
--            // DELIVER slice 01 lands the delegation body:
--            //   `self.inner.probe().await`.
--            // Per ADR-0021 §6: Sieve has no external dependency to
--            // probe; the only external dependency is the inner sink.
--            unimplemented!("SamplingSink::probe lands at DELIVER slice 01");
--        })
-+        // Per ADR-0021 §6: Sieve has no external dependency to probe;
-+        // the only external dependency is the inner sink. Delegation
-+        // is the contract.
-+        Box::pin(async move { self.inner.probe().await })
-+    }
-+}
++## Codex — DESIGN closed
 +
-+impl<S, N> SamplingSink<S, N>
-+where
-+    S: OtlpSink + Probe,
-+    N: Sampler,
-+{
-+    /// Group spans of the incoming `ExportTraceServiceRequest` by
-+    /// `trace_id`, ask the sampler for a `Decision` per trace, and
-+    /// forward a kept-traces-only envelope to the inner sink.
-+    ///
-+    /// Per ADR-0021 §1: the grouping pass is one allocation per
-+    /// call (the `HashMap<[u8; 16], Vec<&Span>>`); the rebuild
-+    /// filters spans within each `ResourceSpans` / `ScopeSpans`. An
-+    /// entirely-dropped `ResourceSpans` is omitted.
-+    ///
-+    /// Slice 05 lands the routing and the kept-trace forwarding;
-+    /// slice 06 will add the per-decision DEBUG events and the
-+    /// counter increments at the keep / drop branches.
-+    async fn accept_traces(
-+        &self,
-+        request: ExportTraceServiceRequest,
-+    ) -> Result<(), SinkError> {
-+        let kept_trace_ids = self.decide_kept_trace_ids(&request);
-+        let filtered = filter_request_by_trace_ids(request, &kept_trace_ids);
-+        self.inner.accept(SinkRecord::Traces(filtered)).await
-+    }
++Four ADRs lock the architecture. The public surface stays at five
++types plus the doc-hidden test seam discipline already established
++by Spark and Sieve. The corpus is hand-written Rust constants
++generated from the upstream OpenTelemetry semantic-conventions crate
++by an `xtask` regenerator the maintainer runs when the workspace's
++semconv pin moves; the generated artefact is checked in so its
++evolution is visible in pull-request diffs. The Levenshtein
++algorithm for the fuzzy "did you mean" suggestions is thirty lines
++in-tree, no new dependency, well within the licence-audit
++discipline an AGPL crate calls for.
 +
-+    /// Compute the set of trace_ids that the sampler keeps for this
-+    /// request. Spans whose `trace_id` is not the canonical 16-byte
-+    /// length are skipped (defensive; the OTLP wire contract
-+    /// requires 16 bytes).
-+    fn decide_kept_trace_ids(
-+        &self,
-+        request: &ExportTraceServiceRequest,
-+    ) -> HashSet<[u8; 16]> {
-+        let groups = group_spans_by_trace_id(request);
-+        let mut kept: HashSet<[u8; 16]> = HashSet::with_capacity(groups.len());
-+        for (trace_id, spans) in &groups {
-+            let view = TraceView::from_grouping_pass(*trace_id, spans.as_slice());
-+            if matches!(self.sampler.sample(&view), Decision::Keep) {
-+                kept.insert(*trace_id);
-+            }
-+        }
-+        kept
-+    }
-+}
++The Spark integration is the one cross-feature touch. Spark adds
++Codex as a runtime dependency, gains an additive `SchemaValidation`
++variant on its already-`#[non_exhaustive]` error type, and exposes
++an opt-in strict-mode builder. The default is warn mode: a single
++`tracing::warn!` event per misconfigured init carrying the report's
++human-readable text via Display rendering. Strict mode flips that
++to a fast `Err` from `init` for CI environments. The default is the
++operationally safe choice for existing Spark deployments rolling out
++the lint.
 +
-+/// Walk an `ExportTraceServiceRequest`, copying each span into a
-+/// `Vec<Span>` keyed by its 16-byte `trace_id`.
-+///
-+/// Spans whose `trace_id` is not exactly 16 bytes are skipped
-+/// (defensive against malformed input; the OTLP wire contract
-+/// requires 16 bytes per `Span::trace_id`).
-+///
-+/// The sampler reads `trace_id` and iterates spans through
-+/// [`crate::TraceView`]; `TraceView` borrows a `&[Span]` so the
-+/// grouping pass owns a `Vec<Span>` per trace and the sampler reads
-+/// it through the borrowed view. Cloning each span here is the v0
-+/// shape; ADR-0021 §"Cons" notes a future optimisation can pool the
-+/// allocation.
-+fn group_spans_by_trace_id(
-+    request: &ExportTraceServiceRequest,
-+) -> HashMap<[u8; 16], Vec<Span>> {
-+    let mut groups: HashMap<[u8; 16], Vec<Span>> = HashMap::new();
-+    for resource_spans in &request.resource_spans {
-+        for scope_spans in &resource_spans.scope_spans {
-+            for span in &scope_spans.spans {
-+                if let Ok(trace_id) = <[u8; 16]>::try_from(span.trace_id.as_slice()) {
-+                    groups.entry(trace_id).or_default().push(span.clone());
-+                }
-+            }
-+        }
-+    }
-+    groups
-+}
++```mermaid
++flowchart LR
++    SPK[crates/spark]
++    CDX[crates/codex<br/>library, AGPL]
++    OTSEMCONV[opentelemetry-semantic-conventions =0.27<br/>upstream]
++    XTASK[xtask/regenerate_codex_corpus<br/>maintainer ritual]
++    GEN[crates/codex/src/generated/semconv_0_27.rs<br/>checked-in artefact]
 +
-+/// Rebuild the `ExportTraceServiceRequest` keeping only the spans
-+/// whose `trace_id` is in `kept`. A `ScopeSpans` whose span list
-+/// becomes empty after filtering is omitted; a `ResourceSpans` whose
-+/// scope-span list becomes empty after filtering is omitted.
-+fn filter_request_by_trace_ids(
-+    request: ExportTraceServiceRequest,
-+    kept: &HashSet<[u8; 16]>,
-+) -> ExportTraceServiceRequest {
-+    let resource_spans = request
-+        .resource_spans
-+        .into_iter()
-+        .filter_map(|resource_spans| filter_resource_spans(resource_spans, kept))
-+        .collect();
-+    ExportTraceServiceRequest { resource_spans }
-+}
++    OTSEMCONV -.read at maintainer trigger.-> XTASK
++    XTASK -->|emits| GEN
++    GEN -->|seeds| CDX
++    SPK -->|runtime dep| CDX
++    SPK -.calls at init.-> CDX
++```
 +
-+fn filter_resource_spans(
-+    resource_spans: ResourceSpans,
-+    kept: &HashSet<[u8; 16]>,
-+) -> Option<ResourceSpans> {
-+    let scope_spans: Vec<ScopeSpans> = resource_spans
-+        .scope_spans
-+        .into_iter()
-+        .filter_map(|scope_spans| filter_scope_spans(scope_spans, kept))
-+        .collect();
-+    if scope_spans.is_empty() {
-+        return None;
-+    }
-+    Some(ResourceSpans {
-+        resource: resource_spans.resource,
-+        scope_spans,
-+        schema_url: resource_spans.schema_url,
-+    })
-+}
++The wave surfaced one alignment risk during the architect's work and
++resolved it cleanly. The slice-06 brief from DISCUSS recommended one
++warn event per individual violation; the wave-decisions document
++locked one warn event per init carrying the full report. The
++architect flagged the contradiction; the slice brief was amended to
++match the wave-decisions lock. Q9 wins; the slice brief follows.
 +
-+fn filter_scope_spans(scope_spans: ScopeSpans, kept: &HashSet<[u8; 16]>) -> Option<ScopeSpans> {
-+    let spans: Vec<Span> = scope_spans
-+        .spans
-+        .into_iter()
-+        .filter(|span| span_is_kept(span, kept))
-+        .collect();
-+    if spans.is_empty() {
-+        return None;
-+    }
-+    Some(ScopeSpans {
-+        scope: scope_spans.scope,
-+        spans,
-+        schema_url: scope_spans.schema_url,
-+    })
-+}
++The architect approved on iteration one with no blocking issues. The
++recovery-during-stall pattern that has shown up earlier in the
++project (ADR-0017 was the first; this is the second) held cleanly
++again: the agent produced what he could before the watchdog cut him
++off; the orchestrator finalised the remainder; the reviewer's pass
++treated both halves equivalently. The methodology has now had two
++clean recoveries from this pattern, and the cost of each has stayed
++bounded.
 +
-+fn span_is_kept(span: &Span, kept: &HashSet<[u8; 16]>) -> bool {
-+    match <[u8; 16]>::try_from(span.trace_id.as_slice()) {
-+        Ok(trace_id) => kept.contains(&trace_id),
-+        Err(_) => false,
-     }
- }
++DISTILL picks up the acceptance test design next.
++
++---
++
+ ## What is consistent across the four features
  
-@@ -140,8 +286,8 @@ where
- // Tokio timer entirely. Slice-06 uses this so the assertion does not
- // depend on wall-clock time.
- //
--// At DISTILL the body is `unimplemented!()`; DELIVER slice 06
--// replaces it with a snapshot of the counters and a call into
-+// At slice 05 the body is still `unimplemented!()`; slice 06 replaces
-+// it with a snapshot of the counters and a call into
- // `observability::emit_summary`.
- // =========================================================================
- 
-diff --git a/crates/sieve/src/trace_view.rs b/crates/sieve/src/trace_view.rs
-index 654d8e5..912b3fe 100644
---- a/crates/sieve/src/trace_view.rs
-+++ b/crates/sieve/src/trace_view.rs
-@@ -59,6 +59,27 @@ impl<'a> TraceView<'a> {
-     }
- }
- 
-+impl<'a> TraceView<'a> {
-+    /// Crate-internal constructor used by the decorator's grouping
-+    /// pass.
-+    ///
-+    /// The decorator walks the upstream `ExportTraceServiceRequest`,
-+    /// groups spans by `trace_id` into a `HashMap<[u8; 16], Vec<Span>>`,
-+    /// and constructs a [`TraceView`] per group via this constructor.
-+    /// The invariant "every span in the view shares the same
-+    /// `trace_id`" is maintained by the grouping pass: the `trace_id`
-+    /// passed here is the key of the `HashMap` entry whose `Vec<Span>`
-+    /// is borrowed by `spans`.
-+    ///
-+    /// Kept `pub(crate)` so the decorator can call it without going
-+    /// through the doc-hidden test seam (the test seam's ergonomics
-+    /// are tuned for fixture construction in slice tests, not for the
-+    /// decorator's hot path).
-+    pub(crate) fn from_grouping_pass(trace_id: [u8; 16], spans: &'a [Span]) -> Self {
-+        Self { trace_id, spans }
-+    }
-+}
-+
- // =========================================================================
- // Test seam — `__test_trace_view` (per ADR-0018 §"Test seams").
- //
-diff --git a/crates/sieve/tests/common/mod.rs b/crates/sieve/tests/common/mod.rs
-index 74f8223..a2fe2b0 100644
---- a/crates/sieve/tests/common/mod.rs
-+++ b/crates/sieve/tests/common/mod.rs
-@@ -109,17 +109,68 @@ pub fn acquire_test_serial() -> SieveTestGuard {
- // real Aperture `OtlpSink + Probe` contract. `RecordingSink` records
- // every accepted record; the slice tests assert against the
- // recorded set.
-+//
-+// The decorator's `new(inner: S, sampler: N)` takes the inner sink by
-+// value, so the fixture wraps a single `Arc<RecordingSink>` in the
-+// `SharedRecording` newtype below: one clone of the `Arc` lives
-+// inside the decorator (via the newtype that satisfies
-+// `OtlpSink + Probe`), the other clone stays on the fixture for
-+// `drain()` inspection. Both clones address the SAME recording
-+// instance, so the slice-05 assertions on `fixture.recording.drain()`
-+// see what the decorator forwarded.
- // =========================================================================
- 
--/// A live `SamplingSink<RecordingSink, HeadSampler>` plus a handle
--/// to the inner `RecordingSink` so tests can interrogate what
--/// reached the inner sink.
-+/// `OtlpSink + Probe` newtype around `Arc<RecordingSink>`.
-+///
-+/// The decorator is generic over `S: OtlpSink + Probe + Send + Sync +
-+/// 'static` and consumes the inner by value. Wrapping the shared
-+/// `Arc<RecordingSink>` lets the test side and the decorator side
-+/// observe the same recording without `aperture::testing` growing a
-+/// blanket `impl OtlpSink for Arc<RecordingSink>` (Aperture's surface
-+/// is closed; `tests/common/mod.rs` is the right place for the test
-+/// double's wiring).
-+pub struct SharedRecording {
-+    inner: Arc<RecordingSink>,
-+}
-+
-+impl SharedRecording {
-+    fn new(inner: Arc<RecordingSink>) -> Self {
-+        Self { inner }
-+    }
-+}
-+
-+impl OtlpSink for SharedRecording {
-+    fn accept<'a>(
-+        &'a self,
-+        record: SinkRecord,
-+    ) -> std::pin::Pin<
-+        Box<dyn std::future::Future<Output = Result<(), SinkError>> + Send + 'a>,
-+    > {
-+        let inner = Arc::clone(&self.inner);
-+        Box::pin(async move { inner.accept(record).await })
-+    }
-+}
-+
-+impl Probe for SharedRecording {
-+    fn probe<'a>(
-+        &'a self,
-+    ) -> std::pin::Pin<
-+        Box<dyn std::future::Future<Output = Result<(), ProbeError>> + Send + 'a>,
-+    > {
-+        let inner = Arc::clone(&self.inner);
-+        Box::pin(async move { inner.probe().await })
-+    }
-+}
-+
-+/// A live `SamplingSink<SharedRecording, HeadSampler>` plus a shared
-+/// handle to the same inner `RecordingSink` so tests can
-+/// `drain()` what the decorator forwarded.
- ///
--/// At DISTILL `SamplingSink::new` panics with `unimplemented!()` so
--/// constructing this fixture panics. That is the RED state — DELIVER
--/// slice 01 makes the constructor real.
-+/// Both `sink` and `recording` reference the same `RecordingSink`
-+/// instance via `Arc` cloning, so a record forwarded through the
-+/// decorator is observable on `recording.drain()`.
- pub struct SieveFixture {
--    pub sink: SamplingSink<RecordingSink, sieve::HeadSampler>,
-+    pub sink: SamplingSink<SharedRecording, sieve::HeadSampler>,
-     pub recording: Arc<RecordingSink>,
- }
- 
-@@ -131,27 +182,12 @@ pub struct SieveFixture {
- /// `.expect`). Tests that intentionally pass an out-of-range value
- /// should call `HeadSampler::new` directly and assert on the error.
- pub fn spawn_sampling_sink_with_recording_inner(rate: f64) -> SieveFixture {
--    let recording_inner = RecordingSink::new();
-+    let recording: Arc<RecordingSink> = Arc::new(RecordingSink::new());
-     let sampler = sieve::HeadSampler::new(rate)
-         .unwrap_or_else(|e| panic!("HeadSampler::new({rate}) must succeed for fixture: {e}"));
--    // Hold an Arc<RecordingSink> so the test can `drain()` after the
--    // sink consumes records. The decorator owns the inner sink by
--    // value; we rebuild a second copy here for inspection. At
--    // DISTILL the constructor panics on `unimplemented!()` so tests
--    // panic before reaching the recording inspection — which is the
--    // canonical RED state.
--    let _recording_arc: Arc<RecordingSink> = Arc::new(recording_inner);
--    let recording_for_sink = RecordingSink::new();
--    let sink = SamplingSink::new(recording_for_sink, sampler);
--    // The decorator owns its inner sink; the test side keeps a
--    // separate `RecordingSink` reference to assert against. DELIVER
--    // slice 01 + 05 will replace this stand-in with a shared
--    // `Arc<RecordingSink>` constructed by the decorator's `new` in a
--    // way the slice tests can reach.
--    SieveFixture {
--        sink,
--        recording: _recording_arc,
--    }
-+    let shared = SharedRecording::new(Arc::clone(&recording));
-+    let sink = SamplingSink::new(shared, sampler);
-+    SieveFixture { sink, recording }
- }
- 
- // =========================================================================
+ Discipline, not heroics. The methodology is the load-bearing

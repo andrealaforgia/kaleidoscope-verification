@@ -3,6 +3,6 @@ step 1: waiting for aperture /readyz to return 200
 step 2: sending one logs payload via telemetrygen (grpc)
   telemetrygen exited 0
 step 3: checking aperture stderr for sink_accepted (signal=logs)
-  found: aperture-1  | {"timestamp":"2026-05-06T23:28:24.950802Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":1,"resource.service.name":"expectation-A02-pilot"}
+  found: aperture-1  | {"timestamp":"2026-05-07T07:53:40.517202Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-A02-pilot"}
   observed record_count=1
 OK — aperture acked logs on grpc with record_count=1 for service expectation-A02-pilot

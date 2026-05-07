@@ -5,6 +5,7 @@
 harness/.captured/
 harness/.snapshot/
 harness/.workspace-build-cache/
+harness/.re-verify-summary/
 
 # macOS
 .DS_Store
