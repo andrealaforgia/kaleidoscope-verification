@@ -1,0 +1,20 @@
+step 1: ensure cargo-deny installed (Step 3 of the hook needs it)
+step 2: run scripts/hooks/pre-commit on the snapshot
+  hook exited 0 (cleanly)
+  last 15 lines of hook output:
+    test developer_drops_guard_with_healthy_aperture_and_observes_shutdown_complete_info_event ... ok
+    test developer_drops_guard_with_healthy_aperture_and_shutdown_complete_message_carries_drained_prefix ... ok
+    test developer_drops_guard_with_no_listener_at_endpoint_and_drop_does_not_panic ... ok
+    test developer_drops_guard_with_short_deadline_and_drop_completes_close_to_deadline ... ok
+    
+    test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+    
+    → cargo build -p codex --all-targets --locked  (Gate 1, Codex compile-only)
+       Compiling serde v1.0.228
+       Compiling similar v2.7.0
+       Compiling codex v0.1.0 (/src/crates/codex)
+       Compiling console v0.16.3
+       Compiling insta v1.47.2
+        Finished `dev` profile [unoptimized] target(s) in 1.57s
+    [32m[pass] all pre-commit gates green[0m
+OK — pre-commit hook ran every local gate and exited 0

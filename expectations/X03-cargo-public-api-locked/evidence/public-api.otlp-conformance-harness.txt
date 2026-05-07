@@ -1,0 +1,127 @@
+pub mod otlp_conformance_harness
+#[non_exhaustive] pub enum otlp_conformance_harness::ByteOffset
+pub otlp_conformance_harness::ByteOffset::Known(usize)
+pub otlp_conformance_harness::ByteOffset::Unknown
+impl core::clone::Clone for otlp_conformance_harness::ByteOffset
+pub fn otlp_conformance_harness::ByteOffset::clone(&self) -> otlp_conformance_harness::ByteOffset
+impl core::cmp::Eq for otlp_conformance_harness::ByteOffset
+impl core::cmp::PartialEq for otlp_conformance_harness::ByteOffset
+pub fn otlp_conformance_harness::ByteOffset::eq(&self, other: &otlp_conformance_harness::ByteOffset) -> bool
+impl core::fmt::Debug for otlp_conformance_harness::ByteOffset
+pub fn otlp_conformance_harness::ByteOffset::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::hash::Hash for otlp_conformance_harness::ByteOffset
+pub fn otlp_conformance_harness::ByteOffset::hash<__H: core::hash::Hasher>(&self, state: &mut __H)
+impl core::marker::Copy for otlp_conformance_harness::ByteOffset
+impl core::marker::StructuralPartialEq for otlp_conformance_harness::ByteOffset
+impl core::marker::Freeze for otlp_conformance_harness::ByteOffset
+impl core::marker::Send for otlp_conformance_harness::ByteOffset
+impl core::marker::Sync for otlp_conformance_harness::ByteOffset
+impl core::marker::Unpin for otlp_conformance_harness::ByteOffset
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::ByteOffset
+impl core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::ByteOffset
+impl core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::ByteOffset
+#[non_exhaustive] pub enum otlp_conformance_harness::Framing
+pub otlp_conformance_harness::Framing::GrpcProtobuf
+pub otlp_conformance_harness::Framing::HttpProtobuf
+impl core::clone::Clone for otlp_conformance_harness::Framing
+pub fn otlp_conformance_harness::Framing::clone(&self) -> otlp_conformance_harness::Framing
+impl core::cmp::Eq for otlp_conformance_harness::Framing
+impl core::cmp::PartialEq for otlp_conformance_harness::Framing
+pub fn otlp_conformance_harness::Framing::eq(&self, other: &otlp_conformance_harness::Framing) -> bool
+impl core::fmt::Debug for otlp_conformance_harness::Framing
+pub fn otlp_conformance_harness::Framing::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::hash::Hash for otlp_conformance_harness::Framing
+pub fn otlp_conformance_harness::Framing::hash<__H: core::hash::Hasher>(&self, state: &mut __H)
+impl core::marker::Copy for otlp_conformance_harness::Framing
+impl core::marker::StructuralPartialEq for otlp_conformance_harness::Framing
+impl core::marker::Freeze for otlp_conformance_harness::Framing
+impl core::marker::Send for otlp_conformance_harness::Framing
+impl core::marker::Sync for otlp_conformance_harness::Framing
+impl core::marker::Unpin for otlp_conformance_harness::Framing
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::Framing
+impl core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::Framing
+impl core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::Framing
+#[non_exhaustive] pub enum otlp_conformance_harness::Rule
+pub otlp_conformance_harness::Rule::EmptyInput
+pub otlp_conformance_harness::Rule::WireType(otlp_conformance_harness::WireTypeRule)
+impl core::clone::Clone for otlp_conformance_harness::Rule
+pub fn otlp_conformance_harness::Rule::clone(&self) -> otlp_conformance_harness::Rule
+impl core::cmp::Eq for otlp_conformance_harness::Rule
+impl core::cmp::PartialEq for otlp_conformance_harness::Rule
+pub fn otlp_conformance_harness::Rule::eq(&self, other: &otlp_conformance_harness::Rule) -> bool
+impl core::fmt::Debug for otlp_conformance_harness::Rule
+pub fn otlp_conformance_harness::Rule::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::StructuralPartialEq for otlp_conformance_harness::Rule
+impl core::marker::Freeze for otlp_conformance_harness::Rule
+impl core::marker::Send for otlp_conformance_harness::Rule
+impl core::marker::Sync for otlp_conformance_harness::Rule
+impl core::marker::Unpin for otlp_conformance_harness::Rule
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::Rule
+impl core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::Rule
+impl core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::Rule
+#[non_exhaustive] pub enum otlp_conformance_harness::SignalType
+pub otlp_conformance_harness::SignalType::Logs
+pub otlp_conformance_harness::SignalType::Metrics
+pub otlp_conformance_harness::SignalType::Traces
+impl core::clone::Clone for otlp_conformance_harness::SignalType
+pub fn otlp_conformance_harness::SignalType::clone(&self) -> otlp_conformance_harness::SignalType
+impl core::cmp::Eq for otlp_conformance_harness::SignalType
+impl core::cmp::PartialEq for otlp_conformance_harness::SignalType
+pub fn otlp_conformance_harness::SignalType::eq(&self, other: &otlp_conformance_harness::SignalType) -> bool
+impl core::fmt::Debug for otlp_conformance_harness::SignalType
+pub fn otlp_conformance_harness::SignalType::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::hash::Hash for otlp_conformance_harness::SignalType
+pub fn otlp_conformance_harness::SignalType::hash<__H: core::hash::Hasher>(&self, state: &mut __H)
+impl core::marker::Copy for otlp_conformance_harness::SignalType
+impl core::marker::StructuralPartialEq for otlp_conformance_harness::SignalType
+impl core::marker::Freeze for otlp_conformance_harness::SignalType
+impl core::marker::Send for otlp_conformance_harness::SignalType
+impl core::marker::Sync for otlp_conformance_harness::SignalType
+impl core::marker::Unpin for otlp_conformance_harness::SignalType
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::SignalType
+impl core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::SignalType
+impl core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::SignalType
+#[non_exhaustive] pub enum otlp_conformance_harness::WireTypeRule
+pub otlp_conformance_harness::WireTypeRule::ProtobufDecode
+pub otlp_conformance_harness::WireTypeRule::SignalMismatch
+pub otlp_conformance_harness::WireTypeRule::SignalMismatch::asserted: otlp_conformance_harness::SignalType
+pub otlp_conformance_harness::WireTypeRule::SignalMismatch::observed: otlp_conformance_harness::SignalType
+impl core::clone::Clone for otlp_conformance_harness::WireTypeRule
+pub fn otlp_conformance_harness::WireTypeRule::clone(&self) -> otlp_conformance_harness::WireTypeRule
+impl core::cmp::Eq for otlp_conformance_harness::WireTypeRule
+impl core::cmp::PartialEq for otlp_conformance_harness::WireTypeRule
+pub fn otlp_conformance_harness::WireTypeRule::eq(&self, other: &otlp_conformance_harness::WireTypeRule) -> bool
+impl core::fmt::Debug for otlp_conformance_harness::WireTypeRule
+pub fn otlp_conformance_harness::WireTypeRule::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::StructuralPartialEq for otlp_conformance_harness::WireTypeRule
+impl core::marker::Freeze for otlp_conformance_harness::WireTypeRule
+impl core::marker::Send for otlp_conformance_harness::WireTypeRule
+impl core::marker::Sync for otlp_conformance_harness::WireTypeRule
+impl core::marker::Unpin for otlp_conformance_harness::WireTypeRule
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::WireTypeRule
+impl core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::WireTypeRule
+impl core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::WireTypeRule
+#[non_exhaustive] pub struct otlp_conformance_harness::OtlpViolation
+pub otlp_conformance_harness::OtlpViolation::expected: alloc::borrow::Cow<'static, str>
+pub otlp_conformance_harness::OtlpViolation::framing_asserted: otlp_conformance_harness::Framing
+pub otlp_conformance_harness::OtlpViolation::locus: otlp_conformance_harness::ByteOffset
+pub otlp_conformance_harness::OtlpViolation::observed: alloc::borrow::Cow<'static, str>
+pub otlp_conformance_harness::OtlpViolation::rule: otlp_conformance_harness::Rule
+pub otlp_conformance_harness::OtlpViolation::signal_asserted: otlp_conformance_harness::SignalType
+impl core::error::Error for otlp_conformance_harness::OtlpViolation
+pub fn otlp_conformance_harness::OtlpViolation::source(&self) -> core::option::Option<&(dyn core::error::Error + 'static)>
+impl core::fmt::Debug for otlp_conformance_harness::OtlpViolation
+pub fn otlp_conformance_harness::OtlpViolation::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::fmt::Display for otlp_conformance_harness::OtlpViolation
+pub fn otlp_conformance_harness::OtlpViolation::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::Freeze for otlp_conformance_harness::OtlpViolation
+impl core::marker::Send for otlp_conformance_harness::OtlpViolation
+impl core::marker::Sync for otlp_conformance_harness::OtlpViolation
+impl core::marker::Unpin for otlp_conformance_harness::OtlpViolation
+impl core::marker::UnsafeUnpin for otlp_conformance_harness::OtlpViolation
+impl !core::panic::unwind_safe::RefUnwindSafe for otlp_conformance_harness::OtlpViolation
+impl !core::panic::unwind_safe::UnwindSafe for otlp_conformance_harness::OtlpViolation
+pub const otlp_conformance_harness::OTLP_SPEC_VERSION: &str
+pub fn otlp_conformance_harness::validate_logs(bytes: &[u8], framing: otlp_conformance_harness::Framing) -> core::result::Result<opentelemetry_proto::proto::tonic::collector::logs::v1::ExportLogsServiceRequest, otlp_conformance_harness::OtlpViolation>
+pub fn otlp_conformance_harness::validate_metrics(bytes: &[u8], framing: otlp_conformance_harness::Framing) -> core::result::Result<opentelemetry_proto::proto::tonic::collector::metrics::v1::ExportMetricsServiceRequest, otlp_conformance_harness::OtlpViolation>
+pub fn otlp_conformance_harness::validate_traces(bytes: &[u8], framing: otlp_conformance_harness::Framing) -> core::result::Result<opentelemetry_proto::proto::tonic::collector::trace::v1::ExportTraceServiceRequest, otlp_conformance_harness::OtlpViolation>

@@ -1,0 +1,18 @@
+step 1: ensure cargo-deny installed (cached install dir)
+  cargo-deny: cargo-deny 0.19.4
+step 2: cargo deny --all-features check
+  exit: 0 (otherwise the docker run above would have failed)
+  last 12 lines of cargo deny output:
+       ┌─ /src/deny.toml:46:4
+       │
+    46 │   "Unicode-DFS-2016",
+       │    ━━━━━━━━━━━━━━━━ unmatched license allowance
+    
+    warning[license-not-encountered]: license was not encountered
+       ┌─ /src/deny.toml:48:4
+       │
+    48 │   "Zlib",
+       │    ━━━━ unmatched license allowance
+    
+    advisories ok, bans ok, licenses ok, sources ok
+OK — cargo deny --all-features check is green

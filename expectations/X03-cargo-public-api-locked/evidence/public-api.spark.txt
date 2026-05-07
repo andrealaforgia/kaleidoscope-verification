@@ -1,0 +1,57 @@
+pub mod spark
+#[non_exhaustive] pub enum spark::SparkError
+pub spark::SparkError::ExporterInitFailed
+pub spark::SparkError::ExporterInitFailed::reason: alloc::string::String
+pub spark::SparkError::ExporterInitFailed::source: core::option::Option<alloc::boxed::Box<(dyn core::error::Error + core::marker::Send + core::marker::Sync + 'static)>>
+pub spark::SparkError::GlobalAlreadyInitialised
+pub spark::SparkError::InvalidEndpoint
+pub spark::SparkError::InvalidEndpoint::endpoint: alloc::string::String
+pub spark::SparkError::InvalidEndpoint::reason: alloc::string::String
+pub spark::SparkError::MissingRequiredAttribute
+pub spark::SparkError::MissingRequiredAttribute::name: alloc::string::String
+impl core::error::Error for spark::SparkError
+pub fn spark::SparkError::source(&self) -> core::option::Option<&(dyn core::error::Error + 'static)>
+impl core::fmt::Debug for spark::SparkError
+pub fn spark::SparkError::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::fmt::Display for spark::SparkError
+pub fn spark::SparkError::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::Freeze for spark::SparkError
+impl core::marker::Send for spark::SparkError
+impl core::marker::Sync for spark::SparkError
+impl core::marker::Unpin for spark::SparkError
+impl core::marker::UnsafeUnpin for spark::SparkError
+impl !core::panic::unwind_safe::RefUnwindSafe for spark::SparkError
+impl !core::panic::unwind_safe::UnwindSafe for spark::SparkError
+#[non_exhaustive] pub struct spark::SparkConfig
+impl spark::SparkConfig
+pub fn spark::SparkConfig::for_service(name: impl core::convert::Into<alloc::string::String>) -> spark::SparkConfig
+pub fn spark::SparkConfig::require_tenant_id(self) -> Self
+pub fn spark::SparkConfig::with_endpoint(self, endpoint: impl core::convert::Into<alloc::string::String>) -> Self
+pub fn spark::SparkConfig::with_experiment_id(self, experiment_id: impl core::convert::Into<alloc::string::String>) -> Self
+pub fn spark::SparkConfig::with_feature_flags<I, K, V>(self, flags: I) -> Self where I: core::iter::traits::collect::IntoIterator<Item = (K, V)>, K: core::convert::Into<alloc::string::String>, V: core::convert::Into<alloc::string::String>
+pub fn spark::SparkConfig::with_flush_timeout(self, timeout: core::time::Duration) -> Self
+pub fn spark::SparkConfig::with_tenant_id(self, tenant_id: impl core::convert::Into<alloc::string::String>) -> Self
+impl core::clone::Clone for spark::SparkConfig
+pub fn spark::SparkConfig::clone(&self) -> spark::SparkConfig
+impl core::fmt::Debug for spark::SparkConfig
+pub fn spark::SparkConfig::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::marker::Freeze for spark::SparkConfig
+impl core::marker::Send for spark::SparkConfig
+impl core::marker::Sync for spark::SparkConfig
+impl core::marker::Unpin for spark::SparkConfig
+impl core::marker::UnsafeUnpin for spark::SparkConfig
+impl core::panic::unwind_safe::RefUnwindSafe for spark::SparkConfig
+impl core::panic::unwind_safe::UnwindSafe for spark::SparkConfig
+pub struct spark::SparkGuard
+impl core::fmt::Debug for spark::SparkGuard
+pub fn spark::SparkGuard::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::ops::drop::Drop for spark::SparkGuard
+pub fn spark::SparkGuard::drop(&mut self)
+impl core::marker::Freeze for spark::SparkGuard
+impl core::marker::Send for spark::SparkGuard
+impl core::marker::Sync for spark::SparkGuard
+impl core::marker::Unpin for spark::SparkGuard
+impl core::marker::UnsafeUnpin for spark::SparkGuard
+impl !core::panic::unwind_safe::RefUnwindSafe for spark::SparkGuard
+impl !core::panic::unwind_safe::UnwindSafe for spark::SparkGuard
+pub fn spark::init(config: spark::SparkConfig) -> core::result::Result<spark::SparkGuard, spark::SparkError>

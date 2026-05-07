@@ -2,47 +2,45 @@
 
 ## Surface
 
-Operations / build / supply chain. build-engineer-facing.
+Operations / build. Build-engineer-facing.
 
 ## Behaviour
 
-scripts/hooks/pre-commit runs the same gates CI runs (fmt, clippy, deny, test) and exits 0 on a clean workspace.
-
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+`scripts/hooks/pre-commit` runs all four local quality gates (cargo
+fmt --check, cargo clippy --all-targets --locked -- -D warnings,
+cargo deny --all-features check, cargo test --workspace
+--all-targets --locked) and exits 0 with the success marker
+`[pass] all pre-commit gates green`. This is the kaleidoscope
+contributor's local quality gate, mirroring as much of the CI
+contract (ADR-0005) as can run in seconds.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **X5**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor:
+  [`scripts/hooks/pre-commit`](https://github.com/andrealaforgia/kaleidoscope/blob/HEAD/scripts/hooks/pre-commit)
+  itself.
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-07 UTC at HEAD.
+- Method: identical setup pattern to X02 (cargo-deny installed
+  into `harness/.workspace-build-cache/cargo-install/` cache),
+  then `docker run rust:1.88-slim-bookworm` against the snapshot
+  read-write (the hook needs target/ writable). Inside the
+  container: `apt-get install pkg-config libssl-dev ca-certificates
+  git`, `rustup component add rustfmt clippy`, then `bash
+  scripts/hooks/pre-commit`. The runner asserts the hook exits 0
+  AND the literal success marker `[pass] all pre-commit gates
+  green` appears.
+- Workaround: `CARGO_PROFILE_TEST_DEBUG=0` for the cargo test
+  step, same reason as X01.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh X05
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/pre-commit.stdout.txt`](evidence/pre-commit.stdout.txt) — the hook's full output. Last line: `[pass] all pre-commit gates green`. Intermediate sections show fmt-check ok, clippy ok with -D warnings, cargo-deny ok, cargo test ok per workspace member.
 
 ## Issues
 
@@ -50,4 +48,8 @@ None.
 
 ## Notes
 
-None.
+X05 is a superset of X01 + X02 plus fmt and clippy. Each
+expectation has its own evidence file capture; satisfying X05
+does not satisfy X01 or X02 by transitivity in catalogue
+bookkeeping (each contract is verified independently). In
+practice they tend to move together.

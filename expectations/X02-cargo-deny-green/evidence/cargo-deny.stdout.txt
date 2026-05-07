@@ -1,0 +1,37 @@
+info: syncing channel updates for '1.88-aarch64-unknown-linux-gnu'
+info: latest update on 2025-06-26, rust version 1.88.0 (6b00bc388 2025-06-23)
+info: downloading component 'cargo'
+info: downloading component 'clippy'
+info: downloading component 'rust-std'
+info: downloading component 'rustc'
+info: downloading component 'rustfmt'
+info: installing component 'cargo'
+info: installing component 'clippy'
+info: installing component 'rust-std'
+info: installing component 'rustc'
+info: installing component 'rustfmt'
+warning[license-not-encountered]: license was not encountered
+   ┌─ /src/deny.toml:45:4
+   │
+45 │   "CC0-1.0",
+   │    ━━━━━━━ unmatched license allowance
+
+warning[license-not-encountered]: license was not encountered
+   ┌─ /src/deny.toml:44:4
+   │
+44 │   "MPL-2.0",
+   │    ━━━━━━━ unmatched license allowance
+
+warning[license-not-encountered]: license was not encountered
+   ┌─ /src/deny.toml:46:4
+   │
+46 │   "Unicode-DFS-2016",
+   │    ━━━━━━━━━━━━━━━━ unmatched license allowance
+
+warning[license-not-encountered]: license was not encountered
+   ┌─ /src/deny.toml:48:4
+   │
+48 │   "Zlib",
+   │    ━━━━ unmatched license allowance
+
+advisories ok, bans ok, licenses ok, sources ok

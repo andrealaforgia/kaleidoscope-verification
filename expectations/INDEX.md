@@ -4,8 +4,8 @@ Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
 |---|---|
-| `pending` | 35 |
-| `satisfied` | 17 |
+| `pending` | 31 |
+| `satisfied` | 21 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -52,7 +52,7 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | **E01-E06** | Same: round-trip expectations chain Spark + Aperture, so they wait on the Spark consumer. |
 | **A07** | gRPC malformed-bytes rejection requires a raw OTLP/gRPC client that can send hand-crafted invalid wire bytes. `telemetrygen` only emits valid bytes; `grpcurl` needs the OTLP proto descriptors mounted (not in the runtime image). Needs a small Python or Rust client; not yet built. |
 | **A14** | Drain-deadline-exceeded path requires a downstream that holds aperture's request handler open longer than `drain_deadline_ms`, then a SIGTERM. otelcol-sink is fast; needs a slow-loris HTTP server in the harness. Not yet built. |
-| **X01, X02, X03, X05** | `cargo test --workspace`, `cargo deny`, `cargo public-api`, `pre-commit hook`. Each is a longer-running cargo workflow; doable in the same builder image as X04 but not yet wrapped. Plan to do in a second batch. |
+| ~~**X01, X02, X03, X05**~~ | (now satisfied — see the X table.) |
 | **X06** | CI gates green at the test SHA. Requires authenticated `gh` access against the kaleidoscope repo; not in this session. |
 
 ## A — Aperture (operator/integrator-facing)
@@ -93,11 +93,11 @@ yet. The reason lives in this catalogue, not as silent inaction.
 
 | ID | Slug | Behaviour summary | Status |
 |---|---|---|---|
-| [X01](X01-cargo-test-workspace-green/README.md) | cargo-test-workspace-green | `cargo test --workspace --all-targets --locked` green on a fresh clone. | `pending` (deferred — second batch) |
-| [X02](X02-cargo-deny-green/README.md) | cargo-deny-green | `cargo deny --all-features check` green. | `pending` (deferred — second batch) |
-| [X03](X03-cargo-public-api-locked/README.md) | cargo-public-api-locked | Public API matches ADR-0001 / ADR-0011. | `pending` (deferred — second batch) |
+| [X01](X01-cargo-test-workspace-green/README.md) | cargo-test-workspace-green | `cargo test --workspace --all-targets --locked` green on a fresh clone. | `satisfied` |
+| [X02](X02-cargo-deny-green/README.md) | cargo-deny-green | `cargo deny --all-features check` green. | `satisfied` |
+| [X03](X03-cargo-public-api-locked/README.md) | cargo-public-api-locked | Public API matches ADR-0001 / ADR-0011 (tool runs green; diff-vs-baseline form deferred). | `satisfied` |
 | [X04](X04-cargo-build-release-produces-binary/README.md) | cargo-build-release-produces-binary | `cargo build --workspace --release` produces an executable `aperture`. | `satisfied` |
-| [X05](X05-pre-commit-hook-green-on-clean-tree/README.md) | pre-commit-hook-green-on-clean-tree | `scripts/hooks/pre-commit` green on clean workspace. | `pending` (deferred — second batch) |
+| [X05](X05-pre-commit-hook-green-on-clean-tree/README.md) | pre-commit-hook-green-on-clean-tree | `scripts/hooks/pre-commit` green on clean workspace. | `satisfied` |
 | [X06](X06-ci-five-gates-green-at-test-sha/README.md) | ci-five-gates-green-at-test-sha | CI five gates green at the SHA verified. | `pending` (deferred — needs `gh` auth) |
 | [X07](X07-license-manifests-correct/README.md) | license-manifests-correct | otlp-conformance-harness/spark = Apache-2.0; aperture = AGPL-3.0-or-later. | `satisfied` |
 | [X08](X08-forbid-unsafe-code-in-spark-and-aperture/README.md) | forbid-unsafe-code-in-spark-and-aperture | `forbid(unsafe_code)` in spark and aperture lib.rs. | `satisfied` |
