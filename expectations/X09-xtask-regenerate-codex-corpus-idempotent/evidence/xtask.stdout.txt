@@ -1,0 +1,16 @@
+info: syncing channel updates for '1.88-aarch64-unknown-linux-gnu'
+info: latest update on 2025-06-26, rust version 1.88.0 (6b00bc388 2025-06-23)
+info: downloading component 'cargo'
+info: downloading component 'clippy'
+info: downloading component 'rust-std'
+info: downloading component 'rustc'
+info: downloading component 'rustfmt'
+info: installing component 'cargo'
+info: installing component 'clippy'
+info: installing component 'rust-std'
+info: installing component 'rustc'
+info: installing component 'rustfmt'
+   Compiling regenerate-codex-corpus v0.1.0 (/src/xtask/regenerate_codex_corpus)
+    Finished `release` profile [optimized] target(s) in 0.30s
+     Running `target/release/regenerate-codex-corpus`
+regenerated 132 entries from opentelemetry-semantic-conventions =0.27 → /src/crates/codex/src/generated/semconv_0_27.rs

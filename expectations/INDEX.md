@@ -5,7 +5,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 31 |
-| `satisfied` | 21 |
+| `satisfied` | 22 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -105,3 +105,4 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [X06](X06-ci-five-gates-green-at-test-sha/README.md) | ci-five-gates-green-at-test-sha | CI five gates green at the SHA verified. | `pending` (deferred — needs `gh` auth) |
 | [X07](X07-license-manifests-correct/README.md) | license-manifests-correct | otlp-conformance-harness/spark = Apache-2.0; aperture = AGPL-3.0-or-later. | `satisfied` |
 | [X08](X08-forbid-unsafe-code-in-spark-and-aperture/README.md) | forbid-unsafe-code-in-spark-and-aperture | `forbid(unsafe_code)` in spark and aperture lib.rs. | `satisfied` |
+| [X09](X09-xtask-regenerate-codex-corpus-idempotent/README.md) | xtask-regenerate-codex-corpus-idempotent | Running `xtask regenerate-codex-corpus` on a clean tree produces zero diff vs committed corpus (ADR-0023). | `satisfied` |

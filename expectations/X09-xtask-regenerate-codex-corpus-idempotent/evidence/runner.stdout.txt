@@ -1,0 +1,11 @@
+step 1: committed corpus size:      155 lines
+step 2: cargo run --package regenerate-codex-corpus
+  xtask exit 0; last 4 lines of output:
+       Compiling regenerate-codex-corpus v0.1.0 (/src/xtask/regenerate_codex_corpus)
+        Finished `release` profile [optimized] target(s) in 0.30s
+         Running `target/release/regenerate-codex-corpus`
+    regenerated 132 entries from opentelemetry-semantic-conventions =0.27 → /src/crates/codex/src/generated/semconv_0_27.rs
+step 3: regenerated corpus size:      155 lines
+step 4: diff committed vs regenerated
+  zero diff (corpus is idempotent)
+OK — xtask regenerate-codex-corpus produced no diff against the committed corpus
