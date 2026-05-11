@@ -1,0 +1,6 @@
+step 1: ensure spark-consumer image is built
+  spark-consumer image ready
+step 2: run scenario s06-missing-service-name
+  consumer stdout:
+    scenario=s06-missing-service-name result=ok detail=MissingRequiredAttribute name=service.name
+OK — spark::init returned MissingRequiredAttribute(service.name) on empty service name

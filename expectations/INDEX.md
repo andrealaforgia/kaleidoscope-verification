@@ -4,8 +4,8 @@ Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
 |---|---|
-| `pending` | 31 |
-| `satisfied` | 22 |
+| `pending` | 25 |
+| `satisfied` | 28 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -52,8 +52,8 @@ yet. The reason lives in this catalogue, not as silent inaction.
 
 | ID | Reason |
 |---|---|
-| **S01-S22** | Need a Spark-consumer Rust binary harness (a small app that links `crates/spark` and emits canonical signals). New harness component, not yet built. |
-| **E01-E06** | Same: round-trip expectations chain Spark + Aperture, so they wait on the Spark consumer. |
+| ~~**S01-S22**~~ | (consumer fixture landed 2026-05-11; S01, S06-S10 satisfied; S02-S05 and S11-S22 are pending per-scenario branches in `harness/spark-consumer/src/main.rs`.) |
+| **E01-E06** | Round-trip Spark + Aperture. Same fixture as S, plus aperture chain. E01 essentially proven by S01's evidence (round-trip works); the catalogue still tracks E1-E6 as their own contracts. |
 | **A07** | gRPC malformed-bytes rejection requires a raw OTLP/gRPC client that can send hand-crafted invalid wire bytes. `telemetrygen` only emits valid bytes; `grpcurl` needs the OTLP proto descriptors mounted (not in the runtime image). Needs a small Python or Rust client; not yet built. |
 | **A14** | Drain-deadline-exceeded path requires a downstream that holds aperture's request handler open longer than `drain_deadline_ms`, then a SIGTERM. otelcol-sink is fast; needs a slow-loris HTTP server in the harness. Not yet built. |
 | ~~**X01, X02, X03, X05**~~ | (now satisfied — see the X table.) |
@@ -84,8 +84,13 @@ yet. The reason lives in this catalogue, not as silent inaction.
 
 | ID | Slug | Behaviour summary | Status |
 |---|---|---|---|
-| [S01](S01-init-canonical-config-emits-span/README.md) | init-canonical-config-emits-span | `spark::init` with canonical config returns `Ok(SparkGuard)`; an emitted span reaches Aperture. | `pending` (deferred — needs Spark consumer) |
-| [S02-S22](.) | (see individual READMEs) | service.name, tenant.id, feature_flags, experiment.id on resource; init/double-init/drop semantics; cross-signal symmetry; tracing-as-logs / counter-as-metric routing; shutdown event vocabulary; endpoint precedence. | `pending` (deferred — needs Spark consumer) |
+| [S01](S01-init-canonical-config-emits-span/README.md) | init-canonical-config-emits-span | `spark::init` with canonical config returns `Ok(SparkGuard)`; an emitted span reaches Aperture. | `satisfied` |
+| [S06](S06-missing-service-name-errors/README.md) | missing-service-name-errors | Empty service.name → `Err(MissingRequiredAttribute { name: "service.name" })`. | `satisfied` |
+| [S07](S07-missing-tenant-id-when-required-errors/README.md) | missing-tenant-id-when-required-errors | `require_tenant_id()` without `with_tenant_id` → `Err(MissingRequiredAttribute { name: "tenant.id" })`. | `satisfied` |
+| [S08](S08-malformed-endpoint-errors/README.md) | malformed-endpoint-errors | Malformed endpoint URL → `Err(InvalidEndpoint)`. | `satisfied` |
+| [S09](S09-double-init-while-guard-alive-errors/README.md) | double-init-while-guard-alive-errors | Second `spark::init` while first guard alive → `Err(GlobalAlreadyInitialised)`. | `satisfied` |
+| [S10](S10-reinit-after-drop-allowed/README.md) | reinit-after-drop-allowed | Sequential init→drop→init returns `Ok` the second time. | `satisfied` |
+| [S02-S05, S11-S22](.) | (see individual READMEs) | service.name on resource (S02 — implicitly covered by S01's evidence), tenant.id (S03), feature_flags (S04), experiment.id (S05); cross-signal symmetry, tracing→logs / counter→metric routing, shutdown event vocabulary, endpoint precedence. | `pending` (consumer fixture in place; per-scenario branches to add to `harness/spark-consumer/src/main.rs`). |
 
 ## E — End-to-end (Spark + Aperture round-trip)
 

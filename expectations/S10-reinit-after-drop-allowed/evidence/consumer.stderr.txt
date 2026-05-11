@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=s10-reinit-after-drop

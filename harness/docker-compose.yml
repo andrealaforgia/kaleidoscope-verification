@@ -52,3 +52,19 @@ services:
       # Host bind so the file-exporter output is visible to
       # run-expectation.sh without docker cp.
       - ./.captured:/captured
+
+  # Spark consumer test fixture. Built from harness/spark-consumer/
+  # plus the kaleidoscope snapshot. The service is declared with
+  # profile=fixture so `docker compose up` doesn't start it
+  # automatically; per-expectation runners invoke it via
+  # `docker compose run --rm spark-consumer <scenario flags>`.
+  spark-consumer:
+    profiles: ["fixture"]
+    build:
+      context: .
+      dockerfile: Dockerfile.spark-consumer
+      additional_contexts:
+        kaleidoscope: ${KALEIDOSCOPE_DIR:-../../kaleidoscope}
+    image: kaleidoscope-expectations/spark-consumer:under-test
+    environment:
+      RUST_LOG: ${SPARK_CONSUMER_LOG:-info}

@@ -1,0 +1,6 @@
+step 1: ensure spark-consumer image is built
+  spark-consumer image ready
+step 2: run scenario s08-malformed-endpoint
+  consumer stdout:
+    scenario=s08-malformed-endpoint result=ok detail=InvalidEndpoint as expected
+OK — spark::init returned InvalidEndpoint on a malformed URL

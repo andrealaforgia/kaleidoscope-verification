@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=s07-missing-tenant-id

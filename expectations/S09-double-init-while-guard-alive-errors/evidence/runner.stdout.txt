@@ -1,0 +1,6 @@
+step 1: ensure spark-consumer image is built
+  spark-consumer image ready
+step 2: run scenario s09-double-init
+  consumer stdout:
+    scenario=s09-double-init result=ok detail=second init returned GlobalAlreadyInitialised
+OK — second spark::init while first guard alive returns GlobalAlreadyInitialised

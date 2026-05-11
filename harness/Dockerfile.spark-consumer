@@ -1,0 +1,44 @@
+# Builder + runtime for the spark-consumer EDD fixture.
+#
+# Two contexts:
+# - default (`.`): harness/ directory, gives us harness/spark-consumer/.
+# - `kaleidoscope`: the HEAD snapshot of kaleidoscope, gives us
+#   crates/spark and the workspace context cargo walks up to resolve
+#   spark's `workspace.package` settings.
+#
+# Both go into /kaleidoscope-src and /consumer respectively inside the
+# build container. The consumer's Cargo.toml references
+# `/kaleidoscope-src/crates/spark` as a path dep; cargo finds spark's
+# workspace at /kaleidoscope-src/Cargo.toml and resolves edition,
+# rust-version, license, etc.
+
+# syntax=docker/dockerfile:1.7
+
+FROM rust:1.88-slim-bookworm AS builder
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        ca-certificates pkg-config libssl-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# Layout matches what the consumer's Cargo.toml expects.
+COPY --from=kaleidoscope . /kaleidoscope-src/
+COPY spark-consumer /consumer
+
+WORKDIR /consumer
+
+# Cache mounts so subsequent rebuilds re-use the dep graph.
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/consumer/target \
+    cargo build --release \
+ && cp /consumer/target/release/spark-consumer /spark-consumer.bin
+
+# -----------------------------------------------------------------------
+
+FROM debian:bookworm-slim AS runtime
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /spark-consumer.bin /usr/local/bin/spark-consumer
+ENTRYPOINT ["/usr/local/bin/spark-consumer"]

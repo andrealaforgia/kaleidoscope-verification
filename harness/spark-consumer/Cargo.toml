@@ -1,0 +1,43 @@
+[package]
+name = "spark-consumer"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+license = "Apache-2.0"
+description = "EDD-catalogue test fixture: links `spark` and exposes scenarios via CLI flags so per-expectation runners can drive Spark's user-facing behaviour."
+publish = false
+
+# Standalone workspace. The consumer is its own workspace so cargo
+# does not try to attach it to the kaleidoscope workspace it neighbours
+# at build time. spark's own workspace context resolves correctly via
+# `path` because cargo walks up from the dep's manifest to find its
+# [workspace].
+[workspace]
+
+[[bin]]
+name = "spark-consumer"
+path = "src/main.rs"
+
+[dependencies]
+# Spark, linked by path. The Dockerfile mounts the kaleidoscope
+# snapshot at /kaleidoscope-src and this Cargo.toml is copied into the
+# image at /consumer/Cargo.toml; cargo therefore resolves
+# /kaleidoscope-src/crates/spark and pulls spark's workspace settings
+# from /kaleidoscope-src/Cargo.toml.
+spark = { path = "/kaleidoscope-src/crates/spark" }
+
+# Minimal OTel surface the consumer needs to emit a span / log /
+# metric after `spark::init`. Versions match what spark itself uses
+# (opentelemetry 0.27.x family per Cargo.lock).
+opentelemetry = { version = "0.27", default-features = false, features = ["trace", "logs", "metrics"] }
+opentelemetry_sdk = { version = "0.27", default-features = false, features = ["trace", "logs", "metrics", "rt-tokio"] }
+tracing = "0.1"
+
+# Async runtime.
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+
+# CLI parser.
+clap = { version = "4", default-features = false, features = ["std", "derive", "help"] }
+
+[lints.rust]
+unsafe_code = "forbid"

@@ -1,0 +1,1 @@
+scenario=s06-missing-service-name result=ok detail=MissingRequiredAttribute name=service.name

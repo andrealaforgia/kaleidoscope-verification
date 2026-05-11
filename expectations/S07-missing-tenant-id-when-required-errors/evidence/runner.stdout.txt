@@ -1,0 +1,6 @@
+step 1: ensure spark-consumer image is built
+  spark-consumer image ready
+step 2: run scenario s07-missing-tenant-id
+  consumer stdout:
+    scenario=s07-missing-tenant-id result=ok detail=MissingRequiredAttribute name=tenant.id
+OK — spark::init returned MissingRequiredAttribute(tenant.id) when require_tenant_id without with_tenant_id

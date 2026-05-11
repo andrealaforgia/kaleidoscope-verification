@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=s06-missing-service-name

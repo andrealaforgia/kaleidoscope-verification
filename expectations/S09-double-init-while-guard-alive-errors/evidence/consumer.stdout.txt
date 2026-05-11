@@ -1,0 +1,1 @@
+scenario=s09-double-init result=ok detail=second init returned GlobalAlreadyInitialised

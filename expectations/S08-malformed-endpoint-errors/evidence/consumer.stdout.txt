@@ -1,0 +1,1 @@
+scenario=s08-malformed-endpoint result=ok detail=InvalidEndpoint as expected
