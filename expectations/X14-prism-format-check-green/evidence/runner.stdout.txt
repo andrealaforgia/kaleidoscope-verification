@@ -1,0 +1,10 @@
+  tail:
+    No projects matched the filters "/src" in "/src"
+    
+    > prism@0.1.0 format:check /src/apps/prism
+    > prettier --check "src/**/*.{ts,tsx,css}" "tests/**/*.{ts,tsx}" "e2e/**/*.{ts,tsx}"
+    
+    Checking formatting...
+    All matched files use Prettier code style!
+    FORMAT_OK
+OK — prettier --check is green

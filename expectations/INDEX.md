@@ -5,7 +5,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 15 |
-| `satisfied` | 42 |
+| `satisfied` | 44 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -125,3 +125,5 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [X11](X11-prism-typecheck-green/README.md) | prism-typecheck-green | `pnpm -F prism typecheck` (tsc -b --noEmit) is green. | `satisfied` |
 | [X12](X12-prism-vitest-green/README.md) | prism-vitest-green | `pnpm -F prism vitest` (unit tests, jsdom) is green. | `satisfied` |
 | [X13](X13-prism-lint-green/README.md) | prism-lint-green | `pnpm -F prism lint` (eslint) is green. | `satisfied` |
+| [X14](X14-prism-format-check-green/README.md) | prism-format-check-green | `pnpm -F prism format:check` (prettier --check) is green. | `satisfied` |
+| [X15](X15-prism-bundle-size-within-budget/README.md) | prism-bundle-size-within-budget | `pnpm -F prism bundle-size` (gzipped JS bundle ≤ 300 KB) is green. | `satisfied` |

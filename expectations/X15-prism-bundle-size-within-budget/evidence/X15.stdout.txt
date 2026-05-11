@@ -1,0 +1,43 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +414
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   ╭──────────────────────────────────────────────────────────────────╮
+   │                                                                  │
+   │                Update available! 9.15.0 → 11.1.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.1.0   │
+   │         Run "corepack install -g pnpm@11.1.0" to update.         │
+   │                                                                  │
+   ╰──────────────────────────────────────────────────────────────────╯
+
+Progress: resolved 414, reused 412, downloaded 0, added 25
+Progress: resolved 414, reused 413, downloaded 0, added 123
+Progress: resolved 414, reused 413, downloaded 0, added 263
+Progress: resolved 414, reused 413, downloaded 0, added 360
+Progress: resolved 414, reused 413, downloaded 0, added 413
+Progress: resolved 414, reused 413, downloaded 0, added 414, done
+Done in 5.9s
+--- pnpm -F prism build (bundle-size needs dist/) ---
+No projects matched the filters "/src" in "/src"
+
+> prism@0.1.0 build /src/apps/prism
+> tsc -b && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 597 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.39 kB │ gzip:   0.26 kB
+dist/assets/index-BiLGTODY.css    3.84 kB │ gzip:   1.21 kB
+dist/assets/index-DiaFpjTc.js   691.99 kB │ gzip: 228.55 kB │ map: 3,729.38 kB
+✓ built in 1.81s
+--- pnpm -F prism bundle-size ---
+No projects matched the filters "/src" in "/src"
+
+> prism@0.1.0 bundle-size /src/apps/prism
+> node scripts/check-bundle-size.js
+
+[pass] bundle size 228547 bytes within limit 307200 bytes (74.4%)
+BUNDLE_OK

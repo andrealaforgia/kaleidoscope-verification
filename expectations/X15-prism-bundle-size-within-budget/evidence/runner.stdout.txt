@@ -1,0 +1,10 @@
+  tail:
+    --- pnpm -F prism bundle-size ---
+    No projects matched the filters "/src" in "/src"
+    
+    > prism@0.1.0 bundle-size /src/apps/prism
+    > node scripts/check-bundle-size.js
+    
+    [pass] bundle size 228547 bytes within limit 307200 bytes (74.4%)
+    BUNDLE_OK
+OK — bundle-size script is green (within budget)
