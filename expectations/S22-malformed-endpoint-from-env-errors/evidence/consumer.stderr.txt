@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=s22-malformed-endpoint-from-env

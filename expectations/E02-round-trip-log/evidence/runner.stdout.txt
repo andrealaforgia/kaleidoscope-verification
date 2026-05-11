@@ -1,0 +1,5 @@
+step 1: run e02-emit-log scenario
+step 2: look for resourceLogs in captured file
+  resourceLogs payload lines: 1
+  service.name on resourceLogs: expectation-E02-pilot
+OK — tracing::info from Spark-instrumented app reaches otelcol-sink as resourceLogs

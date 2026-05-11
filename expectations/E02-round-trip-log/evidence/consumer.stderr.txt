@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=e02-emit-log

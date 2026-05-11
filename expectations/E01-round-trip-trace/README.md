@@ -2,47 +2,39 @@
 
 ## Surface
 
-End-to-end (Spark + Aperture, loopback). integrator-facing.
+Spark (auto-instrumentation SDK) / end-to-end. Integrator-facing.
 
 ## Behaviour
 
-A Spark-instrumented app emits a span; Aperture receives it; the RecordingSink (or ForwardingSink, depending on harness wiring) records it.
-
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+A Spark-instrumented app emits one span via `opentelemetry::global::tracer`. The span round-trips through aperture and arrives at the downstream sink (here, the otelcol-sink). Verified by extracting the span's `name` from `resourceSpans[].scopeSpans[].spans[]` in the captured OTLP.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **E1**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor: [`docs/feature/aperture/slices/slice-03-traces.md`](https://github.com/andrealaforgia/kaleidoscope/blob/HEAD/docs/feature/aperture/slices/slice-03-traces.md) for aperture's traces contract; S01 covers the Spark-side ack.
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-11 UTC at HEAD.
+- Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
+- Method: driven by the **spark-consumer** fixture under
+  `harness/spark-consumer/`. The fixture is built once via
+  `docker compose --profile fixture build spark-consumer` and
+  cached; this runner invokes a scenario on the compose network so
+  the SDK's OTLP exporter reaches aperture. After the consumer
+  exits cleanly (which flushes the in-flight batch via SparkGuard's
+  Drop), the runner waits 3 s for the forwarding chain to settle,
+  then `jq`-asserts on the otelcol-sink file-exporter capture.
+  
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh E01
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/spark-consumer-build.txt`](evidence/spark-consumer-build.txt) — fixture build log.
+- [`evidence/consumer.stdout.txt`](evidence/consumer.stdout.txt) — structured outcome line.
+- [`evidence/aperture.live.stderr.txt`](evidence/aperture.live.stderr.txt) — aperture's stderr during the run.
+- [`evidence/otlp-received.jsonl`](evidence/otlp-received.jsonl) — otelcol-sink's file-exporter capture; the `jq` filter cited in `runner.stdout.txt` extracts the asserted attribute(s) from this file.
 
 ## Issues
 
@@ -50,4 +42,5 @@ None.
 
 ## Notes
 
-None.
+This expectation rides the same spark-consumer fixture as S01.
+Adding more S/E coverage is now pattern repetition.

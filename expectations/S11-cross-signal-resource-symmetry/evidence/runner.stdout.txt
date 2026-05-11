@@ -1,0 +1,7 @@
+step 1: run s11-cross-signal-symmetry scenario
+step 2: extract Resource attribute sets per signal
+  resourceSpans:        2 attribute(s)
+  resourceLogs:        2 attribute(s)
+  resourceMetrics:        2 attribute(s)
+step 3: diff resource sets
+OK — Resource attribute sets identical across traces, logs, metrics

@@ -1,0 +1,2 @@
+service.name=expectation-S11-pilot
+tenant.id=acme-S11

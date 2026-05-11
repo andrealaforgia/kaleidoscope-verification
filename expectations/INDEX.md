@@ -4,8 +4,8 @@ Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
 |---|---|
-| `pending` | 25 |
-| `satisfied` | 28 |
+| `pending` | 15 |
+| `satisfied` | 38 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -90,13 +90,23 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [S08](S08-malformed-endpoint-errors/README.md) | malformed-endpoint-errors | Malformed endpoint URL → `Err(InvalidEndpoint)`. | `satisfied` |
 | [S09](S09-double-init-while-guard-alive-errors/README.md) | double-init-while-guard-alive-errors | Second `spark::init` while first guard alive → `Err(GlobalAlreadyInitialised)`. | `satisfied` |
 | [S10](S10-reinit-after-drop-allowed/README.md) | reinit-after-drop-allowed | Sequential init→drop→init returns `Ok` the second time. | `satisfied` |
-| [S02-S05, S11-S22](.) | (see individual READMEs) | service.name on resource (S02 — implicitly covered by S01's evidence), tenant.id (S03), feature_flags (S04), experiment.id (S05); cross-signal symmetry, tracing→logs / counter→metric routing, shutdown event vocabulary, endpoint precedence. | `pending` (consumer fixture in place; per-scenario branches to add to `harness/spark-consumer/src/main.rs`). |
+| [S02](S02-service-name-on-resource/README.md) | service-name-on-resource | Resource carries `service.name` exactly as set on `for_service`. | `satisfied` |
+| [S03](S03-tenant-id-on-resource-when-required/README.md) | tenant-id-on-resource-when-required | Resource carries `tenant.id` when `require_tenant_id` + `with_tenant_id`. | `satisfied` |
+| [S04](S04-feature-flags-on-resource/README.md) | feature-flags-on-resource | Resource carries `feature_flag.{k}` per pair in `with_feature_flags`. | `satisfied` |
+| [S05](S05-experiment-id-on-resource/README.md) | experiment-id-on-resource | Resource carries `experiment.id` from `with_experiment_id`. | `satisfied` |
+| [S11](S11-cross-signal-resource-symmetry/README.md) | cross-signal-resource-symmetry | Traces, logs, metrics from one Spark carry an identical Resource set. | `satisfied` |
+| [S22](S22-malformed-endpoint-from-env-errors/README.md) | malformed-endpoint-from-env-errors | Malformed `OTEL_EXPORTER_OTLP_ENDPOINT` → `Err(InvalidEndpoint)`. | `satisfied` |
+| [S12-S21](.) | (see individual READMEs) | tracing → log routing (S12), counter → metric routing (S13), no-telemetry-on-telemetry filter (S14), shutdown event vocabulary (S15-S17), drop bounded by flush_timeout (S18), drop no-panic on dead downstream (S19), idempotent drop (S20), endpoint precedence (S21). | `pending` (consumer fixture in place; remaining scenarios mostly require capturing the consumer's own stderr or precise timing). |
 
 ## E — End-to-end (Spark + Aperture round-trip)
 
 | ID | Slug | Behaviour summary | Status |
 |---|---|---|---|
-| [E01-E06](.) | (see individual READMEs) | Round-trip per signal; house attribute survival; clean exit flush; SIGTERM-during-emit bounded flush. | `pending` (deferred — needs Spark consumer) |
+| [E01](E01-round-trip-trace/README.md) | round-trip-trace | Span from Spark-instrumented app reaches otelcol-sink. | `satisfied` |
+| [E02](E02-round-trip-log/README.md) | round-trip-log | tracing::info from Spark-instrumented app reaches otelcol-sink as resourceLogs. | `satisfied` |
+| [E03](E03-round-trip-metric/README.md) | round-trip-metric | Counter.add from Spark-instrumented app reaches otelcol-sink as resourceMetrics. | `satisfied` |
+| [E04](E04-house-attributes-survive-round-trip/README.md) | house-attributes-survive-round-trip | All four house attributes survive end-to-end on Resource. | `satisfied` |
+| [E05, E06](.) | (see individual READMEs) | Clean-exit final batch (E05 — implicitly covered by every passing E01-E04 run); SIGTERM-during-emit bounded flush (E06). | `pending` (E05 trivially yes from existing evidence; E06 needs SIGTERM injection on the consumer). |
 
 ## X — Operations / build / supply chain
 

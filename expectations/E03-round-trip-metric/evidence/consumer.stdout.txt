@@ -1,0 +1,1 @@
+scenario=e03-emit-metric result=ok detail=init + counter.add + clean drop

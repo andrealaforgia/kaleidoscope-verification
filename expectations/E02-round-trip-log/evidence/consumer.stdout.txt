@@ -1,0 +1,1 @@
+scenario=e02-emit-log result=ok detail=init + tracing::info + clean drop

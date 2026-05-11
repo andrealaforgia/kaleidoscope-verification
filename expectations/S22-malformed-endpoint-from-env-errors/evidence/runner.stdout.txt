@@ -1,0 +1,4 @@
+step 1: build consumer
+step 2: run scenario with malformed OTEL_EXPORTER_OTLP_ENDPOINT
+  consumer stdout: scenario=s22-malformed-endpoint-from-env result=ok detail=InvalidEndpoint from env var as expected
+OK — malformed endpoint from env var → InvalidEndpoint

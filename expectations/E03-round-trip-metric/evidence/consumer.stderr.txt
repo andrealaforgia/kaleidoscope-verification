@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=e03-emit-metric

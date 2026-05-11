@@ -2,47 +2,39 @@
 
 ## Surface
 
-End-to-end (Spark + Aperture, loopback). integrator-facing.
+Spark (auto-instrumentation SDK) / end-to-end. Integrator-facing.
 
 ## Behaviour
 
-All four house attributes (service.name, tenant.id, feature_flag.*, experiment.id) survive the round-trip intact on the Resource observed by Aperture.
-
-The full Given/When/Then contract is to be tightened during pilot
-verification against the external anchor identified below.
+All four Kaleidoscope-house Resource attributes (`service.name`, `tenant.id`, `feature_flag.*`, `experiment.id`) configured on `SparkConfig` are still present, intact, on the Resource observed at the otelcol-sink downstream of aperture. End-to-end propagation contract.
 
 ## Source
 
 - Inter-session feed (other claude session, 2026-05-06): item **E4**.
-- External contract anchor: **TBD**. Candidates to inspect, in this order:
-  1. `docs/feature/aperture/distill/wave-decisions.md`
-  2. `docs/feature/aperture/distill/acceptance-test-coverage-matrix.md`
-  3. `docs/feature/aperture/slices/` (the slice that owns this surface)
-  4. `docs/product/architecture/adr-*.md` (the relevant ADR)
-
-If no committed anchor exists at the time of verification, the expectation
-is annotated `unanchored-claim` even when the binary passes.
+- External contract anchor: [`docs/product/architecture/adr-0011-spark-public-api-and-crate-layout.md`](https://github.com/andrealaforgia/kaleidoscope/blob/HEAD/docs/product/architecture/adr-0011-spark-public-api-and-crate-layout.md).
 
 ## Verification
 
-- Status: `pending`
-- Last verified: never
-- Kaleidoscope SHA: n/a
-- Kaleidoscope dirty: n/a
-- Method: TBD
+- Status: `satisfied`
+- Last verified: 2026-05-11 UTC at HEAD.
+- Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
+- Method: driven by the **spark-consumer** fixture under
+  `harness/spark-consumer/`. The fixture is built once via
+  `docker compose --profile fixture build spark-consumer` and
+  cached; this runner invokes a scenario on the compose network so
+  the SDK's OTLP exporter reaches aperture. After the consumer
+  exits cleanly (which flushes the in-flight batch via SparkGuard's
+  Drop), the runner waits 3 s for the forwarding chain to settle,
+  then `jq`-asserts on the otelcol-sink file-exporter capture.
+  Invoked with `--require-tenant-id --tenant-id acme-prod-E04 --feature-flag rollout=staged --experiment-id exp-E04-xyz`. All four resource keys are asserted by name on the captured Resource.
 
 ## Evidence
 
-None yet. Once verified, evidence is captured by:
-
-```
-harness/run-expectation.sh E04
-```
-
-and stored under [`evidence/`](evidence/) (`verification.yaml`,
-`aperture.stderr.txt`, `otelcol-sink.stderr.txt`,
-`otlp-received.jsonl`, plus any expectation-specific captures
-named by the runner).
+- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/spark-consumer-build.txt`](evidence/spark-consumer-build.txt) — fixture build log.
+- [`evidence/consumer.stdout.txt`](evidence/consumer.stdout.txt) — structured outcome line.
+- [`evidence/aperture.live.stderr.txt`](evidence/aperture.live.stderr.txt) — aperture's stderr during the run.
+- [`evidence/otlp-received.jsonl`](evidence/otlp-received.jsonl) — otelcol-sink's file-exporter capture; the `jq` filter cited in `runner.stdout.txt` extracts the asserted attribute(s) from this file.
 
 ## Issues
 
@@ -50,4 +42,5 @@ None.
 
 ## Notes
 
-None.
+This expectation rides the same spark-consumer fixture as S01.
+Adding more S/E coverage is now pattern repetition.

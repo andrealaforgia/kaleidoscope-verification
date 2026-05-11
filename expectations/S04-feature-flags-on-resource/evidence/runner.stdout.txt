@@ -1,0 +1,8 @@
+step 1: build consumer (cache hit if no source changes)
+step 2: run consumer scenario
+  consumer outcome: scenario=s01-init-and-emit-trace result=ok detail=init + one span + clean drop
+step 3: extract resource attributes from otelcol-sink capture
+  feature_flag.* observed:
+    feature_flag.region=eu
+    feature_flag.rollout=canary
+OK — Resource carries feature_flag.{key} attributes from with_feature_flags

@@ -38,6 +38,15 @@ struct Args {
     /// Optional tenant.id (SparkConfig::with_tenant_id).
     #[arg(long)]
     tenant_id: Option<String>,
+
+    /// Optional experiment.id (SparkConfig::with_experiment_id).
+    #[arg(long)]
+    experiment_id: Option<String>,
+
+    /// Feature flag pair in `key=value` form. Repeatable.
+    /// Mapped 1:1 into SparkConfig::with_feature_flags.
+    #[arg(long = "feature-flag", value_name = "KEY=VALUE")]
+    feature_flags: Vec<String>,
 }
 
 fn build_config(args: &Args) -> spark::SparkConfig {
@@ -47,6 +56,22 @@ fn build_config(args: &Args) -> spark::SparkConfig {
     }
     if let Some(t) = &args.tenant_id {
         cfg = cfg.with_tenant_id(t.clone());
+    }
+    if let Some(x) = &args.experiment_id {
+        cfg = cfg.with_experiment_id(x.clone());
+    }
+    if !args.feature_flags.is_empty() {
+        let pairs: Vec<(String, String)> = args
+            .feature_flags
+            .iter()
+            .filter_map(|kv| {
+                let mut it = kv.splitn(2, '=');
+                let k = it.next()?.to_string();
+                let v = it.next()?.to_string();
+                Some((k, v))
+            })
+            .collect();
+        cfg = cfg.with_feature_flags(pairs);
     }
     if let Some(e) = &args.endpoint {
         cfg = cfg.with_endpoint(e.clone());
@@ -219,6 +244,99 @@ async fn main() -> ExitCode {
                     ExitCode::from(1)
                 }
             }
+        }
+
+        // S22 — InvalidEndpoint when OTEL_EXPORTER_OTLP_ENDPOINT
+        // is a malformed URL. The runner sets that env var before
+        // launching the container; with_endpoint is NOT called so
+        // the env path is the source.
+        "s22-malformed-endpoint-from-env" => {
+            let cfg = spark::SparkConfig::for_service("svc".to_string());
+            match spark::init(cfg) {
+                Ok(_) => {
+                    report(&scenario, "fail", "init returned Ok on malformed env endpoint");
+                    ExitCode::from(1)
+                }
+                Err(e) => {
+                    let (variant, _) = classify_err(&e);
+                    if variant == "InvalidEndpoint" {
+                        report(&scenario, "ok", &format!("{variant} from env var as expected"));
+                        ExitCode::SUCCESS
+                    } else {
+                        report(&scenario, "fail", &format!("wrong error: {variant}"));
+                        ExitCode::from(1)
+                    }
+                }
+            }
+        }
+
+        // E02 — round-trip-log. Emit one tracing::info!(target="app", ...)
+        // after init; Spark's appender-tracing bridge (ADR-0017) forwards
+        // it as an OTLP LogRecord.
+        "e02-emit-log" => {
+            let cfg = build_config(&args);
+            let guard = match spark::init(cfg) {
+                Ok(g) => g,
+                Err(e) => {
+                    report(&scenario, "fail", &format!("init failed: {e}"));
+                    return ExitCode::from(1);
+                }
+            };
+            tracing::info!(target: "spark-consumer-app", "e02-emit-log payload");
+            drop(guard);
+            report(&scenario, "ok", "init + tracing::info + clean drop");
+            ExitCode::SUCCESS
+        }
+
+        // E03 — round-trip-metric. Emit one counter increment after
+        // init; Spark forwards it as an OTLP MetricsRequest after the
+        // batch interval / on guard drop.
+        "e03-emit-metric" => {
+            let cfg = build_config(&args);
+            let guard = match spark::init(cfg) {
+                Ok(g) => g,
+                Err(e) => {
+                    report(&scenario, "fail", &format!("init failed: {e}"));
+                    return ExitCode::from(1);
+                }
+            };
+            {
+                let meter = opentelemetry::global::meter("spark-consumer");
+                let counter = meter.u64_counter("spark_consumer_e03_counter").build();
+                counter.add(1, &[]);
+            }
+            drop(guard);
+            report(&scenario, "ok", "init + counter.add + clean drop");
+            ExitCode::SUCCESS
+        }
+
+        // S11 — cross-signal Resource symmetry. Emit all three signals
+        // from the same Spark; downstream Resource attributes must be
+        // identical across the three captures.
+        "s11-cross-signal-symmetry" => {
+            let cfg = build_config(&args);
+            let guard = match spark::init(cfg) {
+                Ok(g) => g,
+                Err(e) => {
+                    report(&scenario, "fail", &format!("init failed: {e}"));
+                    return ExitCode::from(1);
+                }
+            };
+            {
+                use opentelemetry::trace::{Tracer, TracerProvider};
+                let provider = opentelemetry::global::tracer_provider();
+                let tracer = provider.tracer("spark-consumer");
+                let _span = tracer.start("s11-trace");
+            }
+            tracing::info!(target: "spark-consumer-app", "s11-log");
+            {
+                let meter = opentelemetry::global::meter("spark-consumer");
+                let c = meter.u64_counter("s11_counter").build();
+                c.add(1, &[]);
+            }
+            drop(guard);
+            report(&scenario, "ok", "init + trace + log + metric + clean drop");
+            ExitCode::SUCCESS
         }
 
         // S01 — canonical init plus one span via the global tracer.

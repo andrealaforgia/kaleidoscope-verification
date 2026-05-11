@@ -1,0 +1,1 @@
+[spark-consumer] starting scenario=s01-init-and-emit-trace

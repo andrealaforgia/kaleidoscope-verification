@@ -1,0 +1,5 @@
+step 1: run e03-emit-metric scenario
+step 2: look for resourceMetrics in captured file
+  resourceMetrics payload lines: 1
+  service.name on resourceMetrics: expectation-E03-pilot
+OK — counter add() from Spark-instrumented app reaches otelcol-sink as resourceMetrics

@@ -1,0 +1,10 @@
+step 1: build consumer (cache hit if no source changes)
+step 2: run consumer scenario
+  consumer outcome: scenario=s01-init-and-emit-trace result=ok detail=init + one span + clean drop
+step 3: extract resource attributes from otelcol-sink capture
+  resource keys observed:
+    experiment.id
+    feature_flag.rollout
+    service.name
+    tenant.id
+OK — All four house attributes (service.name, tenant.id, feature_flag.*, experiment.id) survive the round-trip on Resource
