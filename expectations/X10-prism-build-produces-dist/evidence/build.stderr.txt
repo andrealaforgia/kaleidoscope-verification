@@ -1,0 +1,23 @@
+Unable to find image 'node:22-slim' locally
+22-slim: Pulling from library/node
+f420f8ff7ca0: Pulling fs layer
+58e6b93c89ba: Pulling fs layer
+b6a2ac377c51: Pulling fs layer
+193a880d93fc: Pulling fs layer
+508c9b3b1ad4: Download complete
+011ea1af8ac8: Download complete
+58e6b93c89ba: Download complete
+58e6b93c89ba: Pull complete
+f420f8ff7ca0: Download complete
+193a880d93fc: Download complete
+b6a2ac377c51: Download complete
+f420f8ff7ca0: Pull complete
+193a880d93fc: Pull complete
+b6a2ac377c51: Pull complete
+Digest: sha256:9f6d5975c7dca860947d3915877f85607946403fc55349f39b4bc3688448bb6e
+Status: Downloaded newer image for node:22-slim
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

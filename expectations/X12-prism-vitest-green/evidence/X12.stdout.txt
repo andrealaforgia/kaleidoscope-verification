@@ -1,0 +1,43 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +414
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   ╭──────────────────────────────────────────────────────────────────╮
+   │                                                                  │
+   │                Update available! 9.15.0 → 11.1.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.1.0   │
+   │         Run "corepack install -g pnpm@11.1.0" to update.         │
+   │                                                                  │
+   ╰──────────────────────────────────────────────────────────────────╯
+
+Progress: resolved 414, reused 412, downloaded 0, added 24
+Progress: resolved 414, reused 413, downloaded 0, added 129
+Progress: resolved 414, reused 413, downloaded 0, added 262
+Progress: resolved 414, reused 413, downloaded 0, added 358
+Progress: resolved 414, reused 413, downloaded 0, added 413
+Progress: resolved 414, reused 413, downloaded 0, added 414, done
+Done in 5.9s
+--- pnpm -F prism vitest ---
+No projects matched the filters "/src" in "/src"
+
+> prism@0.1.0 vitest /src/apps/prism
+> vitest run
+
+
+ RUN  v2.1.8 /src/apps/prism
+
+ ✓ tests/invariant-licence-headers.test.ts (5 tests) 21ms
+ ✓ tests/invariant-public-api.test.ts (16 tests) 2ms
+ ✓ tests/slice-04-auto-refresh.test.ts (24 tests) 4ms
+ ✓ tests/invariant-fidelity.test.ts (17 tests) 10ms
+ ✓ tests/slice-05-absolute-time-range-and-permalink.test.ts (11 tests) 5ms
+ ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 173ms
+ ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 394ms
+
+ Test Files  7 passed (7)
+      Tests  114 passed (114)
+   Start at  22:28:49
+   Duration  3.89s (transform 174ms, setup 2.66s, collect 2.01s, tests 609ms, environment 10.49s, prepare 1.24s)
+
+VITEST_OK

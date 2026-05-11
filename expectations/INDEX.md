@@ -5,7 +5,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 15 |
-| `satisfied` | 38 |
+| `satisfied` | 42 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -121,3 +121,7 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [X07](X07-license-manifests-correct/README.md) | license-manifests-correct | otlp-conformance-harness/spark = Apache-2.0; aperture = AGPL-3.0-or-later. | `satisfied` |
 | [X08](X08-forbid-unsafe-code-in-spark-and-aperture/README.md) | forbid-unsafe-code-in-spark-and-aperture | `forbid(unsafe_code)` in spark and aperture lib.rs. | `satisfied` |
 | [X09](X09-xtask-regenerate-codex-corpus-idempotent/README.md) | xtask-regenerate-codex-corpus-idempotent | Running `xtask regenerate-codex-corpus` on a clean tree produces zero diff vs committed corpus (ADR-0023). | `satisfied` |
+| [X10](X10-prism-build-produces-dist/README.md) | prism-build-produces-dist | `pnpm -F prism build` produces `apps/prism/dist/` with `index.html` and `assets/`. | `satisfied` |
+| [X11](X11-prism-typecheck-green/README.md) | prism-typecheck-green | `pnpm -F prism typecheck` (tsc -b --noEmit) is green. | `satisfied` |
+| [X12](X12-prism-vitest-green/README.md) | prism-vitest-green | `pnpm -F prism vitest` (unit tests, jsdom) is green. | `satisfied` |
+| [X13](X13-prism-lint-green/README.md) | prism-lint-green | `pnpm -F prism lint` (eslint) is green. | `satisfied` |

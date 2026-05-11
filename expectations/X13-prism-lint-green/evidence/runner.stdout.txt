@@ -1,0 +1,13 @@
+step 1: pnpm install + pnpm -F prism lint
+  tail:
+    Progress: resolved 414, reused 413, downloaded 0, added 413
+    Progress: resolved 414, reused 413, downloaded 0, added 414, done
+    Done in 5.8s
+    --- pnpm -F prism lint ---
+    No projects matched the filters "/src" in "/src"
+    
+    > prism@0.1.0 lint /src/apps/prism
+    > eslint .
+    
+    LINT_OK
+OK — pnpm -F prism lint (eslint) is green

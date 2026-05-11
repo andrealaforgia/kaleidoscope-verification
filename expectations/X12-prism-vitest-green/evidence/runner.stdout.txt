@@ -1,0 +1,13 @@
+step 1: pnpm install + pnpm -F prism vitest
+  tail:
+     ✓ tests/slice-05-absolute-time-range-and-permalink.test.ts (11 tests) 5ms
+     ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 173ms
+     ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 394ms
+    
+     Test Files  7 passed (7)
+          Tests  114 passed (114)
+       Start at  22:28:49
+       Duration  3.89s (transform 174ms, setup 2.66s, collect 2.01s, tests 609ms, environment 10.49s, prepare 1.24s)
+    
+    VITEST_OK
+OK — pnpm -F prism vitest (unit tests, jsdom) is green
