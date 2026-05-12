@@ -1,0 +1,4 @@
+step 1: build loom (cache hit if no source change) + run scenario
+  first apply exit:  0
+  second apply exit: 0
+OK — loom apply is idempotent (two consecutive runs both exit 0; plan after is empty)

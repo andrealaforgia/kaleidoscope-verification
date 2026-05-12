@@ -1,0 +1,2 @@
+validated 0 rules, rejected 0
+exit=0

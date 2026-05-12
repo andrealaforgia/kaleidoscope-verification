@@ -1,0 +1,2 @@
+step 1: build loom (cache hit if no source change) + run scenario
+OK — loom plan output is byte-equal across two consecutive runs

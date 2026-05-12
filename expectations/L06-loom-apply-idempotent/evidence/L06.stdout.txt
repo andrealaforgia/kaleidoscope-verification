@@ -1,0 +1,8 @@
+first-apply-exit=0
+---first apply tail---
+summary: 1 written, 0 removed, 0 unchanged
+second-apply-exit=0
+---second apply tail---
+summary: 0 written, 0 removed, 1 unchanged
+---plan after two applies (should be no changes) ---
+summary: 0 added, 0 removed, 0 changed

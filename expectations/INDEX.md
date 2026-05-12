@@ -5,7 +5,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 44 |
+| `satisfied` | 50 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -62,6 +62,7 @@ that can have an expectation, tracked?".
 | `crates/codex` library | Schema lint via SchemaCatalogue | **C** | 0 — no external surface | Codex's only callsite is Spark Slice 07 (`SparkConfig::with_strict_schema_lint`), but Spark's public API does not let the integrator inject unknown resource attributes — every attribute Spark composes is in Codex's blessed set. Lint-failure path is unreachable through the public SDK. Documented in `known-gaps.md` N9. |
 | `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 6 placeholders (B01-B06, all pending) | Beacon v0 GRADUATED at `f2c28b5`: real Tokio binary, PromQL HTTP polling, SIGHUP reload, inhibition (Slice 03), multi-sink routing (Slice 04), SLO MWMBR synthesis (Slice 05). B-prefix opened with stubs anchored to the slice docs. Verification blocked on a Beacon harness (mock Prom + wiremock webhook); see `known-gaps.md` N10 — updated. |
 | `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
+| `crates/loom` binary | Operator change-control CLI (validate / plan / apply) | **L** | 6 (all satisfied: L01-L06) | Loom v0 graduated at `149e4e4`. Six expectations cover validate exit-code contract (L01-L04), plan determinism (L05), apply idempotency (L06). Verified via `docker run rust:1.88-slim` building loom against the HEAD snapshot and running each scenario with inline TOML fixtures. |
 
 The two columns to watch are *Tracked entries* (how the catalogue
 sees the surface) and *Status* (why the surface is or is not in

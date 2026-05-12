@@ -1,0 +1,22 @@
+debconf: delaying package configuration, since apt-utils is not installed
+info: syncing channel updates for '1.88-aarch64-unknown-linux-gnu'
+info: latest update on 2025-06-26, rust version 1.88.0 (6b00bc388 2025-06-23)
+info: downloading component 'cargo'
+info: downloading component 'clippy'
+info: downloading component 'rust-std'
+info: downloading component 'rustc'
+info: downloading component 'rustfmt'
+info: installing component 'cargo'
+info: installing component 'clippy'
+info: installing component 'rust-std'
+info: installing component 'rustc'
+info: installing component 'rustfmt'
+   Compiling ring v0.17.14
+   Compiling rustls v0.23.40
+   Compiling rustls-webpki v0.103.13
+   Compiling tokio-rustls v0.26.4
+   Compiling hyper-rustls v0.27.9
+   Compiling reqwest v0.12.28
+   Compiling beacon v0.1.0 (/src/crates/beacon)
+   Compiling loom v0.1.0 (/src/crates/loom)
+    Finished `release` profile [optimized] target(s) in 7.16s

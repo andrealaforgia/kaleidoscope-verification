@@ -1,0 +1,3 @@
+step 1: build loom (cache hit if no source change) + run scenario
+  loom validate exit: 2
+OK — loom validate exited 2 on unreadable directory
