@@ -7,6 +7,10 @@ harness/.snapshot/
 harness/.workspace-build-cache/
 harness/.re-verify-summary/
 
+# Claude Code's per-session scheduled-task state. Mutates every
+# wake-up cycle; nothing useful tracked.
+.claude/
+
 # macOS
 .DS_Store
 
