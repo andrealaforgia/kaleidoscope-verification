@@ -153,3 +153,26 @@ the backend. That's a substantial new harness component — similar
 in size to the spark-consumer fixture but with browser machinery.
 The catalogue keeps no P-prefix entries until that infrastructure
 lands. P01-P06 would naturally mirror the six Prism slices.
+
+## N12 — Aegis is library-only at v0 (no external consumer yet)
+
+Aegis v0 graduated at commit `fde3cd9`: JWT validator (HS256, 8
+typed ValidationError variants), tenant catalogue (TOML loader,
+O(1) contains lookup), audit log via structured tracing events.
+All three slices landed in one commit (DESIGN collapsed into
+implementation per the Loom precedent). 26 new acceptance tests
+GREEN.
+
+Aegis is library-only. There is no `aegis` binary; the only
+caller envisioned is aperture once Phase 2 wires TLS/SPIFFE and
+the authentication path (see N1 — aperture's
+`[aperture.security]` config has the knobs but they are gated
+off at v0, with `tls_not_supported_in_v0` event emitted on
+opt-in).
+
+Per the H-rule (library-API is out of scope), Aegis carries no
+catalogue prefix at HEAD. The natural opening for an A-prefix
+extension (or a new AEG-prefix) is when aperture starts honouring
+the TLS/SPIFFE knobs in its config schema and the JWT validator
+gates incoming OTLP requests. Until then, Aegis's contracts are
+exercised internally by `crates/aegis/tests/` only.
