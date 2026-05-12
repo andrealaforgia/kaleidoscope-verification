@@ -4,7 +4,7 @@ Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
 |---|---|
-| `pending` | 21 (15 in S/E/X + 6 SI placeholders blocked on N8) |
+| `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
 | `satisfied` | 44 |
 | `partial` | 0 |
 | `broken` | 0 |
@@ -60,7 +60,7 @@ that can have an expectation, tracked?".
 | Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (14 satisfied, 1 deferred) | X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
 | `crates/sieve` library + SamplingSink decorator | Sampling decisions, observability events | **SI** | 6 placeholders (SI01-SI06, all pending) | Slices 02-06 lock the contracts in `docs/feature/sieve/slices/`; ADR-0021 specifies the decorator wiring. aperture does NOT yet wire sieve at HEAD, and no sieve-consumer harness exists. See `known-gaps.md` N8. |
 | `crates/codex` library | Schema lint via SchemaCatalogue | **C** | 0 — no external surface | Codex's only callsite is Spark Slice 07 (`SparkConfig::with_strict_schema_lint`), but Spark's public API does not let the integrator inject unknown resource attributes — every attribute Spark composes is in Codex's blessed set. Lint-failure path is unreachable through the public SDK. Documented in `known-gaps.md` N9. |
-| `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 0 — deferred | beacon-server at HEAD is the placeholder exit-2 binary per ADR-0037. Slice 03 prefix is expected to wire the real Tokio + PromQL HTTP + scheduler + SIGHUP binary. B-prefix opens for entries when that lands. See `known-gaps.md` N10. |
+| `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 6 placeholders (B01-B06, all pending) | Beacon v0 GRADUATED at `f2c28b5`: real Tokio binary, PromQL HTTP polling, SIGHUP reload, inhibition (Slice 03), multi-sink routing (Slice 04), SLO MWMBR synthesis (Slice 05). B-prefix opened with stubs anchored to the slice docs. Verification blocked on a Beacon harness (mock Prom + wiremock webhook); see `known-gaps.md` N10 — updated. |
 | `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
 
 The two columns to watch are *Tracked entries* (how the catalogue

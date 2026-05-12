@@ -111,24 +111,31 @@ that operators run directly. Kaleidoscope's own integration tests
 under `crates/spark/tests/` and `crates/codex/tests/` cover the
 contracts internally.
 
-## N10 — Beacon binary still a placeholder
+## N10 — Beacon harness not yet built (binary IS runnable now)
 
-Beacon graduated through Slice 02 (pure-function rule evaluator,
-WebhookSink with retry/permanent classification, TOML rule loader
-with Levenshtein-suggestion diagnostics). The library tests pass
-under `cargo test`. However, `crates/beacon-server/src/main.rs` at
-HEAD is the placeholder shell from ADR-0037 that prints
-`"beacon-server placeholder. Implementation arrives at slice 01
-DELIVER per ADR-0037."` and exits with code 2.
+**Updated 2026-05-12 wake-up cycle**: Beacon v0 graduated at
+commit `f2c28b5`. The binary is real now: `beacon-server --rules
+<DIR> --backend <URL>` loads TOML rules, spawns one Tokio task
+per rule, polls the Prometheus HTTP API, drives the pure
+transition function, and emits incidents to the configured
+sinks. SIGHUP reload + grouping + inhibition (Slice 03), multi-
+sink routing (Slice 04), SLO multi-window multi-burn-rate
+synthesis (Slice 05) all GREEN.
 
-The B-prefix surface (operator runs beacon-server with a directory
-of TOML rules + a PromQL endpoint, the daemon ticks the evaluator,
-fires incidents to webhooks, reloads on SIGHUP) is therefore not
-externally observable yet. The catalogue keeps no B-prefix entries
-until Slice 03 prefix lands the real binary. Slice 02's commit
-message explicitly tells us when: "Slice 03 prefix lands the binary
-(real Tokio runtime + PromQL HTTP + scheduler + SIGHUP) — moved
-out of slice 02 by the SPIKE".
+The B-prefix is now opened with six placeholder stubs (B01-B06)
+anchored to the slice docs in `docs/feature/beacon-v0/slices/`.
+Verification is blocked on the catalogue side: a Beacon harness
+similar in shape to `harness/spark-consumer/` is needed, plus a
+mock Prometheus HTTP backend (wiremock or a small adapter) and a
+wiremock-based webhook sink fixture so the harness can capture
+incident deliveries. The harness has not been built.
+
+This is the next natural EDD investment, comparable in scope to
+the spark-consumer fixture that unblocked S/E. Deferred to a
+session with operator review since the harness layout
+(in-container Prom vs sidecar prometheus, webhook fixture, time
+travel for the SLO MWMBR alerts) wants a design conversation
+first.
 
 ## N11 — Prism UI behaviour needs a Playwright-in-container harness
 
