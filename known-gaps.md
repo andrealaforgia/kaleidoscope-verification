@@ -71,3 +71,78 @@ is at the running-system surface, not at the library API surface.
 Revisit if and only if `otlp-conformance-harness` is published as a
 public Apache-2.0 library that third-party crates embed; at that point
 "library consumer" becomes a real external user.
+
+## N8 — Sieve harness not yet wired
+
+Sieve graduated through Slice 06 (rate-zero drop, non-error rate
+via xxh3_64, trace-id determinism, logs/metrics passthrough, DEBUG
+per-decision events, INFO summary timer, SamplingSink decorator).
+The catalogue carries SI01-SI06 as `pending` placeholders anchored
+at the slice docs and ADR-0021. Verification is blocked on either
+(a) aperture wiring the `SamplingSink` decorator from a future
+`aperture.toml` knob, OR (b) a sieve-consumer fixture (similar to
+`harness/spark-consumer/`) that links `crates/sieve` and exercises
+the decorator in-process. Neither exists at HEAD. Until then the
+contracts are exercised internally by `crates/sieve/tests/` only.
+
+## N9 — Codex external surface unreachable
+
+Codex graduated to v0 with Slices 01-05 (canonical pair validation,
+semconv 0.27 corpus, house attributes, unknown-attribute lint with
+Levenshtein "did you mean" suggestions). The library is consumed
+internally by Spark Slice 07 (ADR-0025): with
+`SparkConfig::with_strict_schema_lint(true)`, an unknown resource
+attribute would cause `spark::init` to return
+`Err(SparkError::SchemaValidation(LintReport))`; in default warn
+mode it would emit a `tracing::warn!(target = "spark")` event.
+
+But Spark's public API only exposes typed builders for blessed
+attributes (`for_service` → `service.name`, `with_tenant_id` →
+`tenant.id`, `with_feature_flags` → `feature_flag.*`,
+`with_experiment_id` → `experiment.id`), and every one of these
+keys is in Codex's blessed set. There is no public API entry
+point for an integrator to inject an unknown attribute.
+
+The lint-failure observable contract is therefore unreachable
+through Spark's public API at HEAD. The catalogue keeps no
+C-prefix entries until either (a) a Spark API extension allows
+arbitrary attribute injection, or (b) Codex ships a CLI surface
+that operators run directly. Kaleidoscope's own integration tests
+under `crates/spark/tests/` and `crates/codex/tests/` cover the
+contracts internally.
+
+## N10 — Beacon binary still a placeholder
+
+Beacon graduated through Slice 02 (pure-function rule evaluator,
+WebhookSink with retry/permanent classification, TOML rule loader
+with Levenshtein-suggestion diagnostics). The library tests pass
+under `cargo test`. However, `crates/beacon-server/src/main.rs` at
+HEAD is the placeholder shell from ADR-0037 that prints
+`"beacon-server placeholder. Implementation arrives at slice 01
+DELIVER per ADR-0037."` and exits with code 2.
+
+The B-prefix surface (operator runs beacon-server with a directory
+of TOML rules + a PromQL endpoint, the daemon ticks the evaluator,
+fires incidents to webhooks, reloads on SIGHUP) is therefore not
+externally observable yet. The catalogue keeps no B-prefix entries
+until Slice 03 prefix lands the real binary. Slice 02's commit
+message explicitly tells us when: "Slice 03 prefix lands the binary
+(real Tokio runtime + PromQL HTTP + scheduler + SIGHUP) — moved
+out of slice 02 by the SPIKE".
+
+## N11 — Prism UI behaviour needs a Playwright-in-container harness
+
+Prism v0 graduated through Slice 06 (six slices wiring the React
+SPA + ECharts + PromQL backend client + reducers). The build
+pipeline is tracked by X10-X15. The operator-facing UI behaviour —
+loading the SPA, submitting a query, panning the chart, picking a
+time range, auto-refresh ticking, postmortem permalink, WCAG 2.2
+AA pass — is **not** in the catalogue.
+
+The Playwright e2e suite under `apps/prism/e2e/` exercises these
+contracts internally; an external EDD harness would need
+Playwright-in-container plus a Prometheus or Mimir fixture for
+the backend. That's a substantial new harness component — similar
+in size to the spark-consumer fixture but with browser machinery.
+The catalogue keeps no P-prefix entries until that infrastructure
+lands. P01-P06 would naturally mirror the six Prism slices.

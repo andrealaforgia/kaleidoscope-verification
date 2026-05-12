@@ -4,7 +4,7 @@ Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
 |---|---|
-| `pending` | 15 |
+| `pending` | 21 (15 in S/E/X + 6 SI placeholders blocked on N8) |
 | `satisfied` | 44 |
 | `partial` | 0 |
 | `broken` | 0 |
@@ -44,6 +44,30 @@ Closed:
 [001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md) (`fixed` at `6b09c0d`);
 [002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);
 [003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md) (`wontfix`, catalogue tooling).
+
+## Surfaces overview (catalogue coverage map)
+
+Coverage of every observable surface in kaleidoscope HEAD against
+this catalogue. The table below is the answer to "is everything
+that can have an expectation, tracked?".
+
+| Kaleidoscope component | Surface | Prefix | Tracked entries | Status |
+|---|---|---|---|---|
+| `crates/aperture` binary | OTLP gateway runtime (operator) | **A** | 16 (14 satisfied, 2 deferred) | Comprehensive. A07 needs raw gRPC client; A14 needs slow downstream. |
+| `crates/spark` library | SDK init + signal emission (integrator), via `harness/spark-consumer` fixture | **S** | 22 (12 satisfied, 10 pending) | Consumer fixture in place; remaining S12-S21 are pattern-repetition extensions. |
+| Spark + Aperture round-trip | End-to-end signal flow (operator + integrator) | **E** | 6 (4 satisfied, 2 pending) | E05 implicitly proven by E01-E04 evidence; E06 needs SIGTERM injection on consumer. |
+| `crates/otlp-conformance-harness` | Validator library API (library-consumer) | **H** | 6 — all `out-of-scope` | Excluded per the H-rule (library-consumer concern, not operator/integrator-facing). Documented in [`../known-gaps.md`](../known-gaps.md). |
+| Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (14 satisfied, 1 deferred) | X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
+| `crates/sieve` library + SamplingSink decorator | Sampling decisions, observability events | **SI** | 6 placeholders (SI01-SI06, all pending) | Slices 02-06 lock the contracts in `docs/feature/sieve/slices/`; ADR-0021 specifies the decorator wiring. aperture does NOT yet wire sieve at HEAD, and no sieve-consumer harness exists. See `known-gaps.md` N8. |
+| `crates/codex` library | Schema lint via SchemaCatalogue | **C** | 0 — no external surface | Codex's only callsite is Spark Slice 07 (`SparkConfig::with_strict_schema_lint`), but Spark's public API does not let the integrator inject unknown resource attributes — every attribute Spark composes is in Codex's blessed set. Lint-failure path is unreachable through the public SDK. Documented in `known-gaps.md` N9. |
+| `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 0 — deferred | beacon-server at HEAD is the placeholder exit-2 binary per ADR-0037. Slice 03 prefix is expected to wire the real Tokio + PromQL HTTP + scheduler + SIGHUP binary. B-prefix opens for entries when that lands. See `known-gaps.md` N10. |
+| `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
+
+The two columns to watch are *Tracked entries* (how the catalogue
+sees the surface) and *Status* (why the surface is or is not in
+that state). If a surface graduates to runnable, the matching
+`known-gaps.md` entry closes and pending placeholders move to
+`satisfied`.
 
 ## Deferred (reason recorded)
 
