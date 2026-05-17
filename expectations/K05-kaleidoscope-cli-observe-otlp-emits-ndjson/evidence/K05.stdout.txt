@@ -1,0 +1,5 @@
+exit=0
+---observed file size + head---
+     366
+{"resource":{"attributes":[{"key":"tenant_id","value":{"stringValue":"acme"}}]},"scopeMetrics":[{"scope":{"name":"kaleidoscope.lumen"},"metrics":[{"name":"lumen.ingest.count","sum":{"aggregationTemporality":2,"isMonotonic":true,"dataPoints":[{"attributes":[{"key":"tenant_id","value":{"stringValue":"acme"}}],"timeUnixNano":"1779060812813923260","asInt":"2"}]}}]}]}
+

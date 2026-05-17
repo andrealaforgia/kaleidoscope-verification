@@ -1,0 +1,2 @@
+  exit code: 2
+OK — unknown subcommand exits 2 with diagnostic

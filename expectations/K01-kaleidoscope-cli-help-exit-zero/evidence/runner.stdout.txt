@@ -1,0 +1,2 @@
+  kaleidoscope-cli --help exit: 0
+OK — --help exits 0 and prints usage naming both subcommands

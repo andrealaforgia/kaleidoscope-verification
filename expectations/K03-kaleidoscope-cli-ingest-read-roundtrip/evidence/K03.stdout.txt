@@ -1,0 +1,5 @@
+ingest-exit=0
+---ingest output---
+ingest ok: records=3 batches=1 tier_items=1
+read-exit=0
+read-lines=3

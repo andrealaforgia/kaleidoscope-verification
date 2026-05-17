@@ -1,0 +1,7 @@
+exit=2
+---stderr head---
+kaleidoscope-cli: unknown subcommand "totally-bogus"
+
+kaleidoscope-cli — operator CLI for Lumen v1 + Cinder v1
+
+Usage:

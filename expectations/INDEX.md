@@ -5,7 +5,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 50 |
+| `satisfied` | 55 |
 | `partial` | 0 |
 | `broken` | 0 |
 | `unanchored-claim` | 0 |
@@ -64,6 +64,8 @@ that can have an expectation, tracked?".
 | `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
 | `crates/loom` binary | Operator change-control CLI (validate / plan / apply) | **L** | 6 (all satisfied: L01-L06) | Loom v0 graduated at `149e4e4`. Six expectations cover validate exit-code contract (L01-L04), plan determinism (L05), apply idempotency (L06). Verified via `docker run rust:1.88-slim` building loom against the HEAD snapshot and running each scenario with inline TOML fixtures. |
 | `crates/aegis` library | JWT validator + tenant catalogue + audit log (consumed by aperture in Phase 2) | none yet | 0 — deferred | Aegis v0 graduated at `fde3cd9` library-only. No binary; intended caller is aperture once TLS/SPIFFE knobs ship (see N1 + N12). Per the H-rule, library API is out of scope until an external consumer exposes it. |
+| `crates/kaleidoscope-cli` binary | Operator CLI wiring Lumen v1 + Cinder v1 + self-observe (ingest / read / --observe-otlp) | **K** | 5 (all satisfied: K01-K05) | First runnable product binary, landed at `c96cb18` and extended with `--observe-otlp` at `3af7e82`. Five expectations cover usage / unknown subcommand exit-code / ingest-read round-trip / malformed-input rejection / OTLP-JSON observe flag. Verified via `harness/run-kaleidoscope-cli.sh` which builds the project-shipped `Dockerfile` against the HEAD snapshot. |
+| `crates/{lumen,cinder,pulse,ray,strata,augur,sluice}` libraries | Storage / metrics / traces / profiles / cold-tier / AIops / buffer pillars | none direct | 0 — deferred (partial via K-prefix) | Seven new pillar v0 (lumen, sluice, pulse, ray, strata, cinder, augur) and three v1 carry-forwards (lumen, sluice, cinder) landed in this range. All library-only per H-rule. Lumen v1 + Cinder v1 + Pulse-via-self-observe ARE indirectly exercised by K03 + K05 through kaleidoscope-cli. Ray, Strata, Augur, Sluice have no external consumer yet. See `known-gaps.md` N13. |
 
 The two columns to watch are *Tracked entries* (how the catalogue
 sees the surface) and *Status* (why the surface is or is not in

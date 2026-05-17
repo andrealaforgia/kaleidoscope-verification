@@ -1,0 +1,2 @@
+  ingest exit: 0  read exit: 0  read lines: 3
+OK — ingest + read round-trip preserves all 3 records

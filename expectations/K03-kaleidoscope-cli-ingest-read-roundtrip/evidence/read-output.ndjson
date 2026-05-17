@@ -1,0 +1,3 @@
+{"observed_time_unix_nano":100,"severity_number":9,"severity_text":"INFO","body":"first event","attributes":{},"resource_attributes":{"service.name":"checkout"},"trace_id":null,"span_id":null}
+{"observed_time_unix_nano":200,"severity_number":9,"severity_text":"INFO","body":"second event","attributes":{},"resource_attributes":{"service.name":"checkout"},"trace_id":null,"span_id":null}
+{"observed_time_unix_nano":300,"severity_number":17,"severity_text":"ERROR","body":"third event","attributes":{"http.status_code":"500"},"resource_attributes":{"service.name":"checkout"},"trace_id":null,"span_id":null}

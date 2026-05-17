@@ -1,0 +1,2 @@
+  exit: 1
+OK — malformed NDJSON line is rejected (exit 1, diagnostic on stderr)

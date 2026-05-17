@@ -1,0 +1,15 @@
+kaleidoscope-cli: unknown subcommand "totally-bogus"
+
+kaleidoscope-cli — operator CLI for Lumen v1 + Cinder v1
+
+Usage:
+  kaleidoscope-cli ingest <tenant_id> <data_dir> [--observe-otlp <path>]
+      Read NDJSON lumen::LogRecord from stdin and persist into <data_dir>.
+      Each batch lands in Lumen and a single Cinder Hot tier entry is placed.
+      --observe-otlp appends NDJSON OTLP-JSON metric lines to <path>; a
+      sidecar can `tail -f` it and forward to a real OTLP/HTTP collector.
+
+  kaleidoscope-cli read <tenant_id> <data_dir>
+      Query every record for <tenant_id> and write NDJSON to stdout.
+
+Stats are emitted to stderr after `ingest` completes.

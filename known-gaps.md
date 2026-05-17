@@ -176,3 +176,33 @@ extension (or a new AEG-prefix) is when aperture starts honouring
 the TLS/SPIFFE knobs in its config schema and the JWT validator
 gates incoming OTLP requests. Until then, Aegis's contracts are
 exercised internally by `crates/aegis/tests/` only.
+
+## N13 — Seven new pillar libraries (lumen / cinder / pulse / ray / strata / augur / sluice)
+
+Between commits `fde3cd9` and `1df2d59` seven new pillar v0
+crates landed (sluice, lumen, pulse, ray, strata, cinder,
+augur), plus three v1 carry-forwards (cinder, sluice, lumen).
+All library-only at HEAD. Per the H-rule, none carry their own
+catalogue prefix.
+
+Three of them — **Lumen v1**, **Cinder v1**, **Pulse via
+self-observe** — are indirectly exercised by the K-prefix
+expectations because `kaleidoscope-cli` wires them together:
+
+- K03 ingest+read round-trip drives Lumen v1's
+  `FileBackedLogStore` and Cinder v1's Hot tier placement.
+- K05 `--observe-otlp` exercises the self-observe Lumen→Pulse
+  bridge plus the LumenToOtlpJsonWriter cross-process sink.
+
+The remaining four (**Ray**, **Strata**, **Augur**, **Sluice**)
+have no external consumer yet. The `integration-suite` crate
+runs cross-pillar functional composition tests internally, but
+no operator-facing surface exposes those flows. New prefixes
+(R, ST, AU, SL or similar) would open when a binary or CLI
+exposes them.
+
+Naming convention to follow when those land: use the pillar's
+first letter or first two letters when ambiguous (S is taken by
+Spark, so Sluice would be SL; Strata would be ST; Sieve already
+uses SI). Augur could be AU. Ray is R. Cinder is C (Codex
+already uses C — would be CI? CN? Reserve when needed).

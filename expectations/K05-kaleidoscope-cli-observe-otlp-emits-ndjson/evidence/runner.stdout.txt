@@ -1,0 +1,1 @@
+OK — --observe-otlp wrote NDJSON OTLP-JSON metrics to the configured path
