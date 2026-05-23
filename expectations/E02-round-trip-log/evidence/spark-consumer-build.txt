@@ -8,7 +8,7 @@
 #2 DONE 0.0s
 
 #3 [context kaleidoscope] load .dockerignore
-#3 transferring kaleidoscope: 2B done
+#3 transferring kaleidoscope: 814B done
 #3 DONE 0.0s
 
 #4 [internal] load metadata for docker.io/library/rust:1.88-slim-bookworm
@@ -34,25 +34,25 @@
 #9 DONE 0.0s
 
 #10 [context kaleidoscope] load from client
-#10 transferring kaleidoscope: 35.68kB 0.0s done
+#10 transferring kaleidoscope: 64.84kB 0.0s done
 #10 DONE 0.0s
 
-#11 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
+#11 [builder 4/6] COPY spark-consumer /consumer
 #11 CACHED
 
 #12 [builder 2/6] RUN apt-get update  && apt-get install -y --no-install-recommends         ca-certificates pkg-config libssl-dev  && rm -rf /var/lib/apt/lists/*
 #12 CACHED
 
-#13 [builder 4/6] COPY spark-consumer /consumer
+#13 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
 #13 CACHED
 
-#14 [builder 5/6] WORKDIR /consumer
+#14 [builder 3/6] COPY --from=kaleidoscope . /kaleidoscope-src/
 #14 CACHED
 
-#15 [builder 3/6] COPY --from=kaleidoscope . /kaleidoscope-src/
+#15 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
 #15 CACHED
 
-#16 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
+#16 [builder 5/6] WORKDIR /consumer
 #16 CACHED
 
 #17 [runtime 3/3] COPY --from=builder /spark-consumer.bin /usr/local/bin/spark-consumer
@@ -60,10 +60,10 @@
 
 #18 exporting to image
 #18 exporting layers done
-#18 exporting manifest sha256:6ceb0e13c04f80a65c464f8e84ca636d1e71f0579eec7de7a003ea9f8456b928 done
-#18 exporting config sha256:b2cb2b3b15c8cd2839b69cf191bbff3b524994e350c1eedd3d17b23efcadcc25 done
-#18 exporting attestation manifest sha256:273210d0e4d7144689e86c90f87b40e4a45ba9adcb768d8e959395d9323ccb62 done
-#18 exporting manifest list sha256:a39b4bdc950b9d7d9abe56fca88205b8445626e39b726b3eec2592ec70383d77 done
+#18 exporting manifest sha256:3497f9d5e8ec93a875cdff0b5778b16ea0981856ab48a06763b74b98274f7178 done
+#18 exporting config sha256:af73c673b4327640e81213dd6dca0e50fd0ba2085aec7f963d7b51fb29a282fb done
+#18 exporting attestation manifest sha256:59031e0432cef88076ec3e93163db861dd48c4a33b11274bb5895d38819e3d95 done
+#18 exporting manifest list sha256:9c4272f4eaf10292de2a49523ce8b7c819d56a706b6c58f886abfa955ae1d93d done
 #18 naming to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
 #18 unpacking to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
 #18 DONE 0.0s

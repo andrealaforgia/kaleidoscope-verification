@@ -20,8 +20,12 @@ Gate 1 of the CI contract per ADR-0005.
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-07 UTC at HEAD.
+- Status: `broken`
+- Last verified: 2026-05-19 UTC at HEAD (`4855d69`) — broken
+  with exit 101 (`cargo test --workspace --all-targets --locked`
+  fails to compile self-observe due to workspace path-dep
+  resolution; see [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)).
+- Previously satisfied: 2026-05-07 UTC at HEAD `c8d8a55`.
 - Method: `docker run rust:1.88-slim-bookworm` mounting the snapshot
   read-write under `/src` plus persistent caches under
   `harness/.workspace-build-cache/`. Inside the container:
@@ -44,7 +48,10 @@ Gate 1 of the CI contract per ADR-0005.
 
 ## Issues
 
-None.
+- [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
+  — `cargo test --workspace --all-targets --locked` cannot
+  resolve self-observe's path-dep workspace crates (aegis,
+  cinder, lumen, pulse) on a fresh build.
 
 ## Notes
 

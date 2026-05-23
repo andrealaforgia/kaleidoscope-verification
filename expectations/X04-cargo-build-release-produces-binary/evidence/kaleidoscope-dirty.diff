@@ -1,0 +1,117 @@
+diff --git a/crates/kaleidoscope-cli/src/lib.rs b/crates/kaleidoscope-cli/src/lib.rs
+index 74aaaeb..8aeacf6 100644
+--- a/crates/kaleidoscope-cli/src/lib.rs
++++ b/crates/kaleidoscope-cli/src/lib.rs
+@@ -75,6 +75,10 @@ pub enum Error {
+     LumenIngest(LogStoreError),
+     LumenQuery(LogStoreError),
+     CinderOpen(MigrateError),
++    CinderMigrate(MigrateError),
++    InvalidTier {
++        value: String,
++    },
+     Io(std::io::Error),
+     ParseRecord {
+         line: usize,
+@@ -90,6 +94,13 @@ impl fmt::Display for Error {
+             Error::LumenIngest(e) => write!(f, "lumen ingest: {e}"),
+             Error::LumenQuery(e) => write!(f, "lumen query: {e}"),
+             Error::CinderOpen(e) => write!(f, "cinder open: {e}"),
++            Error::CinderMigrate(e) => write!(f, "cinder migrate: {e}"),
++            Error::InvalidTier { value } => {
++                write!(
++                    f,
++                    "invalid tier {value:?}: expected one of hot, warm, cold"
++                )
++            }
+             Error::Io(e) => write!(f, "io: {e}"),
+             Error::ParseRecord { line, source } => {
+                 write!(f, "parse record at line {line}: {source}")
+@@ -381,6 +392,87 @@ pub fn stats_with_tiers(
+     Ok(count)
+ }
+ 
++/// Manually migrates `(tenant, item_id)` from its currently-placed
++/// tier to `to_tier_arg`. Writes exactly one line to `writer` on
++/// success:
++///
++/// ```text
++/// migrated tenant=<tenant> item=<item_id> from=<from> to=<to>\n
++/// ```
++///
++/// where `<from>` and `<to>` render via [`tier_lowercase`] as
++/// `hot` / `warm` / `cold`.
++///
++/// Contract (DESIGN DD1, DD2, DD3 — feature
++/// `cli-migrate-subcommand-v0`):
++///
++/// 1. `to_tier_arg` is parsed via the private [`parse_tier`] helper.
++///    Only literal lowercase `hot`/`warm`/`cold` are accepted (no
++///    trim, no case-fold). Anything else returns
++///    [`Error::InvalidTier`] carrying the verbatim invalid input.
++///    The parse runs BEFORE the Cinder store is opened — invalid
++///    tier values never touch the filesystem.
++/// 2. Cinder is opened against `cinder_base(data_dir)` with a
++///    [`CinderRecorder`] (quiescent — no OTLP file). The Lumen store
++///    is never opened.
++/// 3. `get_entry(tenant, item)` is consulted as a pre-flight to
++///    discover the from-tier. `None` → returns
++///    [`Error::CinderMigrate`] wrapping
++///    [`MigrateError::UnknownItem`] WITHOUT issuing a `migrate`
++///    call (no silent insert).
++/// 4. Otherwise calls `cinder.migrate(tenant, &item, to_tier,
++///    SystemTime::now())` and propagates any [`MigrateError`] as
++///    [`Error::CinderMigrate`].
++/// 5. On success writes the one-line transition report.
++pub fn migrate(
++    tenant: &TenantId,
++    data_dir: &Path,
++    item_id: &str,
++    to_tier_arg: &str,
++    mut writer: impl Write,
++) -> Result<(), Error> {
++    let to_tier = parse_tier(to_tier_arg).map_err(|_| Error::InvalidTier {
++        value: to_tier_arg.to_string(),
++    })?;
++    let cinder = FileBackedTieringStore::open(cinder_base(data_dir), Box::new(CinderRecorder))
++        .map_err(Error::CinderOpen)?;
++    let item = ItemId::new(item_id.to_string());
++    let entry = cinder
++        .get_entry(tenant, &item)
++        .ok_or_else(|| Error::CinderMigrate(MigrateError::UnknownItem {
++            tenant: tenant.clone(),
++            item: item.clone(),
++        }))?;
++    let from = entry.tier;
++    cinder
++        .migrate(tenant, &item, to_tier, SystemTime::now())
++        .map_err(Error::CinderMigrate)?;
++    writeln!(
++        writer,
++        "migrated tenant={} item={} from={} to={}",
++        tenant.0,
++        item_id,
++        tier_lowercase(from),
++        tier_lowercase(to_tier)
++    )?;
++    Ok(())
++}
++
++/// Parses a literal `hot`/`warm`/`cold` lowercase ASCII tier string.
++///
++/// Returns `Err(())` for any other input (including upper-case and
++/// whitespace-padded variants — no case-fold, no trim per DESIGN
++/// DD3). Callers wrap the unit-`Err` into [`Error::InvalidTier`]
++/// preserving the verbatim invalid value.
++fn parse_tier(s: &str) -> Result<Tier, ()> {
++    match s {
++        "hot" => Ok(Tier::Hot),
++        "warm" => Ok(Tier::Warm),
++        "cold" => Ok(Tier::Cold),
++        _ => Err(()),
++    }
++}
++
+ /// Renders a [`Tier`] as the exact lowercase ASCII byte sequence
+ /// expected on stdout (`hot` / `warm` / `cold`). Local to this
+ /// crate so the output-shape contract for the stats subcommand is

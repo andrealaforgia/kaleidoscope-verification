@@ -1,0 +1,1 @@
+OK — stats emits Cinder hot=N line after ingest

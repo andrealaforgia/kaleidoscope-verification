@@ -1,0 +1,29 @@
+diff --git a/crates/kaleidoscope-cli/src/lib.rs b/crates/kaleidoscope-cli/src/lib.rs
+index 74aaaeb..d89987f 100644
+--- a/crates/kaleidoscope-cli/src/lib.rs
++++ b/crates/kaleidoscope-cli/src/lib.rs
+@@ -75,6 +75,10 @@ pub enum Error {
+     LumenIngest(LogStoreError),
+     LumenQuery(LogStoreError),
+     CinderOpen(MigrateError),
++    CinderMigrate(MigrateError),
++    InvalidTier {
++        value: String,
++    },
+     Io(std::io::Error),
+     ParseRecord {
+         line: usize,
+@@ -90,6 +94,13 @@ impl fmt::Display for Error {
+             Error::LumenIngest(e) => write!(f, "lumen ingest: {e}"),
+             Error::LumenQuery(e) => write!(f, "lumen query: {e}"),
+             Error::CinderOpen(e) => write!(f, "cinder open: {e}"),
++            Error::CinderMigrate(e) => write!(f, "cinder migrate: {e}"),
++            Error::InvalidTier { value } => {
++                write!(
++                    f,
++                    "invalid tier {value:?}: expected one of hot, warm, cold"
++                )
++            }
+             Error::Io(e) => write!(f, "io: {e}"),
+             Error::ParseRecord { line, source } => {
+                 write!(f, "parse record at line {line}: {source}")

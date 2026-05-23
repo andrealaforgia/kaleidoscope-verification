@@ -3,30 +3,37 @@ rustc 1.88.0 (6b00bc388 2025-06-23)
 cargo 1.88.0 (873a06493 2025-05-10)
 --- cargo build --workspace --release --locked ---
 --- target/release listing (top-level) ---
-total 14744
-drwxr-xr-x  22 root root     704 May  7 15:56 .
-drwxr-xr-x   8 root root     256 May  7 09:55 ..
--rw-r--r--   1 root root       0 May  6 23:41 .cargo-lock
-drwxr-xr-x 227 root root    7264 May  7 15:44 .fingerprint
--rwxr-xr-x   2 root root 8224440 May  7 15:56 aperture
--rw-r--r--   1 root root     849 May  7 15:56 aperture.d
-drwxr-xr-x  48 root root    1536 May  7 15:44 build
-drwxr-xr-x 520 root root   16640 May  7 15:56 deps
-drwxr-xr-x   2 root root      64 May  6 23:41 examples
-drwxr-xr-x   2 root root      64 May  6 23:41 incremental
--rw-r--r--   1 root root     824 May  7 15:56 libaperture.d
--rw-r--r--   2 root root 3789576 May  7 15:56 libaperture.rlib
--rw-r--r--   1 root root     247 May  7 15:56 libcodex.d
--rw-r--r--   2 root root  129182 May  7 15:44 libcodex.rlib
--rw-r--r--   1 root root     363 May  7 15:56 libotlp_conformance_harness.d
--rw-r--r--   2 root root  635144 May  7 15:44 libotlp_conformance_harness.rlib
--rw-r--r--   1 root root    1094 May  7 15:56 libsieve.d
--rw-r--r--   2 root root  475322 May  7 15:56 libsieve.rlib
--rw-r--r--   1 root root     227 May  7 15:56 libspark.d
--rw-r--r--   2 root root 1277836 May  7 15:44 libspark.rlib
--rwxr-xr-x   2 root root  522632 May  7 15:44 regenerate-codex-corpus
--rw-r--r--   1 root root      92 May  7 15:44 regenerate-codex-corpus.d
+total 34672
+drwxr-xr-x  56 root root     1792 May 19 09:11 .
+drwxr-xr-x   8 root root      256 May 19 09:10 ..
+-rw-r--r--   1 root root        0 May 19 09:04 .cargo-lock
+drwxr-xr-x 309 root root     9888 May 19 09:11 .fingerprint
+-rwxr-xr-x   2 root root 10257264 May 19 09:11 aperture
+-rw-r--r--   1 root root      849 May 19 09:11 aperture.d
+-rwxr-xr-x   2 root root  8148256 May 19 09:11 beacon-server
+-rw-r--r--   1 root root      344 May 19 09:11 beacon-server.d
+drwxr-xr-x  55 root root     1760 May 19 09:11 build
+drwxr-xr-x 740 root root    23680 May 19 09:11 deps
+drwxr-xr-x   2 root root       64 May 19 09:04 examples
+drwxr-xr-x   2 root root       64 May 19 09:04 incremental
+-rwxr-xr-x   2 root root  1112720 May 19 09:11 kaleidoscope-cli
+-rw-r--r--   1 root root      997 May 19 09:11 kaleidoscope-cli.d
+-rw-r--r--   1 root root      134 May 19 09:11 libaegis.d
+-rw-r--r--   2 root root   768990 May 19 09:11 libaegis.rlib
+-rw-r--r--   1 root root      824 May 19 09:11 libaperture.d
+-rw-r--r--   2 root root  3832976 May 19 09:11 libaperture.rlib
+-rw-r--r--   1 root root      297 May 19 09:11 libaugur.d
+-rw-r--r--   2 root root    99864 May 19 09:11 libaugur.rlib
+-rw-r--r--   1 root root      270 May 19 09:11 libbeacon.d
+-rw-r--r--   2 root root  1351810 May 19 09:11 libbeacon.rlib
+-rw-r--r--   1 root root      314 May 19 09:11 libbeacon_server.d
+-rw-r--r--   2 root root   132004 May 19 09:11 libbeacon_server.rlib
+-rw-r--r--   1 root root      333 May 19 09:11 libcinder.d
+-rw-r--r--   2 root root   571360 May 19 09:11 libcinder.rlib
+-rw-r--r--   1 root root      247 May 19 09:11 libcodex.d
+-rw-r--r--   2 root root   129182 May 19 09:11 libcodex.rlib
+-rw-r--r--   1 root root      187 May 19 09:11 libintegration_suite.d
 --- aperture binary check ---
-size=8224440 mode=-rwxr-xr-x path=target/release/aperture
--rwxr-xr-x 2 root root 8224440 May  7 15:56 target/release/aperture
+size=10257264 mode=-rwxr-xr-x path=target/release/aperture
+-rwxr-xr-x 2 root root 10257264 May 19 09:11 target/release/aperture
 PRESENT_AND_EXECUTABLE

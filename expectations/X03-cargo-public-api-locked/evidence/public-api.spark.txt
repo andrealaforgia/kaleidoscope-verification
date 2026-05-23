@@ -9,6 +9,7 @@ pub spark::SparkError::InvalidEndpoint::endpoint: alloc::string::String
 pub spark::SparkError::InvalidEndpoint::reason: alloc::string::String
 pub spark::SparkError::MissingRequiredAttribute
 pub spark::SparkError::MissingRequiredAttribute::name: alloc::string::String
+pub spark::SparkError::SchemaValidation(codex::lint::LintReport)
 impl core::error::Error for spark::SparkError
 pub fn spark::SparkError::source(&self) -> core::option::Option<&(dyn core::error::Error + 'static)>
 impl core::fmt::Debug for spark::SparkError
@@ -30,6 +31,7 @@ pub fn spark::SparkConfig::with_endpoint(self, endpoint: impl core::convert::Int
 pub fn spark::SparkConfig::with_experiment_id(self, experiment_id: impl core::convert::Into<alloc::string::String>) -> Self
 pub fn spark::SparkConfig::with_feature_flags<I, K, V>(self, flags: I) -> Self where I: core::iter::traits::collect::IntoIterator<Item = (K, V)>, K: core::convert::Into<alloc::string::String>, V: core::convert::Into<alloc::string::String>
 pub fn spark::SparkConfig::with_flush_timeout(self, timeout: core::time::Duration) -> Self
+pub fn spark::SparkConfig::with_strict_schema_lint(self, strict: bool) -> Self
 pub fn spark::SparkConfig::with_tenant_id(self, tenant_id: impl core::convert::Into<alloc::string::String>) -> Self
 impl core::clone::Clone for spark::SparkConfig
 pub fn spark::SparkConfig::clone(&self) -> spark::SparkConfig

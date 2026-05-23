@@ -1,0 +1,1 @@
+OK — stats --since/--until narrows the Lumen records count from 3 to 1

@@ -9,7 +9,14 @@ Usage:
       --observe-otlp appends NDJSON OTLP-JSON metric lines to <path>; a
       sidecar can `tail -f` it and forward to a real OTLP/HTTP collector.
 
-  kaleidoscope-cli read <tenant_id> <data_dir>
-      Query every record for <tenant_id> and write NDJSON to stdout.
-
-Stats are emitted to stderr after `ingest` completes.
+  kaleidoscope-cli read <tenant_id> <data_dir> [--observe-otlp <path>] \
+                       [--since <ISO 8601 UTC>] [--until <ISO 8601 UTC>]
+      Query records for <tenant_id> and write NDJSON to stdout.
+      --since / --until restrict the query to the half-open interval
+      [since, until). The accepted timestamp shapes are
+      YYYY-MM-DDTHH:MM:SSZ and YYYY-MM-DDTHH:MM:SS.D..DZ (1..=9
+      fractional digits); lower-case `z` and `+00:00` offset forms are
+      rejected. Missing flags default to 0 (since) / u64::MAX (until)
+      — byte-equivalent to a pre-flag query under TimeRange::all().
+      --observe-otlp appends one `lumen.query.count` OTLP-JSON line per
+      invocation to <path>; pointing it at the same file used by `ingest`

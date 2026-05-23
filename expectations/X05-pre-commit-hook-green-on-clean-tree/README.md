@@ -23,8 +23,12 @@ contract (ADR-0005) as can run in seconds.
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-07 UTC at HEAD.
+- Status: `broken`
+- Last verified: 2026-05-19 UTC at HEAD (`4855d69`) — broken at
+  the `cargo test --workspace --all-targets --locked` stage of
+  the hook, which inherits X01's self-observe path-dep failure;
+  see [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
+- Previously satisfied: 2026-05-07 UTC at HEAD `c8d8a55`.
 - Method: identical setup pattern to X02 (cargo-deny installed
   into `harness/.workspace-build-cache/cargo-install/` cache),
   then `docker run rust:1.88-slim-bookworm` against the snapshot
@@ -44,7 +48,9 @@ contract (ADR-0005) as can run in seconds.
 
 ## Issues
 
-None.
+- [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
+  — the workspace cargo test step inside the hook reproduces
+  X01's failure mode (self-observe path-dep resolution).
 
 ## Notes
 

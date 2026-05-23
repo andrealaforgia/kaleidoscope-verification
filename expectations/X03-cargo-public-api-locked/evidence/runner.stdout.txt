@@ -6,7 +6,7 @@ step 1: ensure pinned nightly toolchain + cargo-public-api
 step 2.otlp-conformance-harness: cargo +nightly-2026-04-15 public-api -p otlp-conformance-harness
   otlp-conformance-harness: 127 surface lines captured (compile noise in .compile-noise.txt)
 step 2.spark: cargo +nightly-2026-04-15 public-api -p spark
-  spark: 57 surface lines captured (compile noise in .compile-noise.txt)
+  spark: 59 surface lines captured (compile noise in .compile-noise.txt)
 step 3: surface summary
   otlp-conformance-harness top 4 surface lines:
     pub mod otlp_conformance_harness

@@ -1,0 +1,1 @@
+OK — stats emits records=3 + earliest + latest for a populated tenant

@@ -206,3 +206,49 @@ first letter or first two letters when ambiguous (S is taken by
 Spark, so Sluice would be SL; Strata would be ST; Sieve already
 uses SI). Augur could be AU. Ray is R. Cinder is C (Codex
 already uses C — would be CI? CN? Reserve when needed).
+
+## N14 — Overnight session reverted en bloc (e3a8cad)
+
+Between commits `01dbae0` and `c17f0af` the previous Bea ran an
+overnight session that produced 31 direct commits with no nWave
+provenance under `docs/feature/`. Andrea reviewed and asked for
+the lot to be reverted; `e3a8cad` ("revert: drop overnight
+session — methodology violation, not nWave-shaped") returned
+the tree state to `01dbae0` byte-for-byte and removed the new
+files added during the overnight.
+
+Catalogue impact:
+
+- **K11** (unknown-flag rejection) was anchored on `e7fbee0`,
+  one of the dropped commits. Marked `held`; will return to
+  `pending` only when the rejection contract is rebuilt through
+  a proper nWave flow with a fresh anchoring commit.
+- **K01-K10** survive: the post-revert commits `75f15a6`,
+  `946d2c8`, `b503f49`, `9d1f805`, `8ee7091`, `2baa05c`
+  re-implemented the relevant CLI features through nWave waves
+  (each with its own `docs/feature/*` artefacts).
+- **K12 candidate**: `2baa05c` ("wire Cinder events into
+  --observe-otlp sink") is a distinct operator-facing surface
+  that K10 does not exercise. A new K12 would assert that an
+  `ingest` invocation also lands `cinder.*` events when paired
+  with `--observe-otlp`. Not yet drafted.
+
+Operating rule, going forward: every K-prefix runner should
+verify, before promotion, that
+`git log e3a8cad..HEAD -- <code path>` shows the anchoring
+commit. If the anchor is upstream of `e3a8cad` it might still
+exist in HEAD via byte-for-byte reintroduction, but the rule is
+cheap to check and catches anchor drift.
+
+## N15 — cli-migrate-subcommand-v0 in DESIGN wave
+
+`docs/feature/cli-migrate-subcommand-v0/` exists at HEAD with
+DISCUSS + DESIGN artefacts (and an untracked `devops/` directory
+mid-wave). No `feat(...)` commit has landed yet. The intended
+subcommand likely migrates data between Cinder tiers or moves
+records between tenants, but the application-architecture.md is
+the authoritative source.
+
+No K-prefix entry yet. A K12+ slot opens once the DELIVER wave
+ships the binary surface and an `kaleidoscope-cli migrate ...`
+invocation produces observable behaviour.

@@ -1,0 +1,1 @@
+OK — read --observe-otlp emits a lumen.query.count NDJSON line

@@ -11,15 +11,134 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
+   Compiling tracing-core v0.1.36
+   Compiling memchr v2.8.0
+   Compiling autocfg v1.5.0
+   Compiling futures-sink v0.3.32
+   Compiling slab v0.4.12
+   Compiling futures-task v0.3.32
+   Compiling getrandom v0.2.17
+   Compiling ring v0.17.14
+   Compiling errno v0.3.14
+   Compiling tracing-attributes v0.1.31
+   Compiling futures-macro v0.3.32
+   Compiling tokio-macros v2.7.0
+   Compiling fnv v1.0.7
+   Compiling httpdate v1.0.3
+   Compiling signal-hook-registry v1.4.8
+   Compiling thiserror v2.0.18
+   Compiling thiserror-impl v2.0.18
+   Compiling time-core v0.1.8
+   Compiling num-conv v0.2.1
+   Compiling powerfmt v0.2.0
+   Compiling num-traits v0.2.19
+   Compiling time-macros v0.2.27
+   Compiling serde_json v1.0.149
+   Compiling deranged v0.5.8
+   Compiling zerocopy v0.8.48
+   Compiling version_check v0.9.5
+   Compiling pem v3.0.6
+   Compiling log v0.4.29
+   Compiling bitflags v2.11.1
+   Compiling rand_core v0.6.4
+   Compiling thiserror v1.0.69
+   Compiling rustversion v1.0.22
+   Compiling anyhow v1.0.102
+   Compiling indexmap v1.9.3
+   Compiling thiserror-impl v1.0.69
+   Compiling num-integer v0.1.46
+   Compiling either v1.15.0
+   Compiling num-bigint v0.4.6
+   Compiling time v0.3.47
+   Compiling itertools v0.14.0
+   Compiling pin-project-internal v1.1.11
+   Compiling tokio v1.52.1
+   Compiling regex-syntax v0.8.10
+   Compiling futures-util v0.3.32
+   Compiling hashbrown v0.12.3
+   Compiling mime v0.3.17
+   Compiling prost-derive v0.13.5
+   Compiling tracing v0.1.44
+   Compiling async-stream-impl v0.3.6
+   Compiling simple_asn1 v0.6.4
+   Compiling regex-automata v0.4.14
+   Compiling lazy_static v1.5.0
+   Compiling matchit v0.7.3
+   Compiling sharded-slab v0.1.7
+   Compiling axum-core v0.4.5
+   Compiling ppv-lite86 v0.2.21
+   Compiling opentelemetry v0.27.1
+   Compiling futures-executor v0.3.32
+   Compiling rand_chacha v0.3.1
+   Compiling tracing-log v0.2.0
+   Compiling rand v0.8.6
+   Compiling async-stream v0.3.6
    Compiling proc-macro2-diagnostics v0.10.1
-   Compiling parking_lot_core v0.9.12
+   Compiling tracing-serde v0.2.0
+   Compiling socket2 v0.5.10
+   Compiling pin-project v1.1.11
+   Compiling thread_local v1.1.9
+   Compiling matchers v0.2.0
+   Compiling glob v0.3.3
+   Compiling nu-ansi-term v0.50.3
    Compiling getrandom v0.4.2
+   Compiling tokio-util v0.7.18
+   Compiling tower v0.5.3
+   Compiling tokio-stream v0.1.18
+   Compiling tracing-subscriber v0.3.23
+   Compiling yansi v1.0.1
+   Compiling parking_lot_core v0.9.12
    Compiling rustix v1.1.4
-   Compiling figment v0.10.19
-   Compiling parking_lot v0.12.5
+   Compiling tower-http v0.6.8
+   Compiling opentelemetry_sdk v0.27.1
+   Compiling h2 v0.4.14
+   Compiling tower v0.4.13
+   Compiling uncased v0.9.10
+   Compiling prost v0.13.5
+   Compiling scopeguard v1.2.0
+   Compiling linux-raw-sys v0.12.1
+   Compiling lock_api v0.4.14
    Compiling pear_codegen v0.2.9
-   Compiling pear v0.2.9
+   Compiling figment v0.10.19
+   Compiling fastrand v2.4.1
+   Compiling inlinable_string v0.1.15
+   Compiling parking_lot v0.12.5
+   Compiling opentelemetry-semantic-conventions v0.27.0
+   Compiling opentelemetry-appender-tracing v0.27.0
+   Compiling xxhash-rust v0.8.15
+   Compiling codex v0.1.0 (/src/crates/codex)
+   Compiling regenerate-codex-corpus v0.1.0 (/src/xtask/regenerate_codex_corpus)
    Compiling tempfile v3.27.0
+   Compiling hyper v1.9.0
+   Compiling pear v0.2.9
+   Compiling rustls v0.23.40
+   Compiling hyper-util v0.1.20
+   Compiling rustls-webpki v0.103.13
+   Compiling jsonwebtoken v9.3.1
+   Compiling hyper-timeout v0.5.2
+   Compiling axum v0.7.9
+   Compiling aegis v0.1.0 (/src/crates/aegis)
+   Compiling lumen v0.1.0 (/src/crates/lumen)
+   Compiling pulse v0.1.0 (/src/crates/pulse)
+   Compiling cinder v0.1.0 (/src/crates/cinder)
+   Compiling strata v0.1.0 (/src/crates/strata)
+   Compiling ray v0.1.0 (/src/crates/ray)
+   Compiling integration-suite v0.1.0 (/src/crates/integration-suite)
+   Compiling augur v0.1.0 (/src/crates/augur)
+   Compiling sluice v0.1.0 (/src/crates/sluice)
+   Compiling self-observe v0.1.0 (/src/crates/self-observe)
+   Compiling kaleidoscope-cli v0.1.0 (/src/crates/kaleidoscope-cli)
+   Compiling tonic v0.12.3
+   Compiling tokio-rustls v0.26.4
+   Compiling hyper-rustls v0.27.9
+   Compiling reqwest v0.12.28
+   Compiling opentelemetry-proto v0.27.0
+   Compiling beacon v0.1.0 (/src/crates/beacon)
+   Compiling otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
+   Compiling opentelemetry-otlp v0.27.0
    Compiling aperture v0.1.0 (/src/crates/aperture)
+   Compiling spark v0.1.0 (/src/crates/spark)
+   Compiling loom v0.1.0 (/src/crates/loom)
+   Compiling beacon-server v0.1.0 (/src/crates/beacon-server)
    Compiling sieve v0.1.0 (/src/crates/sieve)
-    Finished `release` profile [optimized] target(s) in 5.98s
+    Finished `release` profile [optimized] target(s) in 16.89s

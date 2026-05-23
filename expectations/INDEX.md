@@ -5,13 +5,19 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 55 |
+| `satisfied` | 59 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 — A01-A06,A08-A13,A15,A16 + S01-S11,S22 + E01-E04 + X02-X04,X07-X15 + L01-L06 + K01-K10,K12) |
+| `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 0 |
+| `broken` | 2 (X01, X05 — see [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-07.
+Last index refresh: 2026-05-19, after re-verify against `4855d69`.
+58 of 60 re-verified passed in the batched run plus an individual
+S01 retry that recovered the compose flake; X01 + X05 are
+broken on the same root cause ([issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)).
+K12 added at `4855d69` (Cinder + Lumen cross-writer wiring per
+`2baa05c`).
 
 All 17 satisfied expectations re-verified at SHA `c871b5852356b346b6c1fdc48b8be93514c27d2f`
 via `harness/re-verify-all.sh`; zero regressions across the 14 commits
@@ -39,7 +45,9 @@ Original-batch dates:
   retries for transient Docker Desktop VM pressure after the heavy
   cargo workloads. All 21 confirmed green at the same SHA on retry.
 
-Open issues: none.
+Open issues:
+[004 — cargo test workspace broken (self-observe path-deps)](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
+(`open`, reproducing at `4855d69`; affects X01 + X05).
 Closed:
 [001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md) (`fixed` at `6b09c0d`);
 [002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);
@@ -57,14 +65,14 @@ that can have an expectation, tracked?".
 | `crates/spark` library | SDK init + signal emission (integrator), via `harness/spark-consumer` fixture | **S** | 22 (12 satisfied, 10 pending) | Consumer fixture in place; remaining S12-S21 are pattern-repetition extensions. |
 | Spark + Aperture round-trip | End-to-end signal flow (operator + integrator) | **E** | 6 (4 satisfied, 2 pending) | E05 implicitly proven by E01-E04 evidence; E06 needs SIGTERM injection on consumer. |
 | `crates/otlp-conformance-harness` | Validator library API (library-consumer) | **H** | 6 — all `out-of-scope` | Excluded per the H-rule (library-consumer concern, not operator/integrator-facing). Documented in [`../known-gaps.md`](../known-gaps.md). |
-| Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (14 satisfied, 1 deferred) | X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
+| Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (12 satisfied, 2 broken, 1 deferred) | X01 + X05 broken on issue 004 (`cargo test` self-observe path-deps fail to resolve). X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
 | `crates/sieve` library + SamplingSink decorator | Sampling decisions, observability events | **SI** | 6 placeholders (SI01-SI06, all pending) | Slices 02-06 lock the contracts in `docs/feature/sieve/slices/`; ADR-0021 specifies the decorator wiring. aperture does NOT yet wire sieve at HEAD, and no sieve-consumer harness exists. See `known-gaps.md` N8. |
 | `crates/codex` library | Schema lint via SchemaCatalogue | **C** | 0 — no external surface | Codex's only callsite is Spark Slice 07 (`SparkConfig::with_strict_schema_lint`), but Spark's public API does not let the integrator inject unknown resource attributes — every attribute Spark composes is in Codex's blessed set. Lint-failure path is unreachable through the public SDK. Documented in `known-gaps.md` N9. |
 | `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 6 placeholders (B01-B06, all pending) | Beacon v0 GRADUATED at `f2c28b5`: real Tokio binary, PromQL HTTP polling, SIGHUP reload, inhibition (Slice 03), multi-sink routing (Slice 04), SLO MWMBR synthesis (Slice 05). B-prefix opened with stubs anchored to the slice docs. Verification blocked on a Beacon harness (mock Prom + wiremock webhook); see `known-gaps.md` N10 — updated. |
 | `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
 | `crates/loom` binary | Operator change-control CLI (validate / plan / apply) | **L** | 6 (all satisfied: L01-L06) | Loom v0 graduated at `149e4e4`. Six expectations cover validate exit-code contract (L01-L04), plan determinism (L05), apply idempotency (L06). Verified via `docker run rust:1.88-slim` building loom against the HEAD snapshot and running each scenario with inline TOML fixtures. |
 | `crates/aegis` library | JWT validator + tenant catalogue + audit log (consumed by aperture in Phase 2) | none yet | 0 — deferred | Aegis v0 graduated at `fde3cd9` library-only. No binary; intended caller is aperture once TLS/SPIFFE knobs ship (see N1 + N12). Per the H-rule, library API is out of scope until an external consumer exposes it. |
-| `crates/kaleidoscope-cli` binary | Operator CLI wiring Lumen v1 + Cinder v1 + self-observe (ingest / read / --observe-otlp) | **K** | 5 (all satisfied: K01-K05) | First runnable product binary, landed at `c96cb18` and extended with `--observe-otlp` at `3af7e82`. Five expectations cover usage / unknown subcommand exit-code / ingest-read round-trip / malformed-input rejection / OTLP-JSON observe flag. Verified via `harness/run-kaleidoscope-cli.sh` which builds the project-shipped `Dockerfile` against the HEAD snapshot. |
+| `crates/kaleidoscope-cli` binary | Operator CLI wiring Lumen v1 + Cinder v1 + self-observe (ingest / read / stats / --observe-otlp) | **K** | 12 (11 satisfied: K01-K10 + K12; 1 held: K11) | First runnable product binary, landed at `c96cb18` and extended through `75f15a6` / `946d2c8` / `b503f49` / `9d1f805` / `8ee7091` / `2baa05c` (stats + time-range + Cinder tier dist + Lumen observe + Cinder observe). K12 anchors the cross-writer atomicity wiring at `2baa05c`. K11 (unknown-flag rejection) is `held` because its anchor commit `e7fbee0` was reverted by `e3a8cad`; see N14. Verified via `harness/run-kaleidoscope-cli.sh`. |
 | `crates/{lumen,cinder,pulse,ray,strata,augur,sluice}` libraries | Storage / metrics / traces / profiles / cold-tier / AIops / buffer pillars | none direct | 0 — deferred (partial via K-prefix) | Seven new pillar v0 (lumen, sluice, pulse, ray, strata, cinder, augur) and three v1 carry-forwards (lumen, sluice, cinder) landed in this range. All library-only per H-rule. Lumen v1 + Cinder v1 + Pulse-via-self-observe ARE indirectly exercised by K03 + K05 through kaleidoscope-cli. Ray, Strata, Augur, Sluice have no external consumer yet. See `known-gaps.md` N13. |
 
 The two columns to watch are *Tracked entries* (how the catalogue
@@ -140,11 +148,11 @@ yet. The reason lives in this catalogue, not as silent inaction.
 
 | ID | Slug | Behaviour summary | Status |
 |---|---|---|---|
-| [X01](X01-cargo-test-workspace-green/README.md) | cargo-test-workspace-green | `cargo test --workspace --all-targets --locked` green on a fresh clone. | `satisfied` |
+| [X01](X01-cargo-test-workspace-green/README.md) | cargo-test-workspace-green | `cargo test --workspace --all-targets --locked` green on a fresh clone. | `broken` ([issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | [X02](X02-cargo-deny-green/README.md) | cargo-deny-green | `cargo deny --all-features check` green. | `satisfied` |
 | [X03](X03-cargo-public-api-locked/README.md) | cargo-public-api-locked | Public API matches ADR-0001 / ADR-0011 (tool runs green; diff-vs-baseline form deferred). | `satisfied` |
 | [X04](X04-cargo-build-release-produces-binary/README.md) | cargo-build-release-produces-binary | `cargo build --workspace --release` produces an executable `aperture`. | `satisfied` |
-| [X05](X05-pre-commit-hook-green-on-clean-tree/README.md) | pre-commit-hook-green-on-clean-tree | `scripts/hooks/pre-commit` green on clean workspace. | `satisfied` |
+| [X05](X05-pre-commit-hook-green-on-clean-tree/README.md) | pre-commit-hook-green-on-clean-tree | `scripts/hooks/pre-commit` green on clean workspace. | `broken` ([issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | [X06](X06-ci-five-gates-green-at-test-sha/README.md) | ci-five-gates-green-at-test-sha | CI five gates green at the SHA verified. | `pending` (deferred — needs `gh` auth) |
 | [X07](X07-license-manifests-correct/README.md) | license-manifests-correct | otlp-conformance-harness/spark = Apache-2.0; aperture = AGPL-3.0-or-later. | `satisfied` |
 | [X08](X08-forbid-unsafe-code-in-spark-and-aperture/README.md) | forbid-unsafe-code-in-spark-and-aperture | `forbid(unsafe_code)` in spark and aperture lib.rs. | `satisfied` |
@@ -155,3 +163,39 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [X13](X13-prism-lint-green/README.md) | prism-lint-green | `pnpm -F prism lint` (eslint) is green. | `satisfied` |
 | [X14](X14-prism-format-check-green/README.md) | prism-format-check-green | `pnpm -F prism format:check` (prettier --check) is green. | `satisfied` |
 | [X15](X15-prism-bundle-size-within-budget/README.md) | prism-bundle-size-within-budget | `pnpm -F prism bundle-size` (gzipped JS bundle ≤ 300 KB) is green. | `satisfied` |
+
+## L — Loom (operator change-control CLI)
+
+| ID | Slug | Behaviour summary | Status |
+|---|---|---|---|
+| [L01](L01-loom-help-exit-zero/README.md) | loom-help-exit-zero | `loom --help` exits 0 and prints a usage banner with the three subcommands. | `satisfied` |
+| [L02](L02-loom-validate-clean-tree-exit-zero/README.md) | loom-validate-clean-tree-exit-zero | `loom validate` on a syntactically valid manifest tree exits 0. | `satisfied` |
+| [L03](L03-loom-validate-malformed-toml-exit-non-zero/README.md) | loom-validate-malformed-toml-exit-non-zero | `loom validate` on malformed TOML exits non-zero with a diagnostic. | `satisfied` |
+| [L04](L04-loom-validate-unknown-key-exit-non-zero/README.md) | loom-validate-unknown-key-exit-non-zero | `loom validate` rejects unknown TOML keys (no silent acceptance). | `satisfied` |
+| [L05](L05-loom-plan-deterministic-byte-output/README.md) | loom-plan-deterministic-byte-output | `loom plan` produces byte-identical output across runs given identical inputs. | `satisfied` |
+| [L06](L06-loom-apply-idempotent/README.md) | loom-apply-idempotent | `loom apply` is idempotent: re-applying the same manifest produces no further changes. | `satisfied` |
+
+## K — kaleidoscope-cli (operator product binary)
+
+| ID | Slug | Behaviour summary | Status |
+|---|---|---|---|
+| [K01](K01-kaleidoscope-cli-help-exit-zero/README.md) | kaleidoscope-cli-help-exit-zero | `kaleidoscope-cli --help` exits 0; usage banner names `ingest` and `read`. | `satisfied` |
+| [K02](K02-kaleidoscope-cli-unknown-subcommand-exit-two/README.md) | kaleidoscope-cli-unknown-subcommand-exit-two | Unknown subcommand exits 2 with diagnostic. | `satisfied` |
+| [K03](K03-kaleidoscope-cli-ingest-read-roundtrip/README.md) | kaleidoscope-cli-ingest-read-roundtrip | `ingest` then `read` for the same tenant returns the ingested records. | `satisfied` |
+| [K04](K04-kaleidoscope-cli-malformed-ndjson-rejected/README.md) | kaleidoscope-cli-malformed-ndjson-rejected | Malformed NDJSON on stdin is rejected with non-zero exit + diagnostic. | `satisfied` |
+| [K05](K05-kaleidoscope-cli-observe-otlp-emits-ndjson/README.md) | kaleidoscope-cli-observe-otlp-emits-ndjson | `--observe-otlp <path>` appends OTLP-JSON NDJSON lines. | `satisfied` |
+| [K06](K06-kaleidoscope-cli-stats-populated-tenant/README.md) | kaleidoscope-cli-stats-populated-tenant | `stats` emits `records=N` + `earliest=` + `latest=` for a populated tenant. | `satisfied` |
+| [K07](K07-kaleidoscope-cli-read-time-range-filter/README.md) | kaleidoscope-cli-read-time-range-filter | `read --since/--until` returns only records in the half-open interval. | `satisfied` |
+| [K08](K08-kaleidoscope-cli-stats-time-range-filter/README.md) | kaleidoscope-cli-stats-time-range-filter | `stats --since/--until` reports the same window. | `satisfied` |
+| [K09](K09-kaleidoscope-cli-stats-cinder-tier-distribution/README.md) | kaleidoscope-cli-stats-cinder-tier-distribution | `stats` emits a `cinder.hot=N` tier-distribution line. | `satisfied` |
+| [K10](K10-kaleidoscope-cli-read-observe-otlp/README.md) | kaleidoscope-cli-read-observe-otlp | `read --observe-otlp` lands `lumen.query.count` in the OTLP-JSON sink. | `satisfied` |
+| [K11](K11-kaleidoscope-cli-unknown-flag-rejected/README.md) | kaleidoscope-cli-unknown-flag-rejected | (Anchored on reverted `e7fbee0`; see N14.) | `held` |
+| [K12](K12-kaleidoscope-cli-observe-otlp-cinder-wired/README.md) | kaleidoscope-cli-observe-otlp-cinder-wired | `ingest --observe-otlp` lands BOTH `lumen.ingest.count` AND a `cinder.*` metric in the same NDJSON file. | `satisfied` |
+
+## SI — Sieve (sampling decisions, placeholders)
+
+Six pending placeholders (SI01-SI06) anchored to Sieve slice docs; blocked on harness — see [`../known-gaps.md`](../known-gaps.md) N8.
+
+## B — Beacon (alert rule evaluation, placeholders)
+
+Six pending placeholders (B01-B06) anchored to Beacon slice docs; blocked on harness — see [`../known-gaps.md`](../known-gaps.md) N10.

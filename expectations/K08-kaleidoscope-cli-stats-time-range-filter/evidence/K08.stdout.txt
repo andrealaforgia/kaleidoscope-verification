@@ -1,0 +1,12 @@
+---all---
+records=3
+earliest=2023-11-14T22:13:20.000000000Z
+latest=2023-11-14T22:15:20.000000000Z
+hot=1
+stats ok: records=3
+---window---
+records=1
+earliest=2023-11-14T22:14:20.000000000Z
+latest=2023-11-14T22:14:20.000000000Z
+hot=1
+stats ok: records=1
