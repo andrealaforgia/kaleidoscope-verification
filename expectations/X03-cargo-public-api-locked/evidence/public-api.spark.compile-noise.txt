@@ -1,56 +1,11 @@
-   Compiling libc v0.2.186
-   Compiling serde_core v1.0.228
-   Compiling httparse v1.10.1
+    Checking serde_core v1.0.228
    Compiling rustversion v1.0.22
-    Checking tracing v0.1.44
-    Checking futures-util v0.3.32
-    Checking zerofrom v0.1.7
-   Compiling icu_normalizer_data v2.2.0
-   Compiling serde v1.0.228
-   Compiling icu_properties_data v2.2.0
-    Checking thiserror v1.0.69
-   Compiling indexmap v1.9.3
-    Checking pin-project v1.1.11
-    Checking async-stream v0.3.6
-    Checking prost v0.13.5
-   Compiling thiserror v2.0.18
-    Checking codex v0.1.0 (/src/crates/codex)
-    Checking yoke v0.8.2
-    Checking opentelemetry v0.27.1
-    Checking zerovec v0.11.6
-    Checking zerotrie v0.2.4
-    Checking mio v1.2.0
-    Checking socket2 v0.6.3
-    Checking getrandom v0.2.17
-    Checking socket2 v0.5.10
-    Checking opentelemetry-appender-tracing v0.27.0
-    Checking tinystr v0.8.3
-    Checking potential_utf v0.1.5
-    Checking rand_core v0.6.4
-    Checking tokio v1.52.1
-    Checking icu_collections v2.2.0
-    Checking icu_locale_core v2.2.0
-    Checking rand_chacha v0.3.1
-    Checking serde_json v1.0.149
-    Checking rand v0.8.6
-    Checking tower v0.5.3
+    Checking thiserror v2.0.18
     Checking axum-core v0.4.5
-    Checking futures-executor v0.3.32
-    Checking icu_provider v2.2.0
-    Checking icu_properties v2.2.0
-    Checking icu_normalizer v2.2.0
-    Checking idna_adapter v1.2.2
-    Checking idna v1.1.0
+    Checking serde v1.0.228
+    Checking serde_json v1.0.149
     Checking axum v0.7.9
-    Checking url v2.5.8
-    Checking tokio-util v0.7.18
-    Checking tokio-stream v0.1.18
     Checking opentelemetry_sdk v0.27.1
-    Checking h2 v0.4.14
-    Checking tower v0.4.13
-    Checking hyper v1.9.0
-    Checking hyper-util v0.1.20
-    Checking hyper-timeout v0.5.2
     Checking tonic v0.12.3
     Checking opentelemetry-proto v0.27.0
     Checking opentelemetry-otlp v0.27.0
@@ -89,4 +44,4 @@ warning: unresolved link to `crate::SparkConfig::with_strict_schema_lint(true)`
    = note: `#[warn(rustdoc::broken_intra_doc_links)]` on by default
 
 warning: `spark` (lib doc) generated 4 warnings
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.30s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.70s

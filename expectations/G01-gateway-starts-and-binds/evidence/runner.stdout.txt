@@ -1,0 +1,1 @@
+OK — gateway came up healthy: aperture emitted event=ready on stderr

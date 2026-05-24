@@ -1,25 +1,11 @@
-   Compiling libc v0.2.186
-   Compiling serde_core v1.0.228
-   Compiling syn v2.0.117
-    Checking getrandom v0.2.17
-    Checking rand_core v0.6.4
-    Checking rand_chacha v0.3.1
-    Checking serde_json v1.0.149
-    Checking rand v0.8.6
-   Compiling tracing-attributes v0.1.31
-   Compiling thiserror-impl v1.0.69
-   Compiling futures-macro v0.3.32
-   Compiling async-trait v0.1.89
-   Compiling pin-project-internal v1.1.11
-   Compiling prost-derive v0.13.5
-    Checking pin-project v1.1.11
-    Checking thiserror v1.0.69
+    Checking serde_core v1.0.228
     Checking tracing v0.1.44
-    Checking futures-util v0.3.32
-    Checking opentelemetry v0.27.1
+    Checking thiserror v1.0.69
     Checking prost v0.13.5
+    Checking pin-project v1.1.11
+    Checking opentelemetry v0.27.1
     Checking tonic v0.12.3
-    Checking futures-executor v0.3.32
+    Checking serde_json v1.0.149
     Checking opentelemetry_sdk v0.27.1
     Checking opentelemetry-proto v0.27.0
  Documenting otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
@@ -73,4 +59,4 @@ help: remove explicit link target
    |
 
 warning: `otlp-conformance-harness` (lib doc) generated 3 warnings
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.05s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.16s

@@ -39,19 +39,25 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 59 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 — A01-A06,A08-A13,A15,A16 + S01-S11,S22 + E01-E04 + X02-X04,X07-X15 + L01-L06 + K01-K10,K12) |
+| `satisfied` | 62 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 1 + G 1 + EG 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 2 (X01, X05 — see [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-19, after re-verify against `4855d69`.
-58 of 60 re-verified passed in the batched run plus an individual
-S01 retry that recovered the compose flake; X01 + X05 are
-broken on the same root cause ([issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)).
-K12 added at `4855d69` (Cinder + Lumen cross-writer wiring per
-`2baa05c`).
+Last index refresh: 2026-05-24, after re-verify against `0c1d66b`.
+60 of 60 re-verified expectations green at HEAD; X01 + X05
+remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
+Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
+contract, the gateway startup smoke, and the first true E2E
+through the durable pipeline (telemetrygen → gateway → Pulse
+→ query-api). Issue 005 opened: query-api and gateway main.rs
+emit structured `tracing::error!` events but install no
+subscriber, so the documented `health.startup.refused` /
+`gateway_starting` events are dropped silently; the runners
+assert on the actually-observable signals until the subscribers
+land.
 
 All 17 satisfied expectations re-verified at SHA `c871b5852356b346b6c1fdc48b8be93514c27d2f`
 via `harness/re-verify-all.sh`; zero regressions across the 14 commits
@@ -110,6 +116,7 @@ that can have an expectation, tracked?".
 | `crates/{lumen,cinder,pulse,ray,strata,augur,sluice}` libraries | Storage / metrics / traces / profiles / cold-tier / AIops / buffer pillars | none direct | 0 — deferred (partial via K-prefix) | Seven new pillar v0 (lumen, sluice, pulse, ray, strata, cinder, augur) and three v1 carry-forwards (lumen, sluice, cinder) landed in this range. All library-only per H-rule. Lumen v1 + Cinder v1 + Pulse-via-self-observe ARE indirectly exercised by K03 + K05 through kaleidoscope-cli. Ray, Strata, Augur, Sluice have no external consumer yet. See `known-gaps.md` N13. |
 | `crates/kaleidoscope-gateway` binary | OTLP receiver + storage sink (operator) | **G** | 1 (G01 satisfied) | Multi-stage `Dockerfile.gateway`, ports :4317 + :4318, persists into lumen/ray/pulse. G01 is the startup smoke; G02-G06 (OTLP accept + per-pillar persistence + restart durability) are the natural next batch. See `known-gaps.md` N16. |
 | `crates/query-api` binary | Prometheus `/api/v1/query_range` over Pulse (operator) | **Q** | 1 (Q01 satisfied) | Multi-stage `Dockerfile.query-api`, port :9090, fails closed without `KALEIDOSCOPE_QUERY_TENANT`. Q02-Q07 (round-trip, label matchers, regex matchers, static-serve, 400-on-bad-promql) are the natural next batch. See `known-gaps.md` N16. |
+| End-to-end via kaleidoscope-gateway | OTLP → pillars → query-api round-trip (operator) | **EG** | 1 (EG01 satisfied) | EG01 verifies the integration thesis under contract for the first time: telemetrygen → gateway :4318 → Pulse store → query-api :9090 → matrix response. EG02-EG05 (gRPC ingest, logs via log-query-api, traces, multi-tenant isolation, durability mid-write) are the natural next batch. See `known-gaps.md` N18 + N19. |
 | `crates/log-query-api` binary | `/api/v1/logs` over Lumen (operator) | **LQ** | 0 — deferred (no Dockerfile yet) | Binary builds in-workspace but lacks a packaging Dockerfile at HEAD. See `known-gaps.md` N16. |
 | `crates/trace-query-api` | `/api/v1/traces` over Ray (operator) | none yet | 0 — design only | ADR-0048 defined; crate does not exist at HEAD. See `known-gaps.md` N17. |
 

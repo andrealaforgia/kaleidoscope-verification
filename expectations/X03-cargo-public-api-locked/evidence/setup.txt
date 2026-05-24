@@ -1,3 +1,9 @@
 debconf: delaying package configuration, since apt-utils is not installed
+info: syncing channel updates for 'nightly-2026-04-15-aarch64-unknown-linux-gnu'
+
+  nightly-2026-04-15-aarch64-unknown-linux-gnu unchanged - rustc 1.97.0-nightly (a5c825cd8 2026-04-14)
+
+info: checking for self-update
+info: downloading self-update
 cargo-public-api 0.51.0
 nightly-2026-04-15-aarch64-unknown-linux-gnu

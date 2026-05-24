@@ -1,6 +1,7 @@
 step 1: ensure pinned nightly toolchain + cargo-public-api
   setup tail:
-    debconf: delaying package configuration, since apt-utils is not installed
+    info: checking for self-update
+    info: downloading self-update
     cargo-public-api 0.51.0
     nightly-2026-04-15-aarch64-unknown-linux-gnu
 step 2.otlp-conformance-harness: cargo +nightly-2026-04-15 public-api -p otlp-conformance-harness

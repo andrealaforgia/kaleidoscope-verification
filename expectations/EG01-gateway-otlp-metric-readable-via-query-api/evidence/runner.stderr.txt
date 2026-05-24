@@ -1,0 +1,2 @@
+step 1a: build kaleidoscope-gateway image
+step 1b: build query-api image

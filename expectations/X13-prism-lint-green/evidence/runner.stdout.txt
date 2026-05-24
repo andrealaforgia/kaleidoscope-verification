@@ -1,8 +1,8 @@
 step 1: pnpm install + pnpm -F prism lint
   tail:
-    Progress: resolved 414, reused 413, downloaded 0, added 412
+    Progress: resolved 414, reused 413, downloaded 0, added 413
     Progress: resolved 414, reused 413, downloaded 0, added 414, done
-    Done in 8.4s
+    Done in 7.9s
     --- pnpm -F prism lint ---
     No projects matched the filters "/src" in "/src"
     

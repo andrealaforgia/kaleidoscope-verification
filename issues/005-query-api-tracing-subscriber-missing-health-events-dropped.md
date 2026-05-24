@@ -1,8 +1,9 @@
-# 005 — `query-api` has no tracing subscriber: structured health events are dropped silently
+# 005 — `query-api` and `kaleidoscope-gateway` have no tracing subscriber: pre-spawn structured events are dropped silently
 
 - Status: `open`
-- Expectations affected: Q01 (currently asserts on stderr text
-  rather than the documented `health.startup.refused` event).
+- Expectations affected: Q01 (asserts on stderr text rather
+  than `health.startup.refused`), G01 (asserts on aperture's
+  post-spawn `event=ready` rather than `gateway_starting`).
 - Opened: 2026-05-24
 - Kaleidoscope SHA at observation: `0c1d66b560ad48f5822d2fd30d00b41045368ec0`
 
@@ -38,11 +39,27 @@ any future structured lifecycle event.
 
 ## Expected
 
-`main()` installs a tracing subscriber (`tracing_subscriber::fmt`
-or similar) so that the events the code emits are actually
-visible to an operator running the container. The aperture
-binary (`crates/aperture/src/main.rs`) does this; the gateway
-binary does too. query-api should match.
+Each composition-root `main()` installs a tracing subscriber
+(`tracing_subscriber::fmt` or similar) BEFORE the first
+`tracing::info!` / `tracing::error!` call, so the events the
+code emits are actually visible to an operator running the
+container.
+
+This affects both:
+
+- `crates/query-api/src/main.rs` — emits
+  `query_api_starting` and `health.startup.refused`, both
+  dropped.
+- `crates/kaleidoscope-gateway/src/main.rs` — emits
+  `gateway_starting` and `health.startup.refused`, both
+  dropped because the subscriber is only installed when
+  `aperture::spawn` is reached.
+
+(`crates/aperture/src/main.rs` — the standalone aperture
+binary — gets it right: aperture's compose installs the
+subscriber and any pre-init failure prints to stderr directly
+via `eprintln!`. The new binaries should match that posture
+explicitly.)
 
 ## Reproduction
 

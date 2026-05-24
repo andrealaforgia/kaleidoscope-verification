@@ -8,10 +8,19 @@ OTLP/HTTP/protobuf :4318). Operator-facing.
 ## Behaviour
 
 `kaleidoscope-gateway` started with a writable pillar root and
-`KALEIDOSCOPE_DEFAULT_TENANT` set emits an
-`event=gateway_starting` event on stderr within a short window,
-the storage-sink probe passes, and aperture's listener spawns.
-This is the Earned-Trust positive path from ADR-0041 DD5.
+`KALEIDOSCOPE_DEFAULT_TENANT` set comes up healthy: the
+storage-sink probe passes, aperture (which the gateway
+delegates to via `aperture::spawn`) binds OTLP/gRPC :4317 +
+OTLP/HTTP :4318, and emits `event=ready` on stderr within a
+short window. This is the Earned-Trust positive path from
+ADR-0041 DD5.
+
+The gateway's own `tracing::info!(event="gateway_starting")`
+in `crates/kaleidoscope-gateway/src/main.rs` is dropped on the
+floor because main.rs installs no tracing subscriber and
+aperture installs one only post-spawn — see issue 005. We
+therefore assert on aperture's `event=ready`, which fires
+AFTER the subscriber is up.
 
 ## Source
 
@@ -25,7 +34,7 @@ This is the Earned-Trust positive path from ADR-0041 DD5.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-23 UTC at HEAD (`0c1d66b`).
+- Last verified: 2026-05-24 UTC at HEAD (`0c1d66b`).
 - Method: `harness/run-gateway.sh` builds the gateway runtime
   image from the snapshot's `Dockerfile.gateway`. A `docker
   run -d` brings the container up with /data writable +
@@ -41,7 +50,13 @@ This is the Earned-Trust positive path from ADR-0041 DD5.
 
 ## Issues
 
-None.
+- [issue 005](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
+  — same pattern as query-api: the gateway's `main.rs` emits
+  `tracing::info!(event="gateway_starting")` and
+  `tracing::error!(event="health.startup.refused")` but
+  installs no subscriber, so both events are dropped. Once a
+  subscriber lands, this runner should tighten to assert the
+  `gateway_starting` event before the `ready` event.
 
 ## Notes
 

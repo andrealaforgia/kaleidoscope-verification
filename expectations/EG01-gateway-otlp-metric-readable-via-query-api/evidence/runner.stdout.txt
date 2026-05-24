@@ -1,0 +1,1 @@
+OK — OTLP metric ingested via gateway is readable via query-api (status=success, __name__=gen)
