@@ -1,0 +1,1 @@
+OK — query-api fails closed without KALEIDOSCOPE_QUERY_TENANT (exit=1 + Err(KALEIDOSCOPE_QUERY_TENANT ... fail-closed) on stderr)

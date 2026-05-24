@@ -1,1 +1,1 @@
-OK — read --observe-otlp emits a lumen.query.count NDJSON line
+OK — read --observe-otlp emits a metric named lumen.query.count (structural)

@@ -1,29 +1,39 @@
-diff --git a/crates/kaleidoscope-cli/src/lib.rs b/crates/kaleidoscope-cli/src/lib.rs
-index 74aaaeb..d89987f 100644
---- a/crates/kaleidoscope-cli/src/lib.rs
-+++ b/crates/kaleidoscope-cli/src/lib.rs
-@@ -75,6 +75,10 @@ pub enum Error {
-     LumenIngest(LogStoreError),
-     LumenQuery(LogStoreError),
-     CinderOpen(MigrateError),
-+    CinderMigrate(MigrateError),
-+    InvalidTier {
-+        value: String,
-+    },
-     Io(std::io::Error),
-     ParseRecord {
-         line: usize,
-@@ -90,6 +94,13 @@ impl fmt::Display for Error {
-             Error::LumenIngest(e) => write!(f, "lumen ingest: {e}"),
-             Error::LumenQuery(e) => write!(f, "lumen query: {e}"),
-             Error::CinderOpen(e) => write!(f, "cinder open: {e}"),
-+            Error::CinderMigrate(e) => write!(f, "cinder migrate: {e}"),
-+            Error::InvalidTier { value } => {
-+                write!(
-+                    f,
-+                    "invalid tier {value:?}: expected one of hot, warm, cold"
-+                )
-+            }
-             Error::Io(e) => write!(f, "io: {e}"),
-             Error::ParseRecord { line, source } => {
-                 write!(f, "parse record at line {line}: {source}")
+diff --git a/Cargo.lock b/Cargo.lock
+index a6d1749..d62c757 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2619,6 +2619,22 @@ version = "0.3.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+ 
++[[package]]
++name = "trace-query-api"
++version = "0.1.0"
++dependencies = [
++ "aegis",
++ "axum",
++ "hyper",
++ "mutants",
++ "ray",
++ "serde",
++ "serde_json",
++ "tokio",
++ "tower 0.5.3",
++ "tracing",
++]
++
+ [[package]]
+ name = "tracing"
+ version = "0.1.44"
+diff --git a/Cargo.toml b/Cargo.toml
+index cc1df58..b6484a7 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -24,6 +24,7 @@ members = [
+     "crates/kaleidoscope-cli",
+     "crates/query-api",
+     "crates/log-query-api",
++    "crates/trace-query-api",
+     "xtask/regenerate_codex_corpus",
+ ]
+ 

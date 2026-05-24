@@ -66,6 +66,14 @@ kaleidoscope_dirty: "${KALEIDOSCOPE_DIRTY}"
 host_uname: "${HOST_UNAME}"
 harness_dir: "${HARNESS_DIR}"
 EOF
+if [[ "${KALEIDOSCOPE_DIRTY}" == "yes" ]]; then
+    # Disambiguate for a casual reader: the dirty diff is captured
+    # alongside as evidence, but the build itself used `git archive
+    # HEAD`, so the SHA above identifies the actual built tree.
+    cat >> "$EVIDENCE_DIR/verification.yaml" <<EOF
+note: "build used HEAD via git archive; dirty diff saved for reference only"
+EOF
+fi
 
 # 2. Snapshot kaleidoscope HEAD into a staging dir.
 #
@@ -206,6 +214,21 @@ fi
 if [[ "$RUNNER_EXIT" -ne 0 ]]; then
     echo "scenario runner exited ${RUNNER_EXIT}" >&2
     exit "$RUNNER_EXIT"
+fi
+
+# 6. Anchor check (opt-in via anchor.yaml). Defends against the
+#    K11 pattern where the cited anchor commit got reverted but
+#    the expectation still claims to anchor it. If anchor-check
+#    fails, refuse `satisfied` even if the scenario passed.
+if [[ -f "$EXP_DIR/anchor.yaml" ]]; then
+    if ! "$HARNESS_DIR/check-anchor.sh" "$EXP_DIR" > "$EVIDENCE_DIR/anchor-check.txt" 2>&1; then
+        ANCHOR_EXIT=$?
+        echo "anchor check failed (exit ${ANCHOR_EXIT}):" >&2
+        cat "$EVIDENCE_DIR/anchor-check.txt" >&2
+        echo "scenario passed but anchor invalid — refusing 'satisfied'." >&2
+        exit "$ANCHOR_EXIT"
+    fi
+    cat "$EVIDENCE_DIR/anchor-check.txt" >&2
 fi
 
 echo "evidence captured under $EVIDENCE_DIR" >&2

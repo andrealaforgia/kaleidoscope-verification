@@ -29,13 +29,19 @@ cp /tmp/ingest.out "'"$EVIDENCE_DIR"'/ingest-output.txt"
 
 EC_I=$(grep -oE 'ingest-exit=[0-9]+' "$EVIDENCE_DIR/K03.stdout.txt" | cut -d= -f2)
 EC_R=$(grep -oE 'read-exit=[0-9]+'   "$EVIDENCE_DIR/K03.stdout.txt" | cut -d= -f2)
-LINES=$(grep -oE 'read-lines=[0-9]+' "$EVIDENCE_DIR/K03.stdout.txt" | cut -d= -f2)
-echo "  ingest exit: $EC_I  read exit: $EC_R  read lines: $LINES"
 [[ "$EC_I" == "0" ]] || { echo "ingest failed" >&2; exit 1; }
 [[ "$EC_R" == "0" ]] || { echo "read failed"  >&2; exit 1; }
-[[ "$LINES" == "3" ]] || { echo "expected 3 lines back, got $LINES" >&2; exit 1; }
-# Each input body string must appear in read output.
-for body in "first event" "second event" "third event"; do
-    grep -q "$body" "$EVIDENCE_DIR/read-output.ndjson" || { echo "missing body: $body" >&2; exit 1; }
-done
-echo "OK — ingest + read round-trip preserves all 3 records"
+
+# Hard equality: extract the .body field from each NDJSON record
+# (skip the `read ok: records=N` diagnostic line) and compare the
+# sorted set against the input set exactly. A substring grep would
+# accept "first event" landing in any field; this asserts it
+# landed in `.body`, the contract LogRecord body field.
+ACTUAL=$(grep '^{' "$EVIDENCE_DIR/read-output.ndjson" | jq -r '.body' | sort)
+EXPECTED=$(printf '%s\n' "first event" "second event" "third event" | sort)
+[[ "$ACTUAL" == "$EXPECTED" ]] || {
+    echo "body set mismatch:" >&2
+    diff <(echo "$EXPECTED") <(echo "$ACTUAL") >&2 || true
+    exit 1
+}
+echo "OK — ingest + read round-trip preserves all 3 records (.body exact-equality)"

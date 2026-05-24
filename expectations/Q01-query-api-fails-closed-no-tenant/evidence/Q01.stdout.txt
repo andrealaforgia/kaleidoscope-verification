@@ -1,0 +1,4 @@
+exit=1
+---stdout (first 10 lines)---
+---stderr (first 20 lines)---
+Error: "KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"

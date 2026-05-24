@@ -1,0 +1,1 @@
+Error: "KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"

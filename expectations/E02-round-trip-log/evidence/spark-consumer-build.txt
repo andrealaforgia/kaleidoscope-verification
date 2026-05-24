@@ -15,14 +15,14 @@
 #4 DONE 0.0s
 
 #5 [internal] load metadata for docker.io/library/debian:bookworm-slim
-#5 DONE 0.3s
+#5 DONE 0.8s
 
 #6 [internal] load .dockerignore
 #6 transferring context: 2B done
 #6 DONE 0.0s
 
-#7 [runtime 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:67b30a61dc87758f0caf819646104f29ecbda97d920aaf5edc834128ac8493d3
-#7 resolve docker.io/library/debian:bookworm-slim@sha256:67b30a61dc87758f0caf819646104f29ecbda97d920aaf5edc834128ac8493d3 done
+#7 [runtime 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb
+#7 resolve docker.io/library/debian:bookworm-slim@sha256:0104b334637a5f19aa9c983a91b54c89887c0984081f2068983107a6f6c21eeb done
 #7 DONE 0.0s
 
 #8 [builder 1/6] FROM docker.io/library/rust:1.88-slim-bookworm@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
@@ -34,22 +34,22 @@
 #9 DONE 0.0s
 
 #10 [context kaleidoscope] load from client
-#10 transferring kaleidoscope: 64.84kB 0.0s done
+#10 transferring kaleidoscope: 94.85kB 0.0s done
 #10 DONE 0.0s
 
-#11 [builder 4/6] COPY spark-consumer /consumer
+#11 [builder 3/6] COPY --from=kaleidoscope . /kaleidoscope-src/
 #11 CACHED
 
 #12 [builder 2/6] RUN apt-get update  && apt-get install -y --no-install-recommends         ca-certificates pkg-config libssl-dev  && rm -rf /var/lib/apt/lists/*
 #12 CACHED
 
-#13 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
+#13 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
 #13 CACHED
 
-#14 [builder 3/6] COPY --from=kaleidoscope . /kaleidoscope-src/
+#14 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
 #14 CACHED
 
-#15 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
+#15 [builder 4/6] COPY spark-consumer /consumer
 #15 CACHED
 
 #16 [builder 5/6] WORKDIR /consumer
@@ -60,10 +60,10 @@
 
 #18 exporting to image
 #18 exporting layers done
-#18 exporting manifest sha256:3497f9d5e8ec93a875cdff0b5778b16ea0981856ab48a06763b74b98274f7178 done
-#18 exporting config sha256:af73c673b4327640e81213dd6dca0e50fd0ba2085aec7f963d7b51fb29a282fb done
-#18 exporting attestation manifest sha256:59031e0432cef88076ec3e93163db861dd48c4a33b11274bb5895d38819e3d95 done
-#18 exporting manifest list sha256:9c4272f4eaf10292de2a49523ce8b7c819d56a706b6c58f886abfa955ae1d93d done
+#18 exporting manifest sha256:dbe4d6b35553f3c5df28d857cf65ef42174b403561055a57ab17633af1ae0ba1 done
+#18 exporting config sha256:ab05a68d79c3bdbf28c2d23433191bc2eb4f6297cadc21c6695cbbea177f8fc0 done
+#18 exporting attestation manifest sha256:b48b0a54e8cc060e3abe867137c45ab83238f672c2f12a2514e6bfe3c5e0e6b6 done
+#18 exporting manifest list sha256:076ed19f359ba755480f02cf63151a8ea57f0d933b7df744e7cd77464c2d5f90 done
 #18 naming to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
 #18 unpacking to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
 #18 DONE 0.0s

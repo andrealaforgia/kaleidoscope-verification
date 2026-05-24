@@ -3,6 +3,7 @@ info: syncing channel updates for '1.88-aarch64-unknown-linux-gnu'
 info: latest update on 2025-06-26, rust version 1.88.0 (6b00bc388 2025-06-23)
 info: downloading component 'cargo'
 info: downloading component 'clippy'
+info: retrying download for 'https://static.rust-lang.org/dist/2025-06-26/clippy-1.88.0-aarch64-unknown-linux-gnu.tar.xz'
 info: downloading component 'rust-std'
 info: downloading component 'rustc'
 info: downloading component 'rustfmt'
@@ -11,16 +12,5 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-   Compiling serde_core v1.0.228
-   Compiling serde v1.0.228
-   Compiling serde_json v1.0.149
-   Compiling toml_datetime v0.6.11
-   Compiling serde_spanned v0.6.9
-   Compiling serde_urlencoded v0.7.1
-   Compiling toml_edit v0.22.27
-   Compiling reqwest v0.12.28
-   Compiling toml v0.8.23
-   Compiling beacon v0.1.0 (/src/crates/beacon)
-   Compiling loom v0.1.0 (/src/crates/loom)
-    Finished `release` profile [optimized] target(s) in 4.19s
+    Finished `release` profile [optimized] target(s) in 0.38s
 /nonexistent-path: cannot read rule directory /nonexistent-path: No such file or directory (os error 2)

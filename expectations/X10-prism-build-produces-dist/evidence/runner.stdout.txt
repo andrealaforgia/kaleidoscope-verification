@@ -1,10 +1,10 @@
 step 1: pnpm install + pnpm -F prism build inside node:22-slim
   build done; tail:
-    total 4
-    drwxr-xr-x  4 root root 128 May 19 09:12 .
-    drwxr-xr-x 20 root root 640 May 19 09:12 ..
-    drwxr-xr-x  5 root root 160 May 19 09:12 assets
-    -rw-r--r--  1 root root 390 May 19 09:12 index.html
+    drwxr-xr-x  5 root root 160 May 23 20:54 .
+    drwxr-xr-x 21 root root 672 May 23 20:54 ..
+    drwxr-xr-x  5 root root 160 May 23 20:54 assets
+    -rw-r--r--  1 root root 101 May 23 20:54 config.json
+    -rw-r--r--  1 root root 390 May 23 20:54 index.html
     --- index.html head ---
     <!doctype html>
     <html lang="en">

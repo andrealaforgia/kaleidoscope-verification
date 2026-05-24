@@ -1,7 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.593772Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.594620Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.594682Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.594687Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.594702Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.756881Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":386}
-aperture-1  | {"timestamp":"2026-05-19T09:02:58.757702Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A04-pilot"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:32.467926Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:32.468469Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:32.468589Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:32.468594Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:32.468665Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:33.923276Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":386}
+aperture-1  | {"timestamp":"2026-05-24T09:39:33.925488Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":1,"resource.service.name":"expectation-A04-pilot"}

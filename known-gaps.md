@@ -240,6 +240,88 @@ commit. If the anchor is upstream of `e3a8cad` it might still
 exist in HEAD via byte-for-byte reintroduction, but the rule is
 cheap to check and catches anchor drift.
 
+## N16 — Three operator binaries graduated; partial coverage at G/Q
+
+Between commits `4855d69` and `0c1d66b` three operator-facing
+binaries reached running state (the rest are still libraries
+per the H-rule):
+
+- **`crates/kaleidoscope-gateway`** — multi-stage `Dockerfile.gateway`,
+  ports :4317 (OTLP/gRPC) + :4318 (OTLP/HTTP/protobuf), persists
+  signals to lumen / ray / pulse via `aperture-storage-sink`.
+  Catalogue prefix **G**.
+- **`crates/query-api`** — multi-stage `Dockerfile.query-api`,
+  port :9090, Prometheus-compatible `GET /api/v1/query_range`
+  over the Pulse store. Catalogue prefix **Q**.
+- **`crates/log-query-api`** — `GET /api/v1/logs` over the Lumen
+  store. **No `Dockerfile.log-query-api` at HEAD `0c1d66b`** —
+  the binary builds in-workspace but is not yet packaged as a
+  runtime image. Catalogue prefix would be **LQ** once a
+  Dockerfile lands.
+
+Opened G01 (gateway smoke) and Q01 (query-api fails-closed) as
+the cheapest contracts. Round-trip coverage (write via gateway,
+read via query-api / log-query-api) is the natural next batch:
+gateway slice 01-03 commits persist into lumen/ray/pulse, and
+query-api slice 01-04 commits parse PromQL + label matchers
+(`=`, `!=`, `=~`, `!~`).
+
+## N18 — Durability claim unverified (kill-9 + restart per v1 pillar)
+
+The kaleidoscope README and ADRs describe the v1 file-backed
+stores as "survives a restart". The catalogue currently verifies
+functional ingest+read round-trips (K03, K05, K12), which prove
+the happy path but NOT the durability invariant under abrupt
+process death.
+
+The missing class of expectation: per v1 pillar (lumen, cinder,
+pulse, ray, strata, sluice, plus beacon RuleState),
+
+1. Ingest N records through the gateway (or kaleidoscope-cli
+   where applicable).
+2. SIGKILL the writer process mid-write (timing-window vs
+   one-record-at-a-time).
+3. Restart the writer.
+4. Read back via query-api / kaleidoscope-cli read.
+5. Assert every record persisted (no torn/missing/corrupt) OR
+   document the exact partial-batch shape the contract permits.
+
+Effort: per-pillar harness extension to inject a kill signal mid-
+emit. Pulse + Lumen would be first targets (already exercised
+by K-prefix). Sluice / Cinder may need bespoke writer fixtures.
+
+This is the catalogue's biggest credibility lever for v1.
+
+## N19 — E2E through kaleidoscope-gateway unverified
+
+The current E-prefix (E01-E04, E05-E06 pending) exercises
+Spark → aperture → otelcol-sink, which is a forwarding path.
+The README's "the platform runs end to end" claim is about a
+different loop: OTLP in → kaleidoscope-gateway → lumen/ray/pulse
+→ query-api / log-query-api → operator-readable output.
+
+That loop is not under contract at HEAD. Open the EG-prefix
+(End-to-end via Gateway) with at least three contracts:
+
+- EG01: OTLP/HTTP trace into gateway lands in Ray, observable
+  via the trace-query-api when it ships (or via a Ray library
+  read in the interim).
+- EG02: OTLP/HTTP log into gateway lands in Lumen, observable
+  via log-query-api `GET /api/v1/logs`.
+- EG03: OTLP/HTTP metric into gateway lands in Pulse, observable
+  via query-api `GET /api/v1/query_range`.
+
+EG03 is the lowest-friction first because query-api is the
+most-shipped of the three read APIs.
+
+## N17 — trace-query-api designed only (ADR-0048)
+
+ADR-0048 defines the `trace-query-api` crate (Ray read path)
+but no `crates/trace-query-api/` exists at HEAD `0c1d66b` —
+DESIGN wave is complete, DELIVER not yet. The catalogue keeps
+no R-prefix entries until the binary surface ships with a
+Dockerfile.
+
 ## N15 — cli-migrate-subcommand-v0 in DESIGN wave
 
 `docs/feature/cli-migrate-subcommand-v0/` exists at HEAD with

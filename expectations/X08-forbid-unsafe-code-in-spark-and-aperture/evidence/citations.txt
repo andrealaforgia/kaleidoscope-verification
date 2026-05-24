@@ -1,5 +1,5 @@
 === crates/spark/src/lib.rs ===
-59:#![forbid(unsafe_code)]
+55:#![forbid(unsafe_code)]
 
 === crates/aperture/src/lib.rs ===
-29:#![forbid(unsafe_code)]
+33:#![forbid(unsafe_code)]

@@ -1,7 +1,9 @@
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.505881Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.506760Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.506804Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.506809Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.506826Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.603373Z","level":"INFO","event":"shutdown_initiated","signal":"SIGTERM","drain_deadline_ms":30000}
-aperture-1  | {"timestamp":"2026-05-19T09:03:18.603385Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.016997Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.029364Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.029553Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.029564Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.029609Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.337962Z","level":"INFO","event":"shutdown_initiated","signal":"SIGTERM","drain_deadline_ms":30000}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.338009Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.590173Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+aperture-1  | {"timestamp":"2026-05-23T13:54:24.590222Z","level":"INFO","event":"shutdown_complete","exit_code":0}

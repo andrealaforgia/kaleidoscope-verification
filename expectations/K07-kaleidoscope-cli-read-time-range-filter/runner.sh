@@ -28,7 +28,15 @@ cp /tmp/win.out "'"$EVIDENCE_DIR"'/windowed.ndjson"
 LINES=$(grep -oE 'lines=[0-9]+' "$EVIDENCE_DIR/K07.stdout.txt" | cut -d= -f2)
 echo "  windowed lines: $LINES"
 [[ "$LINES" == "1" ]] || { echo "expected 1, got $LINES" >&2; exit 1; }
-grep -q "event-b" "$EVIDENCE_DIR/windowed.ndjson" || { echo "missing event-b" >&2; exit 1; }
-grep -q "event-a" "$EVIDENCE_DIR/windowed.ndjson" && { echo "should not contain event-a" >&2; exit 1; } || true
-grep -q "event-c" "$EVIDENCE_DIR/windowed.ndjson" && { echo "should not contain event-c" >&2; exit 1; } || true
-echo "OK — read --since/--until filters to the window (event-b only)"
+
+# Hard equality: the only `.body` returned must be exactly "event-b".
+# A substring grep would accept "event-b" landing in any field; jq
+# asserts the structural location.
+BODIES=$(grep '^{' "$EVIDENCE_DIR/windowed.ndjson" | jq -r '.body' | sort)
+EXPECTED="event-b"
+[[ "$BODIES" == "$EXPECTED" ]] || {
+    echo "body set mismatch in window:" >&2
+    diff <(echo "$EXPECTED") <(echo "$BODIES") >&2 || true
+    exit 1
+}
+echo "OK — read --since/--until filters to the window (.body == event-b only)"

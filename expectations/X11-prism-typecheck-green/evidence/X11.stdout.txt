@@ -5,21 +5,21 @@ Packages: +414
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.1.3.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.1.3   │
-   │         Run "corepack install -g pnpm@11.1.3" to update.         │
+   │                Update available! 9.15.0 → 11.2.2.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
+   │         Run "corepack install -g pnpm@11.2.2" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
 Progress: resolved 414, reused 412, downloaded 0, added 14
-Progress: resolved 414, reused 413, downloaded 0, added 83
-Progress: resolved 414, reused 413, downloaded 0, added 167
-Progress: resolved 414, reused 413, downloaded 0, added 260
-Progress: resolved 414, reused 413, downloaded 0, added 317
-Progress: resolved 414, reused 413, downloaded 0, added 405
+Progress: resolved 414, reused 413, downloaded 0, added 88
+Progress: resolved 414, reused 413, downloaded 0, added 143
+Progress: resolved 414, reused 413, downloaded 0, added 224
+Progress: resolved 414, reused 413, downloaded 0, added 311
+Progress: resolved 414, reused 413, downloaded 0, added 404
 Progress: resolved 414, reused 413, downloaded 0, added 413
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 8s
+Done in 8.5s
 --- pnpm -F prism typecheck ---
 No projects matched the filters "/src" in "/src"
 

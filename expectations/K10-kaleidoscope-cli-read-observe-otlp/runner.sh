@@ -19,6 +19,16 @@ cp "$DATA_HOST/observed.ndjson" "'"$EVIDENCE_DIR"'/observed.ndjson"
 '
 "$HARNESS_DIR/run-kaleidoscope-cli.sh" "$EVIDENCE_DIR" K10 "$INLINE"
 
-grep -q "lumen.query.count" "$EVIDENCE_DIR/observed.ndjson" || \
-    { echo "observed file lacks lumen.query.count metric" >&2; exit 1; }
-echo "OK — read --observe-otlp emits a lumen.query.count NDJSON line"
+# Hard equality: extract the metric `.name` field across NDJSON
+# resourceMetrics records and assert `lumen.query.count` is among
+# them. Substring grep would also accept the name appearing in any
+# resource attribute value.
+NAMES=$(grep '^{' "$EVIDENCE_DIR/observed.ndjson" \
+    | jq -r '.scopeMetrics[]?.metrics[]?.name' 2>/dev/null \
+    | sort -u)
+echo "$NAMES" | grep -qx "lumen.query.count" || {
+    echo "observed file lacks lumen.query.count as a metric name; got:" >&2
+    echo "$NAMES" >&2
+    exit 1
+}
+echo "OK — read --observe-otlp emits a metric named lumen.query.count (structural)"

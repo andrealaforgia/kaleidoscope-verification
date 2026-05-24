@@ -3,6 +3,6 @@ step 1: waiting for aperture /readyz
 step 2: sending one OTLP/HTTP/protobuf trace via telemetrygen
   telemetrygen exited 0
 step 3: checking aperture stderr for sink_accepted line
-  found: aperture-1  | {"timestamp":"2026-05-19T09:02:58.757702Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A04-pilot"}
+  found: aperture-1  | {"timestamp":"2026-05-24T09:39:33.925488Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":1,"resource.service.name":"expectation-A04-pilot"}
   observed span_count=2, expected=2
 OK — aperture acked the OTLP/HTTP/protobuf request and emitted sink_accepted with matching span_count and service.name

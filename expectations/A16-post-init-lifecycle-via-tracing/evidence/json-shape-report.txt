@@ -1,5 +1,5 @@
 # json-shape-report
-kaleidoscope_sha:    4855d69b774144013ad93d8eed1e60303d317a58
+kaleidoscope_sha:    0c1d66b560ad48f5822d2fd30d00b41045368ec0
 lines_total:         5
 lines_bad_json:      0
 lines_missing_field: 0

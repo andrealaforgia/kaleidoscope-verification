@@ -1,5 +1,39 @@
 # Expectations index
 
+## What this catalogue does NOT validate
+
+A satisfied count below is not the same as "the system works".
+This catalogue verifies contract-level behavioural correctness
+at v0/v1 operator and integrator surfaces. It deliberately does
+NOT cover four load-bearing claims a casual reader of the
+kaleidoscope README might infer.
+
+- **Architectural thesis** — "OTLP at every internal seam", the
+  four-pillar model holding together as a cohesive whole, the
+  "removing the vendor margin" framing. We assert wire-shape
+  contracts at the boundary, not architectural coherence.
+- **Cost thesis** — claims of the form "Aegis is in the free
+  product. Always.", "no licence tax", or any total-cost-of-
+  ownership argument. The catalogue has no business-economics
+  surface.
+- **Durability thesis** — "survives a restart" for six storage
+  pillars and rule-state. We verify functional ingest + read
+  round-trips. We do NOT yet kill-9 mid-write, restart, and
+  assert every record landed without corruption. Tracked as a
+  follow-up — see [`../known-gaps.md`](../known-gaps.md) N18
+  when added.
+- **Multi-pillar coherence thesis** — "the platform now runs
+  end to end" with all six pillars participating in one flow.
+  The current E-prefix tests Spark → aperture → otelcol-sink,
+  which is a forwarding path. The gateway→pillars→query-api
+  loop is not yet under contract. G-prefix opens this; G01 is
+  a smoke contract, not the round-trip.
+
+A green INDEX confirms the contracts that ARE here. The
+[`../known-gaps.md`](../known-gaps.md) file enumerates what is
+intentionally out of scope (the H-rule excludes library APIs)
+and what is deferred pending external anchors or harness work.
+
 Live status table. Updated when an expectation moves between states.
 
 | Status | Count |
@@ -71,9 +105,13 @@ that can have an expectation, tracked?".
 | `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 6 placeholders (B01-B06, all pending) | Beacon v0 GRADUATED at `f2c28b5`: real Tokio binary, PromQL HTTP polling, SIGHUP reload, inhibition (Slice 03), multi-sink routing (Slice 04), SLO MWMBR synthesis (Slice 05). B-prefix opened with stubs anchored to the slice docs. Verification blocked on a Beacon harness (mock Prom + wiremock webhook); see `known-gaps.md` N10 — updated. |
 | `apps/prism` SPA in a browser | Operator-facing UI (query panel, charts, time-range pickers, auto-refresh) | **P** | 0 — deferred infrastructure | Build pipeline is tracked (X10-X15); the actual UI behaviour would need Playwright-in-container plus a PromQL backend fixture. See `known-gaps.md` N11. |
 | `crates/loom` binary | Operator change-control CLI (validate / plan / apply) | **L** | 6 (all satisfied: L01-L06) | Loom v0 graduated at `149e4e4`. Six expectations cover validate exit-code contract (L01-L04), plan determinism (L05), apply idempotency (L06). Verified via `docker run rust:1.88-slim` building loom against the HEAD snapshot and running each scenario with inline TOML fixtures. |
-| `crates/aegis` library | JWT validator + tenant catalogue + audit log (consumed by aperture in Phase 2) | none yet | 0 — deferred | Aegis v0 graduated at `fde3cd9` library-only. No binary; intended caller is aperture once TLS/SPIFFE knobs ship (see N1 + N12). Per the H-rule, library API is out of scope until an external consumer exposes it. |
+| `crates/aegis` library | JWT validator + tenant catalogue + audit log (consumed by aperture in Phase 2) | none yet | 0 — deferred | Aegis v0 graduated at `fde3cd9` library-only. No binary; intended caller is aperture once TLS/SPIFFE knobs ship (see N1 + N12). Per the H-rule, library API is out of scope until an external consumer exposes it. **The kaleidoscope README markets Aegis as a free product feature; that auth/tenancy claim is unverified at HEAD because no external surface exposes it.** |
 | `crates/kaleidoscope-cli` binary | Operator CLI wiring Lumen v1 + Cinder v1 + self-observe (ingest / read / stats / --observe-otlp) | **K** | 12 (11 satisfied: K01-K10 + K12; 1 held: K11) | First runnable product binary, landed at `c96cb18` and extended through `75f15a6` / `946d2c8` / `b503f49` / `9d1f805` / `8ee7091` / `2baa05c` (stats + time-range + Cinder tier dist + Lumen observe + Cinder observe). K12 anchors the cross-writer atomicity wiring at `2baa05c`. K11 (unknown-flag rejection) is `held` because its anchor commit `e7fbee0` was reverted by `e3a8cad`; see N14. Verified via `harness/run-kaleidoscope-cli.sh`. |
 | `crates/{lumen,cinder,pulse,ray,strata,augur,sluice}` libraries | Storage / metrics / traces / profiles / cold-tier / AIops / buffer pillars | none direct | 0 — deferred (partial via K-prefix) | Seven new pillar v0 (lumen, sluice, pulse, ray, strata, cinder, augur) and three v1 carry-forwards (lumen, sluice, cinder) landed in this range. All library-only per H-rule. Lumen v1 + Cinder v1 + Pulse-via-self-observe ARE indirectly exercised by K03 + K05 through kaleidoscope-cli. Ray, Strata, Augur, Sluice have no external consumer yet. See `known-gaps.md` N13. |
+| `crates/kaleidoscope-gateway` binary | OTLP receiver + storage sink (operator) | **G** | 1 (G01 satisfied) | Multi-stage `Dockerfile.gateway`, ports :4317 + :4318, persists into lumen/ray/pulse. G01 is the startup smoke; G02-G06 (OTLP accept + per-pillar persistence + restart durability) are the natural next batch. See `known-gaps.md` N16. |
+| `crates/query-api` binary | Prometheus `/api/v1/query_range` over Pulse (operator) | **Q** | 1 (Q01 satisfied) | Multi-stage `Dockerfile.query-api`, port :9090, fails closed without `KALEIDOSCOPE_QUERY_TENANT`. Q02-Q07 (round-trip, label matchers, regex matchers, static-serve, 400-on-bad-promql) are the natural next batch. See `known-gaps.md` N16. |
+| `crates/log-query-api` binary | `/api/v1/logs` over Lumen (operator) | **LQ** | 0 — deferred (no Dockerfile yet) | Binary builds in-workspace but lacks a packaging Dockerfile at HEAD. See `known-gaps.md` N16. |
+| `crates/trace-query-api` | `/api/v1/traces` over Ray (operator) | none yet | 0 — design only | ADR-0048 defined; crate does not exist at HEAD. See `known-gaps.md` N17. |
 
 The two columns to watch are *Tracked entries* (how the catalogue
 sees the surface) and *Status* (why the surface is or is not in

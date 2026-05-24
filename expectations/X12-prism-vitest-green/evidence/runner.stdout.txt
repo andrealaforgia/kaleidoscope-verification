@@ -1,13 +1,13 @@
 step 1: pnpm install + pnpm -F prism vitest
   tail:
-     ✓ tests/invariant-fidelity.test.ts (17 tests) 10ms
-     ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 192ms
-     ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 415ms
+     ✓ tests/slice-04-auto-refresh.test.ts (24 tests) 5ms
+     ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 187ms
+     ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 431ms
     
      Test Files  7 passed (7)
           Tests  114 passed (114)
-       Start at  09:13:25
-       Duration  4.18s (transform 250ms, setup 2.93s, collect 2.23s, tests 650ms, environment 11.14s, prepare 1.23s)
+       Start at  21:25:35
+       Duration  8.42s (transform 289ms, setup 4.11s, collect 2.09s, tests 678ms, environment 19.58s, prepare 5.28s)
     
     VITEST_OK
 OK — pnpm -F prism vitest (unit tests, jsdom) is green

@@ -1,1 +1,1 @@
-OK — observe-otlp sink contains BOTH lumen.ingest.count AND a cinder.* metric
+OK — observe-otlp sink contains BOTH lumen.ingest.count AND a cinder.* metric (structural)

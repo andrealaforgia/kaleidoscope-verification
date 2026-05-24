@@ -27,9 +27,19 @@ EC=$(grep -oE 'exit=[0-9]+' "$EVIDENCE_DIR/K12.stdout.txt" | tail -1 | cut -d= -
 [[ "$EC" == "0" ]] || { echo "ingest exit $EC" >&2; exit 1; }
 [[ -s "$EVIDENCE_DIR/observed.ndjson" ]] || { echo "observed.ndjson empty" >&2; exit 1; }
 
-grep -q "lumen.ingest.count" "$EVIDENCE_DIR/observed.ndjson" || \
-    { echo "observed file lacks lumen.ingest.count" >&2; exit 1; }
-grep -qE '"name":"cinder\.' "$EVIDENCE_DIR/observed.ndjson" || \
-    { echo "observed file lacks any cinder.* metric (cross-writer wiring absent)" >&2; \
-      head -10 "$EVIDENCE_DIR/observed.ndjson" >&2; exit 1; }
-echo "OK — observe-otlp sink contains BOTH lumen.ingest.count AND a cinder.* metric"
+# Hard equality: extract metric names structurally and assert
+# coexistence of `lumen.ingest.count` and at least one `cinder.*`.
+NAMES=$(grep '^{' "$EVIDENCE_DIR/observed.ndjson" \
+    | jq -r '.scopeMetrics[]?.metrics[]?.name' 2>/dev/null \
+    | sort -u)
+echo "$NAMES" | grep -qx "lumen.ingest.count" || {
+    echo "observed file lacks lumen.ingest.count metric; got:" >&2
+    echo "$NAMES" >&2
+    exit 1
+}
+echo "$NAMES" | grep -qE '^cinder\.' || {
+    echo "observed file lacks any cinder.* metric (cross-writer wiring absent); got:" >&2
+    echo "$NAMES" >&2
+    exit 1
+}
+echo "OK — observe-otlp sink contains BOTH lumen.ingest.count AND a cinder.* metric (structural)"

@@ -1,2 +1,2 @@
   windowed lines: 1
-OK — read --since/--until filters to the window (event-b only)
+OK — read --since/--until filters to the window (.body == event-b only)

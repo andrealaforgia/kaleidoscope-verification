@@ -1,7 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.751118Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.751466Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.751498Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.751503Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.751519Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.895520Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":119}
-aperture-1  | {"timestamp":"2026-05-19T09:03:05.896290Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-A06-pilot"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.257496Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.257904Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.257938Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.257943Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.257957Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.468243Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":119}
+aperture-1  | {"timestamp":"2026-05-24T09:39:41.469307Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":1,"resource.service.name":"expectation-A06-pilot"}

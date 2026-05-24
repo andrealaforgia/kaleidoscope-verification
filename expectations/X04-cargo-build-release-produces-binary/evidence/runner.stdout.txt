@@ -8,5 +8,5 @@ step 2: surface evidence
     --- cargo build --workspace --release --locked ---
   aperture binary:
     --- aperture binary check ---
-    size=10257264 mode=-rwxr-xr-x path=target/release/aperture
+    size=11293312 mode=-rwxr-xr-x path=target/release/aperture
 OK — cargo build --workspace --release produced an executable aperture binary
