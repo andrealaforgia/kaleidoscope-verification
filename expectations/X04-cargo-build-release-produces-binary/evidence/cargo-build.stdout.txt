@@ -3,37 +3,37 @@ rustc 1.88.0 (6b00bc388 2025-06-23)
 cargo 1.88.0 (873a06493 2025-05-10)
 --- cargo build --workspace --release --locked ---
 --- target/release listing (top-level) ---
-total 63932
-drwxr-xr-x  68 root root     2176 May 23  2026 .
+total 69232
+drwxr-xr-x  74 root root     2368 May 27 07:48 .
 drwxr-xr-x   8 root root      256 May 19 09:10 ..
 -rw-r--r--   1 root root        0 May 19 09:04 .cargo-lock
-drwxr-xr-x 385 root root    12320 May 23 19:23 .fingerprint
--rwxr-xr-x   2 root root 11293312 May 23  2026 aperture
--rw-r--r--   1 root root      849 May 23  2026 aperture.d
--rwxr-xr-x   2 root root  9305040 May 23 20:24 beacon-server
--rw-r--r--   1 root root      382 May 23  2026 beacon-server.d
+drwxr-xr-x 389 root root    12448 May 27 07:48 .fingerprint
+-rwxr-xr-x   2 root root 11293312 May 27 07:48 aperture
+-rw-r--r--   1 root root      849 May 27 07:48 aperture.d
+-rwxr-xr-x   2 root root  9305040 May 27 07:48 beacon-server
+-rw-r--r--   1 root root      382 May 27 07:48 beacon-server.d
 drwxr-xr-x  61 root root     1952 May 23 19:23 build
-drwxr-xr-x 942 root root    30144 May 23  2026 deps
+drwxr-xr-x 952 root root    30464 May 27 07:48 deps
 drwxr-xr-x   2 root root       64 May 19 09:04 examples
 drwxr-xr-x   2 root root       64 May 19 09:04 incremental
--rwxr-xr-x   2 root root  1196320 May 23 20:23 kaleidoscope-cli
--rw-r--r--   1 root root     1034 May 23  2026 kaleidoscope-cli.d
--rwxr-xr-x   2 root root 11111848 May 23  2026 kaleidoscope-gateway
--rw-r--r--   1 root root     1645 May 23  2026 kaleidoscope-gateway.d
--rw-r--r--   1 root root      134 May 23  2026 libaegis.d
--rw-r--r--   2 root root   769290 May 23 20:12 libaegis.rlib
--rw-r--r--   1 root root      824 May 23  2026 libaperture.d
--rw-r--r--   2 root root  3863010 May 23 20:24 libaperture.rlib
--rw-r--r--   1 root root     1609 May 23  2026 libaperture_storage_sink.d
--rw-r--r--   2 root root   348850 May 23 20:24 libaperture_storage_sink.rlib
--rw-r--r--   1 root root      297 May 23  2026 libaugur.d
--rw-r--r--   2 root root    99876 May 23 20:12 libaugur.rlib
--rw-r--r--   1 root root      308 May 23  2026 libbeacon.d
--rw-r--r--   2 root root  1600690 May 23 20:24 libbeacon.rlib
--rw-r--r--   1 root root      352 May 23  2026 libbeacon_server.d
--rw-r--r--   2 root root   132198 May 23 20:23 libbeacon_server.rlib
--rw-r--r--   1 root root      333 May 23  2026 libcinder.d
+-rwxr-xr-x   2 root root  1196872 May 27 07:48 kaleidoscope-cli
+-rw-r--r--   1 root root     1128 May 27 07:48 kaleidoscope-cli.d
+-rwxr-xr-x   2 root root 11179176 May 27 07:48 kaleidoscope-gateway
+-rw-r--r--   1 root root     1778 May 27 07:48 kaleidoscope-gateway.d
+-rw-r--r--   1 root root      134 May 27 07:48 libaegis.d
+-rw-r--r--   2 root root   769290 May 27 07:48 libaegis.rlib
+-rw-r--r--   1 root root      824 May 27 07:48 libaperture.d
+-rw-r--r--   2 root root  3863010 May 27 07:48 libaperture.rlib
+-rw-r--r--   1 root root     1646 May 27 07:48 libaperture_storage_sink.d
+-rw-r--r--   2 root root   348906 May 27 07:48 libaperture_storage_sink.rlib
+-rw-r--r--   1 root root      297 May 27 07:48 libaugur.d
+-rw-r--r--   2 root root    99876 May 27 07:48 libaugur.rlib
+-rw-r--r--   1 root root      308 May 27 07:48 libbeacon.d
+-rw-r--r--   2 root root  1600690 May 27 07:48 libbeacon.rlib
+-rw-r--r--   1 root root      352 May 27 07:48 libbeacon_server.d
+-rw-r--r--   2 root root   132198 May 27 07:48 libbeacon_server.rlib
+-rw-r--r--   1 root root      333 May 27 07:48 libcinder.d
 --- aperture binary check ---
 size=11293312 mode=-rwxr-xr-x path=target/release/aperture
--rwxr-xr-x 2 root root 11293312 May 23  2026 target/release/aperture
+-rwxr-xr-x 2 root root 11293312 May 27 07:48 target/release/aperture
 PRESENT_AND_EXECUTABLE

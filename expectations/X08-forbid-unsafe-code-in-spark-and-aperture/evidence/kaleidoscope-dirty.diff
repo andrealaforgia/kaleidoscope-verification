@@ -1,39 +1,72 @@
-diff --git a/Cargo.lock b/Cargo.lock
-index a6d1749..d62c757 100644
---- a/Cargo.lock
-+++ b/Cargo.lock
-@@ -2619,6 +2619,22 @@ version = "0.3.3"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+diff --git a/crates/trace-query-api/src/lib.rs b/crates/trace-query-api/src/lib.rs
+index af75d16..392f561 100644
+--- a/crates/trace-query-api/src/lib.rs
++++ b/crates/trace-query-api/src/lib.rs
+@@ -63,6 +63,12 @@ use serde_json::json;
+ /// target: `/api/v1` prefix (ADR-0043) + `/traces` (ADR-0048 Decision 3).
+ const TRACES_ROUTE: &str = "/api/v1/traces";
  
-+[[package]]
-+name = "trace-query-api"
-+version = "0.1.0"
-+dependencies = [
-+ "aegis",
-+ "axum",
-+ "hyper",
-+ "mutants",
-+ "ray",
-+ "serde",
-+ "serde_json",
-+ "tokio",
-+ "tower 0.5.3",
-+ "tracing",
-+]
++/// The sibling lookup-by-id route (ADR-0053 Decision 1). Mounted on the
++/// same `Router` as `TRACES_ROUTE`; shares `ApiState { store, tenant }`.
++/// Scaffold: declared so the DISTILL acceptance suite compiles; the
++/// handler is `unimplemented!` until DELIVER lands the parse + wire.
++const TRACES_BY_ID_ROUTE: &str = "/api/v1/traces/by_id";
 +
- [[package]]
- name = "tracing"
- version = "0.1.44"
-diff --git a/Cargo.toml b/Cargo.toml
-index cc1df58..b6484a7 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -24,6 +24,7 @@ members = [
-     "crates/kaleidoscope-cli",
-     "crates/query-api",
-     "crates/log-query-api",
-+    "crates/trace-query-api",
-     "xtask/regenerate_codex_corpus",
- ]
+ /// Maximum permitted query window in whole seconds (24 hours; ADR-0050
+ /// Decision 1). A request whose `end - start` in seconds STRICTLY
+ /// exceeds this value is refused with a named 400 BEFORE the store is
+@@ -99,6 +105,7 @@ pub fn router(store: Arc<dyn TraceStore + Send + Sync>, tenant: Option<TenantId>
+     let state = ApiState { store, tenant };
+     Router::new()
+         .route(TRACES_ROUTE, get(handle_traces))
++        .route(TRACES_BY_ID_ROUTE, get(handle_traces_by_id))
+         .with_state(state)
+ }
  
+@@ -190,6 +197,46 @@ async fn handle_traces(
+     }
+ }
+ 
++/// The lookup-by-id query parameter. ADR-0053 Decision 2: exactly 32
++/// hex characters (case-insensitive). `trace_id` is `Option<String>` so
++/// axum's `Query` extractor accepts a request whose parameter is
++/// absent and the handler emits the contract's named 400 itself
++/// (rather than axum's default rejection body), mirroring
++/// `TracesParams`.
++///
++/// Scaffold for DISTILL Mandate 7 RED-not-BROKEN: the type is declared
++/// so the acceptance suite compiles; the handler is `unimplemented!`
++/// until DELIVER lands the parse + wire.
++#[derive(Debug, Deserialize)]
++pub struct TracesByIdParams {
++    pub trace_id: Option<String>,
++}
++
++/// Handle `GET /api/v1/traces/by_id?trace_id=<32-hex>`. ADR-0053
++/// Decision 1 mounts this as a sibling route on the same `Router` as
++/// `handle_traces`; the two share `ApiState { store, tenant }`. The
++/// orchestration the DELIVER wave implements is: resolve-tenant
++/// (fail-closed 401) -> read required `trace_id` (presence 400 BEFORE
++/// the store) -> parse `trace_id` (32-hex case-insensitive; format 400
++/// BEFORE the store) -> `TraceStore::get_trace` -> result cap (400) ->
++/// serialise the bare array (200, `[]` when empty) -> map
++/// `PersistenceFailed` to 500. Every malformed-input arm returns the
++/// single literal class label `"invalid trace_id"` and NEVER echoes
++/// the raw parameter value (ADR-0053 Decision 2, ADR-0048 Decision 2
++/// redaction extended).
++///
++/// Scaffold for DISTILL Mandate 7 RED-not-BROKEN: the handler is
++/// `unimplemented!` so the suite compiles and every scenario fails
++/// RED (panic on call) rather than BROKEN (compile error). DELIVER
++/// implements the body per the architecture brief and the scenarios
++/// go green one at a time per the outer-loop convention.
++async fn handle_traces_by_id(
++    State(_state): State<ApiState>,
++    Query(_params): Query<TracesByIdParams>,
++) -> Response {
++    unimplemented!("__SCAFFOLD__ trace-lookup-by-id-v0 RED")
++}
++
+ /// Read the required `service` parameter. The handler must see a
+ /// non-empty value; missing or empty are both 400. The reason names
+ /// the missing parameter WITHOUT echoing any raw value (the redaction

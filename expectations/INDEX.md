@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `6fc2aaa` (cycle 13 of overnight loop). S11 cold retry GREEN: cycle-12 double-fail confirmed flake, same disposition as 006/007. A09, A11, E04 GREEN. N24 added for trace-lookup-by-id-v0 DISCUSS.
+Last index refresh: 2026-05-27, observed HEAD `0b71328` (cycle 14 of overnight loop). Two DESIGN/DEVOPS commits progress trace-lookup-by-id-v0 (N24 updated: `/api/v1/traces/by_id?id=<32-hex>`, 400 on malformed). Spot re-verified K07, X04, X08: GREEN.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
