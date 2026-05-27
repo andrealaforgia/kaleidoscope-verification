@@ -314,20 +314,19 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N25 — query-http-common-v0 in DESIGN
+## N25 — query-http-common-v0 graduated
 
 Commits `7f24998` (discuss) + `8adb08a` (design, ADR-0054) +
-`a6175f1` (devops, gate-5-mutants CI job) at 2026-05-27
-progress the wave. ADR-0054 pins a Mikado-ordered extraction
-of the HTTP-shape seam ADR-0048 deferred: the three read APIs (query-api,
-log-query-api, trace-query-api) currently re-implement
-parse-tenant + cap-rejection + error-response shape; a
-common crate is being scoped to lift the seam. No DESIGN
-yet. Pure refactor wave: when it lands, no operator-visible
-contract changes (the wire shape stays Prometheus-compatible
-JSON `{"status":...,"error":...}`), but Q02 and its future
-LQ/TQ siblings will exercise the SAME code path. Recheck
-Q02 evidence after DELIVER lands.
+`a6175f1` (devops, gate-5-mutants CI job) + `51400b1`
+(DELIVER, "extract scaffolding from three read APIs") at
+2026-05-27. The HTTP-shape seam ADR-0048 deferred has been
+lifted: query-api, log-query-api and trace-query-api now
+route their parse-tenant + cap-rejection + error-response
+shape through the common crate. Pure refactor; the wire
+shape stays Prometheus-compatible JSON
+`{"status":...,"error":...}`. Q01 and Q02 re-verified GREEN
+at `51400b1` (cycle 23), confirming no operator-visible
+contract drift on the query-api binary.
 
 ## N24 — trace-lookup-by-id-v0 graduated, still blocked by N17
 
