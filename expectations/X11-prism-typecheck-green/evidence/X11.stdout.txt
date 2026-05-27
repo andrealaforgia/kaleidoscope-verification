@@ -5,19 +5,19 @@ Packages: +414
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.2.2.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
-   │         Run "corepack install -g pnpm@11.2.2" to update.         │
+   │                Update available! 9.15.0 → 11.3.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.3.0   │
+   │         Run "corepack install -g pnpm@11.3.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
-Progress: resolved 414, reused 412, downloaded 0, added 14
-Progress: resolved 414, reused 413, downloaded 0, added 88
-Progress: resolved 414, reused 413, downloaded 0, added 143
-Progress: resolved 414, reused 413, downloaded 0, added 224
-Progress: resolved 414, reused 413, downloaded 0, added 311
-Progress: resolved 414, reused 413, downloaded 0, added 404
-Progress: resolved 414, reused 413, downloaded 0, added 413
+Progress: resolved 414, reused 412, downloaded 0, added 2
+Progress: resolved 414, reused 413, downloaded 0, added 66
+Progress: resolved 414, reused 413, downloaded 0, added 142
+Progress: resolved 414, reused 413, downloaded 0, added 214
+Progress: resolved 414, reused 413, downloaded 0, added 294
+Progress: resolved 414, reused 413, downloaded 0, added 359
+Progress: resolved 414, reused 413, downloaded 0, added 412
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
 Done in 8.5s
 --- pnpm -F prism typecheck ---

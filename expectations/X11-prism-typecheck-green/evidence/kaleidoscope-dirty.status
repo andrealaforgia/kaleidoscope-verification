@@ -1,3 +1,2 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+ M docs/presentation/narrative.md
+ M docs/presentation/slides.md

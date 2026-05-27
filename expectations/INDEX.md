@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `0b71328` (cycle 14 of overnight loop). Two DESIGN/DEVOPS commits progress trace-lookup-by-id-v0 (N24 updated: `/api/v1/traces/by_id?id=<32-hex>`, 400 on malformed). Spot re-verified K07, X04, X08: GREEN.
+Last index refresh: 2026-05-27, observed HEAD `3908240` (cycle 15 of overnight loop). trace-lookup-by-id-v0 graduated to DELIVER via `3908240`, but trace-query-api still has no Dockerfile (N17), so the contract is unreachable from the catalogue side — N24 updated. Spot re-verified K09, X11, X15: GREEN.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

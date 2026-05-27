@@ -5,23 +5,21 @@ Packages: +414
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.2.2.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
-   │         Run "corepack install -g pnpm@11.2.2" to update.         │
+   │                Update available! 9.15.0 → 11.3.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.3.0   │
+   │         Run "corepack install -g pnpm@11.3.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
-Progress: resolved 414, reused 411, downloaded 0, added 9
-Progress: resolved 414, reused 413, downloaded 0, added 81
-Progress: resolved 414, reused 413, downloaded 0, added 162
-Progress: resolved 414, reused 413, downloaded 0, added 260
-Progress: resolved 414, reused 413, downloaded 0, added 335
-Progress: resolved 414, reused 413, downloaded 0, added 408
-Progress: resolved 414, reused 413, downloaded 0, added 410
+Progress: resolved 414, reused 412, downloaded 0, added 15
+Progress: resolved 414, reused 413, downloaded 0, added 86
+Progress: resolved 414, reused 413, downloaded 0, added 163
+Progress: resolved 414, reused 413, downloaded 0, added 247
+Progress: resolved 414, reused 413, downloaded 0, added 312
+Progress: resolved 414, reused 413, downloaded 0, added 403
 Progress: resolved 414, reused 413, downloaded 0, added 413
-Progress: resolved 414, reused 413, downloaded 0, added 414
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 11.3s
+Done in 8.1s
 --- pnpm -F prism build (bundle-size needs dist/) ---
 No projects matched the filters "/src" in "/src"
 
@@ -36,7 +34,7 @@ computing gzip size...
 dist/index.html                   0.39 kB │ gzip:   0.26 kB
 dist/assets/index-BiLGTODY.css    3.84 kB │ gzip:   1.21 kB
 dist/assets/index-DiaFpjTc.js   691.99 kB │ gzip: 228.55 kB │ map: 3,729.38 kB
-✓ built in 5.43s
+✓ built in 2.46s
 --- pnpm -F prism bundle-size ---
 No projects matched the filters "/src" in "/src"
 

@@ -314,15 +314,16 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N24 — trace-lookup-by-id-v0 in DESIGN/DEVOPS
+## N24 — trace-lookup-by-id-v0 graduated, still blocked by N17
 
-Commits `6fc2aaa` (discuss) + `7f579d7` (design) + `0b71328`
-(devops) at 2026-05-27 progress the wave. Design Decision:
-route `/api/v1/traces/by_id?id=<hex>`, accepts 32-hex
-case-insensitive trace ids, 400 on malformed. No DELIVER
-yet. Doubly blocked: also waiting on a Dockerfile.trace-query-api
-(N17). When both land, the TQ-prefix opens with a
-fail-closed-no-tenant smoke and a lookup-by-id contract.
+Wave shipped DELIVER at `3908240` ("feat(trace-query-api):
+`/api/v1/traces/by_id` with 32-hex case-insensitive trace_id",
+ADR-0053). `parse_trace_id` rejects empty/missing/wrong-length/
+non-hex with a literal 400. The library contract is now real
+but `trace-query-api` still lacks a packaging Dockerfile
+(N17), so the operator-visible surface remains unreachable
+from the catalogue. TQ-prefix opens the moment the Dockerfile
+lands.
 
 ## N23 — log-query-severity-filter-v0 graduated, still blocked by N16
 

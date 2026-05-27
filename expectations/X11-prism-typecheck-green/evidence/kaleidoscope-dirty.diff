@@ -1,39 +1,99 @@
-diff --git a/Cargo.lock b/Cargo.lock
-index a6d1749..d62c757 100644
---- a/Cargo.lock
-+++ b/Cargo.lock
-@@ -2619,6 +2619,22 @@ version = "0.3.3"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+diff --git a/docs/presentation/narrative.md b/docs/presentation/narrative.md
+index 14e792d..76b43bc 100644
+--- a/docs/presentation/narrative.md
++++ b/docs/presentation/narrative.md
+@@ -6643,6 +6643,62 @@ body to catch any future careless leak of the raw input.
  
-+[[package]]
-+name = "trace-query-api"
-+version = "0.1.0"
-+dependencies = [
-+ "aegis",
-+ "axum",
-+ "hyper",
-+ "mutants",
-+ "ray",
-+ "serde",
-+ "serde_json",
-+ "tokio",
-+ "tower 0.5.3",
-+ "tracing",
-+]
+ ---
+ 
++## trace-lookup-by-id-v0 — the operator already has the id
 +
- [[package]]
- name = "tracing"
- version = "0.1.44"
-diff --git a/Cargo.toml b/Cargo.toml
-index cc1df58..b6484a7 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -24,6 +24,7 @@ members = [
-     "crates/kaleidoscope-cli",
-     "crates/query-api",
-     "crates/log-query-api",
-+    "crates/trace-query-api",
-     "xtask/regenerate_codex_corpus",
- ]
++Sometimes the operator does not need to search. An alert fires with a
++trace_id printed on it. A customer rings up reading numbers off the
++screen. A log line ends in `trace_id=4bf92f3577b34da6a3ce929d0e0e4736`
++and the operator wants every span attached to that id, now. The
++existing `/api/v1/traces` endpoint is built for the other question:
++given a service and a window, give me the recent traces. It was never
++built for "I have it, give it to me". Forcing the lookup through the
++range-and-service form would have meant either guessing a wide window
++or building behaviour magic where the presence of `trace_id` quietly
++overrides the rest of the query. Neither was honest. So the slice adds
++a separate path, `/api/v1/traces/by_id`, and lets each endpoint mean
++exactly one thing.
++
++The shape of the work mirrors the severity filter the night before.
++The substrate already knew how to answer the question:
++`ray::TraceStore::get_trace(tenant, trace_id)` had been in the code
++for weeks, with the exact semantics the operator needs, including the
++calm-empty return for an unknown id. So the delivery was parse and
++wire only. Zero change to ray. One parse helper, one handler, one
++route, one acceptance file. Eleven scenarios green, one documented
++`#[ignore]` for the 100k-span cap that the existing slice already
++covers via the same const.
++
++```mermaid
++sequenceDiagram
++    Operator->>+api: GET /api/v1/traces/by_id?trace_id=<32-hex>
++    api->>api: tenant resolve, then parse_trace_id
++    api->>+ray: get_trace(tenant, trace_id)
++    ray-->>-api: Vec<Span> (possibly empty)
++    api-->>-Operator: 200 [..] or 200 [] (calm empty)
++```
++
++ADR-0053 pins the four small choices that make the slice add up. The
++wire format is exactly 32 hex characters, case-insensitive, matching
++W3C and OTel. Wrong length, empty, missing, and non-hex all return
++400 with a literal body `{"error":"invalid trace_id"}` that never
++echoes the raw value. The result cap from ADR-0050 applies uniformly
++on the lookup arm even though the original case for it was the
++range query. An unknown trace_id returns 200 with an empty array,
++not 404, because ADR-0048 already decided the calm-empty arm is the
++honest one and nothing about the lookup shape changes that.
++
++The interesting cost is structural. This is the third read-side
++crate to copy the same cap-and-extractor scaffold. The rule of three
++that was a deferred thought after ADR-0048 is now a rule of three
++and a bit. The extraction into a `query-http-common` crate is still
++deferred, because the duplication is still cheap (about ten lines per
++crate) and the shapes are stable enough to refactor when the next
++feature actually needs to add a fourth read endpoint. But the
++pressure is now named in the ADR, and the next slice that touches
++this scaffold should expect to be the one that earns the extraction.
++
++---
++
+ ## What is consistent across the six features
  
+ Five Rust crates (harness, aperture, spark, sieve, codex) plus a
+diff --git a/docs/presentation/slides.md b/docs/presentation/slides.md
+index 4069fd7..2022fd0 100644
+--- a/docs/presentation/slides.md
++++ b/docs/presentation/slides.md
+@@ -2652,6 +2652,27 @@ flowchart LR
+ 
+ ---
+ 
++# trace-lookup-by-id-v0 — the operator already has the id
++
++**Sometimes the operator does not need to search.** An alert prints a trace_id. A customer reads numbers off a screen. A log line ends `trace_id=4bf9...4736`. The existing `/api/v1/traces` was built for range and service, not for "I have it, give it to me". Forcing the lookup through that form means guessing a window or building behaviour magic. Both dishonest. So: a separate path, `/api/v1/traces/by_id`, one endpoint per intent.
++
++**The substrate already knew the answer.** `ray::TraceStore::get_trace(tenant, trace_id)` had been in place for weeks with the right semantics, including the calm-empty arm. Zero ray change. Parse and wire only: one helper, one handler, one route, one acceptance file. Eleven scenarios green; one documented `#[ignore]` for the 100k-span cap already covered by slice_02.
++
++```mermaid
++sequenceDiagram
++    Operator->>+api: GET /api/v1/traces/by_id?trace_id=<32-hex>
++    api->>api: tenant + parse_trace_id
++    api->>+ray: get_trace(tenant, trace_id)
++    ray-->>-api: Vec<Span> (possibly empty)
++    api-->>-Operator: 200 [..] or 200 [] (calm empty)
++```
++
++**ADR-0053 pins four choices.** 32 hex chars, case-insensitive, W3C/OTel. Wrong length, empty, missing, non-hex all return 400 `{"error":"invalid trace_id"}` with no echo. MAX_RESULT_ROWS applies uniformly on the lookup arm. Unknown trace_id is 200 `[]`, never 404 — ADR-0048 unchanged.
++
++**The structural cost is named.** Third read-side crate copying the same cap-and-extractor scaffold. The deferred `query-http-common` extraction is now a rule of three and a bit; pressure recorded in the ADR. The next slice that touches this scaffold should expect to earn the extraction.
++
++---
++
+ # What I want you to take away
+ 
+ AI agents do not replace engineering discipline. They amplify it.

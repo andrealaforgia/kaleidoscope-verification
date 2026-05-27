@@ -1,6 +1,6 @@
 step 1: pnpm install + pnpm -F prism typecheck
   tail:
-    Progress: resolved 414, reused 413, downloaded 0, added 413
+    Progress: resolved 414, reused 413, downloaded 0, added 412
     Progress: resolved 414, reused 413, downloaded 0, added 414, done
     Done in 8.5s
     --- pnpm -F prism typecheck ---
