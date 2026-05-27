@@ -314,6 +314,18 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
+## N20 — earned-trust-fsync-probe-v0 in DESIGN/DEVOPS
+
+Commits `e409f2d` (design) + `f97b836` (devops) at 2026-05-27
+open a new feature wave: aperture/gateway's storage-sink probe
+should honour `fsync`, not just open-and-read, to close the
+durability gap N18 hints at. No DELIVER commit yet at HEAD
+`f97b836`. Watch for `feat(...)` and revisit: the contract
+likely tightens the gateway's startup posture (probe writes a
+sentinel, fsyncs, reads back, removes), which means G01's
+`event=ready` continues to hold but a new G02-fsync-probe-honoured
+expectation becomes drafabile.
+
 ## N17 — trace-query-api graduated to DELIVER, no Dockerfile yet
 
 ADR-0048 defines the `trace-query-api` crate (Ray read path).
