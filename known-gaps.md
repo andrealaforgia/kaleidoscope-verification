@@ -314,10 +314,11 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N25 — query-http-common-v0 in DISCUSS
+## N25 — query-http-common-v0 in DESIGN
 
-Commit `7f24998` (2026-05-27) names the HTTP-shape seam that
-ADR-0048 deferred: the three read APIs (query-api,
+Commits `7f24998` (discuss) + `8adb08a` (design, ADR-0054)
+at 2026-05-27 progress the wave. ADR-0054 pins a Mikado-
+ordered extraction of the HTTP-shape seam ADR-0048 deferred: the three read APIs (query-api,
 log-query-api, trace-query-api) currently re-implement
 parse-tenant + cap-rejection + error-response shape; a
 common crate is being scoped to lift the seam. No DESIGN

@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `7f24998` (cycle 19 of overnight loop, kaleidoscope HEAD unchanged from cycle 18). Spot re-verified A12, A13, X07: GREEN at first try. No flake this cycle.
+Last index refresh: 2026-05-27, observed HEAD `8adb08a` (cycle 20 of overnight loop). One DESIGN commit (query-http-common-v0 reached DESIGN with ADR-0054, N25 updated). Spot re-verified K10, X09, X11: K10/X11 GREEN at first try; X09 flaked on a rustup channel download "peer closed connection" mid-Docker-build then GREEN on cold retry (tenth flake occurrence, same disposition).
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
