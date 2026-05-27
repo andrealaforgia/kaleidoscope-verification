@@ -1,7 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.411022Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.411925Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.412013Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.412021Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.412047Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.550855Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":139}
-aperture-1  | {"timestamp":"2026-05-27T02:30:29.552223Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":1,"resource.service.name":"expectation-A02-pilot"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.604849Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.605515Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.606387Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.606397Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.606464Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.911545Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":139}
+aperture-1  | {"timestamp":"2026-05-27T12:24:43.916584Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":3,"resource.service.name":"expectation-A02-pilot"}

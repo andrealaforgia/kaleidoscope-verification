@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `3908240` (cycle 15 of overnight loop). trace-lookup-by-id-v0 graduated to DELIVER via `3908240`, but trace-query-api still has no Dockerfile (N17), so the contract is unreachable from the catalogue side — N24 updated. Spot re-verified K09, X11, X15: GREEN.
+Last index refresh: 2026-05-27, observed HEAD `3908240` (cycle 16 of overnight loop, kaleidoscope HEAD unchanged from cycle 15). K02, X14 GREEN; A02 flaked on the recurring `/readyz=200` timeout then GREEN on cold retry (seventh occurrence of the pattern, same disposition as the closed-as-flake issues 006/007).
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
