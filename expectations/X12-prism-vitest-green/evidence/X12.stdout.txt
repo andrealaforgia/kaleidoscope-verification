@@ -2,35 +2,25 @@ Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
 Packages: +414
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 414, reused 78, downloaded 0, added 0
-Progress: resolved 414, reused 279, downloaded 0, added 0
-Progress: resolved 414, reused 411, downloaded 0, added 0
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.2.2.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
-   │         Run "corepack install -g pnpm@11.2.2" to update.         │
+   │                Update available! 9.15.0 → 11.4.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.4.0   │
+   │         Run "corepack install -g pnpm@11.4.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
-Progress: resolved 414, reused 412, downloaded 0, added 23
-Progress: resolved 414, reused 412, downloaded 0, added 56
-Progress: resolved 414, reused 413, downloaded 0, added 77
-Progress: resolved 414, reused 413, downloaded 0, added 105
-Progress: resolved 414, reused 413, downloaded 0, added 134
-Progress: resolved 414, reused 413, downloaded 0, added 168
-Progress: resolved 414, reused 413, downloaded 0, added 200
-Progress: resolved 414, reused 413, downloaded 0, added 236
-Progress: resolved 414, reused 413, downloaded 0, added 274
-Progress: resolved 414, reused 413, downloaded 0, added 296
-Progress: resolved 414, reused 413, downloaded 0, added 326
-Progress: resolved 414, reused 413, downloaded 0, added 389
+Progress: resolved 414, reused 412, downloaded 0, added 2
+Progress: resolved 414, reused 413, downloaded 0, added 65
+Progress: resolved 414, reused 413, downloaded 0, added 145
+Progress: resolved 414, reused 413, downloaded 0, added 208
+Progress: resolved 414, reused 413, downloaded 0, added 287
+Progress: resolved 414, reused 413, downloaded 0, added 332
 Progress: resolved 414, reused 413, downloaded 0, added 409
 Progress: resolved 414, reused 413, downloaded 0, added 413
-Progress: resolved 414, reused 413, downloaded 0, added 414
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 30m 47.6s
+Done in 9.1s
 --- pnpm -F prism vitest ---
 No projects matched the filters "/src" in "/src"
 
@@ -40,17 +30,17 @@ No projects matched the filters "/src" in "/src"
 
  RUN  v2.1.8 /src/apps/prism
 
- ✓ tests/invariant-licence-headers.test.ts (5 tests) 37ms
- ✓ tests/invariant-fidelity.test.ts (17 tests) 10ms
- ✓ tests/slice-05-absolute-time-range-and-permalink.test.ts (11 tests) 6ms
- ✓ tests/invariant-public-api.test.ts (16 tests) 2ms
- ✓ tests/slice-04-auto-refresh.test.ts (24 tests) 5ms
- ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 187ms
- ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 431ms
+ ✓ tests/invariant-licence-headers.test.ts (5 tests) 25ms
+ ✓ tests/slice-05-absolute-time-range-and-permalink.test.ts (11 tests) 23ms
+ ✓ tests/invariant-public-api.test.ts (16 tests) 3ms
+ ✓ tests/slice-04-auto-refresh.test.ts (24 tests) 8ms
+ ✓ tests/invariant-fidelity.test.ts (17 tests) 9ms
+ ✓ tests/slice-02-time-range-and-relative-presets.test.tsx (18 tests) 190ms
+ ✓ tests/slice-03-error-and-empty-states.test.tsx (23 tests) 405ms
 
  Test Files  7 passed (7)
       Tests  114 passed (114)
-   Start at  21:25:35
-   Duration  8.42s (transform 289ms, setup 4.11s, collect 2.09s, tests 678ms, environment 19.58s, prepare 5.28s)
+   Start at  13:41:56
+   Duration  4.39s (transform 516ms, setup 3.29s, collect 2.58s, tests 663ms, environment 11.64s, prepare 1.45s)
 
 VITEST_OK
