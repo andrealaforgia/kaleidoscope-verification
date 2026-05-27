@@ -314,6 +314,16 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
+## N26 — log-body-text-search-v0 in DISCUSS
+
+Commit `29f109b` (2026-05-27) opens a wave to add a substring
+filter on the `/api/v1/logs` body. No DESIGN yet. Triply
+blocked: even at DELIVER, log-query-api still has no
+packaging Dockerfile (N16), and now also depends on
+query-http-common-v0 (graduated, N25) which routes the
+request-parsing seam. When the Dockerfile lands, LQ-prefix
+opens and this contract becomes drafabile.
+
 ## N25 — query-http-common-v0 graduated
 
 Commits `7f24998` (discuss) + `8adb08a` (design, ADR-0054) +

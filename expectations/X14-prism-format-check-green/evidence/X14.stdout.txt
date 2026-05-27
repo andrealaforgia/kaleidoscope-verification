@@ -5,21 +5,22 @@ Packages: +414
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.3.0.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.3.0   │
-   │         Run "corepack install -g pnpm@11.3.0" to update.         │
+   │                Update available! 9.15.0 → 11.4.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.4.0   │
+   │         Run "corepack install -g pnpm@11.4.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
-Progress: resolved 414, reused 412, downloaded 0, added 9
+Progress: resolved 414, reused 412, downloaded 0, added 8
 Progress: resolved 414, reused 413, downloaded 0, added 75
 Progress: resolved 414, reused 413, downloaded 0, added 154
-Progress: resolved 414, reused 413, downloaded 0, added 222
-Progress: resolved 414, reused 413, downloaded 0, added 296
-Progress: resolved 414, reused 413, downloaded 0, added 391
-Progress: resolved 414, reused 413, downloaded 0, added 412
+Progress: resolved 414, reused 413, downloaded 0, added 214
+Progress: resolved 414, reused 413, downloaded 0, added 293
+Progress: resolved 414, reused 413, downloaded 0, added 362
+Progress: resolved 414, reused 413, downloaded 0, added 411
+Progress: resolved 414, reused 413, downloaded 0, added 413
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 8.3s
+Done in 8.8s
 --- pnpm -F prism format:check ---
 No projects matched the filters "/src" in "/src"
 

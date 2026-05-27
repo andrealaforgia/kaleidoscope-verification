@@ -15,9 +15,15 @@ A Spark-instrumented app emits one span via `opentelemetry::global::tracer`. The
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-11 UTC at HEAD.
-- Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
+- Status: `broken` (suspected flake, twelfth occurrence of
+  the docker-network transient pattern documented in closed
+  issues 006/007)
+- Last verified: 2026-05-27 UTC at HEAD (`29f109b`) — broken:
+  aperture container never reached `/readyz=200` within 180 s
+  across two consecutive runs. Cold retry next cycle expected
+  to recover; if not, escalate.
+- Earlier satisfaction: 2026-05-11 at `3a18514` and across many
+  later cycles.
 - Method: driven by the **spark-consumer** fixture under
   `harness/spark-consumer/`. The fixture is built once via
   `docker compose --profile fixture build spark-consumer` and

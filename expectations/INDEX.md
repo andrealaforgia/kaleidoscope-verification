@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
+| `satisfied` | 63 (A 14 + S 12 + E 3 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) — E01 broken (suspected flake) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
+| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); E01 — suspected flake, same shape as closed 006/007, no new issue per docked disposition) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `51400b1` (cycle 24 of overnight loop, kaleidoscope HEAD unchanged from cycle 23). A02, K12, L06 spot re-verified GREEN. No flake this cycle.
+Last index refresh: 2026-05-27, observed HEAD `29f109b` (cycle 25 of overnight loop). Two new commits: cba41a5 (docs/presentation query-http-common-v0 closure) + 29f109b (discuss log-body-text-search-v0). N26 added. Spot re-verified E01/L03/X14: L03/X14 GREEN; E01 broken on the recurring `/readyz` timeout across two runs (twelfth flake occurrence) — marked broken with flake note, cycle 26 cold retry expected to recover.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
