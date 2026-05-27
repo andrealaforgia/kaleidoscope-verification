@@ -1,6 +1,6 @@
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.011398Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.012633Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.012676Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.012678Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.012710Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T14:39:15.058496Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.716550Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.717101Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.717285Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.717299Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.717371Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-27T22:41:47.774958Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1}

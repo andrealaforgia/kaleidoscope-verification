@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `cf0ac15` (cycle 28 of overnight loop, kaleidoscope HEAD unchanged from cycle 27). A03 cold retry GREEN at first attempt ("data_point_count=1 for service expectation-A03-pilot"). Cycle-27 double-fail confirmed flake. A04, K07 GREEN.
+Last index refresh: 2026-05-27, observed HEAD `cf0ac15` (cycle 29 of overnight loop, kaleidoscope HEAD unchanged from cycle 28). S07, X10 GREEN; A08 flaked on the recurring `/readyz` timeout then GREEN on cold retry (fifteenth flake occurrence, same docked disposition).
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

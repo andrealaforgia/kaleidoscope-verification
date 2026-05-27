@@ -1,4 +1,4 @@
-A  docs/feature/pulse-cardinality-watermark-v0/design/application-architecture.md
-A  docs/feature/pulse-cardinality-watermark-v0/design/wave-decisions.md
-A  docs/product/architecture/adr-0051-pulse-per-tenant-cardinality-watermark.md
-M  docs/product/architecture/brief.md
+ M crates/log-query-api/src/lib.rs
+ M crates/lumen/src/predicate.rs
+?? crates/log-query-api/tests/slice_04_body_contains.rs
+?? docs/feature/log-body-text-search-v0/distill/
