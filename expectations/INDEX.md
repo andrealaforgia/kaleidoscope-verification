@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `4e82b50` (cycle 9 of overnight loop). N22 graduated: `feat(cardinality)` at `936ca75` ships pulse per-tenant cardinality watermark (10k cap, partial-apply, `pulse.series.refused.count` self-observe metric). EG02 candidate deferred until a >10k-series fixture is feasible. Spot re-verified S04, S05, X09: GREEN.
+Last index refresh: 2026-05-27, observed HEAD `36e067f` (cycle 10 of overnight loop). Two DISCUSS/DESIGN commits open log-query-severity-filter-v0 (N23). Spot re-verified A03, A04, K04: GREEN.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
