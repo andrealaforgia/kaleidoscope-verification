@@ -1,0 +1,146 @@
+diff --git a/crates/pulse/Cargo.toml b/crates/pulse/Cargo.toml
+index 45de8c3..5ec065b 100644
+--- a/crates/pulse/Cargo.toml
++++ b/crates/pulse/Cargo.toml
+@@ -37,6 +37,10 @@ path = "tests/v1_slice_02_snapshot.rs"
+ name = "v1_slice_03_fsync_probe"
+ path = "tests/v1_slice_03_fsync_probe.rs"
+ 
++[[test]]
++name = "v1_slice_04_cardinality_watermark"
++path = "tests/v1_slice_04_cardinality_watermark.rs"
++
+ [lints.rust]
+ unsafe_code = "forbid"
+ 
+diff --git a/crates/pulse/src/file_backed.rs b/crates/pulse/src/file_backed.rs
+index 566fb00..2da905b 100644
+--- a/crates/pulse/src/file_backed.rs
++++ b/crates/pulse/src/file_backed.rs
+@@ -261,7 +261,11 @@ impl MetricStore for FileBackedMetricStore {
+     ) -> Result<IngestReceipt, MetricStoreError> {
+         if batch.is_empty() {
+             self.recorder.record_ingest(tenant, 0);
+-            return Ok(IngestReceipt { count: 0 });
++            // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++            return Ok(IngestReceipt {
++                count: 0,
++                series_refused: 0,
++            });
+         }
+         let count = batch.total_points();
+         let record = WalRecord::Ingest {
+@@ -277,7 +281,11 @@ impl MetricStore for FileBackedMetricStore {
+             entry.points.sort_by_key(|p| p.time_unix_nano);
+         }
+         self.recorder.record_ingest(tenant, count);
+-        Ok(IngestReceipt { count })
++        // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++        Ok(IngestReceipt {
++            count,
++            series_refused: 0,
++        })
+     }
+ 
+     fn query(
+diff --git a/crates/pulse/src/lib.rs b/crates/pulse/src/lib.rs
+index 254af77..6086419 100644
+--- a/crates/pulse/src/lib.rs
++++ b/crates/pulse/src/lib.rs
+@@ -55,6 +55,14 @@ mod metrics;
+ mod predicate;
+ mod store;
+ 
++// SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++/// Per-tenant cardinality watermark (ADR-0051). The maximum number of
++/// distinct `SeriesKey`s a single tenant may hold in any pulse store
++/// instance. A NEW `SeriesKey` insertion above this ceiling is refused
++/// at the shared `apply_ingest` seam on the live ingest path; WAL
++/// replay is never gated.
++pub const MAX_SERIES_PER_TENANT: usize = 10_000;
++
+ pub use file_backed::FileBackedMetricStore;
+ pub use fsync_probe::{
+     fsync_probe, FsyncBackend, FsyncProbeError, LyingFsyncBackend, RealFsyncBackend,
+diff --git a/crates/pulse/src/metrics.rs b/crates/pulse/src/metrics.rs
+index 404183e..0d672ba 100644
+--- a/crates/pulse/src/metrics.rs
++++ b/crates/pulse/src/metrics.rs
+@@ -24,6 +24,15 @@ use aegis::TenantId;
+ pub trait MetricsRecorder: Send + Sync {
+     fn record_ingest(&self, tenant: &TenantId, point_count: usize);
+     fn record_query(&self, tenant: &TenantId, matched_count: usize);
++
++    // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++    /// Fired once per ingest call in which one or more NEW
++    /// `SeriesKey`s were refused over the per-tenant cardinality
++    /// watermark (ADR-0051). `count` is the number of NEW
++    /// `SeriesKey`s refused in this call. Default body is a no-op so
++    /// existing implementors continue to compile and behave
++    /// identically.
++    fn record_series_refused(&self, _tenant: &TenantId, _count: usize) {}
+ }
+ 
+ #[derive(Debug, Clone, Default)]
+diff --git a/crates/pulse/src/store.rs b/crates/pulse/src/store.rs
+index 42af241..0420bb3 100644
+--- a/crates/pulse/src/store.rs
++++ b/crates/pulse/src/store.rs
+@@ -29,6 +29,12 @@ use crate::predicate::Predicate;
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+ pub struct IngestReceipt {
+     pub count: usize,
++    // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++    /// Number of NEW `SeriesKey`s refused in this ingest call because
++    /// the tenant's distinct-series count was already at or above
++    /// [`crate::MAX_SERIES_PER_TENANT`]. Counted per-metric, not
++    /// per-point. ADR-0051.
++    pub series_refused: usize,
+ }
+ 
+ #[derive(Debug, Clone, PartialEq, Eq)]
+@@ -167,7 +173,11 @@ impl MetricStore for InMemoryMetricStore {
+             entry.points.sort_by_key(|p| p.time_unix_nano);
+         }
+         self.recorder.record_ingest(tenant, count);
+-        Ok(IngestReceipt { count })
++        // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++        Ok(IngestReceipt {
++            count,
++            series_refused: 0,
++        })
+     }
+ 
+     fn query(
+diff --git a/crates/self-observe/Cargo.toml b/crates/self-observe/Cargo.toml
+index 38d40a0..a8b71ea 100644
+--- a/crates/self-observe/Cargo.toml
++++ b/crates/self-observe/Cargo.toml
+@@ -36,6 +36,10 @@ path = "tests/cinder_to_pulse.rs"
+ name = "cinder_to_otlp_json"
+ path = "tests/cinder_to_otlp_json.rs"
+ 
++[[test]]
++name = "pulse_cardinality_bridge_test"
++path = "tests/pulse_cardinality_bridge_test.rs"
++
+ [lints.rust]
+ unsafe_code = "forbid"
+ 
+diff --git a/crates/self-observe/src/lib.rs b/crates/self-observe/src/lib.rs
+index e758ae4..5d67852 100644
+--- a/crates/self-observe/src/lib.rs
++++ b/crates/self-observe/src/lib.rs
+@@ -52,8 +52,12 @@ mod cinder_bridge;
+ mod cinder_otlp_json;
+ mod lumen_bridge;
+ mod lumen_otlp_json;
++// SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++mod pulse_cardinality_bridge;
+ 
+ pub use cinder_bridge::CinderToPulseRecorder;
+ pub use cinder_otlp_json::CinderToOtlpJsonWriter;
+ pub use lumen_bridge::LumenToPulseRecorder;
+ pub use lumen_otlp_json::LumenToOtlpJsonWriter;
++// SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
++pub use pulse_cardinality_bridge::PulseCardinalityToPulseRecorder;

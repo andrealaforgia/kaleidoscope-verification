@@ -1,6 +1,11 @@
 # 007 — S03 aperture `/readyz=200` timeout under compose harness at `91d3daa`
 
-- Status: `open` (suspected flake — see issue 006 precedent)
+- Status: `closed` (flake, not regression)
+- Closed: 2026-05-27. Cycle 7 cold retry of S03 GREEN at first
+  attempt (`tenant.id observed: acme-prod-S03`). Same
+  disposition as issue 006: docker desktop resource pressure
+  late in a heavy compose-churn cycle is enough to time out
+  aperture's `/readyz` poll; a fresh docker state recovers.
 - Expectations affected: S03 (broken at cycle 6 of overnight loop).
 - Opened: 2026-05-27
 - Kaleidoscope SHA at observation: `91d3daa`

@@ -314,15 +314,15 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N22 — pulse-cardinality-watermark-v0 in DISCUSS
+## N22 — pulse-cardinality-watermark-v0 in DESIGN/DEVOPS
 
-Commit `91d3daa` (2026-05-27) opens a new wave to close
-ADR-0045's open consequence: pulse needs a cardinality
-watermark so the series-identity-is-the-full-label-set rule
-does not let an attacker explode the index. No DESIGN /
-DELIVER yet. Operator-visible contract still unknown; likely
-the gateway will refuse high-cardinality writes or pulse will
-emit a degraded-mode event. Revisit at DELIVER.
+Commits `91d3daa` (discuss) + `cea487d` (design) + `34131c9`
+(devops) at 2026-05-27 progress the wave. Design Decision:
+10k cardinality cap, partial-apply on overflow, forward-gate
+at the gateway. No DELIVER yet. When `feat(...)` lands,
+operator-visible contract becomes: gateway refuses writes
+that would push series count above the watermark, with a
+named error reason. Q03/G03 candidates.
 
 ## N21 — honest-read-caps-v0 graduated
 

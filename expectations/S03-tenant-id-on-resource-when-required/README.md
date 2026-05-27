@@ -15,15 +15,13 @@ With `require_tenant_id()` AND `with_tenant_id(id)`, the Resource carries an att
 
 ## Verification
 
-- Status: `broken` (suspected flake — see issue 007)
-- Last verified: 2026-05-27 UTC at HEAD (`91d3daa`) — broken:
-  aperture container never reached `/readyz=200` within 180 s
-  across two consecutive runs. Same shape as the (closed,
-  flake) issue 006 on A10. Other compose-based expectations in
-  the same cycle (A11, A12, S02) all GREEN. See
-  [issue 007](../../issues/007-s03-aperture-readyz-timeout-cycle6.md).
-- Previously satisfied at HEAD `3a18514` and across multiple
-  later cycles.
+- Status: `satisfied`
+- Last verified: 2026-05-27 UTC at HEAD (`34131c9`).
+  `tenant.id observed: acme-prod-S03` on the otelcol-sink
+  capture. Cycle 6's failure was confirmed flake (cold retry
+  in cycle 7 GREEN at first attempt); issue 007 closed.
+- Previously satisfied at HEAD `3a18514` and across many
+  subsequent cycles.
 - Method: driven by the **spark-consumer** fixture under
   `harness/spark-consumer/`. The fixture is built once via
   `docker compose --profile fixture build spark-consumer` and

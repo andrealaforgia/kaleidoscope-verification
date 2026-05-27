@@ -63,15 +63,14 @@ index 254af77..6086419 100644
  pub use fsync_probe::{
      fsync_probe, FsyncBackend, FsyncProbeError, LyingFsyncBackend, RealFsyncBackend,
 diff --git a/crates/pulse/src/metrics.rs b/crates/pulse/src/metrics.rs
-index 404183e..0d672ba 100644
+index 404183e..c16d71c 100644
 --- a/crates/pulse/src/metrics.rs
 +++ b/crates/pulse/src/metrics.rs
-@@ -24,6 +24,15 @@ use aegis::TenantId;
+@@ -24,6 +24,14 @@ use aegis::TenantId;
  pub trait MetricsRecorder: Send + Sync {
      fn record_ingest(&self, tenant: &TenantId, point_count: usize);
      fn record_query(&self, tenant: &TenantId, matched_count: usize);
 +
-+    // SCAFFOLD: true (DELIVER fills in the refuse-and-count logic)
 +    /// Fired once per ingest call in which one or more NEW
 +    /// `SeriesKey`s were refused over the per-tenant cardinality
 +    /// watermark (ADR-0051). `count` is the number of NEW
@@ -82,6 +81,36 @@ index 404183e..0d672ba 100644
  }
  
  #[derive(Debug, Clone, Default)]
+@@ -44,6 +52,14 @@ pub enum RecordedEvent {
+         tenant: TenantId,
+         matched_count: usize,
+     },
++    /// Pushed by `CapturingRecorder` for each
++    /// `record_series_refused` call (ADR-0051). `count` is the
++    /// number of NEW `SeriesKey`s refused in the originating ingest
++    /// call.
++    SeriesRefused {
++        tenant: TenantId,
++        count: usize,
++    },
+ }
+ 
+ #[derive(Debug, Clone, Default)]
+@@ -89,4 +105,14 @@ impl MetricsRecorder for CapturingRecorder {
+                 matched_count,
+             });
+     }
++
++    fn record_series_refused(&self, tenant: &TenantId, count: usize) {
++        self.events
++            .lock()
++            .expect("poisoned")
++            .push(RecordedEvent::SeriesRefused {
++                tenant: tenant.clone(),
++                count,
++            });
++    }
+ }
 diff --git a/crates/pulse/src/store.rs b/crates/pulse/src/store.rs
 index 42af241..0420bb3 100644
 --- a/crates/pulse/src/store.rs

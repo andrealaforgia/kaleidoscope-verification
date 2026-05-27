@@ -1,3 +1,10 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+ M crates/pulse/Cargo.toml
+ M crates/pulse/src/file_backed.rs
+ M crates/pulse/src/lib.rs
+ M crates/pulse/src/metrics.rs
+ M crates/pulse/src/store.rs
+ M crates/self-observe/Cargo.toml
+ M crates/self-observe/src/lib.rs
+?? crates/pulse/tests/v1_slice_04_cardinality_watermark.rs
+?? crates/self-observe/src/pulse_cardinality_bridge.rs
+?? crates/self-observe/tests/pulse_cardinality_bridge_test.rs
