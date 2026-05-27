@@ -1,3 +1,2 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+ M crates/log-query-api/src/lib.rs
+ M crates/lumen/src/predicate.rs

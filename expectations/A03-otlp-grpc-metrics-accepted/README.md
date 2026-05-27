@@ -20,10 +20,15 @@ naming the resource's `service.name` and reporting `data_point_count=N`.
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-06T23:28:28Z
-- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
-- Kaleidoscope dirty: `no`
+- Status: `broken` (suspected flake, thirteenth occurrence of
+  the docker-network transient pattern documented in closed
+  issues 006/007)
+- Last verified: 2026-05-27 UTC at HEAD (`cf0ac15`) — broken:
+  aperture container never reached `/readyz=200` within 180 s
+  across two consecutive runs. Cold retry next cycle expected
+  to recover.
+- Earlier satisfaction: 2026-05-06T23:28:28Z at `6b09c0d` and
+  across many later cycles.
 - Method: dockerised harness; aperture built from the HEAD snapshot, invoked with `--config /etc/aperture/aperture.toml` (`kind = "forwarding"`, downstream `http://otelcol-sink:4318`). One metrics payload from the upstream `telemetrygen` image (`ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.114.0`) tagged `service.name="expectation-A03-pilot"` is sent to aperture's grpc listener. The shared driver `harness/assert-signal-acceptance.sh` verifies that telemetrygen exits 0 (proves the ack) and that aperture's container stderr contains exactly one `event=sink_accepted` line for this signal and service with a positive `data_point_count`.
 
 ## Evidence

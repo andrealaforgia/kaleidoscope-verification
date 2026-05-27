@@ -314,15 +314,14 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N26 — log-body-text-search-v0 in DISCUSS
+## N26 — log-body-text-search-v0 in DESIGN/DEVOPS
 
-Commit `29f109b` (2026-05-27) opens a wave to add a substring
-filter on the `/api/v1/logs` body. No DESIGN yet. Triply
-blocked: even at DELIVER, log-query-api still has no
-packaging Dockerfile (N16), and now also depends on
-query-http-common-v0 (graduated, N25) which routes the
-request-parsing seam. When the Dockerfile lands, LQ-prefix
-opens and this contract becomes drafabile.
+Commits `29f109b` (discuss) + `de40d49` (design) + `cf0ac15`
+(devops) at 2026-05-27. Design Decision: extend `lumen::Predicate`
+with `body_contains` substring filter, applied at query time.
+No DELIVER yet. Still doubly blocked: log-query-api has no
+packaging Dockerfile (N16); when that lands, LQ-prefix opens
+and this contract becomes drafabile.
 
 ## N25 — query-http-common-v0 graduated
 

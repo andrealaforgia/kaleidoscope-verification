@@ -2,24 +2,25 @@ Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
 Packages: +414
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 414, reused 412, downloaded 0, added 14
-Progress: resolved 414, reused 413, downloaded 0, added 85
-Progress: resolved 414, reused 413, downloaded 0, added 167
-Progress: resolved 414, reused 413, downloaded 0, added 262
-Progress: resolved 414, reused 413, downloaded 0, added 319
-Progress: resolved 414, reused 413, downloaded 0, added 405
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.2.2.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
-   │         Run "corepack install -g pnpm@11.2.2" to update.         │
+   │                Update available! 9.15.0 → 11.4.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.4.0   │
+   │         Run "corepack install -g pnpm@11.4.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
+Progress: resolved 414, reused 412, downloaded 0, added 6
+Progress: resolved 414, reused 413, downloaded 0, added 70
+Progress: resolved 414, reused 413, downloaded 0, added 152
+Progress: resolved 414, reused 413, downloaded 0, added 213
+Progress: resolved 414, reused 413, downloaded 0, added 294
+Progress: resolved 414, reused 413, downloaded 0, added 357
+Progress: resolved 414, reused 413, downloaded 0, added 411
 Progress: resolved 414, reused 413, downloaded 0, added 413
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 7.9s
+Done in 8.6s
 --- pnpm -F prism lint ---
 No projects matched the filters "/src" in "/src"
 

@@ -1,39 +1,162 @@
-diff --git a/Cargo.lock b/Cargo.lock
-index a6d1749..d62c757 100644
---- a/Cargo.lock
-+++ b/Cargo.lock
-@@ -2619,6 +2619,22 @@ version = "0.3.3"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+diff --git a/crates/log-query-api/src/lib.rs b/crates/log-query-api/src/lib.rs
+index c508278..2ed712d 100644
+--- a/crates/log-query-api/src/lib.rs
++++ b/crates/log-query-api/src/lib.rs
+@@ -106,8 +106,20 @@ struct LogsParams {
+     start: String,
+     end: String,
+     min_severity: Option<String>,
++    /// DISTILL scaffold (log-body-text-search-v0, ADR-0055). The
++    /// `body_contains` optional parameter narrows the response to
++    /// records whose `body` field contains the supplied substring.
++    /// Crafty wires the dispatch in DELIVER; today the parse arm is
++    /// scaffolded via [`parse_body_contains`].
++    body_contains: Option<String>,
+ }
  
-+[[package]]
-+name = "trace-query-api"
-+version = "0.1.0"
-+dependencies = [
-+ "aegis",
-+ "axum",
-+ "hyper",
-+ "mutants",
-+ "ray",
-+ "serde",
-+ "serde_json",
-+ "tokio",
-+ "tower 0.5.3",
-+ "tracing",
-+]
++/// Maximum permitted byte length of a `body_contains` value (ADR-0055
++/// Decision 5 / DD6). A non-empty value of exactly 1024 bytes is
++/// served; 1025 bytes or more is refused with the literal envelope.
++#[allow(dead_code)]
++const MAX_BODY_CONTAINS_LEN: usize = 1024;
 +
- [[package]]
- name = "tracing"
- version = "0.1.44"
-diff --git a/Cargo.toml b/Cargo.toml
-index cc1df58..b6484a7 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -24,6 +24,7 @@ members = [
-     "crates/kaleidoscope-cli",
-     "crates/query-api",
-     "crates/log-query-api",
-+    "crates/trace-query-api",
-     "xtask/regenerate_codex_corpus",
- ]
+ /// Handle `GET /api/v1/logs?start=&end=`. Never panics on bad input;
+ /// every failure mode is a `status:error` arm with the appropriate
+ /// status code. The orchestration is resolve-tenant (fail-closed 401)
+@@ -160,15 +172,47 @@ async fn handle_logs(State(state): State<ApiState>, Query(params): Query<LogsPar
+         },
+     };
  
++    // Body-contains parse (ADR-0055 Decision 7 / DD4-DD6): runs AFTER
++    // the severity parse and BEFORE the store is touched. An empty
++    // value or an over-cap value is the named 400 and the store is
++    // NEVER queried on this path. A missing parameter is `None` and
++    // the handler keeps its prior dispatch behaviour. DISTILL
++    // scaffold: `parse_body_contains` is `unimplemented!` until
++    // Crafty fills the body in DELIVER.
++    let body_contains = match params.body_contains.as_deref() {
++        None => None,
++        Some(raw) => match parse_body_contains(raw) {
++            Ok(target) => Some(target),
++            Err(reason) => {
++                return query_http_common::error_response(StatusCode::BAD_REQUEST, reason);
++            }
++        },
++    };
++
+     let range = TimeRange::new(seconds_to_nanos(start_secs), seconds_to_nanos(end_secs));
+ 
+-    let query_result = match min_severity {
+-        Some(floor) => {
++    // Dispatch (ADR-0055 Decision 7): four arms by the cross-product
++    // of `min_severity` x `body_contains`. When either filter is
++    // present, build the composed predicate and call `query_with`;
++    // when both are absent, fall through to `query` (the slice-prior
++    // backward-compat path).
++    let query_result = match (min_severity, body_contains) {
++        (None, None) => state.store.query(&tenant, range),
++        (Some(floor), None) => {
+             state
+                 .store
+                 .query_with(&tenant, range, &Predicate::new().min_severity(floor))
+         }
+-        None => state.store.query(&tenant, range),
++        (None, Some(target)) => {
++            state
++                .store
++                .query_with(&tenant, range, &Predicate::new().body_contains(target))
++        }
++        (Some(floor), Some(target)) => state.store.query_with(
++            &tenant,
++            range,
++            &Predicate::new().min_severity(floor).body_contains(target),
++        ),
+     };
+ 
+     match query_result {
+@@ -235,6 +279,26 @@ fn parse_min_severity(raw: &str) -> Result<SeverityNumber, String> {
+     }
+ }
+ 
++/// Parse the `body_contains` wire value to an owned `String`.
++///
++/// ADR-0055 Decision 9 / parse-helper-spec: rejects the empty string
++/// and any value whose byte length strictly exceeds
++/// [`MAX_BODY_CONTAINS_LEN`] (1024 bytes). Both rejections return the
++/// SAME literal reason `"invalid body_contains"`; the raw parameter
++/// value is NEVER interpolated (DD5 anti-echo). Returns an owned
++/// `String` on success — a fresh copy of the operator's input,
++/// byte-for-byte preserved (no trim, no case folding, no
++/// normalisation).
++///
++/// DISTILL scaffold (log-body-text-search-v0): the body is
++/// `unimplemented!("__SCAFFOLD__ ...")` so the slice-04 acceptance
++/// test fails RED for a behavioural reason. Crafty fills the body in
++/// DELIVER per the parse-helper-spec test surface.
++#[allow(dead_code)]
++fn parse_body_contains(_raw: &str) -> Result<String, &'static str> {
++    unimplemented!("__SCAFFOLD__ log-body-text-search-v0 RED");
++}
++
+ /// Serialise the success / empty arm: HTTP 200 with a BARE JSON array of
+ /// the in-window `LogRecord`s (ADR-0047 Decision 1), in the store's
+ /// ascending `observed_time_unix_nano` order. The empty arm is `[]`, a
+diff --git a/crates/lumen/src/predicate.rs b/crates/lumen/src/predicate.rs
+index 7991dcc..146d380 100644
+--- a/crates/lumen/src/predicate.rs
++++ b/crates/lumen/src/predicate.rs
+@@ -25,6 +25,13 @@ use crate::record::{LogRecord, SeverityNumber};
+ pub struct Predicate {
+     service: Option<String>,
+     min_severity: Option<SeverityNumber>,
++    /// DISTILL scaffold (log-body-text-search-v0, ADR-0055). The
++    /// `body_contains` filter narrows the response to records whose
++    /// `body` field contains the supplied substring, byte-wise,
++    /// case-sensitive. Crafty fills the `matches` arm body in
++    /// DELIVER; until then the `matches` arm short-circuits via
++    /// `unimplemented!("__SCAFFOLD__ ...")` when this field is `Some`.
++    body_contains: Option<String>,
+ }
+ 
+ impl Predicate {
+@@ -48,9 +55,30 @@ impl Predicate {
+         self
+     }
+ 
++    /// Filter to records whose `body` field contains the supplied
++    /// substring (byte-wise, case-sensitive via `String::contains`).
++    /// DISTILL scaffold for log-body-text-search-v0 (ADR-0055);
++    /// Crafty fills the `matches` arm body in DELIVER.
++    pub fn body_contains(mut self, s: impl Into<String>) -> Self {
++        self.body_contains = Some(s.into());
++        self
++    }
++
+     /// True if every set filter passes for this record.
+     /// Composition is conjunctive (`AND`).
+     pub fn matches(&self, record: &LogRecord) -> bool {
++        // DISTILL scaffold (log-body-text-search-v0): when the
++        // `body_contains` filter is set, the matches arm has no
++        // implementation yet — panic with the recognisable marker so
++        // the slice-04 acceptance test fails RED for a behavioural
++        // reason (not a setup error). Crafty replaces this guard with
++        // the real arm
++        // `if let Some(target) = self.body_contains.as_deref() {
++        //     if !record.body.contains(target) { return false; }
++        // }` in DELIVER.
++        if self.body_contains.is_some() {
++            unimplemented!("__SCAFFOLD__ log-body-text-search-v0 RED");
++        }
+         if let Some(target) = self.service.as_deref() {
+             match record.resource_attributes.get("service.name") {
+                 Some(name) if name == target => {}
+@@ -68,6 +96,8 @@ impl Predicate {
+     /// True if this predicate has no filters set (every record
+     /// matches).
+     pub fn is_empty(&self) -> bool {
+-        self.service.is_none() && self.min_severity.is_none()
++        self.service.is_none()
++            && self.min_severity.is_none()
++            && self.body_contains.is_none()
+     }
+ }
