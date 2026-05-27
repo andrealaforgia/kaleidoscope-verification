@@ -314,15 +314,32 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N22 — pulse-cardinality-watermark-v0 in DESIGN/DEVOPS
+## N22 — pulse-cardinality-watermark-v0 graduated
 
-Commits `91d3daa` (discuss) + `cea487d` (design) + `34131c9`
-(devops) at 2026-05-27 progress the wave. Design Decision:
-10k cardinality cap, partial-apply on overflow, forward-gate
-at the gateway. No DELIVER yet. When `feat(...)` lands,
-operator-visible contract becomes: gateway refuses writes
-that would push series count above the watermark, with a
-named error reason. Q03/G03 candidates.
+Wave shipped DELIVER at `936ca75` ("feat(cardinality):
+pulse per-tenant cardinality watermark + self-observe bridge",
+ADR-0051). `MAX_SERIES_PER_TENANT = 10_000`. Live ingest
+refuses series past the cap (partial-apply: WAL records
+honour the cap shadow counter under the same Mutex; replay
+bypasses enforce_cap so existing state is preserved).
+`PulseCardinalityToPulseRecorder` emits
+`pulse.series.refused.count` (Sum, tenant as point-level
+attribute) via the existing MetricsRecorder hook.
+
+Operator-visible contract through the gateway: ingest a
+10_001st distinct series for a tenant, observe a refusal
+signal. Two paths exist: (a) `--observe-otlp` on the
+kaleidoscope-cli ingest path (Lumen-side; cardinality cap is
+Pulse, not Lumen, so not applicable); (b) gateway → Pulse →
+query-api for the `pulse.series.refused.count` metric. EG02
+candidate (gateway + query-api round-trip on the refusal
+metric). Cost: fixture must drive 10_001 distinct label-sets
+through the gateway, which is non-trivial.
+
+Deferred until either the fixture lands or a simpler
+operator-visible refusal surface ships (e.g. gateway returns
+a 429 / structured event on overflow rather than silently
+recording it as a self-observe metric).
 
 ## N21 — honest-read-caps-v0 graduated
 

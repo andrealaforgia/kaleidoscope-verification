@@ -1,3 +1,5 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+A  docs/feature/log-query-severity-filter-v0/discuss/outcome-kpis.md
+A  docs/feature/log-query-severity-filter-v0/discuss/story-map.md
+A  docs/feature/log-query-severity-filter-v0/discuss/user-stories.md
+A  docs/feature/log-query-severity-filter-v0/discuss/wave-decisions.md
+A  docs/feature/log-query-severity-filter-v0/slices/slice-01-severity-filter.md

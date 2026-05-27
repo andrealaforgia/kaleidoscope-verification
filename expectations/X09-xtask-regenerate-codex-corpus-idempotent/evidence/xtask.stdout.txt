@@ -10,6 +10,7 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-    Finished `release` profile [optimized] target(s) in 0.18s
+   Compiling regenerate-codex-corpus v0.1.0 (/src/xtask/regenerate_codex_corpus)
+    Finished `release` profile [optimized] target(s) in 0.42s
      Running `target/release/regenerate-codex-corpus`
 regenerated 132 entries from opentelemetry-semantic-conventions =0.27 → /src/crates/codex/src/generated/semconv_0_27.rs
