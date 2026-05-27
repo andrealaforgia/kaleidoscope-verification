@@ -12,7 +12,7 @@
 #3 DONE 0.0s
 
 #4 [internal] load metadata for docker.io/library/rust:1.88-slim-bookworm
-#4 DONE 0.0s
+#4 DONE 0.1s
 
 #5 [internal] load metadata for docker.io/library/debian:bookworm-slim
 #5 ...
@@ -40,39 +40,61 @@
 #10 DONE 0.0s
 
 #11 [context kaleidoscope] load from client
-#11 transferring kaleidoscope: 94.85kB 0.0s done
-#11 DONE 0.0s
+#11 transferring kaleidoscope: 12.11MB 0.2s done
+#11 DONE 0.2s
 
-#12 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
+#12 [builder 2/6] RUN apt-get update  && apt-get install -y --no-install-recommends         ca-certificates pkg-config libssl-dev  && rm -rf /var/lib/apt/lists/*
 #12 CACHED
 
 #13 [builder 3/6] COPY --from=kaleidoscope . /kaleidoscope-src/
-#13 CACHED
+#13 DONE 0.2s
 
-#14 [builder 5/6] WORKDIR /consumer
-#14 CACHED
+#14 [builder 4/6] COPY spark-consumer /consumer
+#14 DONE 0.0s
 
-#15 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
-#15 CACHED
+#15 [builder 5/6] WORKDIR /consumer
+#15 DONE 0.0s
 
-#16 [builder 4/6] COPY spark-consumer /consumer
-#16 CACHED
+#16 [builder 6/6] RUN --mount=type=cache,target=/usr/local/cargo/registry     --mount=type=cache,target=/usr/local/cargo/git     --mount=type=cache,target=/consumer/target     cargo build --release  && cp /consumer/target/release/spark-consumer /spark-consumer.bin
+#16 0.189     Updating crates.io index
+#16 3.471      Locking 152 packages to latest compatible versions
+#16 3.493       Adding opentelemetry v0.27.1 (available: v0.32.0)
+#16 3.494       Adding opentelemetry_sdk v0.27.1 (available: v0.32.1)
+#16 3.527  Downloading crates ...
+#16 3.702   Downloaded displaydoc v0.2.6
+#16 3.751    Compiling displaydoc v0.2.6
+#16 3.753    Compiling codex v0.1.0 (/kaleidoscope-src/crates/codex)
+#16 4.089    Compiling tinystr v0.8.3
+#16 4.089    Compiling zerotrie v0.2.4
+#16 4.089    Compiling icu_collections v2.2.0
+#16 4.147    Compiling icu_locale_core v2.2.0
+#16 4.413    Compiling icu_provider v2.2.0
+#16 4.524    Compiling icu_normalizer v2.2.0
+#16 4.524    Compiling icu_properties v2.2.0
+#16 4.838    Compiling idna_adapter v1.2.2
+#16 4.858    Compiling idna v1.1.0
+#16 4.968    Compiling url v2.5.8
+#16 5.162    Compiling spark v0.1.0 (/kaleidoscope-src/crates/spark)
+#16 5.566    Compiling spark-consumer v0.1.0 (/consumer)
+#16 6.094     Finished `release` profile [optimized] target(s) in 5.91s
+#16 DONE 6.2s
 
-#17 [builder 2/6] RUN apt-get update  && apt-get install -y --no-install-recommends         ca-certificates pkg-config libssl-dev  && rm -rf /var/lib/apt/lists/*
+#17 [runtime 2/3] RUN apt-get update  && apt-get install -y --no-install-recommends ca-certificates  && rm -rf /var/lib/apt/lists/*
 #17 CACHED
 
 #18 [runtime 3/3] COPY --from=builder /spark-consumer.bin /usr/local/bin/spark-consumer
-#18 CACHED
+#18 DONE 0.0s
 
 #19 exporting to image
-#19 exporting layers done
-#19 exporting manifest sha256:dbe4d6b35553f3c5df28d857cf65ef42174b403561055a57ab17633af1ae0ba1 done
-#19 exporting config sha256:ab05a68d79c3bdbf28c2d23433191bc2eb4f6297cadc21c6695cbbea177f8fc0 done
-#19 exporting attestation manifest sha256:b6b8dcbb7e75495d945fd37727f3ac6147762c8c99090e2253f02817a0d30178 done
-#19 exporting manifest list sha256:d815e8f2b0a27fd53c7f74c4994ae573af5bbdadecd4e4ffb1ed4d7ac8c3b3a9 done
+#19 exporting layers 0.1s done
+#19 exporting manifest sha256:718956a63d3458d9ab1cc768e86e56cd4bcd4e4c75367bbe5972bc4731cefcac
+#19 exporting manifest sha256:718956a63d3458d9ab1cc768e86e56cd4bcd4e4c75367bbe5972bc4731cefcac done
+#19 exporting config sha256:c264e4ef392c23244cf3d38697adb4aacd841b46dbb80870d29843cd34f34524 done
+#19 exporting attestation manifest sha256:3b5ef81ece7eb1cd8515401de9ab630be2356af989a10a5223fc67532e8de856 done
+#19 exporting manifest list sha256:782cc4fc2d44bc8deedf5a46e92d9fb907c6e02a7caf8bfaec59e53e69386041 done
 #19 naming to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
-#19 unpacking to docker.io/kaleidoscope-expectations/spark-consumer:under-test done
-#19 DONE 0.0s
+#19 unpacking to docker.io/kaleidoscope-expectations/spark-consumer:under-test 0.0s done
+#19 DONE 0.2s
 
 #20 resolving provenance for metadata file
 #20 DONE 0.0s

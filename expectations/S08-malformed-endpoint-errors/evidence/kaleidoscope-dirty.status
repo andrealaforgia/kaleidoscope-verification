@@ -1,3 +1,2 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+ M crates/log-query-api/src/lib.rs
+?? crates/log-query-api/tests/slice_03_severity_filter.rs
