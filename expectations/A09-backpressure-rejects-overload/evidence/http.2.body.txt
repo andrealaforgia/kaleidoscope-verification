@@ -1,1 +1,1 @@
-aperture: HTTP concurrency cap of 1 reached on transport=http_protobuf
+otlp violation: rule=EmptyInput signal=Traces framing=HttpProtobuf locus=byte 0 expected="non-empty OTLP body" observed="0 bytes"

@@ -314,6 +314,15 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
+## N24 — trace-lookup-by-id-v0 in DISCUSS
+
+Commit `6fc2aaa` (2026-05-27) opens a wave to add a
+trace-lookup endpoint to trace-query-api: give an operator
+the trace they hold the id of. No DESIGN / DELIVER yet.
+Doubly blocked: also waiting on a Dockerfile.trace-query-api
+(N17). When both land, the TQ-prefix opens with a
+fail-closed-no-tenant smoke and a lookup-by-id contract.
+
 ## N23 — log-query-severity-filter-v0 graduated, still blocked by N16
 
 Wave shipped DELIVER at `e281fca` ("feat(log-query-api):

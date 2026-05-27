@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 63 (A 14 + S 11 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) — S11 broken (suspected flake, cycle 12) |
+| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); S11 — suspected flake, same shape as closed 006/007, no new issue per established disposition) |
+| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `d782482` (cycle 12 of overnight loop). log-query-severity-filter-v0 graduated to DELIVER via `e281fca`, but log-query-api still has no Dockerfile (N16), so the contract is unreachable from the catalogue side — N23 updated. S09, S10 GREEN; S11 broken on the recurring `/readyz` timeout pattern after a cold retry, marked broken without new issue per the established disposition.
+Last index refresh: 2026-05-27, observed HEAD `6fc2aaa` (cycle 13 of overnight loop). S11 cold retry GREEN: cycle-12 double-fail confirmed flake, same disposition as 006/007. A09, A11, E04 GREEN. N24 added for trace-lookup-by-id-v0 DISCUSS.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

@@ -1,13 +1,13 @@
-2026-05-23T13:54:10.618Z	INFO	traces/traces.go:52	starting gRPC exporter
-2026-05-23T13:54:10.619Z	INFO	grpc@v1.67.1/clientconn.go:162	[core]original dial target is: "aperture:4317"	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:10.619Z	INFO	grpc@v1.67.1/clientconn.go:440	[core][Channel #1]Channel created	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:10.620Z	INFO	grpc@v1.67.1/clientconn.go:193	[core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:"dns", Opaque:"", User:(*url.Userinfo)(nil), Host:"", Path:"/aperture:4317", RawPath:"", OmitHost:false, ForceQuery:false, RawQuery:"", Fragment:"", RawFragment:""}}	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:10.620Z	INFO	grpc@v1.67.1/clientconn.go:194	[core][Channel #1]Channel authority set to "aperture:4317"	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:10.620Z	INFO	traces/traces.go:116	generation of traces isn't being throttled
-2026-05-23T13:54:10.621Z	INFO	traces/worker.go:112	traces generated	{"worker": 0, "traces": 1}
-2026-05-23T13:54:10.621Z	INFO	traces/traces.go:74	stop the batch span processor
-2026-05-23T13:54:10.621Z	INFO	grpc@v1.67.1/clientconn.go:345	[core][Channel #1]Channel exiting idle mode	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.073Z	INFO	grpc@v1.67.1/resolver_wrapper.go:200	[core][Channel #1]Resolver state updated: {
+2026-05-27T07:14:57.565Z	INFO	traces/traces.go:52	starting gRPC exporter
+2026-05-27T07:14:57.565Z	INFO	grpc@v1.67.1/clientconn.go:162	[core]original dial target is: "aperture:4317"	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:14:57.565Z	INFO	grpc@v1.67.1/clientconn.go:440	[core][Channel #1]Channel created	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:14:57.565Z	INFO	grpc@v1.67.1/clientconn.go:193	[core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:"dns", Opaque:"", User:(*url.Userinfo)(nil), Host:"", Path:"/aperture:4317", RawPath:"", OmitHost:false, ForceQuery:false, RawQuery:"", Fragment:"", RawFragment:""}}	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:14:57.565Z	INFO	grpc@v1.67.1/clientconn.go:194	[core][Channel #1]Channel authority set to "aperture:4317"	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:14:57.566Z	INFO	traces/traces.go:116	generation of traces isn't being throttled
+2026-05-27T07:14:57.566Z	INFO	traces/worker.go:112	traces generated	{"worker": 0, "traces": 1}
+2026-05-27T07:14:57.566Z	INFO	traces/traces.go:74	stop the batch span processor
+2026-05-27T07:14:57.566Z	INFO	grpc@v1.67.1/clientconn.go:345	[core][Channel #1]Channel exiting idle mode	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/resolver_wrapper.go:200	[core][Channel #1]Resolver state updated: {
   "Addresses": [
     {
       "Addr": "172.18.0.3:4317",
@@ -34,18 +34,18 @@
   "ServiceConfig": null,
   "Attributes": null
 } (resolver returned new addresses)	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.073Z	INFO	grpc@v1.67.1/balancer_wrapper.go:107	[core][Channel #1]Channel switches to new LB policy "pick_first"	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.075Z	INFO	grpc@v1.67.1/balancer_wrapper.go:180	[core][Channel #1 SubChannel #2]Subchannel created	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.075Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.075Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.075Z	INFO	grpc@v1.67.1/clientconn.go:1317	[core][Channel #1 SubChannel #2]Subchannel picks a new address "172.18.0.3:4317" to connect	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.079Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.079Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
-2026/05/23 13:54:15 traces export: rpc error: code = ResourceExhausted desc = aperture: gRPC concurrency cap of 1 reached on transport=grpc
-2026-05-23T13:54:15.081Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to SHUTDOWN	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.081Z	INFO	grpc@v1.67.1/resolver_wrapper.go:100	[core][Channel #1]Closing the name resolver	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.081Z	INFO	grpc@v1.67.1/balancer_wrapper.go:145	[core][Channel #1]ccBalancerWrapper: closing	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.081Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to SHUTDOWN	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.081Z	INFO	grpc@v1.67.1/clientconn.go:1146	[core][Channel #1 SubChannel #2]Subchannel deleted	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.082Z	INFO	grpc@v1.67.1/clientconn.go:1148	[core][Channel #1]Channel deleted	{"system": "grpc", "grpc_log": true}
-2026-05-23T13:54:15.082Z	INFO	traces/traces.go:64	stopping the exporter
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/balancer_wrapper.go:107	[core][Channel #1]Channel switches to new LB policy "pick_first"	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/balancer_wrapper.go:180	[core][Channel #1 SubChannel #2]Subchannel created	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.581Z	INFO	grpc@v1.67.1/clientconn.go:1317	[core][Channel #1 SubChannel #2]Subchannel picks a new address "172.18.0.3:4317" to connect	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.585Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.585Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
+2026/05/27 07:15:05 traces export: rpc error: code = ResourceExhausted desc = aperture: gRPC concurrency cap of 1 reached on transport=grpc
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to SHUTDOWN	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/resolver_wrapper.go:100	[core][Channel #1]Closing the name resolver	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/balancer_wrapper.go:145	[core][Channel #1]ccBalancerWrapper: closing	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to SHUTDOWN	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/clientconn.go:1146	[core][Channel #1 SubChannel #2]Subchannel deleted	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	grpc@v1.67.1/clientconn.go:1148	[core][Channel #1]Channel deleted	{"system": "grpc", "grpc_log": true}
+2026-05-27T07:15:05.588Z	INFO	traces/traces.go:64	stopping the exporter

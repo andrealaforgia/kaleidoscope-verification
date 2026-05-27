@@ -1,1 +1,4 @@
-?? docs/feature/trace-lookup-by-id-v0/
+A  docs/feature/trace-lookup-by-id-v0/design/application-architecture.md
+A  docs/feature/trace-lookup-by-id-v0/design/wave-decisions.md
+A  docs/product/architecture/adr-0053-trace-lookup-by-id.md
+M  docs/product/architecture/brief.md
