@@ -314,13 +314,23 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N17 — trace-query-api designed only (ADR-0048)
+## N17 — trace-query-api graduated to DELIVER, no Dockerfile yet
 
-ADR-0048 defines the `trace-query-api` crate (Ray read path)
-but no `crates/trace-query-api/` exists at HEAD `0c1d66b` —
-DESIGN wave is complete, DELIVER not yet. The catalogue keeps
-no R-prefix entries until the binary surface ships with a
-Dockerfile.
+ADR-0048 defines the `trace-query-api` crate (Ray read path).
+At commit `87d5e6e` (2026-05-26) the crate shipped DELIVER:
+`crates/trace-query-api/{lib.rs,main.rs,composition.rs}` exist
+with `GET /api/v1/traces?service=&start=&end=` and the same
+fail-closed-on-missing-tenant posture as query-api /
+log-query-api. Env vars `KALEIDOSCOPE_TRACE_QUERY_TENANT`,
+`KALEIDOSCOPE_TRACE_QUERY_ADDR`, `KALEIDOSCOPE_PILLAR_ROOT`.
+
+But `Dockerfile.trace-query-api` does NOT exist at HEAD, same
+posture as `log-query-api` (see N16). Without a packaging
+Dockerfile no operator-runnable surface exists; per the H-rule
+the catalogue defers until either (a) the Dockerfile lands, or
+(b) the harness ships its own wrapper. Catalogue prefix would
+be **TQ** when adopted, opening with the same fails-closed-no-
+tenant smoke and a round-trip in the EG family.
 
 ## N15 — cli-migrate-subcommand-v0 in DESIGN wave
 
