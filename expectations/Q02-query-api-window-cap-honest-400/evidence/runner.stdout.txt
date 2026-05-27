@@ -1,0 +1,1 @@
+OK — query-api refuses (end - start) > 86400 with 400 status=error; reason: window exceeds 86400 seconds

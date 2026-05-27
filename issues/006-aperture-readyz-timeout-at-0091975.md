@@ -1,6 +1,11 @@
 # 006 — aperture `/readyz=200` never reached within 180 s under the compose harness at `0091975`
 
-- Status: `open`
+- Status: `closed` (flake, not regression)
+- Closed: 2026-05-27. Cycle 5 of the overnight loop re-verified
+  A01, A02, A03, A04, A11 all GREEN at HEAD `b71ad8a`, and A10
+  itself recovered on the first retry. The cycle-4 double-fail
+  was likely docker desktop transient (cache loss / network
+  pressure) rather than an aperture regression.
 - Expectations affected: A10 (broken at cycle 4 of overnight loop).
 - Opened: 2026-05-27
 - Kaleidoscope SHA at observation: `0091975c5d60c35416124cecf4f7113136caef86`

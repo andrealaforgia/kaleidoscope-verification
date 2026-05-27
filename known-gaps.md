@@ -314,15 +314,21 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N21 — honest-read-caps-v0 in DISCUSS/DESIGN
+## N21 — honest-read-caps-v0 graduated
 
-Commits `ded02f9` (discuss) + `0091975` (design) at 2026-05-27
-open a new feature wave: `query-api` should refuse oversized
-read requests with an honest 400 rather than silently
-truncating. Cap shape: 24h time-window, 100k result limit.
-No DELIVER yet at HEAD `0091975`. When `feat(...)` lands, Q02
-candidate becomes drafabile: `GET /api/v1/query_range` with
-`(end - start) > 24h` → 400 `status:error` naming the cap.
+Wave shipped DELIVER at commit `b71ad8a` ("feat(read-caps):
+honest 400 for oversized window or result on the three read
+APIs"). Cap shape: `MAX_WINDOW_SECONDS = 86400` (24 h),
+`MAX_RESULT_ROWS = 100_000`. Refusal path returns 400
+`status:error` with the reason naming the cap value verbatim;
+the store is never queried.
+
+Q02 anchors the operator-visible window-cap refusal at the
+query-api binary. Result-size cap (Q03 candidate) needs a
+fixture that loads > 100k rows into Pulse, deferred. The cap
+is also implemented in `log-query-api` and `trace-query-api`
+libraries, but those still lack packaging Dockerfiles (see
+N16 + N17).
 
 ## N20 — earned-trust-fsync-probe-v0 graduated
 

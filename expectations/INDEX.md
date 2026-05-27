@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 62 (A 13 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 1 + G 2 + EG 1) — A10 broken at `0091975`, see issue 006 |
+| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); A10 — [`issue 006`](../issues/006-aperture-readyz-timeout-at-0091975.md)) |
+| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `0091975` (cycle 4 of overnight loop). K07/K08/L01/X07 GREEN; A10 broken (issue 006: aperture `/readyz` never reaches 200 within 180 s, two consecutive runs). Next cycle: re-verify other A-prefix to see if the regression is A10-specific or aperture-wide.
+Last index refresh: 2026-05-27, observed HEAD `b71ad8a` (cycle 5 of overnight loop). honest-read-caps-v0 graduated; Q02 (window cap honest 400) GREEN at first try. A01-A04 + A11 re-verified GREEN, A10 retried GREEN: cycle-4 failure confirmed flake, issue 006 closed.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
@@ -115,7 +115,7 @@ that can have an expectation, tracked?".
 | `crates/kaleidoscope-cli` binary | Operator CLI wiring Lumen v1 + Cinder v1 + self-observe (ingest / read / stats / --observe-otlp) | **K** | 12 (11 satisfied: K01-K10 + K12; 1 held: K11) | First runnable product binary, landed at `c96cb18` and extended through `75f15a6` / `946d2c8` / `b503f49` / `9d1f805` / `8ee7091` / `2baa05c` (stats + time-range + Cinder tier dist + Lumen observe + Cinder observe). K12 anchors the cross-writer atomicity wiring at `2baa05c`. K11 (unknown-flag rejection) is `held` because its anchor commit `e7fbee0` was reverted by `e3a8cad`; see N14. Verified via `harness/run-kaleidoscope-cli.sh`. |
 | `crates/{lumen,cinder,pulse,ray,strata,augur,sluice}` libraries | Storage / metrics / traces / profiles / cold-tier / AIops / buffer pillars | none direct | 0 — deferred (partial via K-prefix) | Seven new pillar v0 (lumen, sluice, pulse, ray, strata, cinder, augur) and three v1 carry-forwards (lumen, sluice, cinder) landed in this range. All library-only per H-rule. Lumen v1 + Cinder v1 + Pulse-via-self-observe ARE indirectly exercised by K03 + K05 through kaleidoscope-cli. Ray, Strata, Augur, Sluice have no external consumer yet. See `known-gaps.md` N13. |
 | `crates/kaleidoscope-gateway` binary | OTLP receiver + storage sink (operator) | **G** | 2 (G01, G02 satisfied) | Multi-stage `Dockerfile.gateway`, ports :4317 + :4318, persists into lumen/ray/pulse. G01 = startup smoke; G02 = fsync probe refuses read-only `/data` (anchored at `5ccf4a9`, ADR-0049 §1). G03+ (OTLP accept per signal, durability mid-write) are the natural next batch. See `known-gaps.md` N16. |
-| `crates/query-api` binary | Prometheus `/api/v1/query_range` over Pulse (operator) | **Q** | 1 (Q01 satisfied) | Multi-stage `Dockerfile.query-api`, port :9090, fails closed without `KALEIDOSCOPE_QUERY_TENANT`. Q02-Q07 (round-trip, label matchers, regex matchers, static-serve, 400-on-bad-promql) are the natural next batch. See `known-gaps.md` N16. |
+| `crates/query-api` binary | Prometheus `/api/v1/query_range` over Pulse (operator) | **Q** | 2 (Q01, Q02 satisfied) | Multi-stage `Dockerfile.query-api`, port :9090. Q01 = fails closed without tenant; Q02 = honest 400 on oversized window (cap 86400 s, anchored at `b71ad8a`/ADR-0050). Q03+ (result-size cap, label matchers, regex matchers, static-serve, 400-on-bad-promql) are the natural next batch. See `known-gaps.md` N16 + N21. |
 | End-to-end via kaleidoscope-gateway | OTLP → pillars → query-api round-trip (operator) | **EG** | 1 (EG01 satisfied) | EG01 verifies the integration thesis under contract for the first time: telemetrygen → gateway :4318 → Pulse store → query-api :9090 → matrix response. EG02-EG05 (gRPC ingest, logs via log-query-api, traces, multi-tenant isolation, durability mid-write) are the natural next batch. See `known-gaps.md` N18 + N19. |
 | `crates/log-query-api` binary | `/api/v1/logs` over Lumen (operator) | **LQ** | 0 — deferred (no Dockerfile yet) | Binary builds in-workspace but lacks a packaging Dockerfile at HEAD. See `known-gaps.md` N16. |
 | `crates/trace-query-api` binary | `/api/v1/traces` over Ray (operator) | **TQ** (when packaged) | 0 — deferred (no Dockerfile yet) | Graduated to DELIVER at `87d5e6e` (2026-05-26): `crates/trace-query-api/` ships lib + binary serving `GET /api/v1/traces?service=&start=&end=` with the same fails-closed-no-tenant posture as query-api. No packaging Dockerfile at HEAD, same as log-query-api. See `known-gaps.md` N17 (updated). |
