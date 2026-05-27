@@ -1,7 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.155254Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.156078Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.156113Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.156117Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.156131Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.269734Z","level":"INFO","event":"shutdown_initiated","signal":"SIGTERM","drain_deadline_ms":30000}
-aperture-1  | {"timestamp":"2026-05-27T07:15:12.269752Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.854004Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.854879Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.855157Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.855163Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.855315Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.969724Z","level":"INFO","event":"shutdown_initiated","signal":"SIGTERM","drain_deadline_ms":30000}
+aperture-1  | {"timestamp":"2026-05-27T21:29:41.969739Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}

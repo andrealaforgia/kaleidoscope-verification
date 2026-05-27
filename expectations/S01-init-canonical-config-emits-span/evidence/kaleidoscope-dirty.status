@@ -1,3 +1,5 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+A  docs/feature/log-body-text-search-v0/design/application-architecture.md
+A  docs/feature/log-body-text-search-v0/design/parse-helper-spec.md
+A  docs/feature/log-body-text-search-v0/design/wave-decisions.md
+A  docs/product/architecture/adr-0055-log-body-text-search.md
+M  docs/product/architecture/brief.md

@@ -15,13 +15,14 @@ A Spark-instrumented app emits one span via `opentelemetry::global::tracer`. The
 
 ## Verification
 
-- Status: `broken` (suspected flake, twelfth occurrence of
-  the docker-network transient pattern documented in closed
-  issues 006/007)
-- Last verified: 2026-05-27 UTC at HEAD (`29f109b`) — broken:
-  aperture container never reached `/readyz=200` within 180 s
-  across two consecutive runs. Cold retry next cycle expected
-  to recover; if not, escalate.
+- Status: `satisfied`
+- Last verified: 2026-05-27 UTC at HEAD (`29f109b`).
+  `span observed: spark-consumer-emit-trace` — GREEN at the
+  fourth attempt this cycle, after three consecutive
+  `/readyz=200` 180 s flakes. Notably A11 and S01 GREEN at
+  first attempt on the same compose stack between the three
+  E01 fails; no aperture-wide regression, just a sticky local
+  flake. Same disposition as closed issues 006/007.
 - Earlier satisfaction: 2026-05-11 at `3a18514` and across many
   later cycles.
 - Method: driven by the **spark-consumer** fixture under
