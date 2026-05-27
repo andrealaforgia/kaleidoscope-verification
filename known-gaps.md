@@ -314,17 +314,17 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N23 — log-query-severity-filter-v0 in DISCUSS/DESIGN
+## N23 — log-query-severity-filter-v0 graduated, still blocked by N16
 
-Commits `581e52c` (discuss) + `36e067f` (design) at 2026-05-27
-open a wave to add a server-side severity filter on
-`GET /api/v1/logs`. Design Decision: `min_severity` parameter,
-case-insensitive comparison, applied BEFORE the result-size
-cap (so the cap counts post-filter rows). No DELIVER yet.
-Doubly blocked from the catalogue's side: log-query-api also
-still lacks a packaging Dockerfile (N16). When both the
-`feat(...)` and the Dockerfile land, the catalogue opens
-LQ-prefix.
+Wave shipped DELIVER at `e281fca` ("feat(log-query-api):
+min_severity filter via Predicate::min_severity, before cap").
+Contract: `GET /api/v1/logs?min_severity=<level>` filters rows
+case-insensitively, BEFORE the result-size cap. The library
+contract is now real but `log-query-api` still lacks a
+packaging Dockerfile (N16), so the operator-visible surface
+remains unreachable from the catalogue. LQ02 candidate
+remains drafabile alongside LQ01 the moment the Dockerfile
+lands.
 
 ## N22 — pulse-cardinality-watermark-v0 graduated
 

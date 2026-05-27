@@ -15,9 +15,15 @@ Traces, logs, and metrics emitted from the same Spark-instrumented app carry an 
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-11 UTC at HEAD.
-- Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
+- Status: `broken` (suspected flake — same shape as the
+  closed-as-flake issues 006/007 on A10/S03/A15)
+- Last verified: 2026-05-27 UTC at HEAD (`d782482`) — broken:
+  aperture container never reached `/readyz=200` within 180 s
+  across two consecutive runs. Cycle 12 of the overnight loop.
+  Same docker-pressure pattern; cold retry next cycle expected
+  to recover.
+- Earlier satisfaction: 2026-05-11 at HEAD `3a18514` and
+  across many later cycles.
 - Method: driven by the **spark-consumer** fixture under
   `harness/spark-consumer/`. The fixture is built once via
   `docker compose --profile fixture build spark-consumer` and
