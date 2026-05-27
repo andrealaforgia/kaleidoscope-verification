@@ -27,13 +27,13 @@ naming the resource's `service.name`.
 
 ## Verification
 
-- Status: `broken` (suspected flake, eleventh occurrence of
-  the recurring docker-network transient pattern documented
-  in closed issues 006/007)
-- Last verified: 2026-05-27 UTC at HEAD (`a6175f1`) — broken:
-  aperture container never reached `/readyz=200` within 180 s
-  across two consecutive runs. Cold retry expected to recover
-  in cycle 22; if not, escalate.
+- Status: `satisfied`
+- Last verified: 2026-05-27 UTC at HEAD (`a6175f1`). Cycle 22
+  cold retry GREEN at first attempt
+  ("aperture acked the OTLP/gRPC request and emitted
+  sink_accepted with matching span_count and service.name").
+  Cycle-21 double-fail confirmed flake, same disposition as
+  closed issues 006/007.
 - Earlier satisfaction: 2026-05-06T23:11:33Z (re-verification after issue
   001 fix; aperture now honours `--config` and the harness's
   `kind = "forwarding"` actually applies). First verification at SHA

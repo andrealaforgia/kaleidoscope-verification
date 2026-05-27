@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 63 (A 13 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) — A01 broken (suspected flake) |
+| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); A01 — suspected flake, same shape as closed 006/007, no new issue per docked disposition) |
+| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `a6175f1` (cycle 21 of overnight loop). One DEVOPS commit (query-http-common-v0 gate-5 mutation CI job, N25 updated). Spot re-verified A01, K03, L02: K03/L02 GREEN; A01 broken on the recurring `/readyz=200` 180 s timeout across two consecutive runs — marked broken with flake note per the docked disposition; cycle 22 cold retry will confirm or escalate.
+Last index refresh: 2026-05-27, observed HEAD `a6175f1` (cycle 22 of overnight loop, kaleidoscope HEAD unchanged from cycle 21). A01 cold retry GREEN at first attempt: cycle-21 double-fail confirmed flake (eleventh occurrence, same disposition as 006/007). K06, S22 spot re-verified GREEN.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
