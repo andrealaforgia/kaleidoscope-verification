@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 63 (A 13 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) — A03 broken (suspected flake) |
+| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); A03 — suspected flake, same shape as closed 006/007, no new issue per docked disposition) |
+| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `cf0ac15` (cycle 27 of overnight loop). Two new DESIGN/DEVOPS commits for log-body-text-search-v0 (N26 updated). K04, X13 GREEN; A03 broken on the recurring `/readyz=200` 180 s timeout across two runs (thirteenth flake occurrence) — marked broken with flake note per docked disposition; cycle 28 cold retry expected to recover.
+Last index refresh: 2026-05-27, observed HEAD `cf0ac15` (cycle 28 of overnight loop, kaleidoscope HEAD unchanged from cycle 27). A03 cold retry GREEN at first attempt ("data_point_count=1 for service expectation-A03-pilot"). Cycle-27 double-fail confirmed flake. A04, K07 GREEN.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

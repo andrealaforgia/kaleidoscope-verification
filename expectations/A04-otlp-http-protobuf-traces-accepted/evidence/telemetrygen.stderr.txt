@@ -1,5 +1,5 @@
-2026-05-27T05:30:03.456Z	INFO	traces/traces.go:40	starting HTTP exporter
-2026-05-27T05:30:03.456Z	INFO	traces/traces.go:116	generation of traces isn't being throttled
-2026-05-27T05:30:03.456Z	INFO	traces/worker.go:112	traces generated	{"worker": 0, "traces": 1}
-2026-05-27T05:30:03.456Z	INFO	traces/traces.go:74	stop the batch span processor
-2026-05-27T05:30:03.458Z	INFO	traces/traces.go:64	stopping the exporter
+2026-05-27T22:06:54.633Z	INFO	traces/traces.go:40	starting HTTP exporter
+2026-05-27T22:06:54.634Z	INFO	traces/traces.go:116	generation of traces isn't being throttled
+2026-05-27T22:06:54.634Z	INFO	traces/worker.go:112	traces generated	{"worker": 0, "traces": 1}
+2026-05-27T22:06:54.634Z	INFO	traces/traces.go:74	stop the batch span processor
+2026-05-27T22:06:54.640Z	INFO	traces/traces.go:64	stopping the exporter
