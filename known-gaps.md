@@ -314,6 +314,16 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
+## N21 — honest-read-caps-v0 in DISCUSS/DESIGN
+
+Commits `ded02f9` (discuss) + `0091975` (design) at 2026-05-27
+open a new feature wave: `query-api` should refuse oversized
+read requests with an honest 400 rather than silently
+truncating. Cap shape: 24h time-window, 100k result limit.
+No DELIVER yet at HEAD `0091975`. When `feat(...)` lands, Q02
+candidate becomes drafabile: `GET /api/v1/query_range` with
+`(end - start) > 24h` → 400 `status:error` naming the cap.
+
 ## N20 — earned-trust-fsync-probe-v0 graduated
 
 Commits `e409f2d` (design) → `f97b836` (devops) → `5ccf4a9`

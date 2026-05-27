@@ -11,7 +11,6 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-    Updating crates.io index
    Compiling beacon v0.1.0 (/src/crates/beacon)
    Compiling loom v0.1.0 (/src/crates/loom)
-    Finished `release` profile [optimized] target(s) in 2.91s
+    Finished `release` profile [optimized] target(s) in 2.46s

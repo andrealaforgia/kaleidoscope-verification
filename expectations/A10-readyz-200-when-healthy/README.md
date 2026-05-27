@@ -27,11 +27,13 @@ flip from `starting` to `ready` is signalled by an
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-06T23:11:16Z (re-verification after issue
-  001 fix landed). First verification at SHA
-  `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68` on 2026-05-06T19:33:37Z
-  also passed.
+- Status: `broken`
+- Last verified: 2026-05-27 UTC at HEAD (`0091975`) — broken:
+  aperture container never reaches `/readyz=200` within the
+  180 s gate, two consecutive deterministic failures. See
+  [issue 006](../../issues/006-aperture-readyz-timeout-at-0091975.md).
+- Previously satisfied: 2026-05-27 at HEAD `74920c7` (cycle 3
+  of overnight loop) and earlier.
 - Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
 - Kaleidoscope dirty: `no`
 - Method: dockerised harness; aperture built from the HEAD snapshot;
