@@ -1,11 +1,11 @@
 saw_ready=yes
 ---stderr head---
-{"timestamp":"2026-05-27T00:06:28.229960Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-27T00:06:28.230022Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-{"timestamp":"2026-05-27T00:06:28.230151Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-{"timestamp":"2026-05-27T00:06:28.230157Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-27T00:06:28.230202Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-27T00:06:29.310605Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
-{"timestamp":"2026-05-27T00:06:29.310630Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-27T00:06:29.564043Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-{"timestamp":"2026-05-27T00:06:29.564089Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+{"timestamp":"2026-05-27T01:12:46.972481Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-05-27T01:12:46.972613Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-05-27T01:12:46.972946Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-05-27T01:12:46.972956Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-05-27T01:12:46.973014Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-05-27T01:12:48.043195Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
+{"timestamp":"2026-05-27T01:12:48.043217Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-05-27T01:12:48.295827Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-05-27T01:12:48.295883Z","level":"INFO","event":"shutdown_complete","exit_code":0}

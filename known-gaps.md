@@ -314,17 +314,19 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
-## N20 — earned-trust-fsync-probe-v0 in DESIGN/DEVOPS
+## N20 — earned-trust-fsync-probe-v0 graduated
 
-Commits `e409f2d` (design) + `f97b836` (devops) at 2026-05-27
-open a new feature wave: aperture/gateway's storage-sink probe
-should honour `fsync`, not just open-and-read, to close the
-durability gap N18 hints at. No DELIVER commit yet at HEAD
-`f97b836`. Watch for `feat(...)` and revisit: the contract
-likely tightens the gateway's startup posture (probe writes a
-sentinel, fsyncs, reads back, removes), which means G01's
-`event=ready` continues to hold but a new G02-fsync-probe-honoured
-expectation becomes drafabile.
+Commits `e409f2d` (design) → `f97b836` (devops) → `5ccf4a9`
+(`feat(earned-trust): honour fsync at pulse write path and
+gateway startup`) shipped the fsync-honest probe. The gateway
+now writes a sentinel, fsyncs, and refuses startup on EROFS
+or fsync failure. G02 anchors the operator-visible refusal:
+`docker run -v /data:ro` produces `Error: PersistenceFailed
+{ reason: "io: Read-only file system (os error 30)" }` and
+exits 1. Verified at HEAD `74920c7`.
+
+Residual: the structured `event=health.startup.refused
+substrate=<descriptor>` (ADR-0049 §7) is dropped per issue 005.
 
 ## N17 — trace-query-api graduated to DELIVER, no Dockerfile yet
 

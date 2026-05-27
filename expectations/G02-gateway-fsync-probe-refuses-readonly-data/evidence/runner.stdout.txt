@@ -1,0 +1,1 @@
+OK — gateway refuses startup with read-only /data: exit=1 + fsync/readonly diagnostic on stderr

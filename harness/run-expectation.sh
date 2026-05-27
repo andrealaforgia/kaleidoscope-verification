@@ -101,6 +101,12 @@ mkdir -p .captured
 # scenario starts with an empty observed-OTLP stream.
 : > .captured/otlp-received.jsonl
 
+# Preserve the original (real) git working tree path before
+# overriding KALEIDOSCOPE_DIR for the docker build. The anchor
+# check (step 6) needs git history, which the snapshot tarball
+# does not carry; using the snapshot there caused merge-base
+# to fail with a false "not reachable" verdict.
+export KALEIDOSCOPE_GIT_DIR="$KALEIDOSCOPE_DIR"
 export KALEIDOSCOPE_DIR="$SNAPSHOT_DIR"
 
 # Optional per-expectation env-var overrides for aperture (passed
@@ -221,7 +227,11 @@ fi
 #    the expectation still claims to anchor it. If anchor-check
 #    fails, refuse `satisfied` even if the scenario passed.
 if [[ -f "$EXP_DIR/anchor.yaml" ]]; then
-    if ! "$HARNESS_DIR/check-anchor.sh" "$EXP_DIR" > "$EVIDENCE_DIR/anchor-check.txt" 2>&1; then
+    # Point KALEIDOSCOPE_DIR back at the real git working tree
+    # (step 2's export redirected it to the snapshot for the
+    # docker build). The snapshot is a tarball with no git
+    # history.
+    if ! KALEIDOSCOPE_DIR="$KALEIDOSCOPE_GIT_DIR" "$HARNESS_DIR/check-anchor.sh" "$EXP_DIR" > "$EVIDENCE_DIR/anchor-check.txt" 2>&1; then
         ANCHOR_EXIT=$?
         echo "anchor check failed (exit ${ANCHOR_EXIT}):" >&2
         cat "$EVIDENCE_DIR/anchor-check.txt" >&2

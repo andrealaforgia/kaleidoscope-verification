@@ -1,0 +1,1 @@
+Error: PersistenceFailed { reason: "io: Read-only file system (os error 30)" }
