@@ -6,32 +6,28 @@ Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
 Packages: +414
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 414, reused 92, downloaded 0, added 0
-Progress: resolved 414, reused 296, downloaded 0, added 0
+Progress: resolved 414, reused 325, downloaded 0, added 0
 
    ╭──────────────────────────────────────────────────────────────────╮
    │                                                                  │
-   │                Update available! 9.15.0 → 11.2.2.                │
-   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.2.2   │
-   │         Run "corepack install -g pnpm@11.2.2" to update.         │
+   │                Update available! 9.15.0 → 11.3.0.                │
+   │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.3.0   │
+   │         Run "corepack install -g pnpm@11.3.0" to update.         │
    │                                                                  │
    ╰──────────────────────────────────────────────────────────────────╯
 
-Progress: resolved 414, reused 412, downloaded 0, added 0
-Progress: resolved 414, reused 412, downloaded 0, added 31
-Progress: resolved 414, reused 413, downloaded 0, added 60
-Progress: resolved 414, reused 413, downloaded 0, added 94
-Progress: resolved 414, reused 413, downloaded 0, added 139
-Progress: resolved 414, reused 413, downloaded 0, added 188
-Progress: resolved 414, reused 413, downloaded 0, added 233
-Progress: resolved 414, reused 413, downloaded 0, added 277
-Progress: resolved 414, reused 413, downloaded 0, added 314
-Progress: resolved 414, reused 413, downloaded 0, added 360
-Progress: resolved 414, reused 413, downloaded 0, added 406
-Progress: resolved 414, reused 413, downloaded 0, added 411
+Progress: resolved 414, reused 412, downloaded 0, added 8
+Progress: resolved 414, reused 412, downloaded 0, added 27
+Progress: resolved 414, reused 412, downloaded 0, added 55
+Progress: resolved 414, reused 413, downloaded 0, added 64
+Progress: resolved 414, reused 413, downloaded 0, added 131
+Progress: resolved 414, reused 413, downloaded 0, added 204
+Progress: resolved 414, reused 413, downloaded 0, added 283
+Progress: resolved 414, reused 413, downloaded 0, added 339
+Progress: resolved 414, reused 413, downloaded 0, added 409
 Progress: resolved 414, reused 413, downloaded 0, added 413
 Progress: resolved 414, reused 413, downloaded 0, added 414, done
-Done in 16.3s
+Done in 12.3s
 --- pnpm -F prism build ---
 No projects matched the filters "/src" in "/src"
 
@@ -46,14 +42,14 @@ computing gzip size...
 dist/index.html                   0.39 kB │ gzip:   0.26 kB
 dist/assets/index-BiLGTODY.css    3.84 kB │ gzip:   1.21 kB
 dist/assets/index-DiaFpjTc.js   691.99 kB │ gzip: 228.55 kB │ map: 3,729.38 kB
-✓ built in 1.90s
+✓ built in 2.44s
 --- prism dist listing ---
 total 8
-drwxr-xr-x  5 root root 160 May 23 20:54 .
-drwxr-xr-x 21 root root 672 May 23 20:54 ..
-drwxr-xr-x  5 root root 160 May 23 20:54 assets
--rw-r--r--  1 root root 101 May 23 20:54 config.json
--rw-r--r--  1 root root 390 May 23 20:54 index.html
+drwxr-xr-x  5 root root 160 May 27 03:09 .
+drwxr-xr-x 21 root root 672 May 27 03:09 ..
+drwxr-xr-x  5 root root 160 May 27 03:09 assets
+-rw-r--r--  1 root root 101 May 27 03:09 config.json
+-rw-r--r--  1 root root 390 May 27 03:09 index.html
 --- index.html head ---
 <!doctype html>
 <html lang="en">

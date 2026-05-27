@@ -1,3 +1,4 @@
- M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+A  docs/feature/pulse-cardinality-watermark-v0/design/application-architecture.md
+A  docs/feature/pulse-cardinality-watermark-v0/design/wave-decisions.md
+A  docs/product/architecture/adr-0051-pulse-per-tenant-cardinality-watermark.md
+M  docs/product/architecture/brief.md

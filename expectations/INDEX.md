@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
+| `satisfied` | 63 (A 14 + S 11 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) — S03 broken (suspected flake, issue 007) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
+| `broken` | 3 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md); S03 — [`issue 007`](../issues/007-s03-aperture-readyz-timeout-cycle6.md), suspected flake) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `b71ad8a` (cycle 5 of overnight loop). honest-read-caps-v0 graduated; Q02 (window cap honest 400) GREEN at first try. A01-A04 + A11 re-verified GREEN, A10 retried GREEN: cycle-4 failure confirmed flake, issue 006 closed.
+Last index refresh: 2026-05-27, observed HEAD `91d3daa` (cycle 6 of overnight loop). A11, A12, S02, X10 re-verified GREEN; S03 broken with same shape as the (closed-as-flake) issue 006, tracked under issue 007. N22 added for pulse-cardinality-watermark-v0 DISCUSS wave.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

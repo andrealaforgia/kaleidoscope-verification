@@ -15,9 +15,15 @@ With `require_tenant_id()` AND `with_tenant_id(id)`, the Resource carries an att
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-11 UTC at HEAD.
-- Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
+- Status: `broken` (suspected flake — see issue 007)
+- Last verified: 2026-05-27 UTC at HEAD (`91d3daa`) — broken:
+  aperture container never reached `/readyz=200` within 180 s
+  across two consecutive runs. Same shape as the (closed,
+  flake) issue 006 on A10. Other compose-based expectations in
+  the same cycle (A11, A12, S02) all GREEN. See
+  [issue 007](../../issues/007-s03-aperture-readyz-timeout-cycle6.md).
+- Previously satisfied at HEAD `3a18514` and across multiple
+  later cycles.
 - Method: driven by the **spark-consumer** fixture under
   `harness/spark-consumer/`. The fixture is built once via
   `docker compose --profile fixture build spark-consumer` and
