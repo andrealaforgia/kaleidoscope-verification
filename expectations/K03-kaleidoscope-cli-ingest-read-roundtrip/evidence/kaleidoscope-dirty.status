@@ -1,10 +1,10 @@
- M crates/pulse/Cargo.toml
- M crates/pulse/src/file_backed.rs
- M crates/pulse/src/lib.rs
- M crates/pulse/src/metrics.rs
- M crates/pulse/src/store.rs
- M crates/self-observe/Cargo.toml
- M crates/self-observe/src/lib.rs
-?? crates/pulse/tests/v1_slice_04_cardinality_watermark.rs
-?? crates/self-observe/src/pulse_cardinality_bridge.rs
-?? crates/self-observe/tests/pulse_cardinality_bridge_test.rs
+ M Cargo.lock
+ M Cargo.toml
+ M crates/log-query-api/Cargo.toml
+ M crates/log-query-api/src/lib.rs
+ M crates/query-api/Cargo.toml
+ M crates/query-api/src/lib.rs
+ M crates/trace-query-api/Cargo.toml
+ M crates/trace-query-api/src/lib.rs
+?? crates/query-http-common/
+?? docs/feature/query-http-common-v0/distill/

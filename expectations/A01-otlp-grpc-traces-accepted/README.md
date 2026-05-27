@@ -27,8 +27,14 @@ naming the resource's `service.name`.
 
 ## Verification
 
-- Status: `satisfied`
-- Last verified: 2026-05-06T23:11:33Z (re-verification after issue
+- Status: `broken` (suspected flake, eleventh occurrence of
+  the recurring docker-network transient pattern documented
+  in closed issues 006/007)
+- Last verified: 2026-05-27 UTC at HEAD (`a6175f1`) — broken:
+  aperture container never reached `/readyz=200` within 180 s
+  across two consecutive runs. Cold retry expected to recover
+  in cycle 22; if not, escalate.
+- Earlier satisfaction: 2026-05-06T23:11:33Z (re-verification after issue
   001 fix; aperture now honours `--config` and the harness's
   `kind = "forwarding"` actually applies). First verification at SHA
   `3d3c99f061a3c76d48ac9d2a824612d8bdc37b68` on 2026-05-06T19:37:52Z

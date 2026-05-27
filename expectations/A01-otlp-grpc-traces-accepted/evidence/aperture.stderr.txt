@@ -1,7 +1,0 @@
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.535376Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.537385Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.539919Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.539931Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.540592Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.762356Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":386}
-aperture-1  | {"timestamp":"2026-05-27T02:30:25.767998Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":4,"resource.service.name":"expectation-A01-pilot"}

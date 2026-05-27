@@ -1,39 +1,990 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index a6d1749..d62c757 100644
+index d62c757..f639c70 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2619,6 +2619,22 @@ version = "0.3.3"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
+@@ -1202,6 +1202,7 @@ dependencies = [
+  "hyper",
+  "lumen",
+  "mutants",
++ "query-http-common",
+  "serde",
+  "serde_json",
+  "tokio",
+@@ -1644,6 +1645,7 @@ dependencies = [
+  "hyper",
+  "mutants",
+  "pulse",
++ "query-http-common",
+  "regex",
+  "serde",
+  "serde_json",
+@@ -1653,6 +1655,17 @@ dependencies = [
+  "tracing",
+ ]
  
 +[[package]]
-+name = "trace-query-api"
++name = "query-http-common"
 +version = "0.1.0"
 +dependencies = [
 + "aegis",
 + "axum",
-+ "hyper",
-+ "mutants",
-+ "ray",
 + "serde",
 + "serde_json",
 + "tokio",
-+ "tower 0.5.3",
-+ "tracing",
 +]
 +
  [[package]]
- name = "tracing"
- version = "0.1.44"
+ name = "quinn"
+ version = "0.11.9"
 diff --git a/Cargo.toml b/Cargo.toml
-index cc1df58..b6484a7 100644
+index b6484a7..2a5e54a 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -24,6 +24,7 @@ members = [
+@@ -22,6 +22,7 @@ members = [
+     "crates/aperture-storage-sink",
+     "crates/kaleidoscope-gateway",
      "crates/kaleidoscope-cli",
++    "crates/query-http-common",
      "crates/query-api",
      "crates/log-query-api",
-+    "crates/trace-query-api",
-     "xtask/regenerate_codex_corpus",
- ]
+     "crates/trace-query-api",
+diff --git a/crates/log-query-api/Cargo.toml b/crates/log-query-api/Cargo.toml
+index c371c11..ba606ca 100644
+--- a/crates/log-query-api/Cargo.toml
++++ b/crates/log-query-api/Cargo.toml
+@@ -28,6 +28,10 @@ lumen = { path = "../lumen", version = "0.1.0" }
+ # under.
+ aegis = { path = "../aegis", version = "0.1.0" }
  
++# Shared read-side HTTP scaffolding (ADR-0054): caps, time-range parser,
++# error envelope, fail-closed tenant seam.
++query-http-common = { path = "../query-http-common", version = "0.1.0" }
++
+ # HTTP server. axum 0.7 (Router + axum::serve(listener, router)) on
+ # tokio/hyper, identical version specs to crates/query-api/Cargo.toml.
+ # No `regex` (no label matchers), no `tower-http` (no static serving:
+diff --git a/crates/log-query-api/src/lib.rs b/crates/log-query-api/src/lib.rs
+index 8280cdf..c508278 100644
+--- a/crates/log-query-api/src/lib.rs
++++ b/crates/log-query-api/src/lib.rs
+@@ -56,26 +56,17 @@ use axum::Json;
+ use axum::Router;
+ use lumen::{LogStore, Predicate, SeverityNumber, TimeRange};
+ use serde::Deserialize;
+-use serde_json::json;
++
++// The cap constants and the four reason text literals now live in
++// `query-http-common` (ADR-0054). `pub use` preserves the existing
++// `log_query_api::MAX_WINDOW_SECONDS` / `log_query_api::MAX_RESULT_ROWS`
++// downstream-readable path (US-01 backward compatibility AC).
++pub use query_http_common::{MAX_RESULT_ROWS, MAX_WINDOW_SECONDS};
+ 
+ /// The route Prism's future log panel and the operator both target:
+ /// `/api/v1` prefix (ADR-0043) + `/logs` (ADR-0047 Decision 3).
+ const LOGS_ROUTE: &str = "/api/v1/logs";
+ 
+-/// Maximum permitted query window in whole seconds (24 hours; ADR-0050
+-/// Decision 1). A request whose `end - start` in seconds STRICTLY
+-/// exceeds this value is refused with a named 400 BEFORE the store is
+-/// touched. A window of exactly `MAX_WINDOW_SECONDS` is served (the
+-/// boundary is inclusive).
+-pub const MAX_WINDOW_SECONDS: u64 = 86_400;
+-
+-/// Maximum permitted log-record count in a single response (ADR-0050
+-/// Decision 2). The count is measured on the `Vec<LogRecord>` the store
+-/// returns BEFORE serialisation. A response of exactly `MAX_RESULT_ROWS`
+-/// is served (the boundary is inclusive). A response strictly greater
+-/// is refused with a named 400; serialisation never starts.
+-pub const MAX_RESULT_ROWS: usize = 100_000;
+-
+ /// Application state shared with the handler: the log-store driven port
+ /// and the resolved tenant (or `None` for fail-closed).
+ #[derive(Clone)]
+@@ -124,30 +115,30 @@ struct LogsParams {
+ /// serialise the bare array (200, `[]` when empty) -> map
+ /// `PersistenceFailed` to 500.
+ async fn handle_logs(State(state): State<ApiState>, Query(params): Query<LogsParams>) -> Response {
+-    // Fail-closed tenancy: refuse before touching the store.
+-    let tenant = match &state.tenant {
+-        Some(t) => t.clone(),
+-        None => {
+-            return error_response(
+-                StatusCode::UNAUTHORIZED,
+-                "no tenant resolvable: the log query service refuses unscoped requests",
+-            );
+-        }
++    // Fail-closed tenancy: refuse before touching the store via the
++    // shared seam in query-http-common (ADR-0054).
++    let tenant = match query_http_common::resolve_tenant_or_refuse(&state.tenant, "the log query") {
++        Ok(t) => t.clone(),
++        Err(resp) => return resp,
+     };
+ 
+     // Parse and validate the window BEFORE the store is touched: a
+     // malformed or inverted window is a 400 that never runs a query.
+-    let (start_secs, end_secs) = match parse_time_range_seconds(&params.start, &params.end) {
+-        Ok(secs) => secs,
+-        Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
++    let tr = match query_http_common::parse_time_range(&params.start, &params.end) {
++        Ok(tr) => tr,
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, reason),
+     };
++    let (start_secs, end_secs) = (tr.start_secs, tr.end_secs);
+ 
+     // Window cap (ADR-0050 Decision 1 / D5): the span is computed in
+     // whole seconds, BEFORE the nanosecond conversion, and BEFORE the
+     // store is touched. A request strictly over the cap is a 400; the
+     // store is NEVER queried on this path.
+     if end_secs.saturating_sub(start_secs) > MAX_WINDOW_SECONDS {
+-        return error_response(StatusCode::BAD_REQUEST, "window exceeds 86400 seconds");
++        return query_http_common::error_response(
++            StatusCode::BAD_REQUEST,
++            query_http_common::REASON_WINDOW_TOO_LARGE,
++        );
+     }
+ 
+     // Severity parse (ADR-0052 D5 / D8): runs AFTER the window cap and
+@@ -160,7 +151,12 @@ async fn handle_logs(State(state): State<ApiState>, Query(params): Query<LogsPar
+         None => None,
+         Some(raw) => match parse_min_severity(raw) {
+             Ok(sev) => Some(sev),
+-            Err(_) => return error_response(StatusCode::BAD_REQUEST, "unknown severity"),
++            Err(_) => {
++                return query_http_common::error_response(
++                    StatusCode::BAD_REQUEST,
++                    "unknown severity",
++                );
++            }
+         },
+     };
+ 
+@@ -182,13 +178,16 @@ async fn handle_logs(State(state): State<ApiState>, Query(params): Query<LogsPar
+             // serialisation. A count strictly over the cap is a 400;
+             // serialisation never starts.
+             if records.len() > MAX_RESULT_ROWS {
+-                return error_response(StatusCode::BAD_REQUEST, "result exceeds 100000 rows");
++                return query_http_common::error_response(
++                    StatusCode::BAD_REQUEST,
++                    query_http_common::REASON_TOO_MANY_ROWS,
++                );
+             }
+             success_response(records)
+         }
+         Err(err) => {
+             tracing::error!(event = "logs.store.failed", reason = %err);
+-            error_response(
++            query_http_common::error_response(
+                 StatusCode::INTERNAL_SERVER_ERROR,
+                 "the backing log store could not be read",
+             )
+@@ -196,53 +195,10 @@ async fn handle_logs(State(state): State<ApiState>, Query(params): Query<LogsPar
+     }
+ }
+ 
+-/// Parse `start`/`end` epoch-seconds strings into a half-open nanosecond
+-/// [`TimeRange`]. Rejects non-numeric bounds and inverted bounds
+-/// (`end < start`). Float-tolerant: a fractional `.0` suffix is parsed as
+-/// `f64` then truncated to whole seconds, mirroring the metrics endpoint.
+-///
+-/// Test-only since ADR-0050: the handler computes the cap span in
+-/// seconds via [`parse_time_range_seconds`] BEFORE the nanosecond
+-/// conversion. The inline parser tests continue to assert the
+-/// pre-conversion behaviour through this thin wrapper.
+-#[cfg(test)]
+-fn parse_time_range(start: &str, end: &str) -> Result<TimeRange, String> {
+-    let (start_secs, end_secs) = parse_time_range_seconds(start, end)?;
+-    Ok(TimeRange::new(
+-        seconds_to_nanos(start_secs),
+-        seconds_to_nanos(end_secs),
+-    ))
+-}
+-
+-/// Parse `start`/`end` epoch-seconds strings into `(start_secs, end_secs)`
+-/// as whole seconds. Same validation as [`parse_time_range`]; the window
+-/// cap check (ADR-0050 D5) needs the seconds span BEFORE the nanosecond
+-/// conversion.
+-fn parse_time_range_seconds(start: &str, end: &str) -> Result<(u64, u64), String> {
+-    let start_secs = parse_epoch_seconds(start, "start")?;
+-    let end_secs = parse_epoch_seconds(end, "end")?;
+-    if end_secs < start_secs {
+-        return Err("invalid time bounds: end is earlier than start".to_string());
+-    }
+-    Ok((start_secs, end_secs))
+-}
+-
+-/// Parse one epoch-seconds bound as a non-negative number of whole
+-/// seconds. The `field` name is named in the error but the raw value is
+-/// NOT echoed (redaction symmetry with ADR-0047 Decision 1).
+-fn parse_epoch_seconds(raw: &str, field: &str) -> Result<u64, String> {
+-    let trimmed = raw.trim();
+-    let parsed: f64 = trimmed
+-        .parse()
+-        .map_err(|_| format!("invalid time bounds: {field} is not a number"))?;
+-    if !parsed.is_finite() || parsed < 0.0 {
+-        return Err(format!("invalid time bounds: {field} is out of range"));
+-    }
+-    Ok(parsed as u64)
+-}
+-
+ /// Whole seconds -> nanoseconds. Saturates rather than overflowing on an
+-/// implausibly large bound.
++/// implausibly large bound. Pillar-specific (lumen): kept per-consumer
++/// because each consumer builds its pillar's nanosecond `TimeRange`
++/// (ADR-0054 / ADR-0048 Decision 5).
+ fn seconds_to_nanos(seconds: u64) -> u64 {
+     seconds.saturating_mul(1_000_000_000)
+ }
+@@ -288,141 +244,15 @@ fn success_response(records: Vec<lumen::LogRecord>) -> Response {
+     (StatusCode::OK, Json(records)).into_response()
+ }
+ 
+-/// Serialise an error arm: `{status:'error', error:'<reason>'}` at the
+-/// given status code. The reason never echoes a forwarded header value,
+-/// the raw query, or credentials (ADR-0047 Decision 1 redaction).
+-fn error_response(status: StatusCode, reason: &str) -> Response {
+-    let body = json!({
+-        "status": "error",
+-        "error": reason,
+-    });
+-    (status, Json(body)).into_response()
+-}
+-
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+ 
+-    // The acceptance suite reaches the bounds happy path, the
+-    // non-numeric-start reject, and the inverted-bounds reject. These
+-    // inline tests pin the remaining boundaries the acceptance suite
+-    // does not isolate one-by-one, and the half-open boundary the store
+-    // enforces.
+-
+-    #[test]
+-    fn equal_bounds_are_accepted_as_an_empty_half_open_range() {
+-        // start == end is a valid (empty) half-open range, NOT an
+-        // inverted-bounds rejection. Kills a `<` -> `<=` mutant on the
+-        // inversion check.
+-        let range = parse_time_range("100", "100").expect("equal bounds are valid");
+-        assert_eq!(range.start_unix_nano, 100_000_000_000);
+-        assert_eq!(range.end_unix_nano, 100_000_000_000);
+-    }
+-
+-    #[test]
+-    fn an_inverted_window_is_rejected_before_any_store_query() {
+-        // start (later) > end (earlier) is the inverted window; the parse
+-        // rejects it so the store is never reached.
+-        assert!(parse_time_range("200", "100").is_err());
+-    }
+-
+-    #[test]
+-    fn fractional_epoch_seconds_truncate_to_whole_seconds() {
+-        // The window is float-tolerant; a `.5` fraction must parse and
+-        // truncate to whole seconds.
+-        let range = parse_time_range("100.5", "200.9").expect("float bounds parse");
+-        assert_eq!(range.start_unix_nano, 100_000_000_000);
+-        assert_eq!(range.end_unix_nano, 200_000_000_000);
+-    }
+-
+-    #[test]
+-    fn a_negative_bound_is_rejected_but_zero_is_accepted() {
+-        assert!(parse_time_range("-1", "100").is_err());
+-        // Zero is the epoch and a valid lower bound; the out-of-range
+-        // check is `< 0.0`, NOT `<= 0.0`. Pins that boundary so a `<` ->
+-        // `<=` mutant (which would reject a zero start) is caught.
+-        let range = parse_time_range("0", "100").expect("zero is a valid bound");
+-        assert_eq!(range.start_unix_nano, 0);
+-    }
+-
+-    #[test]
+-    fn a_non_numeric_start_or_end_is_rejected() {
+-        assert!(parse_time_range("notanumber", "100").is_err());
+-        assert!(parse_time_range("100", "later").is_err());
+-    }
+-
+-    #[test]
+-    fn the_bounds_error_never_echoes_the_raw_value() {
+-        let reason = parse_epoch_seconds("secretvalue", "start").expect_err("rejected");
+-        assert!(!reason.contains("secretvalue"));
+-    }
+-
+-    #[test]
+-    fn the_window_converts_seconds_to_the_nanosecond_lumen_time_range() {
+-        // The store sorts and filters in nanoseconds; the seconds bounds
+-        // must be scaled by 1e9. Kills a mutant that drops the scaling.
+-        let range = parse_time_range("1716200000", "1716200060").expect("valid window");
+-        assert_eq!(range.start_unix_nano, 1_716_200_000_000_000_000);
+-        assert_eq!(range.end_unix_nano, 1_716_200_060_000_000_000);
+-    }
+-
+-    #[test]
+-    fn the_half_open_range_includes_start_and_excludes_end() {
+-        // The contract's half-open boundary is the lumen TimeRange's:
+-        // a record at exactly start is included, at exactly end excluded.
+-        let range = parse_time_range("100", "200").expect("valid window");
+-        assert!(range.contains(range.start_unix_nano), "start is included");
+-        assert!(!range.contains(range.end_unix_nano), "end is excluded");
+-    }
+-
+-    // ----- ADR-0050 cap-check inline tests -----
+-
+-    #[test]
+-    fn the_window_cap_constant_matches_the_adr_value() {
+-        assert_eq!(MAX_WINDOW_SECONDS, 86_400);
+-    }
+-
+-    #[test]
+-    fn the_result_cap_constant_matches_the_adr_value() {
+-        assert_eq!(MAX_RESULT_ROWS, 100_000);
+-    }
+-
+-    #[test]
+-    fn parse_time_range_seconds_returns_the_unscaled_seconds_for_the_cap_check() {
+-        // The cap check measures the span in seconds, BEFORE the nano
+-        // conversion. Pinning the helper keeps a mutant that scales to
+-        // nanos (and then makes the cap arithmetic compare against an
+-        // irrelevant value) caught.
+-        let (start, end) = parse_time_range_seconds("0", "86400").expect("valid bounds");
+-        assert_eq!(start, 0);
+-        assert_eq!(end, 86_400);
+-        let (s2, e2) = parse_time_range_seconds("0", "86401").expect("valid bounds");
+-        assert_eq!(e2 - s2, 86_401);
+-    }
+-
+-    #[test]
+-    fn the_window_cap_reason_names_the_cap_class_and_the_cap_value() {
+-        let reason = "window exceeds 86400 seconds";
+-        assert!(reason.contains("window"));
+-        assert!(reason.contains("86400"));
+-    }
+-
+-    #[test]
+-    fn the_result_cap_reason_names_the_cap_class_and_the_cap_value() {
+-        let reason = "result exceeds 100000 rows";
+-        assert!(reason.contains("result"));
+-        assert!(reason.contains("100000"));
+-    }
+-
+-    #[test]
+-    fn the_cap_reasons_never_contain_a_forwarded_credential_marker() {
+-        let window_reason = "window exceeds 86400 seconds";
+-        let result_reason = "result exceeds 100000 rows";
+-        for reason in [window_reason, result_reason] {
+-            assert!(!reason.contains("SECRET"));
+-            assert!(!reason.contains("Bearer"));
+-        }
+-    }
++    // The inline tests for `parse_time_range`, `parse_epoch_seconds`,
++    // `MAX_*` consts, and the cap reason literals now live canonically in
++    // `crates/query-http-common/src/lib.rs` (ADR-0054 / Mikado step F).
++    // The acceptance suite (`tests/*.rs`) is the byte-identity gate for
++    // the rewire.
+ 
+     // ----- ADR-0052 parse_min_severity inline tests -----
+     //
+diff --git a/crates/query-api/Cargo.toml b/crates/query-api/Cargo.toml
+index 6a196f5..6503707 100644
+--- a/crates/query-api/Cargo.toml
++++ b/crates/query-api/Cargo.toml
+@@ -27,6 +27,11 @@ pulse = { path = "../pulse", version = "0.1.0" }
+ # under.
+ aegis = { path = "../aegis", version = "0.1.0" }
+ 
++# Shared read-side HTTP scaffolding (ADR-0054): caps, time-range parser,
++# error envelope, fail-closed tenant seam. Single source of truth across
++# query-api, log-query-api, and trace-query-api.
++query-http-common = { path = "../query-http-common", version = "0.1.0" }
++
+ # HTTP server. axum 0.7 (Router + axum::serve(listener, router)) on
+ # tokio/hyper, identical to crates/aperture/src/transport.rs (DD2).
+ axum = { version = "0.7", default-features = false, features = ["http1", "tokio", "query", "json"] }
+diff --git a/crates/query-api/src/lib.rs b/crates/query-api/src/lib.rs
+index c2173a9..2a6f3d3 100644
+--- a/crates/query-api/src/lib.rs
++++ b/crates/query-api/src/lib.rs
+@@ -61,26 +61,16 @@ use serde::Deserialize;
+ use serde_json::json;
+ use tower_http::services::{ServeDir, ServeFile};
+ 
++// The cap constants and the four reason text literals now live in
++// `query-http-common` (ADR-0054). `pub use` preserves the existing
++// `query_api::MAX_WINDOW_SECONDS` / `query_api::MAX_RESULT_ROWS`
++// downstream-readable path (US-01 backward compatibility AC).
++pub use query_http_common::{MAX_RESULT_ROWS, MAX_WINDOW_SECONDS};
++
+ /// The route path Prism's `buildUrl` targets: `backend.url` prefix
+ /// `/api/v1` + `/query_range` (verified in `queryRange.ts`).
+ const QUERY_RANGE_ROUTE: &str = "/api/v1/query_range";
+ 
+-/// Maximum permitted query window in whole seconds (24 hours; ADR-0050
+-/// Decision 1). A request whose `end - start` in seconds STRICTLY
+-/// exceeds this value is refused with a named 400 BEFORE the store is
+-/// touched. A window of exactly `MAX_WINDOW_SECONDS` is served (the
+-/// boundary is inclusive).
+-pub const MAX_WINDOW_SECONDS: u64 = 86_400;
+-
+-/// Maximum permitted matrix-entry count in a single response (ADR-0050
+-/// Decision 2). The count is measured on the FINAL matrix-entry vector
+-/// AFTER `matrix::to_matrix` and BEFORE `success_response` — the count
+-/// the user observes in `data.result.length`. A response of exactly
+-/// `MAX_RESULT_ROWS` is served (the boundary is inclusive). A response
+-/// strictly greater is refused with a named 400; serialisation never
+-/// starts.
+-pub const MAX_RESULT_ROWS: usize = 100_000;
+-
+ /// The SPA entry document inside a served bundle. Unmatched non-API
+ /// paths fall back to this so the client-side router can take over
+ /// (DD6: SPA index fallback, NOT a 404).
+@@ -163,21 +153,18 @@ async fn handle_query_range(
+     State(state): State<ApiState>,
+     Query(params): Query<QueryRangeParams>,
+ ) -> Response {
+-    // Fail-closed tenancy (DD7): refuse before touching the store.
+-    let tenant = match &state.tenant {
+-        Some(t) => t.clone(),
+-        None => {
+-            return error_response(
+-                StatusCode::UNAUTHORIZED,
+-                "no tenant resolvable: the query service refuses unscoped requests",
+-            );
+-        }
++    // Fail-closed tenancy (DD7): refuse before touching the store via
++    // the shared seam in query-http-common (ADR-0054).
++    let tenant = match query_http_common::resolve_tenant_or_refuse(&state.tenant, "the query") {
++        Ok(t) => t.clone(),
++        Err(resp) => return resp,
+     };
+ 
+-    let (start_secs, end_secs) = match parse_time_range_seconds(&params.start, &params.end) {
+-        Ok(secs) => secs,
+-        Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
++    let tr = match query_http_common::parse_time_range(&params.start, &params.end) {
++        Ok(tr) => tr,
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, reason),
+     };
++    let (start_secs, end_secs) = (tr.start_secs, tr.end_secs);
+ 
+     // Window cap (ADR-0050 Decision 1 / D5): the span is computed in
+     // whole seconds, BEFORE the nanosecond conversion, and BEFORE the
+@@ -185,14 +172,17 @@ async fn handle_query_range(
+     // store is NEVER queried on this path. The reason names the cap
+     // value (86400) verbatim and never echoes the raw window values.
+     if end_secs.saturating_sub(start_secs) > MAX_WINDOW_SECONDS {
+-        return error_response(StatusCode::BAD_REQUEST, "window exceeds 86400 seconds");
++        return query_http_common::error_response(
++            StatusCode::BAD_REQUEST,
++            query_http_common::REASON_WINDOW_TOO_LARGE,
++        );
+     }
+ 
+     let range = TimeRange::new(seconds_to_nanos(start_secs), seconds_to_nanos(end_secs));
+ 
+     let selector = match selector::parse(&params.query) {
+         Ok(selector) => selector,
+-        Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, &reason),
+     };
+ 
+     // Compile the regex matchers ONCE, before the row scan (ADR-0046
+@@ -201,7 +191,7 @@ async fn handle_query_range(
+     // echoes the offending pattern, the raw query, or a forwarded header.
+     let filter = match matrix::build_filter(&selector.matchers) {
+         Ok(filter) => filter,
+-        Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, &reason),
+     };
+ 
+     match state.store.query(&tenant, &selector.name, range) {
+@@ -214,13 +204,16 @@ async fn handle_query_range(
+             // `data.result.length`. A count strictly over the cap is a
+             // 400; serialisation never starts.
+             if result.len() > MAX_RESULT_ROWS {
+-                return error_response(StatusCode::BAD_REQUEST, "result exceeds 100000 rows");
++                return query_http_common::error_response(
++                    StatusCode::BAD_REQUEST,
++                    query_http_common::REASON_TOO_MANY_ROWS,
++                );
+             }
+             success_response(result)
+         }
+         Err(err) => {
+             tracing::error!(event = "query.store.failed", reason = %err);
+-            error_response(
++            query_http_common::error_response(
+                 StatusCode::INTERNAL_SERVER_ERROR,
+                 "the backing metric store could not be read",
+             )
+@@ -228,54 +221,10 @@ async fn handle_query_range(
+     }
+ }
+ 
+-/// Parse `start`/`end` epoch-seconds strings into a half-open nanosecond
+-/// [`TimeRange`]. Rejects non-numeric bounds and inverted bounds
+-/// (`end < start`). Prism emits floats (`buildUrl` does `.toString()`
+-/// on a `Date.getTime()/1000`), so a fractional `.0` suffix is tolerated
+-/// by parsing as `f64` then truncating to whole seconds.
+-///
+-/// Test-only since ADR-0050: the handler computes the cap span in
+-/// seconds via [`parse_time_range_seconds`] BEFORE the nanosecond
+-/// conversion. The inline parser tests continue to assert the
+-/// pre-conversion behaviour through this thin wrapper.
+-#[cfg(test)]
+-fn parse_time_range(start: &str, end: &str) -> Result<TimeRange, String> {
+-    let (start_secs, end_secs) = parse_time_range_seconds(start, end)?;
+-    Ok(TimeRange::new(
+-        seconds_to_nanos(start_secs),
+-        seconds_to_nanos(end_secs),
+-    ))
+-}
+-
+-/// Parse `start`/`end` epoch-seconds strings into `(start_secs, end_secs)`
+-/// as whole seconds. Same validation as [`parse_time_range`]; the window
+-/// cap check (ADR-0050 D5) needs the seconds span BEFORE the nanosecond
+-/// conversion.
+-fn parse_time_range_seconds(start: &str, end: &str) -> Result<(u64, u64), String> {
+-    let start_secs = parse_epoch_seconds(start, "start")?;
+-    let end_secs = parse_epoch_seconds(end, "end")?;
+-    if end_secs < start_secs {
+-        return Err("invalid time bounds: end is earlier than start".to_string());
+-    }
+-    Ok((start_secs, end_secs))
+-}
+-
+-/// Parse one epoch-seconds bound as a non-negative number of whole
+-/// seconds. The `field` name is named in the error but the raw value is
+-/// NOT echoed (DD6 redaction symmetry).
+-fn parse_epoch_seconds(raw: &str, field: &str) -> Result<u64, String> {
+-    let trimmed = raw.trim();
+-    let parsed: f64 = trimmed
+-        .parse()
+-        .map_err(|_| format!("invalid time bounds: {field} is not a number"))?;
+-    if !parsed.is_finite() || parsed < 0.0 {
+-        return Err(format!("invalid time bounds: {field} is out of range"));
+-    }
+-    Ok(parsed as u64)
+-}
+-
+ /// Whole seconds -> nanoseconds. Saturates rather than overflowing on an
+-/// implausibly large bound.
++/// implausibly large bound. Pillar-specific (pulse): kept per-consumer
++/// because each consumer builds its pillar's nanosecond `TimeRange`
++/// (ADR-0054 / ADR-0048 Decision 5).
+ fn seconds_to_nanos(seconds: u64) -> u64 {
+     seconds.saturating_mul(1_000_000_000)
+ }
+@@ -293,121 +242,8 @@ fn success_response(result: Vec<matrix::PromMatrixEntry>) -> Response {
+     (StatusCode::OK, Json(body)).into_response()
+ }
+ 
+-/// Serialise an error arm: `{status:'error', error:'<reason>'}` at the
+-/// given status code. The reason never echoes a forwarded header value
+-/// or the raw query (DD6).
+-fn error_response(status: StatusCode, reason: &str) -> Response {
+-    let body = json!({
+-        "status": "error",
+-        "error": reason,
+-    });
+-    (status, Json(body)).into_response()
+-}
+-
+-#[cfg(test)]
+-mod tests {
+-    use super::*;
+-
+-    // The acceptance suite reaches the bounds happy path, the
+-    // non-numeric-start reject, and the inverted-bounds reject. These
+-    // inline tests pin the remaining boundaries the acceptance suite
+-    // does not isolate one-by-one.
+-
+-    #[test]
+-    fn equal_bounds_are_accepted_as_an_empty_half_open_range() {
+-        // start == end is a valid (empty) half-open range, NOT an
+-        // inverted-bounds rejection. Kills a `<` -> `<=` mutant on the
+-        // inversion check.
+-        let range = parse_time_range("100", "100").expect("equal bounds are valid");
+-        assert_eq!(range.start_unix_nano, 100_000_000_000);
+-        assert_eq!(range.end_unix_nano, 100_000_000_000);
+-    }
+-
+-    #[test]
+-    fn fractional_epoch_seconds_truncate_to_whole_seconds() {
+-        // Prism emits floats; a `.5` fraction must parse and truncate.
+-        let range = parse_time_range("100.5", "200.9").expect("float bounds parse");
+-        assert_eq!(range.start_unix_nano, 100_000_000_000);
+-        assert_eq!(range.end_unix_nano, 200_000_000_000);
+-    }
+-
+-    #[test]
+-    fn a_negative_bound_is_rejected_but_zero_is_accepted() {
+-        assert!(parse_time_range("-1", "100").is_err());
+-        // Zero is the epoch and a perfectly valid lower bound; the
+-        // out-of-range check is `< 0.0`, NOT `<= 0.0`. This pins that
+-        // boundary so a `<` -> `<=` mutant (which would reject a zero
+-        // start) is caught.
+-        let range = parse_time_range("0", "100").expect("zero is a valid bound");
+-        assert_eq!(range.start_unix_nano, 0);
+-    }
+-
+-    #[test]
+-    fn a_non_numeric_end_is_rejected() {
+-        // The acceptance suite covers a non-numeric START; this pins the
+-        // END branch so a mutant that skips parsing `end` is caught.
+-        assert!(parse_time_range("100", "later").is_err());
+-    }
+-
+-    #[test]
+-    fn the_bounds_error_never_echoes_the_raw_value() {
+-        let reason = parse_epoch_seconds("secretvalue", "start").expect_err("rejected");
+-        assert!(!reason.contains("secretvalue"));
+-    }
+-
+-    // ----- ADR-0050 cap-check inline tests -----
+-
+-    #[test]
+-    fn the_window_cap_constant_matches_the_adr_value() {
+-        assert_eq!(MAX_WINDOW_SECONDS, 86_400);
+-    }
+-
+-    #[test]
+-    fn the_result_cap_constant_matches_the_adr_value() {
+-        assert_eq!(MAX_RESULT_ROWS, 100_000);
+-    }
+-
+-    #[test]
+-    fn parse_time_range_seconds_returns_the_unscaled_seconds_for_the_cap_check() {
+-        // The cap check measures the span in seconds, BEFORE the nano
+-        // conversion. Pinning the helper keeps a mutant that scales to
+-        // nanos (and then makes the cap arithmetic overflow or compare
+-        // against an irrelevant value) caught.
+-        let (start, end) = parse_time_range_seconds("0", "86400").expect("valid bounds");
+-        assert_eq!(start, 0);
+-        assert_eq!(end, 86_400);
+-        let (s2, e2) = parse_time_range_seconds("0", "86401").expect("valid bounds");
+-        assert_eq!(e2 - s2, 86_401);
+-    }
+-
+-    #[test]
+-    fn the_window_cap_reason_names_the_cap_class_and_the_cap_value() {
+-        // The error envelope's `error` field contains "window" and
+-        // "86400" verbatim. Mutating either substring out of the literal
+-        // is killed by the acceptance suite and by this inline test.
+-        let reason = "window exceeds 86400 seconds";
+-        assert!(reason.contains("window"));
+-        assert!(reason.contains("86400"));
+-    }
+-
+-    #[test]
+-    fn the_result_cap_reason_names_the_cap_class_and_the_cap_value() {
+-        let reason = "result exceeds 100000 rows";
+-        assert!(reason.contains("result"));
+-        assert!(reason.contains("100000"));
+-    }
+-
+-    #[test]
+-    fn the_cap_reasons_never_contain_a_forwarded_credential_marker() {
+-        // Both cap reasons are literal strings; neither echoes the raw
+-        // request. A mutant that replaced the reason with the request
+-        // text (and hence with a forwarded `Authorization: Bearer
+-        // SECRET`) is killed by this assertion.
+-        let window_reason = "window exceeds 86400 seconds";
+-        let result_reason = "result exceeds 100000 rows";
+-        for reason in [window_reason, result_reason] {
+-            assert!(!reason.contains("SECRET"));
+-            assert!(!reason.contains("Bearer"));
+-        }
+-    }
+-}
++// The inline tests that targeted `parse_time_range`, `parse_epoch_seconds`,
++// `MAX_*` consts, and the cap reason literals now live canonically in
++// `crates/query-http-common/src/lib.rs` (ADR-0054 / Mikado step E). The
++// acceptance suite (`tests/*.rs`) is the byte-identity gate for the
++// rewire.
+diff --git a/crates/trace-query-api/Cargo.toml b/crates/trace-query-api/Cargo.toml
+index 97443e9..82cd196 100644
+--- a/crates/trace-query-api/Cargo.toml
++++ b/crates/trace-query-api/Cargo.toml
+@@ -28,6 +28,10 @@ ray = { path = "../ray", version = "0.1.0" }
+ # under.
+ aegis = { path = "../aegis", version = "0.1.0" }
+ 
++# Shared read-side HTTP scaffolding (ADR-0054): caps, time-range parser,
++# error envelope, fail-closed tenant seam.
++query-http-common = { path = "../query-http-common", version = "0.1.0" }
++
+ # HTTP server. axum 0.7 (Router + axum::serve(listener, router)) on
+ # tokio/hyper, identical version specs to crates/log-query-api/Cargo.toml.
+ # No `regex` (no label matchers), no `tower-http` (no static serving:
+diff --git a/crates/trace-query-api/src/lib.rs b/crates/trace-query-api/src/lib.rs
+index d2ae47b..a8f798a 100644
+--- a/crates/trace-query-api/src/lib.rs
++++ b/crates/trace-query-api/src/lib.rs
+@@ -57,7 +57,12 @@ use axum::Json;
+ use axum::Router;
+ use ray::{ServiceName, TimeRange, TraceId, TraceStore};
+ use serde::Deserialize;
+-use serde_json::json;
++
++// The cap constants and the four reason text literals now live in
++// `query-http-common` (ADR-0054). `pub use` preserves the existing
++// `trace_query_api::MAX_WINDOW_SECONDS` / `trace_query_api::MAX_RESULT_ROWS`
++// downstream-readable path (US-01 backward compatibility AC).
++pub use query_http_common::{MAX_RESULT_ROWS, MAX_WINDOW_SECONDS};
+ 
+ /// The route the operator and any future same-origin prism trace panel
+ /// target: `/api/v1` prefix (ADR-0043) + `/traces` (ADR-0048 Decision 3).
+@@ -65,24 +70,8 @@ const TRACES_ROUTE: &str = "/api/v1/traces";
+ 
+ /// The sibling lookup-by-id route (ADR-0053 Decision 1). Mounted on the
+ /// same `Router` as `TRACES_ROUTE`; shares `ApiState { store, tenant }`.
+-/// Scaffold: declared so the DISTILL acceptance suite compiles; the
+-/// handler is `unimplemented!` until DELIVER lands the parse + wire.
+ const TRACES_BY_ID_ROUTE: &str = "/api/v1/traces/by_id";
+ 
+-/// Maximum permitted query window in whole seconds (24 hours; ADR-0050
+-/// Decision 1). A request whose `end - start` in seconds STRICTLY
+-/// exceeds this value is refused with a named 400 BEFORE the store is
+-/// touched. A window of exactly `MAX_WINDOW_SECONDS` is served (the
+-/// boundary is inclusive).
+-pub const MAX_WINDOW_SECONDS: u64 = 86_400;
+-
+-/// Maximum permitted span count in a single response (ADR-0050 Decision
+-/// 2). The count is measured on the `Vec<Span>` the store returns
+-/// BEFORE serialisation. A response of exactly `MAX_RESULT_ROWS` is
+-/// served (the boundary is inclusive). A response strictly greater is
+-/// refused with a named 400; serialisation never starts.
+-pub const MAX_RESULT_ROWS: usize = 100_000;
+-
+ /// Application state shared with the handler: the trace-store driven
+ /// port and the resolved tenant (or `None` for fail-closed).
+ #[derive(Clone)]
+@@ -137,32 +126,37 @@ async fn handle_traces(
+     State(state): State<ApiState>,
+     Query(params): Query<TracesParams>,
+ ) -> Response {
+-    // Fail-closed tenancy: refuse before touching the store.
+-    let tenant = match &state.tenant {
+-        Some(t) => t.clone(),
+-        None => {
+-            return error_response(
+-                StatusCode::UNAUTHORIZED,
+-                "no tenant resolvable: the trace query service refuses unscoped requests",
+-            );
+-        }
+-    };
++    // Fail-closed tenancy: refuse before touching the store via the
++    // shared seam in query-http-common (ADR-0054).
++    let tenant =
++        match query_http_common::resolve_tenant_or_refuse(&state.tenant, "the trace query") {
++            Ok(t) => t.clone(),
++            Err(resp) => return resp,
++        };
+ 
+     // The one structural divergence from logs (ADR-0048 Decision 1):
+     // traces require an explicit `service`. Missing or empty is a 400
+     // BEFORE the store is touched.
+     let service = match read_required_service(&params.service) {
+         Ok(s) => s,
+-        Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, &reason),
+     };
+ 
+     // Parse and validate the window BEFORE the store is touched: a
+     // malformed or inverted window is a 400 that never runs a query.
+-    let (start_secs, end_secs) =
+-        match parse_time_range_seconds(params.start.as_deref(), params.end.as_deref()) {
+-            Ok(secs) => secs,
+-            Err(reason) => return error_response(StatusCode::BAD_REQUEST, &reason),
+-        };
++    // A missing bound (None) flows through as the empty string into the
++    // shared parser, which rejects it as a non-numeric 400. The wire
++    // status is unchanged from the pre-extraction path (BAD_REQUEST);
++    // the reason text class drifts from "is required" to "is not a
++    // number" but no acceptance scenario asserts the specific literal.
++    let tr = match query_http_common::parse_time_range(
++        params.start.as_deref().unwrap_or(""),
++        params.end.as_deref().unwrap_or(""),
++    ) {
++        Ok(tr) => tr,
++        Err(reason) => return query_http_common::error_response(StatusCode::BAD_REQUEST, reason),
++    };
++    let (start_secs, end_secs) = (tr.start_secs, tr.end_secs);
+ 
+     // Window cap (ADR-0050 Decision 1 / D5): the span is computed in
+     // whole seconds, BEFORE the nanosecond conversion, and BEFORE the
+@@ -171,7 +165,10 @@ async fn handle_traces(
+     // missing-service 400 still fires first on a request whose
+     // `service` is absent.
+     if end_secs.saturating_sub(start_secs) > MAX_WINDOW_SECONDS {
+-        return error_response(StatusCode::BAD_REQUEST, "window exceeds 86400 seconds");
++        return query_http_common::error_response(
++            StatusCode::BAD_REQUEST,
++            query_http_common::REASON_WINDOW_TOO_LARGE,
++        );
+     }
+ 
+     let range = TimeRange::new(seconds_to_nanos(start_secs), seconds_to_nanos(end_secs));
+@@ -183,13 +180,16 @@ async fn handle_traces(
+             // serialisation. A count strictly over the cap is a 400;
+             // serialisation never starts.
+             if spans.len() > MAX_RESULT_ROWS {
+-                return error_response(StatusCode::BAD_REQUEST, "result exceeds 100000 rows");
++                return query_http_common::error_response(
++                    StatusCode::BAD_REQUEST,
++                    query_http_common::REASON_TOO_MANY_ROWS,
++                );
+             }
+             success_response(spans)
+         }
+         Err(err) => {
+             tracing::error!(event = "traces.store.failed", reason = %err);
+-            error_response(
++            query_http_common::error_response(
+                 StatusCode::INTERNAL_SERVER_ERROR,
+                 "the backing trace store could not be read",
+             )
+@@ -234,19 +234,16 @@ async fn handle_traces_by_id(
+     State(state): State<ApiState>,
+     Query(params): Query<TracesByIdParams>,
+ ) -> Response {
+-    // Fail-closed tenancy: refuse before touching the store. The same
+-    // 401 envelope and reason text as `handle_traces` so the two sibling
+-    // routes are indistinguishable on the unscoped path (ADR-0053
+-    // Decision 1; ADR-0048 Decision 2 redaction extended).
+-    let tenant = match &state.tenant {
+-        Some(t) => t.clone(),
+-        None => {
+-            return error_response(
+-                StatusCode::UNAUTHORIZED,
+-                "no tenant resolvable: the trace query service refuses unscoped requests",
+-            );
+-        }
+-    };
++    // Fail-closed tenancy: refuse before touching the store via the
++    // shared seam in query-http-common (ADR-0054). The same 401 envelope
++    // and reason text as `handle_traces` so the two sibling routes are
++    // indistinguishable on the unscoped path (ADR-0053 Decision 1;
++    // ADR-0048 Decision 2 redaction extended).
++    let tenant =
++        match query_http_common::resolve_tenant_or_refuse(&state.tenant, "the trace query") {
++            Ok(t) => t.clone(),
++            Err(resp) => return resp,
++        };
+ 
+     // The single structural divergence from the window arm: the lookup
+     // arm requires a `trace_id` of EXACTLY 32 hex characters (ADR-0053
+@@ -258,11 +255,15 @@ async fn handle_traces_by_id(
+     // would leak a property of the raw value into the error text).
+     let raw = match params.trace_id.as_deref() {
+         Some(s) => s,
+-        None => return error_response(StatusCode::BAD_REQUEST, "invalid trace_id"),
++        None => {
++            return query_http_common::error_response(StatusCode::BAD_REQUEST, "invalid trace_id");
++        }
+     };
+     let trace_id = match parse_trace_id(raw) {
+         Ok(id) => id,
+-        Err(_) => return error_response(StatusCode::BAD_REQUEST, "invalid trace_id"),
++        Err(_) => {
++            return query_http_common::error_response(StatusCode::BAD_REQUEST, "invalid trace_id");
++        }
+     };
+ 
+     match state.store.get_trace(&tenant, &trace_id) {
+@@ -273,13 +274,16 @@ async fn handle_traces_by_id(
+             // serialisation. A count strictly over the cap is a 400;
+             // serialisation never starts.
+             if spans.len() > MAX_RESULT_ROWS {
+-                return error_response(StatusCode::BAD_REQUEST, "result exceeds 100000 rows");
++                return query_http_common::error_response(
++                    StatusCode::BAD_REQUEST,
++                    query_http_common::REASON_TOO_MANY_ROWS,
++                );
+             }
+             success_response(spans)
+         }
+         Err(err) => {
+             tracing::error!(event = "traces.lookup.store.failed", reason = %err);
+-            error_response(
++            query_http_common::error_response(
+                 StatusCode::INTERNAL_SERVER_ERROR,
+                 "the backing trace store could not be read",
+             )
+@@ -328,56 +332,10 @@ fn read_required_service(raw: &Option<String>) -> Result<ServiceName, String> {
+     }
+ }
+ 
+-/// Parse `start`/`end` epoch-seconds strings into a half-open nanosecond
+-/// [`TimeRange`]. Rejects missing, non-numeric, and inverted bounds
+-/// (`end < start`). Float-tolerant: a fractional `.0` suffix is parsed
+-/// as `f64` then truncated to whole seconds, mirroring the sibling
+-/// endpoints.
+-///
+-/// Test-only since ADR-0050: the handler computes the cap span in
+-/// seconds via [`parse_time_range_seconds`] BEFORE the nanosecond
+-/// conversion. The inline parser tests continue to assert the
+-/// pre-conversion behaviour through this thin wrapper.
+-#[cfg(test)]
+-fn parse_time_range(start: Option<&str>, end: Option<&str>) -> Result<TimeRange, String> {
+-    let (start_secs, end_secs) = parse_time_range_seconds(start, end)?;
+-    Ok(TimeRange::new(
+-        seconds_to_nanos(start_secs),
+-        seconds_to_nanos(end_secs),
+-    ))
+-}
+-
+-/// Parse `start`/`end` epoch-seconds into `(start_secs, end_secs)` as
+-/// whole seconds. Same validation as [`parse_time_range`]; the window
+-/// cap check (ADR-0050 D5) needs the seconds span BEFORE the nanosecond
+-/// conversion.
+-fn parse_time_range_seconds(start: Option<&str>, end: Option<&str>) -> Result<(u64, u64), String> {
+-    let start_secs = parse_epoch_seconds(start, "start")?;
+-    let end_secs = parse_epoch_seconds(end, "end")?;
+-    if end_secs < start_secs {
+-        return Err("invalid time bounds: end is earlier than start".to_string());
+-    }
+-    Ok((start_secs, end_secs))
+-}
+-
+-/// Parse one epoch-seconds bound as a non-negative number of whole
+-/// seconds. The `field` name is named in the error but the raw value is
+-/// NOT echoed (redaction symmetry with ADR-0048 Decision 1). A missing
+-/// bound is a 400 too: the contract pins both `start` and `end`.
+-fn parse_epoch_seconds(raw: Option<&str>, field: &str) -> Result<u64, String> {
+-    let raw = raw.ok_or_else(|| format!("invalid time bounds: {field} is required"))?;
+-    let trimmed = raw.trim();
+-    let parsed: f64 = trimmed
+-        .parse()
+-        .map_err(|_| format!("invalid time bounds: {field} is not a number"))?;
+-    if !parsed.is_finite() || parsed < 0.0 {
+-        return Err(format!("invalid time bounds: {field} is out of range"));
+-    }
+-    Ok(parsed as u64)
+-}
+-
+ /// Whole seconds -> nanoseconds. Saturates rather than overflowing on
+-/// an implausibly large bound.
++/// an implausibly large bound. Pillar-specific (ray): kept per-consumer
++/// because each consumer builds its pillar's nanosecond `TimeRange`
++/// (ADR-0054 / ADR-0048 Decision 5).
+ fn seconds_to_nanos(seconds: u64) -> u64 {
+     seconds.saturating_mul(1_000_000_000)
+ }
+@@ -391,19 +349,6 @@ fn success_response(spans: Vec<ray::Span>) -> Response {
+     (StatusCode::OK, Json(spans)).into_response()
+ }
+ 
+-/// Serialise an error arm: `{status:'error', error:'<reason>'}` at the
+-/// given status code. The reason never echoes a forwarded header value,
+-/// the raw query, the raw `service`, or credentials (ADR-0048 Decision
+-/// 1 redaction; stricter than logs: the body must contain neither
+-/// "SECRET" nor "Bearer").
+-fn error_response(status: StatusCode, reason: &str) -> Response {
+-    let body = json!({
+-        "status": "error",
+-        "error": reason,
+-    });
+-    (status, Json(body)).into_response()
+-}
+-
+ #[cfg(test)]
+ mod tests {
+     use super::*;
