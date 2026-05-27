@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `51400b1` (cycle 23 of overnight loop). N25 graduated: `feat(query-http-common): extract scaffolding from three read APIs` lifted the HTTP-shape seam ADR-0048 deferred. Q01 + Q02 re-verified GREEN at the new SHA — no operator-visible contract drift on the query-api binary after the refactor. K06 also GREEN.
+Last index refresh: 2026-05-27, observed HEAD `51400b1` (cycle 24 of overnight loop, kaleidoscope HEAD unchanged from cycle 23). A02, K12, L06 spot re-verified GREEN. No flake this cycle.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

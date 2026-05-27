@@ -11,4 +11,6 @@ info: installing component 'clippy'
 info: installing component 'rust-std'
 info: installing component 'rustc'
 info: installing component 'rustfmt'
-    Finished `release` profile [optimized] target(s) in 0.40s
+   Compiling beacon v0.1.0 (/src/crates/beacon)
+   Compiling loom v0.1.0 (/src/crates/loom)
+    Finished `release` profile [optimized] target(s) in 2.70s
