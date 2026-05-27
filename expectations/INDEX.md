@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `9895919` (cycle 17 of overnight loop). One docs/presentation commit for trace-lookup-by-id-v0 closure. Spot re-verified A06, K01, X12: GREEN.
+Last index refresh: 2026-05-27, observed HEAD `7f24998` (cycle 18 of overnight loop). One DISCUSS commit (query-http-common-v0, N25 added). Spot re-verified A05/A08/K05: K05 GREEN at first try; A05 hit a docker registry lease-not-found flake and A08 the recurring `/readyz` timeout — both GREEN on cold retry (eighth and ninth flake occurrence; pattern docked, no new issue).
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

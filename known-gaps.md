@@ -314,6 +314,19 @@ That loop is not under contract at HEAD. Open the EG-prefix
 EG03 is the lowest-friction first because query-api is the
 most-shipped of the three read APIs.
 
+## N25 — query-http-common-v0 in DISCUSS
+
+Commit `7f24998` (2026-05-27) names the HTTP-shape seam that
+ADR-0048 deferred: the three read APIs (query-api,
+log-query-api, trace-query-api) currently re-implement
+parse-tenant + cap-rejection + error-response shape; a
+common crate is being scoped to lift the seam. No DESIGN
+yet. Pure refactor wave: when it lands, no operator-visible
+contract changes (the wire shape stays Prometheus-compatible
+JSON `{"status":...,"error":...}`), but Q02 and its future
+LQ/TQ siblings will exercise the SAME code path. Recheck
+Q02 evidence after DELIVER lands.
+
 ## N24 — trace-lookup-by-id-v0 graduated, still blocked by N17
 
 Wave shipped DELIVER at `3908240` ("feat(trace-query-api):
