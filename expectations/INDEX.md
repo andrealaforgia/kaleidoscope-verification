@@ -46,7 +46,7 @@ Live status table. Updated when an expectation moves between states.
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `34131c9` (cycle 7 of overnight loop). S03 cold retry GREEN: issue 007 closed as flake (same disposition as 006). E03, K03, X02 spot re-verified GREEN. N22 progressed (pulse-cardinality-watermark-v0 reached DESIGN/DEVOPS: 10k cap, partial-apply, forward gate).
+Last index refresh: 2026-05-27, observed HEAD `34131c9` (cycle 8 of overnight loop, kaleidoscope HEAD unchanged from cycle 7). A15 flaked on the first run of the batch with the same shape as issues 006/007 then GREEN on cold retry; A16, K05 GREEN. The flake-on-first-compose-run pattern is now recorded three times, always recovered by a cold retry.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed

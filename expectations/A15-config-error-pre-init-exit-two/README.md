@@ -25,8 +25,12 @@ And exits with code 2.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-06T23:32 UTC
-- Kaleidoscope SHA: `6b09c0d4eb38fc2e83a4fc8cf3f9bad6d9813b15`
+- Last verified: 2026-05-27 UTC at HEAD (`34131c9`) — cycle 8
+  cold retry GREEN after a flake on the first attempt (same
+  `/readyz` timeout pattern as the closed-as-flake issues 006
+  and 007; no new issue opened per the established
+  disposition).
+- Earlier satisfaction: 2026-05-06T23:32 UTC at HEAD `6b09c0d`.
 - Kaleidoscope dirty: `no`
 - Method: the runner writes a malformed TOML file with
   `bind_addr = "this-is-not-a-valid-socket-addr"`, runs a one-off
