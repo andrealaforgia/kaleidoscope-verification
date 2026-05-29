@@ -1,0 +1,5 @@
+code_a_contains=200
+code_b_regex=200
+code_c_both=400
+---both response---
+{"status":"error","error":"specify body_regex or body_contains, not both"}

@@ -77,3 +77,18 @@ subscriber lands, the runner should tighten: assert
 `event=health.startup.refused` (or whichever shape the
 subscriber uses) on stderr, rather than the bare `Err(...)`
 text. Track the upgrade alongside the fix.
+
+## Addendum (cycle 31, 2026-05-29, HEAD 35c314a)
+
+The same defect is now confirmed in a SECOND binary:
+`crates/log-query-api/src/main.rs` emits `log_query_api_starting`
+and `listener_bound` via `tracing::info!` and a
+`health.startup.refused` via `tracing::error!`, but installs no
+subscriber, so all three are dropped. LQ01's evidence
+`log-query-api.stderr.txt` is empty for exactly this reason. LQ01
+sidesteps it by asserting on the HTTP status + body, but a future
+LQ fails-closed-no-tenant expectation will hit the same wall Q01
+did and should assert on the bare `Err(...)` text until the
+subscriber lands. The "new binaries should match aperture's
+posture" point above now covers query-api AND log-query-api;
+trace-query-api is likely a third instance (unverified).

@@ -1,0 +1,1 @@
+OK — log-query-api accepts each body filter alone (200/200) and refuses both together (400 status=error: "specify body_regex or body_contains, not both")

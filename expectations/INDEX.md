@@ -39,14 +39,14 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 64 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1) |
+| `satisfied` | 65 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1 + LQ 1) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-27, observed HEAD `cf0ac15` (cycle 30 of overnight loop, kaleidoscope HEAD unchanged from cycle 29). A02, K09, X02 spot re-verified GREEN. No flake this cycle.
+Last index refresh: 2026-05-29, observed HEAD `35c314a` (cycle 31 of overnight loop). Kaleidoscope advanced `cf0ac15..35c314a` (11 commits): log-body-text-search and log-body-regex-search landed as real features on the log-query-api surface, plus a lumen Gate-5 mutation job and presentation docs. New expectation **LQ01** opens the log-query-api surface, verifying the `body_contains`/`body_regex` mutual-exclusion 400 at the running HTTP listener. GREEN at first attempt. The catalogue now builds log-query-api itself (catalogue-authored `harness/Dockerfile.log-query-api`), retiring the lazy "blocked on a project Dockerfile" framing in N23/N26.
 60 of 60 re-verified expectations green at HEAD; X01 + X05
 remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
@@ -117,7 +117,7 @@ that can have an expectation, tracked?".
 | `crates/kaleidoscope-gateway` binary | OTLP receiver + storage sink (operator) | **G** | 2 (G01, G02 satisfied) | Multi-stage `Dockerfile.gateway`, ports :4317 + :4318, persists into lumen/ray/pulse. G01 = startup smoke; G02 = fsync probe refuses read-only `/data` (anchored at `5ccf4a9`, ADR-0049 §1). G03+ (OTLP accept per signal, durability mid-write) are the natural next batch. See `known-gaps.md` N16. |
 | `crates/query-api` binary | Prometheus `/api/v1/query_range` over Pulse (operator) | **Q** | 2 (Q01, Q02 satisfied) | Multi-stage `Dockerfile.query-api`, port :9090. Q01 = fails closed without tenant; Q02 = honest 400 on oversized window (cap 86400 s, anchored at `b71ad8a`/ADR-0050). Q03+ (result-size cap, label matchers, regex matchers, static-serve, 400-on-bad-promql) are the natural next batch. See `known-gaps.md` N16 + N21. |
 | End-to-end via kaleidoscope-gateway | OTLP → pillars → query-api round-trip (operator) | **EG** | 1 (EG01 satisfied) | EG01 verifies the integration thesis under contract for the first time: telemetrygen → gateway :4318 → Pulse store → query-api :9090 → matrix response. EG02-EG05 (gRPC ingest, logs via log-query-api, traces, multi-tenant isolation, durability mid-write) are the natural next batch. See `known-gaps.md` N18 + N19. |
-| `crates/log-query-api` binary | `/api/v1/logs` over Lumen (operator) | **LQ** | 0 — deferred (no Dockerfile yet) | Binary builds in-workspace but lacks a packaging Dockerfile at HEAD. See `known-gaps.md` N16. |
+| `crates/log-query-api` binary | `/api/v1/logs` over Lumen (operator) | **LQ** | 1 (LQ01 satisfied) | log-query-api has a binary target + axum listener at HEAD (`crates/log-query-api/src/main.rs`). The project ships no Dockerfile, so the catalogue authors its own (`harness/Dockerfile.log-query-api`, modelled verbatim on `Dockerfile.query-api`) and stands the binary up. LQ01 = `body_contains`/`body_regex` mutual-exclusion 400 (ADR-0056 DD4, feat `1bfa609`/`6cecd63`). LQ02 (body-filter round-trip on a seeded store) + fails-closed-no-tenant are the natural next batch. See `known-gaps.md` N16 + N23. |
 | `crates/trace-query-api` binary | `/api/v1/traces` over Ray (operator) | **TQ** (when packaged) | 0 — deferred (no Dockerfile yet) | Graduated to DELIVER at `87d5e6e` (2026-05-26): `crates/trace-query-api/` ships lib + binary serving `GET /api/v1/traces?service=&start=&end=` with the same fails-closed-no-tenant posture as query-api. No packaging Dockerfile at HEAD, same as log-query-api. See `known-gaps.md` N17 (updated). |
 
 The two columns to watch are *Tracked entries* (how the catalogue

@@ -316,12 +316,20 @@ most-shipped of the three read APIs.
 
 ## N26 — log-body-text-search-v0 in DESIGN/DEVOPS
 
-Commits `29f109b` (discuss) + `de40d49` (design) + `cf0ac15`
-(devops) at 2026-05-27. Design Decision: extend `lumen::Predicate`
-with `body_contains` substring filter, applied at query time.
-No DELIVER yet. Still doubly blocked: log-query-api has no
-packaging Dockerfile (N16); when that lands, LQ-prefix opens
-and this contract becomes drafabile.
+**RESOLVED (cycle 31, 2026-05-29).** DELIVER landed: `1bfa609`
+("feat(log-query-api): body_contains substring filter") and
+`6cecd63` ("feat(log-query-api): body_regex regex filter"), with
+mutual exclusion at `ca25818` (design). The "blocked on a
+project Dockerfile" framing was lazy: log-query-api has a binary
+target and an axum listener, so the catalogue stands it up itself
+via the catalogue-authored `harness/Dockerfile.log-query-api`.
+**LQ01** verifies the body_contains/body_regex mutual-exclusion
+400 at the running listener, GREEN at first attempt at `35c314a`.
+
+Original note: commits `29f109b` (discuss) + `de40d49` (design) +
+`cf0ac15` (devops) at 2026-05-27. Design Decision: extend
+`lumen::Predicate` with `body_contains` substring filter, applied
+at query time.
 
 ## N25 — query-http-common-v0 graduated
 
@@ -343,10 +351,15 @@ Wave shipped DELIVER at `3908240` ("feat(trace-query-api):
 `/api/v1/traces/by_id` with 32-hex case-insensitive trace_id",
 ADR-0053). `parse_trace_id` rejects empty/missing/wrong-length/
 non-hex with a literal 400. The library contract is now real
-but `trace-query-api` still lacks a packaging Dockerfile
-(N17), so the operator-visible surface remains unreachable
-from the catalogue. TQ-prefix opens the moment the Dockerfile
-lands.
+but `trace-query-api` still lacks a packaging Dockerfile (N17).
+As of cycle 31 this is no longer a true blocker: LQ01 proved the
+catalogue can author its own runtime Dockerfile for a binary the
+project does not package (`harness/Dockerfile.log-query-api`,
+modelled on `Dockerfile.query-api`). The same recipe opens
+TQ-prefix, given trace-query-api has the same binary-target +
+axum-listener shape. The honest remaining work is a
+catalogue-authored `Dockerfile.trace-query-api` plus a seeded Ray
+store for the by-id lookup round-trip, not the Dockerfile itself.
 
 ## N23 — log-query-severity-filter-v0 graduated, still blocked by N16
 
@@ -354,11 +367,16 @@ Wave shipped DELIVER at `e281fca` ("feat(log-query-api):
 min_severity filter via Predicate::min_severity, before cap").
 Contract: `GET /api/v1/logs?min_severity=<level>` filters rows
 case-insensitively, BEFORE the result-size cap. The library
-contract is now real but `log-query-api` still lacks a
-packaging Dockerfile (N16), so the operator-visible surface
-remains unreachable from the catalogue. LQ02 candidate
-remains drafabile alongside LQ01 the moment the Dockerfile
-lands.
+contract is now real. **UNBLOCKED (cycle 31):** the catalogue
+now stands log-query-api up via the catalogue-authored
+`harness/Dockerfile.log-query-api` (the project ships none, but
+the binary target + axum listener make a packaging Dockerfile a
+catalogue concern, not a blocker). LQ01 is live. The min_severity
+filter this note tracks is a clean LQ-prefix candidate now: a
+`?min_severity=warn` request returning only the warn+ rows from a
+seeded store, alongside the LQ02 body-filter round-trip. Both need
+a seeded Lumen store (the same fixture the durability set needs),
+which is the remaining work, not the Dockerfile.
 
 ## N22 — pulse-cardinality-watermark-v0 graduated
 

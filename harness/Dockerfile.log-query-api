@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1.7
+#
+# Kaleidoscope log-query-api runtime image — CATALOGUE-AUTHORED.
+#
+# Honesty note: unlike Dockerfile.query-api and Dockerfile.gateway,
+# the kaleidoscope project does NOT ship a Dockerfile for
+# log-query-api at HEAD (35c314a). This image is authored by the
+# expectations catalogue purely to stand the binary up as a
+# black-box service so its HTTP contract can be observed. It is
+# modelled verbatim on the project's Dockerfile.query-api (same
+# rust:1.88-slim-bookworm builder, same debian:bookworm-slim
+# runtime, same --locked release build) so the build the catalogue
+# exercises matches what the project's CI toolchain would produce.
+# The binary, the workspace, and Cargo.lock are all the project's
+# own, taken from the `git archive HEAD` snapshot. The only
+# catalogue-introduced artefact is this file.
+#
+# `log-query-api` is the Lumen read side: an axum HTTP service over
+# the durable Lumen log store. It opens the store at
+# `pillar_root/lumen` (the same path the gateway writes through),
+# resolves the tenant from KALEIDOSCOPE_LOG_QUERY_TENANT
+# (fail-closed if unset), runs the Earned-Trust probe, then binds
+# the listener (default 0.0.0.0:9091).
+
+# -----------------------------------------------------------------
+# Stage 1 — Build
+# -----------------------------------------------------------------
+FROM rust:1.88-slim-bookworm AS builder
+
+WORKDIR /workspace
+
+COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+COPY crates ./crates
+COPY xtask ./xtask
+
+RUN cargo build --release -p log-query-api --locked
+
+# -----------------------------------------------------------------
+# Stage 2 — Runtime
+# -----------------------------------------------------------------
+FROM debian:bookworm-slim AS runtime
+
+COPY --from=builder /workspace/target/release/log-query-api \
+    /usr/local/bin/log-query-api
+
+# The Lumen pillar lives under this volume at /data/lumen. Mount the
+# same volume the gateway writes to so the read service sees what was
+# ingested. The binary defaults pillar_root to /data and the
+# listener to 0.0.0.0:9091.
+ENV KALEIDOSCOPE_PILLAR_ROOT=/data
+ENV KALEIDOSCOPE_LOG_QUERY_ADDR=0.0.0.0:9091
+WORKDIR /data
+VOLUME ["/data"]
+
+# Lumen log query HTTP API.
+EXPOSE 9091
+
+ENTRYPOINT ["/usr/local/bin/log-query-api"]
