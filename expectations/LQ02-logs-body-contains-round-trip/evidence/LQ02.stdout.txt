@@ -1,0 +1,7 @@
+match_code=200
+absent_code=200
+needle=lq02-needle-ziggurat absent=lq02-absent-qwerty
+---match head---
+[{"observed_time_unix_nano":1780092589605723964,"severity_number":9,"severity_text":"Info","body":"lq02-needle-ziggurat","attributes":{"app":"server"},"resource_attributes":{"service.name":"lq02-pilot"},"trace_id":null,"span_id":null},{"observed_time_unix_nano":1780092589618825755,"severity_number":9,"severity_text":"Info","body":"lq02-needle-ziggurat","attributes":{"app":"server"},"resource_attri
+---absent head---
+[]

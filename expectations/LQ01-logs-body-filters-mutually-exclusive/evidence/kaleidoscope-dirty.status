@@ -1,5 +1,3 @@
-A  docs/feature/gate-5-mutants-batch-v0/discuss/dor-validation.md
-A  docs/feature/gate-5-mutants-batch-v0/discuss/outcome-kpis.md
-A  docs/feature/gate-5-mutants-batch-v0/discuss/story-map.md
-A  docs/feature/gate-5-mutants-batch-v0/discuss/user-stories.md
-A  docs/feature/gate-5-mutants-batch-v0/discuss/wave-decisions.md
+M  .github/workflows/ci.yml
+A  docs/feature/gate-5-mutants-batch-v0/devops/environments.yaml
+A  docs/feature/gate-5-mutants-batch-v0/devops/wave-decisions.md

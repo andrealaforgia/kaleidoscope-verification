@@ -24,6 +24,7 @@ INLINE_SCRIPT="$3"
 SNAPSHOT_DIR="$HARNESS_DIR/.snapshot"
 GW_IMAGE="kaleidoscope-expectations/kaleidoscope-gateway:under-test"
 QAPI_IMAGE="kaleidoscope-expectations/query-api:under-test"
+LQAPI_IMAGE="kaleidoscope-expectations/log-query-api:under-test"
 
 echo "step 1a: build kaleidoscope-gateway image" >&2
 docker build \
@@ -41,10 +42,21 @@ docker build \
     "$SNAPSHOT_DIR" \
     > "$EVIDENCE_DIR/${LABEL}.query-api.build.txt" 2>&1
 
+# log-query-api: the project ships no Dockerfile, so inject the
+# catalogue-authored one into the snapshot (see run-log-query-api.sh).
+echo "step 1c: build log-query-api image" >&2
+cp "$HARNESS_DIR/Dockerfile.log-query-api" "$SNAPSHOT_DIR/Dockerfile.log-query-api"
+docker build \
+    --quiet \
+    -t "$LQAPI_IMAGE" \
+    -f "$SNAPSHOT_DIR/Dockerfile.log-query-api" \
+    "$SNAPSHOT_DIR" \
+    > "$EVIDENCE_DIR/${LABEL}.log-query-api.build.txt" 2>&1
+
 DATA_HOST=$(mktemp -d -t eg-${LABEL}-XXXXXX)
 trap "rm -rf '$DATA_HOST'" EXIT
 
-export GW_IMAGE QAPI_IMAGE DATA_HOST
+export GW_IMAGE QAPI_IMAGE LQAPI_IMAGE DATA_HOST
 bash -c "$INLINE_SCRIPT" \
     > "$EVIDENCE_DIR/${LABEL}.stdout.txt" \
     2> "$EVIDENCE_DIR/${LABEL}.stderr.txt"

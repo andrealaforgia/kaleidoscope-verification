@@ -307,12 +307,33 @@ That loop is not under contract at HEAD. Open the EG-prefix
   via the trace-query-api when it ships (or via a Ray library
   read in the interim).
 - EG02: OTLP/HTTP log into gateway lands in Lumen, observable
-  via log-query-api `GET /api/v1/logs`.
+  via log-query-api `GET /api/v1/logs`. **DONE (cycle 32):** this
+  is exactly what LQ02 verifies (gateway → Lumen → log-query-api
+  body_contains round-trip). Filed under the LQ prefix rather than
+  EG because the behaviour under test is the log read API's body
+  filter, not merely the transport round-trip.
 - EG03: OTLP/HTTP metric into gateway lands in Pulse, observable
-  via query-api `GET /api/v1/query_range`.
+  via query-api `GET /api/v1/query_range`. (This is what EG01
+  already does.)
 
-EG03 is the lowest-friction first because query-api is the
-most-shipped of the three read APIs.
+## N27 — EG01 binds bare host ports 4318/9090, flakes under a squatter
+
+EG01 (and the original EG driver) publish the gateway on host
+`:4317-4318` and query-api on `:9090`. During cycle 32 a parallel
+`kaleidoscope-e2e-*` compose stack (the kaleidoscope DEV side's
+own end-to-end harness, a different docker-compose project from
+this catalogue's `kaleidoscope-expectations`) was left running and
+squatting exactly those ports, so any EG run that reused them
+would fail at container start with "port is already allocated" —
+a harness collision, not a behaviour failure. LQ02 sidesteps it by
+binding unique high host ports (`14318`, `19091`) and NOT tearing
+down containers the catalogue does not own. EG01 should be
+hardened the same way (unique ports, or a pre-flight port-free
+check that skips-with-note rather than failing). Until then, an
+EG01 red under this exact "port is already allocated" stderr is a
+known docked harness flake, not an operator-observable regression;
+cross-check by confirming the squatter with `docker ps` before
+re-running on free ports.
 
 ## N26 — log-body-text-search-v0 in DESIGN/DEVOPS
 

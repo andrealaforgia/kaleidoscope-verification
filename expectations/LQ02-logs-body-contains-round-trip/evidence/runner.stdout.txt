@@ -1,0 +1,1 @@
+OK — log body round-trips gateway->Lumen->log-query-api; body_contains=lq02-needle-ziggurat returns 11 matching record(s), all bodies contain the needle; a non-matching substring returns []
