@@ -20,11 +20,16 @@ Gate 1 of the CI contract per ADR-0005.
 
 ## Verification
 
-- Status: `broken`
-- Last verified: 2026-05-19 UTC at HEAD (`4855d69`) — broken
-  with exit 101 (`cargo test --workspace --all-targets --locked`
-  fails to compile self-observe due to workspace path-dep
-  resolution; see [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)).
+- Status: `satisfied`
+- Last verified: 2026-05-31 UTC at HEAD (`bbded968`, clean tree) —
+  GREEN, exit 0, every `test result: ok`. The 2026-05-19 `broken`
+  verdict was a harness artefact, not a kaleidoscope defect: under
+  Docker Desktop's ~2-4 GB VM cap a parallel `--all-targets` codegen
+  run OOM-killed rustc and left partial rlibs, producing a spurious
+  E0463 "can't find crate" cascade ([issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md),
+  now `resolved`). Fixed by `CARGO_BUILD_JOBS=1` in the runner;
+  cross-confirmed by Bea Implementer's clean 7.18s `self-observe`
+  build and a local `-j1` full-workspace GREEN diagnostic.
 - Previously satisfied: 2026-05-07 UTC at HEAD `c8d8a55`.
 - Method: `docker run rust:1.88-slim-bookworm` mounting the snapshot
   read-write under `/src` plus persistent caches under

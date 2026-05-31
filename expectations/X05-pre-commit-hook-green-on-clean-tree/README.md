@@ -23,11 +23,12 @@ contract (ADR-0005) as can run in seconds.
 
 ## Verification
 
-- Status: `broken`
-- Last verified: 2026-05-19 UTC at HEAD (`4855d69`) — broken at
-  the `cargo test --workspace --all-targets --locked` stage of
-  the hook, which inherits X01's self-observe path-dep failure;
-  see [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
+- Status: `satisfied`
+- Last verified: 2026-05-31 UTC at HEAD (`bbded968`) — GREEN, exit 0,
+  `[pass] all pre-commit gates green`. The 2026-05-19 `broken` verdict
+  inherited X01's harness OOM artefact, not a kaleidoscope defect; see
+  [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
+  (now `resolved`). Fixed by `CARGO_BUILD_JOBS=1` in the runner.
 - Previously satisfied: 2026-05-07 UTC at HEAD `c8d8a55`.
 - Method: identical setup pattern to X02 (cargo-deny installed
   into `harness/.workspace-build-cache/cargo-install/` cache),

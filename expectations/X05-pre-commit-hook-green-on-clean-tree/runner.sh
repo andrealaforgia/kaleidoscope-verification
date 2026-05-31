@@ -41,10 +41,17 @@ docker run --rm \
     -e PATH=/cache/cargo-install/bin:/usr/local/cargo/bin:/usr/bin:/bin \
     -e CARGO_PROFILE_TEST_DEBUG=0 \
     -e CARGO_PROFILE_DEV_DEBUG=0 \
+    -e CARGO_BUILD_JOBS=1 \
     -w /src \
     rust:1.88-slim-bookworm \
     bash -c '
         set -euo pipefail
+        # CARGO_BUILD_JOBS=1: serialise codegen so the pre-commit gate
+        # (clippy + cargo test --workspace) does not OOM-kill rustc
+        # under the ~2-4 GB Docker VM cap and emit spurious E0463
+        # "can'\''t find crate" cascades. Same harness-resource artefact
+        # that broke X01; see issue 004 and the X01 runner comment.
+        # Proven by the 2026-05-31 -j1 diagnostic going GREEN.
         apt-get update >/dev/null
         apt-get install -y --no-install-recommends pkg-config libssl-dev ca-certificates git >/dev/null 2>&1 || true
         rm -rf /var/lib/apt/lists/* || true

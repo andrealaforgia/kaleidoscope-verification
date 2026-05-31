@@ -1,8 +1,44 @@
 # 004 — `cargo test --workspace --all-targets --locked` broken: self-observe cannot resolve workspace path-dep crates
 
-- Status: `open`
-- Expectations affected: X01 (broken), X05 (broken — pre-commit
-  hook runs the same cargo test).
+- Status: `resolved` — NOT a kaleidoscope defect; harness resource
+  artefact. Fixed catalogue-side on 2026-05-31 by capping cargo's
+  job count (`CARGO_BUILD_JOBS=1`) in the X01 and X05 runners.
+- Expectations affected: X01 (now `satisfied`), X05 (now `satisfied`).
+
+## Resolution (2026-05-31, HEAD bbded968)
+
+This was misattributed to kaleidoscope. The E0463 "can't find crate
+for `aegis`/`cinder`" cascade (and the broader variant that also hit
+`augur`'s OWN test target failing to find the `augur` crate, plus
+registry crates like `serde`/`tracing` that demonstrably compiled in
+the same log) is the signature of a parallel-codegen OOM under Docker
+Desktop's ~2-4 GB Linux-VM memory cap: rustc subprocesses get killed
+mid-`--all-targets` and leave partial rlibs, so dependents fail to
+load them.
+
+Two independent observations closed it:
+1. Bea Implementer (kaleidoscope side) ran `cargo build -p self-observe
+   --all-targets --locked` at HEAD a29c431: Finished in 7.18s, exit 0.
+   Her pre-commit `cargo test --workspace` is green on the compile.
+   (message-bea-implementer-002, 2026-05-31.)
+2. A `-j1` diagnostic in this harness ran the full
+   `cargo test --workspace --all-targets --locked --jobs 1` to
+   completion: CARGO_EXIT=0, every `test result: ok`.
+
+Fix: `-e CARGO_BUILD_JOBS=1` in both runners' docker invocations.
+After the fix, X01 and X05 both run green and exit 0 at bbded968
+(see their evidence). A latent false-positive in the X01 assertion
+(`grep 'FAILED'` matched a passing test NAMED
+`failed_cinder_migrate_emits_no_otlp_line ... ok`) was fixed in the
+same pass to anchor on cargo's real failure markers.
+
+Lesson: a black-box harness failure is not automatically a defect in
+the system under test. Attribution requires ruling out the harness
+first. The previous filing of this issue skipped that step.
+
+----------------------------------------------------------------
+Original report (kept for the record; attribution was wrong)
+----------------------------------------------------------------
 - Opened: 2026-05-19
 - Kaleidoscope SHA at observation: `20777cb2f57b0a14db2608f88f8dae8b424e67d5`
 - Confirmed reproducing at: `4855d69` (2026-05-19, re-verify-all

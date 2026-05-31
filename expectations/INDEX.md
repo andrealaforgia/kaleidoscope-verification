@@ -39,20 +39,22 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 68 (A 14 + S 12 + E 4 + X 12 + L 6 + K 11 + Q 2 + G 2 + EG 1 + LQ 4) |
+| `satisfied` | 70 (A 14 + S 12 + E 4 + X 14 + L 6 + K 11 + Q 2 + G 2 + EG 1 + LQ 4) |
 | `held` | 1 (K11 — anchored to reverted commit, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 2 (X01, X05 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)) |
+| `broken` | 0 (X01, X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
-Last index refresh: 2026-05-30, observed HEAD `4e4060e` (cycle 33 of overnight loop). The cycle opened with HEAD at `5a8b330` (only CI work) but the dev side committed `5a8b330..4e4060e` mid-cycle, landing **log-query-pagination-v0** (feat `47fc5ef`, ADR-0057: `limit`/`offset` on `/api/v1/logs`, cap-then-slice). Three new LQ expectations, all GREEN at first attempt at the clean `4e4060e`: **LQ03** (body_regex round-trip, regex semantics proven by `ig{2}u` matching vs the stricter `ig{3}u` returning `[]`), **LQ04** (pagination: `limit=3`==`full[0:3]`, `offset=3&limit=3`==`full[3:6]` disjoint, `limit=0`→`400 invalid limit`, offset-past-end→`[]`). LQ02 from the prior cycle proved the body_contains filter; LQ03/LQ04 extend the same gateway→Lumen→log-query-api fixture.
+Last index refresh: 2026-05-31, observed HEAD `bbded968` (verifier+channel loop tick). Two changes this tick. First, **X01 and X05 recovered**: issue 004 (the workspace `cargo test` "broken" since 2026-05-19) was MISATTRIBUTED to kaleidoscope. It is a harness OOM under Docker Desktop's ~2-4 GB VM cap (parallel `--all-targets` codegen kills rustc and leaves partial rlibs → spurious E0463 "can't find crate"). Cross-confirmed by Bea Implementer's clean 7.18s `self-observe` build and a local `-j1` full-workspace GREEN diagnostic; fixed by `CARGO_BUILD_JOBS=1` in both runners. Both now GREEN at `bbded968`. Broken count 2→0. Second, a comms channel with Bea Implementer is live in `~/dev/kaleidoscope-agents-shared` (defects reported, triaged: issue 005 subscriber → her nWave queue; K11 anchor → her nWave queue). Kaleidoscope HEAD advanced `4e4060e..bbded968` but only perf-kpi-ci-gating-v0 DISCUSS/DESIGN/DEVOPS (CI/doc only), no observable behaviour.
+
+Prior refresh (cycle 33, HEAD `4e4060e`): landed **log-query-pagination-v0** (feat `47fc5ef`, ADR-0057). Three new LQ expectations GREEN at the clean `4e4060e`: **LQ03** (body_regex round-trip, regex semantics proven by `ig{2}u` matching vs the stricter `ig{3}u` returning `[]`), **LQ04** (pagination: `limit=3`==`full[0:3]`, `offset=3&limit=3`==`full[3:6]` disjoint, `limit=0`→`400 invalid limit`, offset-past-end→`[]`).
 
 Prior refresh (cycle 32, HEAD `5a8b330`): **LQ02** proved the log `body_contains` filter actually FILTERS across the durable boundary. `harness/run-eg.sh` extended to build log-query-api too.
 
 Prior refresh (cycle 31, HEAD `35c314a`): **LQ01** opened the log-query-api surface (`body_contains`/`body_regex` mutual-exclusion 400). The catalogue now builds log-query-api itself (catalogue-authored `harness/Dockerfile.log-query-api`), retiring the lazy "blocked on a project Dockerfile" framing in N23/N26.
-60 of 60 re-verified expectations green at HEAD; X01 + X05
-remain broken on [issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md).
+X01 + X05 recovered 2026-05-31 ([issue 004](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
+was a harness OOM artefact, now `resolved`).
 Q01 + G01 + EG01 added at `0c1d66b` — the read-side fails-closed
 contract, the gateway startup smoke, and the first true E2E
 through the durable pipeline (telemetrygen → gateway → Pulse
@@ -90,12 +92,13 @@ Original-batch dates:
   cargo workloads. All 21 confirmed green at the same SHA on retry.
 
 Open issues:
-[004 — cargo test workspace broken (self-observe path-deps)](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
-(`open`, reproducing at `4855d69`; affects X01 + X05).
+[005 — read binaries install no tracing subscriber](../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
+(`open`; query-api + log-query-api drop lifecycle events; accepted by Bea Implementer, queued as nWave `read-api-tracing-subscriber-v0`).
 Closed:
 [001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md) (`fixed` at `6b09c0d`);
 [002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);
-[003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md) (`wontfix`, catalogue tooling).
+[003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md) (`wontfix`, catalogue tooling);
+[004 — cargo test workspace broken](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) (`resolved` 2026-05-31, harness OOM artefact not a kaleidoscope defect; fixed by `CARGO_BUILD_JOBS=1`).
 
 ## Surfaces overview (catalogue coverage map)
 
@@ -109,7 +112,7 @@ that can have an expectation, tracked?".
 | `crates/spark` library | SDK init + signal emission (integrator), via `harness/spark-consumer` fixture | **S** | 22 (12 satisfied, 10 pending) | Consumer fixture in place; remaining S12-S21 are pattern-repetition extensions. |
 | Spark + Aperture round-trip | End-to-end signal flow (operator + integrator) | **E** | 6 (4 satisfied, 2 pending) | E05 implicitly proven by E01-E04 evidence; E06 needs SIGTERM injection on consumer. |
 | `crates/otlp-conformance-harness` | Validator library API (library-consumer) | **H** | 6 — all `out-of-scope` | Excluded per the H-rule (library-consumer concern, not operator/integrator-facing). Documented in [`../known-gaps.md`](../known-gaps.md). |
-| Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (12 satisfied, 2 broken, 1 deferred) | X01 + X05 broken on issue 004 (`cargo test` self-observe path-deps fail to resolve). X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
+| Workspace / supply chain | cargo test/deny/public-api/build/pre-commit, xtask, Prism build pipeline | **X** | 15 (14 satisfied, 0 broken, 1 deferred) | X01 + X05 recovered 2026-05-31: issue 004 was a harness OOM under the ~2-4 GB Docker VM cap (parallel `--all-targets` codegen left partial rlibs → spurious E0463), fixed by `CARGO_BUILD_JOBS=1` in both runners. X06 (CI gates green) needs authenticated `gh` against the kaleidoscope repo. |
 | `crates/sieve` library + SamplingSink decorator | Sampling decisions, observability events | **SI** | 6 placeholders (SI01-SI06, all pending) | Slices 02-06 lock the contracts in `docs/feature/sieve/slices/`; ADR-0021 specifies the decorator wiring. aperture does NOT yet wire sieve at HEAD, and no sieve-consumer harness exists. See `known-gaps.md` N8. |
 | `crates/codex` library | Schema lint via SchemaCatalogue | **C** | 0 — no external surface | Codex's only callsite is Spark Slice 07 (`SparkConfig::with_strict_schema_lint`), but Spark's public API does not let the integrator inject unknown resource attributes — every attribute Spark composes is in Codex's blessed set. Lint-failure path is unreachable through the public SDK. Documented in `known-gaps.md` N9. |
 | `crates/beacon` library + `crates/beacon-server` binary | Alert rule evaluation + webhook emission (operator) | **B** | 6 placeholders (B01-B06, all pending) | Beacon v0 GRADUATED at `f2c28b5`: real Tokio binary, PromQL HTTP polling, SIGHUP reload, inhibition (Slice 03), multi-sink routing (Slice 04), SLO MWMBR synthesis (Slice 05). B-prefix opened with stubs anchored to the slice docs. Verification blocked on a Beacon harness (mock Prom + wiremock webhook); see `known-gaps.md` N10 — updated. |

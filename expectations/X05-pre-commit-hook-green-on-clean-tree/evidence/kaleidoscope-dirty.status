@@ -1,5 +1,2 @@
- M crates/kaleidoscope-cli/Cargo.toml
- M crates/kaleidoscope-cli/src/lib.rs
- M crates/kaleidoscope-cli/src/main.rs
-?? crates/kaleidoscope-cli/tests/migrate_subcommand.rs
-?? docs/feature/cli-migrate-subcommand-v0/distill/
+A  docs/feature/perf-kpi-ci-gating-v0/distill/test-scenarios.md
+A  docs/feature/perf-kpi-ci-gating-v0/distill/wave-decisions.md
