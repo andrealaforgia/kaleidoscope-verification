@@ -399,7 +399,15 @@ axum-listener shape. The honest remaining work is a
 catalogue-authored `Dockerfile.trace-query-api` plus a seeded Ray
 store for the by-id lookup round-trip, not the Dockerfile itself.
 
-## N23 — log-query-severity-filter-v0 graduated, still blocked by N16
+## N23 — log-query-severity-filter-v0 graduated (DONE)
+
+**DONE (2026-05-31).** Verified at the running surface by **LQ05**
+(min_severity round-trip gateway → Lumen → log-query-api at HEAD
+`a898e757`): an INFO batch (severity 9) and an ERROR batch
+(severity 17) are ingested; `min_severity=WARN` returns only
+severity >= 13 (ERROR present, INFO excluded), `min_severity=ERROR`
+only >= 17. The "still blocked by N16" framing was retired in cycle
+31 when the catalogue began standing log-query-api up itself.
 
 Wave shipped DELIVER at `e281fca` ("feat(log-query-api):
 min_severity filter via Predicate::min_severity, before cap").

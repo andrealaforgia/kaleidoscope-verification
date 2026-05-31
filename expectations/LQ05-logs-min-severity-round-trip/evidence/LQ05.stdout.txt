@@ -1,0 +1,5 @@
+full_code=200
+warn_code=200
+error_code=200
+info_body=lq05-info-marker error_body=lq05-error-marker
+full=12 warn=6 error=6

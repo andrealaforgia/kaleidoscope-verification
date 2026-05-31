@@ -1,0 +1,1 @@
+OK — min_severity floor filters across the durable boundary: no-filter keeps both INFO+ERROR; min_severity=WARN keeps only severity>=13 (ERROR present, INFO excluded); min_severity=ERROR keeps only severity>=17

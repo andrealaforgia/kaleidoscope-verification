@@ -1,0 +1,429 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index ec54176..c38eebd 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -137,6 +137,8 @@ jobs:
+     name: Gate 1 — cargo test (all targets, locked)
+     runs-on: ubuntu-latest
+     needs: gate-4-deny
++    env:
++      KALEIDOSCOPE_PERF_TESTS: "1"
+     steps:
+       - name: Check out repository
+         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+diff --git a/crates/aegis/tests/slice_01_validate.rs b/crates/aegis/tests/slice_01_validate.rs
+index b90cd06..5e4e996 100644
+--- a/crates/aegis/tests/slice_01_validate.rs
++++ b/crates/aegis/tests/slice_01_validate.rs
+@@ -330,6 +330,10 @@ fn malformed_token_returns_malformed_error() {
+ 
+ #[test]
+ fn validate_p95_latency_under_two_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let validator = make_validator(&["acme-prod"]);
+     let token = make_jwt(&Claims {
+         iss: ISSUER,
+diff --git a/crates/augur/tests/slice_01_zscore.rs b/crates/augur/tests/slice_01_zscore.rs
+index a0c496c..ce06cd8 100644
+--- a/crates/augur/tests/slice_01_zscore.rs
++++ b/crates/augur/tests/slice_01_zscore.rs
+@@ -189,6 +189,10 @@ fn reset_clears_baseline_and_returns_to_warm_up() {
+ 
+ #[test]
+ fn observe_p95_latency_under_ten_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let mut obs = ZScoreObserver::new(3.0, 100);
+     let tn = tenant("perf");
+ 
+diff --git a/crates/augur/tests/slice_02_rare_event.rs b/crates/augur/tests/slice_02_rare_event.rs
+index e02d472..5fcf84b 100644
+--- a/crates/augur/tests/slice_02_rare_event.rs
++++ b/crates/augur/tests/slice_02_rare_event.rs
+@@ -125,6 +125,10 @@ fn reset_clears_frequency_table_and_fired_set() {
+ 
+ #[test]
+ fn observe_p95_latency_under_twenty_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let mut obs = RareEventObserver::new(0.0001, 100);
+     let tn = tenant("perf");
+ 
+diff --git a/crates/beacon/tests/v1_slice_02_filebacked_durable_recovery.rs b/crates/beacon/tests/v1_slice_02_filebacked_durable_recovery.rs
+index a2024c1..f2cbbfb 100644
+--- a/crates/beacon/tests/v1_slice_02_filebacked_durable_recovery.rs
++++ b/crates/beacon/tests/v1_slice_02_filebacked_durable_recovery.rs
+@@ -373,6 +373,10 @@ fn snapshotted_and_pure_wal_stores_recover_identically() {
+ 
+ #[test]
+ fn persist_p95_latency_under_two_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi3");
+     let store = FileBackedRuleStateStore::open(&base).expect("open");
+     let since = at(1_700_000_000);
+@@ -425,6 +429,10 @@ fn persist_p95_latency_under_two_milliseconds() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_one_and_a_half_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi4");
+     let since = at(1_700_000_000);
+     {
+diff --git a/crates/cinder/tests/slice_01_walking_skeleton.rs b/crates/cinder/tests/slice_01_walking_skeleton.rs
+index 0a32224..0647700 100644
+--- a/crates/cinder/tests/slice_01_walking_skeleton.rs
++++ b/crates/cinder/tests/slice_01_walking_skeleton.rs
+@@ -174,6 +174,10 @@ fn place_overwrites_prior_placement_for_same_key() {
+ 
+ #[test]
+ fn get_tier_p95_latency_under_fifty_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryTieringStore::new(Box::new(NoopRecorder));
+     let tn = tenant("perf");
+     // Place 10 000 items.
+diff --git a/crates/cinder/tests/slice_02_lifecycle.rs b/crates/cinder/tests/slice_02_lifecycle.rs
+index d7fdeb6..49fd239 100644
+--- a/crates/cinder/tests/slice_02_lifecycle.rs
++++ b/crates/cinder/tests/slice_02_lifecycle.rs
+@@ -202,6 +202,10 @@ fn capturing_recorder_observes_place_migrate_evaluate() {
+ 
+ #[test]
+ fn evaluate_p95_latency_under_five_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryTieringStore::new(Box::new(NoopRecorder));
+     let tn = tenant("perf");
+     // Place 10 000 items with mixed initial tiers and ages.
+diff --git a/crates/cinder/tests/v1_slice_01_wal_durability.rs b/crates/cinder/tests/v1_slice_01_wal_durability.rs
+index c4a7953..91ed99f 100644
+--- a/crates/cinder/tests/v1_slice_01_wal_durability.rs
++++ b/crates/cinder/tests/v1_slice_01_wal_durability.rs
+@@ -233,6 +233,10 @@ fn corrupted_wal_surfaces_typed_persistence_error_on_open() {
+ 
+ #[test]
+ fn place_p95_latency_under_two_hundred_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi1_place");
+     let store = FileBackedTieringStore::open(&base, Box::new(NoopRecorder)).expect("open");
+     let tn = tenant("perf");
+diff --git a/crates/cinder/tests/v1_slice_02_snapshot.rs b/crates/cinder/tests/v1_slice_02_snapshot.rs
+index 3c3a49b..9d93ef7 100644
+--- a/crates/cinder/tests/v1_slice_02_snapshot.rs
++++ b/crates/cinder/tests/v1_slice_02_snapshot.rs
+@@ -227,6 +227,10 @@ fn snapshot_is_idempotent_under_no_intervening_writes() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2_recovery");
+     // Seed 10 000 items + snapshot + 100 more.
+     {
+diff --git a/crates/lumen/tests/slice_01_walking_skeleton.rs b/crates/lumen/tests/slice_01_walking_skeleton.rs
+index 74e66ba..bb4f05b 100644
+--- a/crates/lumen/tests/slice_01_walking_skeleton.rs
++++ b/crates/lumen/tests/slice_01_walking_skeleton.rs
+@@ -229,6 +229,10 @@ fn empty_range_returns_ok_empty_not_error() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_two_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryLogStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/lumen/tests/slice_02_structured_query.rs b/crates/lumen/tests/slice_02_structured_query.rs
+index ef2b5aa..e744333 100644
+--- a/crates/lumen/tests/slice_02_structured_query.rs
++++ b/crates/lumen/tests/slice_02_structured_query.rs
+@@ -286,6 +286,10 @@ fn capturing_recorder_observes_every_query_with_matched_count() {
+ 
+ #[test]
+ fn query_p95_latency_under_ten_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryLogStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/lumen/tests/v1_slice_01_wal_durability.rs b/crates/lumen/tests/v1_slice_01_wal_durability.rs
+index bcacbea..5b16f76 100644
+--- a/crates/lumen/tests/v1_slice_01_wal_durability.rs
++++ b/crates/lumen/tests/v1_slice_01_wal_durability.rs
+@@ -305,6 +305,10 @@ fn empty_batch_ingest_writes_nothing_to_wal() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_three_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi1");
+     let s = FileBackedLogStore::open(&base, Box::new(NoopRecorder)).expect("open");
+     let tn = tenant("perf");
+diff --git a/crates/lumen/tests/v1_slice_02_snapshot.rs b/crates/lumen/tests/v1_slice_02_snapshot.rs
+index bdb3da2..bfbb89f 100644
+--- a/crates/lumen/tests/v1_slice_02_snapshot.rs
++++ b/crates/lumen/tests/v1_slice_02_snapshot.rs
+@@ -210,6 +210,10 @@ fn snapshot_is_idempotent_under_no_intervening_writes() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2");
+     {
+         let s = FileBackedLogStore::open(&base, Box::new(NoopRecorder)).expect("open");
+diff --git a/crates/pulse/tests/slice_01_walking_skeleton.rs b/crates/pulse/tests/slice_01_walking_skeleton.rs
+index 2f1871b..9641550 100644
+--- a/crates/pulse/tests/slice_01_walking_skeleton.rs
++++ b/crates/pulse/tests/slice_01_walking_skeleton.rs
+@@ -277,6 +277,10 @@ fn empty_range_returns_ok_empty_not_error() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_two_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryMetricStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/pulse/tests/slice_02_structured_query.rs b/crates/pulse/tests/slice_02_structured_query.rs
+index ec3a7eb..51c8067 100644
+--- a/crates/pulse/tests/slice_02_structured_query.rs
++++ b/crates/pulse/tests/slice_02_structured_query.rs
+@@ -328,6 +328,10 @@ fn capturing_recorder_observes_every_operation() {
+ 
+ #[test]
+ fn query_p95_latency_under_ten_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryMetricStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/pulse/tests/v1_slice_01_wal_durability.rs b/crates/pulse/tests/v1_slice_01_wal_durability.rs
+index ac336e5..f3c3c02 100644
+--- a/crates/pulse/tests/v1_slice_01_wal_durability.rs
++++ b/crates/pulse/tests/v1_slice_01_wal_durability.rs
+@@ -261,6 +261,10 @@ fn empty_batch_ingest_writes_nothing_to_wal() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_fifty_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     // Note (ADR-0049 §Consequences): per-record `sync_all` on the
+     // WAL append is a real cost; the earlier 2 ms ceiling reflected a
+     // pre-honest write path that called `BufWriter::flush` only. With
+diff --git a/crates/pulse/tests/v1_slice_02_snapshot.rs b/crates/pulse/tests/v1_slice_02_snapshot.rs
+index aa17825..6a8dee8 100644
+--- a/crates/pulse/tests/v1_slice_02_snapshot.rs
++++ b/crates/pulse/tests/v1_slice_02_snapshot.rs
+@@ -228,6 +228,10 @@ fn snapshot_is_idempotent_under_no_intervening_writes() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2");
+     {
+         let s = FileBackedMetricStore::open(&base, Box::new(NoopRecorder)).expect("open");
+diff --git a/crates/ray/tests/slice_01_walking_skeleton.rs b/crates/ray/tests/slice_01_walking_skeleton.rs
+index 8b6310d..d41a53a 100644
+--- a/crates/ray/tests/slice_01_walking_skeleton.rs
++++ b/crates/ray/tests/slice_01_walking_skeleton.rs
+@@ -261,6 +261,10 @@ fn spans_without_service_name_are_unreachable_via_query_but_via_get_trace() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_two_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryTraceStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/ray/tests/slice_02_structured_query.rs b/crates/ray/tests/slice_02_structured_query.rs
+index ce460fc..697e843 100644
+--- a/crates/ray/tests/slice_02_structured_query.rs
++++ b/crates/ray/tests/slice_02_structured_query.rs
+@@ -399,6 +399,10 @@ fn capturing_recorder_observes_every_operation() {
+ 
+ #[test]
+ fn query_p95_latency_under_ten_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryTraceStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/ray/tests/v1_slice_01_wal_durability.rs b/crates/ray/tests/v1_slice_01_wal_durability.rs
+index 949c467..9616bc2 100644
+--- a/crates/ray/tests/v1_slice_01_wal_durability.rs
++++ b/crates/ray/tests/v1_slice_01_wal_durability.rs
+@@ -268,6 +268,10 @@ fn empty_batch_ingest_writes_nothing_to_wal() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_five_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi1");
+     let s = FileBackedTraceStore::open(&base, Box::new(ray::NoopRecorder)).expect("open");
+     let t = tenant("perf");
+diff --git a/crates/ray/tests/v1_slice_02_snapshot.rs b/crates/ray/tests/v1_slice_02_snapshot.rs
+index 83f8070..4dd663f 100644
+--- a/crates/ray/tests/v1_slice_02_snapshot.rs
++++ b/crates/ray/tests/v1_slice_02_snapshot.rs
+@@ -348,6 +348,10 @@ fn by_service_index_is_rebuilt_after_reopen_from_snapshot() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2");
+     let services = ["checkout", "billing", "shipping", "auth"];
+     {
+diff --git a/crates/sluice/tests/slice_01_walking_skeleton.rs b/crates/sluice/tests/slice_01_walking_skeleton.rs
+index 934fc37..1dea261 100644
+--- a/crates/sluice/tests/slice_01_walking_skeleton.rs
++++ b/crates/sluice/tests/slice_01_walking_skeleton.rs
+@@ -165,6 +165,10 @@ fn cap_is_per_tenant_not_global() {
+ 
+ #[test]
+ fn enqueue_and_dequeue_p95_under_fifty_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let queue = make_queue(100_000);
+     let t = tenant("perf");
+ 
+diff --git a/crates/sluice/tests/v1_slice_01_wal_durability.rs b/crates/sluice/tests/v1_slice_01_wal_durability.rs
+index 6e7e7a4..dc4c977 100644
+--- a/crates/sluice/tests/v1_slice_01_wal_durability.rs
++++ b/crates/sluice/tests/v1_slice_01_wal_durability.rs
+@@ -263,6 +263,10 @@ fn arbitrary_payload_bytes_round_trip_via_hex() {
+ 
+ #[test]
+ fn enqueue_p95_latency_under_three_hundred_microseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi1");
+     let q = FileBackedQueue::open(&base, 100_000, Box::new(NoopRecorder)).expect("open");
+     let tn = tenant("perf");
+diff --git a/crates/sluice/tests/v1_slice_02_snapshot.rs b/crates/sluice/tests/v1_slice_02_snapshot.rs
+index 9533e3d..25f0820 100644
+--- a/crates/sluice/tests/v1_slice_02_snapshot.rs
++++ b/crates/sluice/tests/v1_slice_02_snapshot.rs
+@@ -214,6 +214,10 @@ fn in_flight_messages_survive_snapshot_and_restart() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_hundred_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2");
+     {
+         let q = FileBackedQueue::open(&base, 20_000, Box::new(NoopRecorder)).expect("open");
+diff --git a/crates/strata/tests/slice_01_walking_skeleton.rs b/crates/strata/tests/slice_01_walking_skeleton.rs
+index 7f6ccfd..5ab523f 100644
+--- a/crates/strata/tests/slice_01_walking_skeleton.rs
++++ b/crates/strata/tests/slice_01_walking_skeleton.rs
+@@ -377,6 +377,10 @@ fn empty_range_returns_ok_empty() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_five_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryProfileStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/strata/tests/slice_02_structured_query.rs b/crates/strata/tests/slice_02_structured_query.rs
+index f66c6db..6a8f01a 100644
+--- a/crates/strata/tests/slice_02_structured_query.rs
++++ b/crates/strata/tests/slice_02_structured_query.rs
+@@ -200,6 +200,10 @@ fn capturing_recorder_observes_every_operation() {
+ 
+ #[test]
+ fn query_p95_latency_under_ten_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let store = InMemoryProfileStore::new(Box::new(NoopRecorder));
+     let t = tenant("perf");
+ 
+diff --git a/crates/strata/tests/v1_slice_01_wal_durability.rs b/crates/strata/tests/v1_slice_01_wal_durability.rs
+index 2d71cb5..72e689c 100644
+--- a/crates/strata/tests/v1_slice_01_wal_durability.rs
++++ b/crates/strata/tests/v1_slice_01_wal_durability.rs
+@@ -338,6 +338,10 @@ fn empty_batch_ingest_writes_nothing_to_wal() {
+ 
+ #[test]
+ fn ingest_p95_latency_under_eight_milliseconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi1");
+     let s = FileBackedProfileStore::open(&base, Box::new(NoopRecorder)).expect("open");
+     let t = tenant("perf");
+diff --git a/crates/strata/tests/v1_slice_02_snapshot.rs b/crates/strata/tests/v1_slice_02_snapshot.rs
+index 83dfd5a..b7250e1 100644
+--- a/crates/strata/tests/v1_slice_02_snapshot.rs
++++ b/crates/strata/tests/v1_slice_02_snapshot.rs
+@@ -361,6 +361,10 @@ fn snapshotted_and_pure_wal_stores_recover_identically() {
+ 
+ #[test]
+ fn recovery_p95_latency_under_five_seconds() {
++    if std::env::var("KALEIDOSCOPE_PERF_TESTS").is_err() {
++        eprintln!("perf test skipped: set KALEIDOSCOPE_PERF_TESTS=1 to run");
++        return;
++    }
+     let base = temp_base("kpi2");
+     {
+         let s = FileBackedProfileStore::open(&base, Box::new(NoopRecorder)).expect("open");

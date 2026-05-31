@@ -1,0 +1,4 @@
+2026-05-31T13:09:17.695Z	INFO	logs/logs.go:84	generation of logs is limited	{"per-second": 5}
+2026-05-31T13:09:17.695Z	INFO	logs/logs.go:37	starting HTTP exporter
+2026-05-31T13:09:18.698Z	INFO	logs/worker.go:105	logs generated	{"worker": 0, "logs": 6}
+2026-05-31T13:09:18.698Z	INFO	logs/worker.go:49	stopping the exporter	{"worker": 0}
