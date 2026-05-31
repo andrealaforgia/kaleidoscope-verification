@@ -1,0 +1,1 @@
+OK — log body round-trips gateway->Lumen->log-query-api; body_regex=ig{2}u returns 11 record(s) all matching, while the stricter ig{3}u on the same bodies returns [] (proves regex semantics, not substring)

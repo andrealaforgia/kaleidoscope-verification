@@ -1,0 +1,1 @@
+OK — pagination: total=21; limit=3 returns full[0:3]; offset=3&limit=3 returns full[3:6] (disjoint); limit=0 -> 400 'invalid limit'; offset past end -> []

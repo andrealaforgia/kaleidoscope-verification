@@ -1,0 +1,7 @@
+match_code=200
+absent_code=200
+body=lq03-needle-ziggurat match_re=ig{2}u absent_re=ig{3}u
+---match head---
+[{"observed_time_unix_nano":1780227212545311305,"severity_number":9,"severity_text":"Info","body":"lq03-needle-ziggurat","attributes":{"app":"server"},"resource_attributes":{"service.name":"lq03-pilot"},"trace_id":null,"span_id":null},{"observed_time_unix_nano":1780227212548497346,"severity_number":9,"severity_text":"Info","body":"lq03-needle-ziggurat","attributes":{"app":"server"},"resource_attri
+---absent head---
+[]

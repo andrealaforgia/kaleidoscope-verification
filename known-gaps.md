@@ -316,6 +316,23 @@ That loop is not under contract at HEAD. Open the EG-prefix
   via query-api `GET /api/v1/query_range`. (This is what EG01
   already does.)
 
+## N28 — log-query-pagination-v0 graduated (DONE)
+
+**DONE (cycle 33, 2026-05-30).** DELIVER landed mid-cycle:
+`5a8b330..4e4060e`, feat `47fc5ef` ("limit and offset pagination
+on /api/v1/logs"), design `489f3ed` ("handler-side slice, cap
+before slice"), ADR-0057. Contract: `?limit=` (reject
+0/negative/non-numeric/over-cap as `invalid limit`; missing = take
+all) and `?offset=` (0 valid, no upper cap, past-end yields an
+empty page not an error), applied as `skip(offset).take(limit)`
+over the stable-ordered post-filter vector AFTER the result-size
+cap. **LQ04** verifies all four arms at the running surface
+(head page == `full[0:3]`, next page == `full[3:6]` disjoint,
+`limit=0` → `400 invalid limit`, offset-past-end → `[]`). GREEN at
+first attempt. The cap-before-slice ordering is asserted only
+indirectly; a direct test needs a seed exceeding `MAX_RESULT_ROWS`
+(left for an LQ-cap expectation alongside #17).
+
 ## N27 — EG01 binds bare host ports 4318/9090, flakes under a squatter
 
 EG01 (and the original EG driver) publish the gateway on host

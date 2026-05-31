@@ -1,0 +1,10 @@
+full_code=200
+p1_code=200
+p2_code=200
+inv_code=400
+past_code=200
+body=lq04-page-body
+---full count---
+21
+---inv body---
+{"status":"error","error":"invalid limit"}
