@@ -25,6 +25,7 @@ SNAPSHOT_DIR="$HARNESS_DIR/.snapshot"
 GW_IMAGE="kaleidoscope-expectations/kaleidoscope-gateway:under-test"
 QAPI_IMAGE="kaleidoscope-expectations/query-api:under-test"
 LQAPI_IMAGE="kaleidoscope-expectations/log-query-api:under-test"
+TQAPI_IMAGE="kaleidoscope-expectations/trace-query-api:under-test"
 
 echo "step 1a: build kaleidoscope-gateway image" >&2
 docker build \
@@ -53,10 +54,21 @@ docker build \
     "$SNAPSHOT_DIR" \
     > "$EVIDENCE_DIR/${LABEL}.log-query-api.build.txt" 2>&1
 
+# trace-query-api: also project-unpackaged; inject the catalogue
+# Dockerfile (see run-trace-query-api.sh). Cached after first build.
+echo "step 1d: build trace-query-api image" >&2
+cp "$HARNESS_DIR/Dockerfile.trace-query-api" "$SNAPSHOT_DIR/Dockerfile.trace-query-api"
+docker build \
+    --quiet \
+    -t "$TQAPI_IMAGE" \
+    -f "$SNAPSHOT_DIR/Dockerfile.trace-query-api" \
+    "$SNAPSHOT_DIR" \
+    > "$EVIDENCE_DIR/${LABEL}.trace-query-api.build.txt" 2>&1
+
 DATA_HOST=$(mktemp -d -t eg-${LABEL}-XXXXXX)
 trap "rm -rf '$DATA_HOST'" EXIT
 
-export GW_IMAGE QAPI_IMAGE LQAPI_IMAGE DATA_HOST
+export GW_IMAGE QAPI_IMAGE LQAPI_IMAGE TQAPI_IMAGE DATA_HOST
 bash -c "$INLINE_SCRIPT" \
     > "$EVIDENCE_DIR/${LABEL}.stdout.txt" \
     2> "$EVIDENCE_DIR/${LABEL}.stderr.txt"
