@@ -1,0 +1,1 @@
+OK — durability: an acked log survives a gateway SIGKILL (exit 137, no graceful flush); 6 record(s) recovered from the Lumen WAL on reopen, all carrying the needle

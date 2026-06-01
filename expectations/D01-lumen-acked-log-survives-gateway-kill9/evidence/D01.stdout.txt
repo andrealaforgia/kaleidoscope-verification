@@ -1,0 +1,4 @@
+telemetrygen_exit=0
+gateway_kill_exit=137
+query_code=200
+survivors=6
