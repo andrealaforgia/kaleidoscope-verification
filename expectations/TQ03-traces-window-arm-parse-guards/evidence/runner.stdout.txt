@@ -1,0 +1,1 @@
+OK — traces window arm guards inputs: missing service -> 400 'invalid request: service is required'; window 86401s -> 400 (reason names 86400); valid service+window -> 200 on the empty store

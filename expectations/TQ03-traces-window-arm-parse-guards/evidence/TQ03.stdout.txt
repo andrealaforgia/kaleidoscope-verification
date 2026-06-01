@@ -1,0 +1,7 @@
+code_a_noservice=400
+code_b_bigwindow=400
+code_c_valid=200
+---a---
+{"status":"error","error":"invalid request: service is required"}
+---b---
+{"status":"error","error":"window exceeds 86400 seconds"}
