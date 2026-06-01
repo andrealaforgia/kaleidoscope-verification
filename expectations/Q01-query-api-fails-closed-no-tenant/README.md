@@ -29,17 +29,24 @@ operator-observable: the binary refuses to come up half-open.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-23 UTC at HEAD (`0c1d66b`).
-- Method: `harness/run-query-api.sh` builds the query-api
-  runtime image from the snapshot's `Dockerfile.query-api`,
-  then `docker run` with a writable /data volume but WITHOUT
-  the `KALEIDOSCOPE_QUERY_TENANT` env var. Assert the
-  container exits non-zero AND `query-api.stderr.txt` contains
-  the `KALEIDOSCOPE_QUERY_TENANT ... fail-closed` reason on
-  stderr. (See issue 005: the documented
-  `event=health.startup.refused` tracing event is dropped
-  because the binary installs no subscriber; we assert on the
-  observable `Err(...)` print path until the subscriber lands.)
+- Last verified: 2026-06-01 UTC at HEAD (`2663eb5`) — TIGHTENED onto
+  the structured event. Since read-api-tracing-subscriber-v0 landed,
+  query-api installs `query_http_common::init_tracing`, so the
+  fail-closed arm emits a STRUCTURED JSON `health.startup.refused`
+  (level ERROR) on stderr before the non-zero exit. Observed verbatim:
+  `{"level":"ERROR","event":"health.startup.refused","reason":"KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"}`.
+  The assertion now `jq`-parses that event (event name + ERROR level +
+  reason), not just the bare `Err()` text. Resolves the read-tier part
+  of issue 005.
+- Earlier `satisfied`: 2026-05-23 at `0c1d66b` (asserting the bare
+  `Err()` text, the only observable signal before the subscriber).
+- Method: `harness/run-query-api.sh` builds the query-api runtime image
+  from the snapshot's `Dockerfile.query-api`, then `docker run` with a
+  writable /data volume but WITHOUT the `KALEIDOSCOPE_QUERY_TENANT` env
+  var. Assert the container exits non-zero AND the structured
+  `health.startup.refused` JSON event (ERROR, tenant fail-closed reason)
+  is present on stderr, plus the bare `Err()` line as a belt-and-braces
+  signal.
 
 ## Evidence
 
@@ -50,11 +57,11 @@ operator-observable: the binary refuses to come up half-open.
 ## Issues
 
 - [issue 005](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
-  — query-api emits `tracing::error!(event="health.startup.refused")`
-  but installs no tracing subscriber, so the documented
-  structured event is dropped silently. Q01 asserts on the
-  operator-visible `Err(...)` line from default-main printing
-  instead. Tighten this assertion when the subscriber lands.
+  — the read-tier part is RESOLVED at `2663eb5`: query-api now
+  installs the subscriber and Q01 asserts the structured
+  `health.startup.refused` JSON event (tightened, see Verification).
+  The issue stays `partial` only for the separate kaleidoscope-gateway
+  binary (G01), which still has no subscriber.
 
 ## Notes
 

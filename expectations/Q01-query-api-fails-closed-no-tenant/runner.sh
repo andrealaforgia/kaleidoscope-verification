@@ -31,12 +31,21 @@ cp /tmp/qapi.out "'"$EVIDENCE_DIR"'/query-api.stdout.txt"
 EC=$(grep -oE 'exit=[0-9]+' "$EVIDENCE_DIR/Q01.stdout.txt" | tail -1 | cut -d= -f2)
 [[ "$EC" != "0" ]] || { echo "expected non-zero exit (fail-closed); got $EC" >&2; exit 1; }
 
-# Note: ADR-0042 promises a `tracing::error!(event =
-# "health.startup.refused", ...)` event, but the query-api
-# binary at HEAD installs no tracing subscriber, so the event
-# is dropped silently. The operator-visible signal is the
-# `Err(...)` printed by Rust's default Result-from-main on
-# stderr. We assert on what is actually observable.
-grep -qE 'KALEIDOSCOPE_QUERY_TENANT.*unset.*fail-closed' "$EVIDENCE_DIR/query-api.stderr.txt" || \
-    { echo "stderr lacks tenant fail-closed reason" >&2; exit 1; }
-echo "OK — query-api fails closed without KALEIDOSCOPE_QUERY_TENANT (exit=${EC} + Err(KALEIDOSCOPE_QUERY_TENANT ... fail-closed) on stderr)"
+# Structured-event assertion (tightened 2026-06-01 at 2663eb5, after
+# read-api-tracing-subscriber-v0 landed; issue 005 resolved). The
+# binary now installs query_http_common::init_tracing, so the
+# fail-closed arm emits a structured JSON `health.startup.refused`
+# (level ERROR) on stderr BEFORE the non-zero exit, not just the bare
+# Err() text. We assert on the structured event: locate the JSON line
+# carrying event=health.startup.refused and verify via jq that it is
+# ERROR level and its reason names the tenant fail-closed.
+SERR="$EVIDENCE_DIR/query-api.stderr.txt"
+REFUSAL=$(grep '"event":"health.startup.refused"' "$SERR" | head -1)
+[[ -n "$REFUSAL" ]] || { echo "stderr lacks structured health.startup.refused event" >&2; cat "$SERR" >&2; exit 1; }
+echo "$REFUSAL" | jq -e '.level=="ERROR" and (.reason|contains("KALEIDOSCOPE_QUERY_TENANT")) and (.reason|contains("fail-closed"))' >/dev/null \
+    || { echo "health.startup.refused event is not ERROR-level or lacks the tenant fail-closed reason" >&2; echo "$REFUSAL" >&2; exit 1; }
+# The bare Err() line still prints too; keep asserting it as a
+# belt-and-braces operator-visible signal.
+grep -qE 'KALEIDOSCOPE_QUERY_TENANT.*unset.*fail-closed' "$SERR" || \
+    { echo "stderr lacks tenant fail-closed reason in the bare Err line" >&2; exit 1; }
+echo "OK — query-api fails closed without KALEIDOSCOPE_QUERY_TENANT (exit=${EC}; structured JSON event=health.startup.refused level=ERROR on stderr + bare Err line)"

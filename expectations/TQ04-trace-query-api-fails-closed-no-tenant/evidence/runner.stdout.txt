@@ -1,0 +1,1 @@
+OK — trace-query-api fails closed without KALEIDOSCOPE_TRACE_QUERY_TENANT (exit=1; structured JSON event=health.startup.refused level=ERROR on stderr)

@@ -1,9 +1,51 @@
 # 005 — `query-api` and `kaleidoscope-gateway` have no tracing subscriber: pre-spawn structured events are dropped silently
 
-- Status: `open`
-- Expectations affected: Q01 (asserts on stderr text rather
-  than `health.startup.refused`), G01 (asserts on aperture's
-  post-spawn `event=ready` rather than `gateway_starting`).
+- Status: `partial` — the READ tier (query-api, log-query-api,
+  trace-query-api) is FIXED at `2663eb5`; `kaleidoscope-gateway`
+  still has no subscriber (see "Remaining" below).
+- Expectations affected: Q01 (now asserts the structured
+  `health.startup.refused`, tightened at `2663eb5`), LQ06 + TQ04
+  (new, assert the same on the log/trace read binaries), G01
+  (still asserts on aperture's post-spawn `event=ready` — gateway
+  part unresolved).
+
+## Resolution — read tier (2026-06-01, HEAD 2663eb5)
+
+read-api-tracing-subscriber-v0 landed (feat `2663eb5`,
+"shared init_tracing makes the read tier observable"). A shared
+`query_http_common::init_tracing` installs a JSON-to-stderr tracing
+subscriber (EnvFilter on RUST_LOG, OnceLock-guarded); all three read
+binaries call it on the first line of main. Black-box confirmed: the
+fail-closed arm now emits a structured JSON event on stderr before the
+non-zero exit, observed verbatim:
+
+  query-api  (Q01):  {"level":"ERROR","event":"health.startup.refused",
+                      "reason":"KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"}
+  log-query-api (LQ06): ...KALEIDOSCOPE_LOG_QUERY_TENANT...
+  trace-query-api (TQ04): ...KALEIDOSCOPE_TRACE_QUERY_TENANT...
+
+Q01 was tightened from the bare `Err()` text onto a `jq`-parsed
+assertion of `event==health.startup.refused` / `level==ERROR` / reason.
+LQ06 and TQ04 are new and assert the same from the start. The
+`*_starting` and `listener_bound` info events also now reach stderr
+(the empty-container-stderr note on LQ02/LQ03/TQ01 is no longer true).
+
+## Remaining — gateway tier (still open)
+
+`crates/kaleidoscope-gateway/src/main.rs` at `2663eb5` STILL installs
+no subscriber (verified: no `init_tracing` / `tracing_subscriber` call;
+the feat touched only query-http-common + the three read main.rs). So
+the gateway's `gateway_starting` / `listener_bound` events are still
+dropped, and G01 still asserts on aperture's post-spawn `event=ready`
+rather than the gateway's own structured startup event. Flagged to Bea
+Implementer as a follow-up slice (the gateway is a fourth binary with
+the same gap; read-api-tracing-subscriber-v0 was deliberately scoped to
+the read APIs). This issue stays `partial` until the gateway gets the
+same `init_tracing` posture.
+
+----------------------------------------------------------------
+Original report
+----------------------------------------------------------------
 - Opened: 2026-05-24
 - Kaleidoscope SHA at observation: `0c1d66b560ad48f5822d2fd30d00b41045368ec0`
 

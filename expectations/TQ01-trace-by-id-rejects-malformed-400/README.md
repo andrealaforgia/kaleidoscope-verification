@@ -64,9 +64,10 @@ a blanket rejection of the by-id route.
 - [`evidence/tq01-c-valid.json`](evidence/tq01-c-valid.json) — the
   valid-id `200` (empty result on the empty store).
 - [`evidence/trace-query-api.stderr.txt`](evidence/trace-query-api.stderr.txt)
-  — the service's container log (empty; no tracing subscriber, the same
-  [`issue 005`](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
-  family the implementer is fixing across all three read binaries).
+  — the service's container log (empty at capture; [`issue 005`](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)).
+  As of `2663eb5` trace-query-api installs the subscriber, so this
+  stderr now carries the JSON startup events; the structured fail-closed
+  event is verified separately by TQ04. TQ01 asserts on HTTP regardless.
 - [`evidence/TQ01.build.txt`](evidence/TQ01.build.txt) — image build log.
 
 ## Issues

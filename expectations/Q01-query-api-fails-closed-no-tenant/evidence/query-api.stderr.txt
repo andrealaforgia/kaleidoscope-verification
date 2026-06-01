@@ -1,1 +1,3 @@
+{"timestamp":"2026-06-01T09:39:25.305016Z","level":"INFO","event":"query_api_starting","pillar_root":"/data","tenant_resolved":false}
+{"timestamp":"2026-06-01T09:39:25.305036Z","level":"ERROR","event":"health.startup.refused","reason":"KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"}
 Error: "KALEIDOSCOPE_QUERY_TENANT is unset or empty (fail-closed)"

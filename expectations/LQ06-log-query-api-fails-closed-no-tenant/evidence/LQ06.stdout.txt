@@ -1,0 +1,5 @@
+exit=1
+---stderr---
+{"timestamp":"2026-06-01T09:41:05.374240Z","level":"INFO","event":"log_query_api_starting","pillar_root":"/data","tenant_resolved":false}
+{"timestamp":"2026-06-01T09:41:05.374253Z","level":"ERROR","event":"health.startup.refused","reason":"KALEIDOSCOPE_LOG_QUERY_TENANT is unset or empty (fail-closed)"}
+Error: "KALEIDOSCOPE_LOG_QUERY_TENANT is unset or empty (fail-closed)"

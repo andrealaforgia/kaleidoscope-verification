@@ -67,13 +67,13 @@ not a blanket rejection of body filtering.
 - [`evidence/lq01-c-both.json`](evidence/lq01-c-both.json) — the
   mutual-exclusion `400` `status:error` envelope.
 - [`evidence/log-query-api.stderr.txt`](evidence/log-query-api.stderr.txt)
-  — the service's own container log during the run. It is **empty**:
-  `crates/log-query-api/src/main.rs` installs no `tracing` subscriber
-  at HEAD, so the `log_query_api_starting` / `listener_bound` events it
-  emits via `tracing::info!` are dropped, exactly the query-api pattern
-  recorded in
-  [`issue 005`](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md).
-  LQ01 asserts only on the HTTP status + body, which is unaffected.
+  — the service's own container log. At the time of capture this was
+  empty (no subscriber, [`issue 005`](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md));
+  as of `2663eb5` (read-api-tracing-subscriber-v0) log-query-api
+  installs the subscriber and this stderr now carries the JSON
+  `log_query_api_starting` / `listener_bound` events. LQ01 asserts only
+  on the HTTP status + body, so it is unaffected either way; the
+  structured fail-closed event is verified separately by LQ06.
 - [`evidence/LQ01.build.txt`](evidence/LQ01.build.txt) — image build log.
 
 ## Issues
