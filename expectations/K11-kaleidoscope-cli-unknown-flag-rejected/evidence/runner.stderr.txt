@@ -1,2 +1,1 @@
 step 1: build kaleidoscope-cli image (cache hit if no source change)
-expected non-zero exit on unknown flag

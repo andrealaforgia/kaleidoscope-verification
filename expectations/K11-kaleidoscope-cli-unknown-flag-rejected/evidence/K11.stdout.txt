@@ -1,3 +1,4 @@
-exit=0
----stderr head---
-ingest ok: records=0 batches=0 tier_items=0
+a_toplevel_exit=2
+b_badsub_exit=2
+c_read_bogus_exit=2
+d_read_known_exit=0

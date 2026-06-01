@@ -13,34 +13,35 @@ the flag and proceeding as if it were absent.
 
 ## Source
 
-- Original contract anchor: commit `e7fbee0` ("ingest + compact
-  reject unknown flags loudly"), part of the 31-commit overnight
-  session that was reverted en bloc.
+- Contract anchor: commit `307e447` ("feat(kaleidoscope-cli): reject
+  unknown subcommand flags, re-anchoring K11"), the clean nWave rebuild
+  of the contract. The original anchor `e7fbee0` was reverted en bloc
+  by `e3a8cad` (N14); this commit is NOT in the reverted set, so the
+  anchor check passes ("anchor 307e447 still applies ... no revert
+  commits"). `crates/kaleidoscope-cli/src/main.rs` now runs a shared
+  `reject_unknown_flags` helper per subcommand during parse.
 
 ## Verification
 
-- Status: `held`
-- Reason: anchored to a reverted commit. The unknown-flag
-  rejection landed in `e7fbee0` and was undone by `e3a8cad`
-  ("revert: drop overnight session — methodology violation, not
-  nWave-shaped"). The current `parse_observe_otlp` in
-  `crates/kaleidoscope-cli/src/main.rs` is back to the silent-
-  accept shape; an unknown flag passes through with exit 0.
-
-## What we observed
-
-A live snapshot run of K11 at HEAD shows `docker run …
-ingest acme /data --observe-otlpp /tmp/wrong.log` exits **0**
-with `ingest ok: records=0`. No stderr diagnostic. The runner is
-correct; the contract is no longer in HEAD.
-
-## Resume condition
-
-Promote back to `pending`, then re-verify, when the unknown-flag
-rejection contract is reintroduced through a proper nWave flow
-(DISCUSS → DESIGN → DEVOPS → DISTILL → DELIVER) and a new
-contract-anchoring commit lands. Update the "Source" anchor to
-that new SHA at that point.
+- Status: `satisfied`
+- Last verified: 2026-06-01 UTC at HEAD (`2bab0b6`, clean tree; the K11
+  feat `307e447` is in this build). GREEN at first attempt (after a
+  catalogue-side `ec()` helper typo fixed). Re-anchored from held → the
+  unknown-flag rejection contract is real in HEAD again, through a
+  proper nWave flow.
+- Observable contract (four cases, all asserted):
+  - `kaleidoscope-cli --bogus` → exit 2 + usage block on stderr;
+  - `kaleidoscope-cli bogus-subcommand` → exit 2 + usage;
+  - `kaleidoscope-cli read acme /data --bogus` → exit 2 + usage —
+    **the re-anchored fix**: this used to exit 0 and silently ignore
+    the unknown flag (a known subcommand with an unknown flag);
+  - `kaleidoscope-cli read acme /data --since <ts>` → a KNOWN flag is
+    parsed, NOT rejected (exit 0 on the empty store, no usage block).
+- Method: `harness/run-kaleidoscope-cli.sh` builds the CLI image from
+  the snapshot's project Dockerfile; four `docker run` invocations
+  capture exit code + stderr per case. The anchor check (`anchor.yaml`,
+  commit `307e447`) confirms the anchoring commit is reachable and not
+  reverted before `satisfied` is granted.
 
 ## Evidence
 

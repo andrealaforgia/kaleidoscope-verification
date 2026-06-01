@@ -209,6 +209,14 @@ already uses C — would be CI? CN? Reserve when needed).
 
 ## N14 — Overnight session reverted en bloc (e3a8cad)
 
+**K11 RESOLVED (2026-06-01).** The unknown-flag rejection contract
+was rebuilt through a clean nWave flow (cli-unknown-flag-rejection-v0)
+and re-anchored at `307e447`, which is NOT in the reverted set. K11
+moved from `held` to `satisfied`; the rebuild also fixed a real
+silent-accept gap (a known subcommand with an unknown flag used to
+exit 0). The rest of this note stands as the historical record of the
+revert.
+
 Between commits `01dbae0` and `c17f0af` the previous Bea ran an
 overnight session that produced 31 direct commits with no nWave
 provenance under `docs/feature/`. Andrea reviewed and asked for

@@ -1,0 +1,1 @@
+OK — kaleidoscope-cli rejects unknown flags as exit-2 usage errors: top-level --bogus, bogus-subcommand, AND the re-anchored fix 'read ... --bogus' (was exit 0); a known flag (--since) is parsed, not rejected

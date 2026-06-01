@@ -1,0 +1,102 @@
+kaleidoscope-cli: unknown flag "--bogus"
+
+kaleidoscope-cli — operator CLI for Lumen v1 + Cinder v1
+
+Usage:
+  kaleidoscope-cli ingest <tenant_id> <data_dir> [--observe-otlp <path>]
+      Read NDJSON lumen::LogRecord from stdin and persist into <data_dir>.
+      Each batch lands in Lumen and a single Cinder Hot tier entry is placed.
+      --observe-otlp appends NDJSON OTLP-JSON metric lines to <path>; a
+      sidecar can `tail -f` it and forward to a real OTLP/HTTP collector.
+
+  kaleidoscope-cli read <tenant_id> <data_dir> [--observe-otlp <path>] \
+                       [--since <ISO 8601 UTC>] [--until <ISO 8601 UTC>]
+      Query records for <tenant_id> and write NDJSON to stdout.
+      --since / --until restrict the query to the half-open interval
+      [since, until). The accepted timestamp shapes are
+      YYYY-MM-DDTHH:MM:SSZ and YYYY-MM-DDTHH:MM:SS.D..DZ (1..=9
+      fractional digits); lower-case `z` and `+00:00` offset forms are
+      rejected. Missing flags default to 0 (since) / u64::MAX (until)
+      — byte-equivalent to a pre-flag query under TimeRange::all().
+      --observe-otlp appends one `lumen.query.count` OTLP-JSON line per
+      invocation to <path>; pointing it at the same file used by `ingest`
+      gives a single sidecar feed for the full ingest+read lifecycle.
+
+  kaleidoscope-cli stats <tenant_id> <data_dir> \
+                       [--since <ISO 8601 UTC>] [--until <ISO 8601 UTC>]
+      Print a plain-text key=value summary of the stored records for
+      <tenant_id> to stdout. Populated tenants get three Lumen lines:
+      records=N, earliest=<ISO 8601 UTC>, latest=<ISO 8601 UTC>.
+      Empty tenants (or empty windows) get a single line: records=0.
+      Then, for each Cinder tier (hot, warm, cold in that fixed
+      order) with a non-zero per-tenant placement count, one extra
+      line `hot=H` / `warm=W` / `cold=C`. Tiers with a zero count
+      emit no line (the output is byte-equivalent to the predecessor
+      for tenants whose Cinder side is empty).
+      --since / --until restrict the Lumen lines to the half-open
+      interval [since, until). The Cinder lines are state-snapshot
+      and IGNORE the window — they always reflect the current
+      per-tenant placement counts regardless of --since / --until.
+      Accepted timestamp shapes are YYYY-MM-DDTHH:MM:SSZ and
+      YYYY-MM-DDTHH:MM:SS.D..DZ (1..=9 fractional digits); lower-case
+      `z` and `+00:00` offset forms are rejected. Missing flags
+      default to 0 (since) / u64::MAX (until) — byte-equivalent to a
+      pre-flag query under TimeRange::all().
+
+  kaleidoscope-cli migrate <tenant_id> <data_dir> <item_id> <to_tier> [--observe-otlp <path>]
+      Manually migrate a previously-placed Cinder item to a new tier.
+      <to_tier> MUST be the literal lowercase string `hot`, `warm`, or
+      `cold`; any other value (including upper-case) is rejected with
+      `invalid tier "<value>": expected one of hot, warm, cold`.
+      Items that were never `place`d are rejected with `cinder migrate:
+      cannot migrate unknown item "<item_id>" for tenant <tenant>`.
+      On success writes exactly one line to stdout:
+      `migrated tenant=<tenant> item=<item_id> from=<from> to=<to>`.
+      --observe-otlp appends one `cinder.migrate.count` OTLP-JSON line
+      per successful migrate to <path>, carrying tenant_id resource
+      attribute plus `from` and `to` point attributes — same wire
+      shape ingest and read already emit.
+
+  kaleidoscope-cli place <tenant_id> <data_dir> <item_id> <tier> [--observe-otlp <path>]
+      Manually place an item in a Cinder tier at the current
+      SystemTime. <tier> MUST be the literal lowercase string `hot`,
+      `warm`, or `cold`. Place is overwrite-semantics: re-placing
+      an existing item updates its tier and migrated_at without
+      error. Writes one line to stdout:
+      `placed tenant=<tenant> item=<item_id> tier=<tier>`.
+      --observe-otlp appends one `cinder.place.count` OTLP-JSON line
+      per place to <path>, same wire shape ingest already emits.
+
+  kaleidoscope-cli evaluate-policy <data_dir> <hot_to_warm_secs> <warm_to_cold_secs> [--observe-otlp <path>]
+      Trigger Cinder's age-based tiering policy across ALL tenants
+      at the current SystemTime. <hot_to_warm_secs> and
+      <warm_to_cold_secs> are non-negative integer seconds.
+      Items in Hot whose age (relative to migrated_at) reaches
+      hot_to_warm_secs move to Warm; items in Warm whose age
+      reaches warm_to_cold_secs move to Cold. Writes one line to
+      stdout: `evaluated migrated=<N>`.
+      This is the only subcommand without a <tenant_id> positional
+      arg — the underlying Cinder API is cross-tenant by design.
+      --observe-otlp appends one `cinder.migrate.count` line per
+      internal migration to <path>, audit-trail composes with the
+      manual migrate subcommand's emission.
+
+  kaleidoscope-cli get-tier <tenant_id> <data_dir> <item_id>
+      Look up the current tier for a single item under <tenant_id>.
+      On success writes one line to stdout: `tier=<lowercase>`
+      where <lowercase> is hot, warm, or cold. On unknown item
+      exits non-zero with stderr `cinder migrate: cannot migrate
+      unknown item "<item_id>" for tenant <tenant>` (the same
+      wording the migrate subcommand uses; consistent operator
+      experience).
+
+  kaleidoscope-cli list-items <tenant_id> <data_dir> <tier>
+      Print every ItemId currently placed under <tenant_id> in
+      <tier>, one per line on stdout, lex-sorted. <tier> MUST be
+      the literal lowercase string `hot`, `warm`, or `cold`.
+      Empty tier prints nothing; exit code is 0 either way.
+      Suitable for piping to xargs: `... list-items acme /tmp/data
+      cold | xargs -I X kaleidoscope-cli migrate acme /tmp/data
+      X warm`.
+
+Stats are emitted to stderr after `ingest` completes.
