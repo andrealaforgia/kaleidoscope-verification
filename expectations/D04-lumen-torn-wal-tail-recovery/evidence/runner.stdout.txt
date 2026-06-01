@@ -1,0 +1,1 @@
+OK — torn WAL tail does NOT yield corrupt data: log-query-api fails closed (exit 1) with a clear 'PersistenceFailed: WAL parse error' and serves nothing. SAFE, but see issue 006: the intact prior records are also blocked (no torn-tail truncation/recovery).

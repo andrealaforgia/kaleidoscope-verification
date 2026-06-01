@@ -1,0 +1,3 @@
+wal_lines_before_tear=6
+lqapi_running=false lqapi_exitcode=1
+query_code=000
