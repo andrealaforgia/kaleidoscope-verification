@@ -24,9 +24,14 @@ contract (ADR-0005) as can run in seconds.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-31 UTC at HEAD (`bbded968`) — GREEN, exit 0,
-  `[pass] all pre-commit gates green`. The 2026-05-19 `broken` verdict
-  inherited X01's harness OOM artefact, not a kaleidoscope defect; see
+- Last verified: 2026-06-01 UTC at HEAD (`2e8bc8b`, clean tree) — GREEN,
+  exit 0, `[pass] all pre-commit gates green`. First run after
+  perf-kpi-ci-gating-v0 (ADR-0058): the hook does not set
+  `KALEIDOSCOPE_PERF_TESTS` (nor does this runner), so the 28 p95 KPI
+  tests skip deterministically, matching the hook's own local posture.
+- Earlier `satisfied`: 2026-05-31 at `bbded968`. The 2026-05-19 `broken`
+  verdict inherited X01's harness OOM artefact, not a kaleidoscope
+  defect; see
   [issue 004](../../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md)
   (now `resolved`). Fixed by `CARGO_BUILD_JOBS=1` in the runner.
 - Previously satisfied: 2026-05-07 UTC at HEAD `c8d8a55`.

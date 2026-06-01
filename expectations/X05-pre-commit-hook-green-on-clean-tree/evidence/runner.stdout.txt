@@ -14,7 +14,7 @@ step 2: run scripts/hooks/pre-commit on the snapshot
     test ac_05_cross_tenant_isolation_on_the_lookup_arm ... ok
     test ac_cap_result_cap_applies_uniformly_on_the_lookup_arm ... ignored, Result cap is verified structurally at the parse-handler layer; same MAX_RESULT_ROWS path as the existing window arm (see slice_02_caps.rs::a_result_one_row_over_the_cap_is_refused_with_a_named_400). A 100_001-span fixture is too expensive for the acceptance suite; uniform interaction is pinned by ADR-0053 Decision 3 and covered by --in-diff mutation tests.
     
-    test result: ok. 11 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+    test result: ok. 11 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
     
     [32m[pass] all pre-commit gates green[0m
 OK — pre-commit hook ran every local gate and exited 0

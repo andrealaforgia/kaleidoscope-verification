@@ -43,6 +43,10 @@ docker run --rm \
     -e CARGO_PROFILE_DEV_DEBUG=0 \
     -e CARGO_BUILD_JOBS=1 \
     -w /src \
+    `# KALEIDOSCOPE_PERF_TESTS deliberately unset: the kaleidoscope` \
+    `# pre-commit hook does not set it either (ADR-0058), so the 28` \
+    `# wall-clock p95 KPI tests skip deterministically here, matching` \
+    `# the hook's own local posture. CI enforces them; see X01.` \
     rust:1.88-slim-bookworm \
     bash -c '
         set -euo pipefail

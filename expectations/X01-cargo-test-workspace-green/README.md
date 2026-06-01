@@ -21,8 +21,15 @@ Gate 1 of the CI contract per ADR-0005.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-31 UTC at HEAD (`bbded968`, clean tree) —
-  GREEN, exit 0, every `test result: ok`. The 2026-05-19 `broken`
+- Last verified: 2026-06-01 UTC at HEAD (`eed810d`) — GREEN, exit 0,
+  every `test result: ok`. This is the first run after
+  perf-kpi-ci-gating-v0 (ADR-0058) landed: the 28 wall-clock p95 KPI
+  tests now early-return because the runner deliberately does NOT set
+  `KALEIDOSCOPE_PERF_TESTS` (a Docker VM under variable host load cannot
+  give a stable timing environment; CI enforces them instead). The
+  workspace-test-green contract holds via the deterministic skip.
+- Earlier `satisfied`: 2026-05-31 at `bbded968` (clean tree). The
+  2026-05-19 `broken`
   verdict was a harness artefact, not a kaleidoscope defect: under
   Docker Desktop's ~2-4 GB VM cap a parallel `--all-targets` codegen
   run OOM-killed rustc and left partial rlibs, producing a spurious

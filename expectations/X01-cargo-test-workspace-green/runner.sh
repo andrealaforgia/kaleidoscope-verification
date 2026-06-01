@@ -40,6 +40,16 @@ docker run --rm \
     -e CARGO_PROFILE_DEV_DEBUG=0 \
     -e CARGO_BUILD_JOBS=1 \
     -w /src \
+    `# KALEIDOSCOPE_PERF_TESTS is DELIBERATELY NOT set. Since eed810d` \
+    `# (ADR-0058 perf-kpi-ci-gating-v0) the 28 wall-clock p95 KPI tests` \
+    `# early-return unless that var is set, so here they skip` \
+    `# deterministically. Wall-clock thresholds are CI's job (CI sets` \
+    `# the var); a Docker Desktop VM under variable host load cannot` \
+    `# give a stable timing environment, so enforcing them here would` \
+    `# only reintroduce flake. The contract X01 verifies is "the` \
+    `# workspace test gate compiles and passes", which the gated-off` \
+    `# skip preserves. To measure the KPIs deliberately, export` \
+    `# KALEIDOSCOPE_PERF_TESTS=1 and record raw values + host.` \
     rust:1.88-slim-bookworm \
     bash -c '
         set -euo pipefail

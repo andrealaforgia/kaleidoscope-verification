@@ -1,6 +1,32 @@
 rustc 1.88.0 (6b00bc388 2025-06-23)
 cargo 1.88.0 (873a06493 2025-05-10)
-    Finished `test` profile [unoptimized] target(s) in 0.79s
+   Compiling aegis v0.1.0 (/src/crates/aegis)
+   Compiling pulse v0.1.0 (/src/crates/pulse)
+   Compiling otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
+   Compiling lumen v0.1.0 (/src/crates/lumen)
+   Compiling aperture v0.1.0 (/src/crates/aperture)
+   Compiling cinder v0.1.0 (/src/crates/cinder)
+   Compiling query-http-common v0.1.0 (/src/crates/query-http-common)
+   Compiling self-observe v0.1.0 (/src/crates/self-observe)
+   Compiling ray v0.1.0 (/src/crates/ray)
+   Compiling beacon v0.1.0 (/src/crates/beacon)
+   Compiling kaleidoscope-cli v0.1.0 (/src/crates/kaleidoscope-cli)
+   Compiling codex v0.1.0 (/src/crates/codex)
+   Compiling spark v0.1.0 (/src/crates/spark)
+   Compiling sieve v0.1.0 (/src/crates/sieve)
+   Compiling log-query-api v0.1.0 (/src/crates/log-query-api)
+   Compiling strata v0.1.0 (/src/crates/strata)
+   Compiling sluice v0.1.0 (/src/crates/sluice)
+   Compiling query-api v0.1.0 (/src/crates/query-api)
+   Compiling loom v0.1.0 (/src/crates/loom)
+   Compiling aperture-storage-sink v0.1.0 (/src/crates/aperture-storage-sink)
+   Compiling augur v0.1.0 (/src/crates/augur)
+   Compiling trace-query-api v0.1.0 (/src/crates/trace-query-api)
+   Compiling beacon-server v0.1.0 (/src/crates/beacon-server)
+   Compiling integration-suite v0.1.0 (/src/crates/integration-suite)
+   Compiling kaleidoscope-gateway v0.1.0 (/src/crates/kaleidoscope-gateway)
+   Compiling regenerate-codex-corpus v0.1.0 (/src/xtask/regenerate_codex_corpus)
+    Finished `test` profile [unoptimized] target(s) in 5m 11s
      Running unittests src/lib.rs (target/debug/deps/aegis-2d6a81c6718368d7)
 
 running 0 tests
@@ -24,7 +50,7 @@ test viewer_role_is_accepted ... ok
 test wrong_audience_returns_wrong_audience_error ... ok
 test wrong_issuer_returns_wrong_issuer_error ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_catalogue.rs (target/debug/deps/slice_02_catalogue-324390ec9f3bf945)
 
@@ -38,7 +64,7 @@ test loads_thousand_tenants_under_fifty_milliseconds ... ok
 test missing_file_returns_read_error ... ok
 test unknown_field_is_rejected ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/slice_03_audit.rs (target/debug/deps/slice_03_audit-071486fff72e20fe)
 
@@ -90,7 +116,7 @@ test config::tests::env_var_override_replaces_toml_max_concurrent_requests_per_a
 test config::tests::env_var_override_replaces_toml_sink_kind_per_adr_0008 ... ok
 test config::tests::env_var_with_no_toml_override_leaves_toml_value_in_place ... ok
 test config::tests::max_concurrent_requests_setter_round_trips_to_built_config ... ok
-test observability::tests::record_debug_captures_debug_formatted_field_as_string ... {"timestamp":"2026-05-31T12:31:55.634878Z","level":"INFO","event":"internal_invariant_violation","payload":"Marker"}
+test observability::tests::record_debug_captures_debug_formatted_field_as_string ... {"timestamp":"2026-06-01T00:25:34.773553Z","level":"INFO","event":"internal_invariant_violation","payload":"Marker"}
 ok
 test ports::tests::probe_error_refused_display_names_endpoint_and_status ... ok
 test ports::tests::probe_error_timeout_display_names_endpoint_and_elapsed_ms ... ok
@@ -99,20 +125,20 @@ test ports::tests::sink_error_downstream_timeout_display_names_elapsed_ms ... ok
 test ports::tests::sink_error_downstream_unavailable_display_names_reason ... ok
 test ports::tests::sink_error_internal_display_names_message ... ok
 test ports::tests::sink_record_has_exactly_three_variants_one_per_otlp_stable_signal ... ok
-test readiness::tests::draining_is_sticky_against_late_listener_bound_signals ... {"timestamp":"2026-05-31T12:31:55.636244Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+test readiness::tests::draining_is_sticky_against_late_listener_bound_signals ... {"timestamp":"2026-06-01T00:25:34.775153Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
 ok
-test readiness::tests::flip_to_draining_from_ready_lands_in_draining ... {"timestamp":"2026-05-31T12:31:55.636400Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:55.636413Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+test readiness::tests::flip_to_draining_from_ready_lands_in_draining ... {"timestamp":"2026-06-01T00:25:34.775271Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:34.775288Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
 ok
-test readiness::tests::flip_to_draining_from_starting_lands_in_draining ... {"timestamp":"2026-05-31T12:31:55.636494Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+test readiness::tests::flip_to_draining_from_starting_lands_in_draining ... {"timestamp":"2026-06-01T00:25:34.775420Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
 ok
-test readiness::tests::flip_to_draining_is_idempotent ... {"timestamp":"2026-05-31T12:31:55.636567Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:55.636581Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+test readiness::tests::flip_to_draining_is_idempotent ... {"timestamp":"2026-06-01T00:25:34.775520Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:34.775535Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
 ok
 test readiness::tests::fresh_state_is_starting ... ok
-test readiness::tests::marking_both_in_reverse_order_promotes_to_ready ... {"timestamp":"2026-05-31T12:31:55.636786Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+test readiness::tests::marking_both_in_reverse_order_promotes_to_ready ... {"timestamp":"2026-06-01T00:25:34.775836Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
 ok
-test readiness::tests::marking_both_listeners_promotes_to_ready ... {"timestamp":"2026-05-31T12:31:55.636969Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+test readiness::tests::marking_both_listeners_promotes_to_ready ... {"timestamp":"2026-06-01T00:25:34.775931Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
 ok
 test readiness::tests::marking_grpc_alone_does_not_promote_to_ready ... ok
 test readiness::tests::marking_http_alone_does_not_promote_to_ready ... ok
@@ -138,48 +164,48 @@ test sinks::tests::url_for_appends_signal_path_to_endpoint ... ok
 test sinks::tests::url_for_trims_a_single_trailing_slash ... ok
 test sinks::tests::url_for_trims_multiple_trailing_slashes ... ok
 test tests::aperture_error_display_renders_the_inner_message ... ok
-test tests::drain_to_exit_code_returns_one_when_deadline_exceeded ... {"timestamp":"2026-05-31T12:31:55.643194Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":200}
-{"timestamp":"2026-05-31T12:31:55.643212Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:31:56.102914Z","level":"WARN","event":"drain_deadline_exceeded","dropped_count":0}
-{"timestamp":"2026-05-31T12:31:56.103055Z","level":"INFO","event":"shutdown_complete","exit_code":1}
+test tests::drain_to_exit_code_returns_one_when_deadline_exceeded ... {"timestamp":"2026-06-01T00:25:34.781404Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":200}
+{"timestamp":"2026-06-01T00:25:34.781420Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:35.244740Z","level":"WARN","event":"drain_deadline_exceeded","dropped_count":0}
+{"timestamp":"2026-06-01T00:25:35.244787Z","level":"INFO","event":"shutdown_complete","exit_code":1}
 ok
-test tests::drain_to_exit_code_returns_zero_for_a_clean_drain ... {"timestamp":"2026-05-31T12:31:56.106755Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.106969Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46277"}
-{"timestamp":"2026-05-31T12:31:56.107371Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45793"}
-{"timestamp":"2026-05-31T12:31:56.107413Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.108165Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:56.108215Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
-{"timestamp":"2026-05-31T12:31:56.108239Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:31:56.365443Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-{"timestamp":"2026-05-31T12:31:56.365515Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test tests::drain_to_exit_code_returns_zero_for_a_clean_drain ... {"timestamp":"2026-06-01T00:25:35.247019Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.247201Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40251"}
+{"timestamp":"2026-06-01T00:25:35.247516Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35165"}
+{"timestamp":"2026-06-01T00:25:35.247551Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.248224Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:35.248316Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
+{"timestamp":"2026-06-01T00:25:35.248368Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:35.505645Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-06-01T00:25:35.505745Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
-test tests::drop_signal_listeners_returns_two_for_a_fresh_handle ... {"timestamp":"2026-05-31T12:31:56.369457Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.369610Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34115"}
-{"timestamp":"2026-05-31T12:31:56.369837Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35923"}
-{"timestamp":"2026-05-31T12:31:56.369874Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.370031Z","level":"INFO","event":"ready"}
+test tests::drop_signal_listeners_returns_two_for_a_fresh_handle ... {"timestamp":"2026-06-01T00:25:35.508812Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.508972Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39355"}
+{"timestamp":"2026-06-01T00:25:35.509247Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44749"}
+{"timestamp":"2026-06-01T00:25:35.509289Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.509440Z","level":"INFO","event":"ready"}
 ok
-test tests::drop_signal_listeners_returns_zero_after_bundle_already_consumed ... {"timestamp":"2026-05-31T12:31:56.372563Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.372682Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36591"}
-{"timestamp":"2026-05-31T12:31:56.372928Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39257"}
-{"timestamp":"2026-05-31T12:31:56.372961Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.373086Z","level":"INFO","event":"ready"}
+test tests::drop_signal_listeners_returns_zero_after_bundle_already_consumed ... {"timestamp":"2026-06-01T00:25:35.511530Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.511622Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36833"}
+{"timestamp":"2026-06-01T00:25:35.511738Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37581"}
+{"timestamp":"2026-06-01T00:25:35.511769Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.511832Z","level":"INFO","event":"ready"}
 ok
-test tests::dropping_a_handle_runs_the_drop_body ... {"timestamp":"2026-05-31T12:31:56.374941Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.374998Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46423"}
-{"timestamp":"2026-05-31T12:31:56.375296Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37221"}
-{"timestamp":"2026-05-31T12:31:56.375353Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.375476Z","level":"INFO","event":"ready"}
+test tests::dropping_a_handle_runs_the_drop_body ... {"timestamp":"2026-06-01T00:25:35.512819Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.512869Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35983"}
+{"timestamp":"2026-06-01T00:25:35.512933Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36327"}
+{"timestamp":"2026-06-01T00:25:35.512944Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.512984Z","level":"INFO","event":"ready"}
 ok
-test tests::handle_debug_reports_bound_addresses ... {"timestamp":"2026-05-31T12:31:56.376844Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.376920Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39873"}
-{"timestamp":"2026-05-31T12:31:56.377117Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38195"}
-{"timestamp":"2026-05-31T12:31:56.377149Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.377264Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:56.377306Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
-{"timestamp":"2026-05-31T12:31:56.377322Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:31:56.632889Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-{"timestamp":"2026-05-31T12:31:56.632992Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test tests::handle_debug_reports_bound_addresses ... {"timestamp":"2026-06-01T00:25:35.514182Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.514219Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39849"}
+{"timestamp":"2026-06-01T00:25:35.514279Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35201"}
+{"timestamp":"2026-06-01T00:25:35.514289Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.514327Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:35.514342Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
+{"timestamp":"2026-06-01T00:25:35.514350Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:35.767617Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-06-01T00:25:35.767703Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
 test transport::tests::empty_content_type_is_rejected ... ok
 test transport::tests::json_content_type_is_rejected ... ok
@@ -189,7 +215,7 @@ test transport::tests::protobuf_content_type_is_case_insensitive ... ok
 test transport::tests::protobuf_content_type_with_charset_parameter_is_accepted ... ok
 test transport::tests::protobuf_prefix_with_extra_path_segment_is_rejected ... ok
 
-test result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s
+test result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.01s
 
      Running unittests src/main.rs (target/debug/deps/aperture-a0eacfdacca609c3)
 
@@ -215,56 +241,56 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/invariant_no_telemetry_on_telemetry.rs (target/debug/deps/invariant_no_telemetry_on_telemetry-ac2232fb407d26aa)
 
 running 5 tests
-test aperture_does_not_expose_a_metrics_endpoint ... {"timestamp":"2026-05-31T12:31:56.697381Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.698597Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41245"}
-{"timestamp":"2026-05-31T12:31:56.700204Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41387"}
-{"timestamp":"2026-05-31T12:31:56.700220Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.701926Z","level":"INFO","event":"ready"}
+test aperture_does_not_expose_a_metrics_endpoint ... {"timestamp":"2026-06-01T00:25:35.824180Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.824930Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46189"}
+{"timestamp":"2026-06-01T00:25:35.826377Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45279"}
+{"timestamp":"2026-06-01T00:25:35.826393Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.827948Z","level":"INFO","event":"ready"}
 ok
-test aperture_does_not_expose_a_telemetry_endpoint ... {"timestamp":"2026-05-31T12:31:56.706528Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.706572Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36251"}
-{"timestamp":"2026-05-31T12:31:56.706639Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38643"}
-{"timestamp":"2026-05-31T12:31:56.706663Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.706719Z","level":"INFO","event":"ready"}
+test aperture_does_not_expose_a_telemetry_endpoint ... {"timestamp":"2026-06-01T00:25:35.831937Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.832006Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46711"}
+{"timestamp":"2026-06-01T00:25:35.832097Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38955"}
+{"timestamp":"2026-06-01T00:25:35.832114Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.832322Z","level":"INFO","event":"ready"}
 ok
-test aperture_with_stub_sink_idle_does_not_open_any_outbound_connection ... {"timestamp":"2026-05-31T12:31:56.707923Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.707961Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33499"}
-{"timestamp":"2026-05-31T12:31:56.708029Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44369"}
-{"timestamp":"2026-05-31T12:31:56.708042Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.708315Z","level":"INFO","event":"ready"}
+test aperture_with_stub_sink_idle_does_not_open_any_outbound_connection ... {"timestamp":"2026-06-01T00:25:35.833434Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.833452Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37125"}
+{"timestamp":"2026-06-01T00:25:35.833505Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34169"}
+{"timestamp":"2026-06-01T00:25:35.833520Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.833559Z","level":"INFO","event":"ready"}
 ok
-test forwarding_sink_export_only_reaches_the_configured_downstream ... {"timestamp":"2026-05-31T12:31:56.817302Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.818451Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45737"}
-{"timestamp":"2026-05-31T12:31:56.818576Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38555"}
-{"timestamp":"2026-05-31T12:31:56.818600Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.818707Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:56.820030Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:56.820437Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:42727","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
+test forwarding_sink_export_only_reaches_the_configured_downstream ... {"timestamp":"2026-06-01T00:25:35.948133Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.949182Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39461"}
+{"timestamp":"2026-06-01T00:25:35.949300Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34371"}
+{"timestamp":"2026-06-01T00:25:35.949323Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.949420Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:35.950709Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:35.951188Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:43895","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
 ok
-test stub_sink_export_does_not_reach_an_unrelated_loopback_listener ... {"timestamp":"2026-05-31T12:31:56.822242Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.822273Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45353"}
-{"timestamp":"2026-05-31T12:31:56.822341Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33937"}
-{"timestamp":"2026-05-31T12:31:56.822357Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.822448Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:56.823175Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:56.823208Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test stub_sink_export_does_not_reach_an_unrelated_loopback_listener ... {"timestamp":"2026-06-01T00:25:35.953203Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.953320Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34217"}
+{"timestamp":"2026-06-01T00:25:35.953404Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45725"}
+{"timestamp":"2026-06-01T00:25:35.953421Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.953517Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:35.954334Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:35.954371Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
 
      Running tests/invariant_single_validator.rs (target/debug/deps/invariant_single_validator-0ccb8f49dbdb132d)
 
 running 1 test
-test one_export_produces_exactly_one_record_in_the_sink ... {"timestamp":"2026-05-31T12:31:56.839124Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:56.840464Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41685"}
-{"timestamp":"2026-05-31T12:31:56.842016Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37625"}
-{"timestamp":"2026-05-31T12:31:56.842038Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:56.843367Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:56.845402Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:56.845430Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test one_export_produces_exactly_one_record_in_the_sink ... {"timestamp":"2026-06-01T00:25:35.968946Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:35.970157Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38259"}
+{"timestamp":"2026-06-01T00:25:35.971466Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41223"}
+{"timestamp":"2026-06-01T00:25:35.971480Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:35.972634Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:35.975215Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:35.975236Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
 
      Running tests/probe_gold_runner.rs (target/debug/deps/probe_gold_runner-f563b099ed129a40)
 
@@ -275,107 +301,107 @@ test probe_issues_post_when_options_returns_405_to_reach_otel_compatible_downstr
 test probe_refuses_when_downstream_returns_200_options_but_503_post ... ok
 test probe_short_circuits_on_options_204_and_does_not_post ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/slice_01_walking_skeleton.rs (target/debug/deps/slice_01_walking_skeleton-8ee68c233cbfe407)
 
 running 13 tests
-test customer_exports_one_log_record_and_receives_grpc_ok ... {"timestamp":"2026-05-31T12:31:57.012872Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.013877Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40137"}
-{"timestamp":"2026-05-31T12:31:57.014713Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37237"}
-{"timestamp":"2026-05-31T12:31:57.014730Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.016197Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.017639Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.017664Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_receives_grpc_ok ... {"timestamp":"2026-06-01T00:25:36.118686Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.119830Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42191"}
+{"timestamp":"2026-06-01T00:25:36.120592Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34747"}
+{"timestamp":"2026-06-01T00:25:36.120604Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.122116Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.123373Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.123394Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_log_record_and_record_carries_logs_variant ... {"timestamp":"2026-05-31T12:31:57.018579Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.018605Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39869"}
-{"timestamp":"2026-05-31T12:31:57.018652Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42687"}
-{"timestamp":"2026-05-31T12:31:57.018666Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.018715Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.019178Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.019207Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_record_carries_logs_variant ... {"timestamp":"2026-06-01T00:25:36.124342Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.124360Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41431"}
+{"timestamp":"2026-06-01T00:25:36.124403Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36721"}
+{"timestamp":"2026-06-01T00:25:36.124413Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.124463Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.124962Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.124978Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_log_record_and_record_reaches_sink ... {"timestamp":"2026-05-31T12:31:57.020009Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.020046Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41165"}
-{"timestamp":"2026-05-31T12:31:57.020103Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42209"}
-{"timestamp":"2026-05-31T12:31:57.020114Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.020152Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.020523Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.020542Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_record_reaches_sink ... {"timestamp":"2026-06-01T00:25:36.125893Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.125913Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39169"}
+{"timestamp":"2026-06-01T00:25:36.125959Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42755"}
+{"timestamp":"2026-06-01T00:25:36.125975Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.126020Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.126415Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.126434Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_log_record_and_request_received_line_is_emitted ... {"timestamp":"2026-05-31T12:31:57.021510Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.021556Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:32923"}
-{"timestamp":"2026-05-31T12:31:57.021613Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42421"}
-{"timestamp":"2026-05-31T12:31:57.021630Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.021683Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.022086Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.022107Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_request_received_line_is_emitted ... {"timestamp":"2026-06-01T00:25:36.127517Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.127614Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39931"}
+{"timestamp":"2026-06-01T00:25:36.127755Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43367"}
+{"timestamp":"2026-06-01T00:25:36.127789Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.127850Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.128355Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.128381Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_log_record_and_sink_accepted_line_names_record_count ... {"timestamp":"2026-05-31T12:31:57.023001Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.023022Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46853"}
-{"timestamp":"2026-05-31T12:31:57.023091Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42241"}
-{"timestamp":"2026-05-31T12:31:57.023106Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.023144Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.023561Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.023579Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_sink_accepted_line_names_record_count ... {"timestamp":"2026-06-01T00:25:36.129263Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.129297Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38751"}
+{"timestamp":"2026-06-01T00:25:36.129359Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36389"}
+{"timestamp":"2026-06-01T00:25:36.129374Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.129418Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.129878Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.129914Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_log_record_and_sink_accepted_line_names_service_name ... {"timestamp":"2026-05-31T12:31:57.024507Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.024540Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38181"}
-{"timestamp":"2026-05-31T12:31:57.024599Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35899"}
-{"timestamp":"2026-05-31T12:31:57.024611Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.024843Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.025190Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.025209Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_sink_accepted_line_names_service_name ... {"timestamp":"2026-06-01T00:25:36.130932Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.130977Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46449"}
+{"timestamp":"2026-06-01T00:25:36.131061Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34121"}
+{"timestamp":"2026-06-01T00:25:36.131081Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.131132Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.131498Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.131517Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_three_log_records_and_record_count_matches ... {"timestamp":"2026-05-31T12:31:57.026107Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.026123Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33485"}
-{"timestamp":"2026-05-31T12:31:57.026159Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45645"}
-{"timestamp":"2026-05-31T12:31:57.026169Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.026202Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.026660Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":184}
-{"timestamp":"2026-05-31T12:31:57.026678Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":3,"resource.service.name":"checkout-api"}
+test customer_exports_three_log_records_and_record_count_matches ... {"timestamp":"2026-06-01T00:25:36.132408Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.132428Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41817"}
+{"timestamp":"2026-06-01T00:25:36.132494Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41351"}
+{"timestamp":"2026-06-01T00:25:36.132513Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.132610Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.133101Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":184}
+{"timestamp":"2026-06-01T00:25:36.133118Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":3,"resource.service.name":"checkout-api"}
 ok
-test customer_sends_empty_body_and_grpc_message_names_empty_input_rule ... {"timestamp":"2026-05-31T12:31:57.027569Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.027602Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41327"}
-{"timestamp":"2026-05-31T12:31:57.027648Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45913"}
-{"timestamp":"2026-05-31T12:31:57.027659Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.027705Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.028118Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
+test customer_sends_empty_body_and_grpc_message_names_empty_input_rule ... {"timestamp":"2026-06-01T00:25:36.134158Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.134198Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37619"}
+{"timestamp":"2026-06-01T00:25:36.134255Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44521"}
+{"timestamp":"2026-06-01T00:25:36.134267Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.134344Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.134768Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
 ok
-test customer_sends_empty_body_and_grpc_message_names_grpc_protobuf_framing ... {"timestamp":"2026-05-31T12:31:57.029392Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.029418Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36295"}
-{"timestamp":"2026-05-31T12:31:57.029478Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44305"}
-{"timestamp":"2026-05-31T12:31:57.029492Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.029539Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.029966Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
+test customer_sends_empty_body_and_grpc_message_names_grpc_protobuf_framing ... {"timestamp":"2026-06-01T00:25:36.136314Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.136334Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40865"}
+{"timestamp":"2026-06-01T00:25:36.136368Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45353"}
+{"timestamp":"2026-06-01T00:25:36.136378Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.136417Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.136839Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
 ok
-test customer_sends_empty_body_and_grpc_message_names_logs_signal ... {"timestamp":"2026-05-31T12:31:57.031040Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.031058Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46027"}
-{"timestamp":"2026-05-31T12:31:57.031108Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33621"}
-{"timestamp":"2026-05-31T12:31:57.031119Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.031155Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.031554Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
+test customer_sends_empty_body_and_grpc_message_names_logs_signal ... {"timestamp":"2026-06-01T00:25:36.137982Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.138004Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44463"}
+{"timestamp":"2026-06-01T00:25:36.138046Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34675"}
+{"timestamp":"2026-06-01T00:25:36.138058Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.138109Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.138424Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
 ok
-test customer_sends_empty_body_and_no_record_reaches_sink ... {"timestamp":"2026-05-31T12:31:57.032494Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.032525Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43857"}
-{"timestamp":"2026-05-31T12:31:57.032579Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34535"}
-{"timestamp":"2026-05-31T12:31:57.032590Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.032632Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.032937Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
+test customer_sends_empty_body_and_no_record_reaches_sink ... {"timestamp":"2026-06-01T00:25:36.139481Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.139498Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39693"}
+{"timestamp":"2026-06-01T00:25:36.139548Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39113"}
+{"timestamp":"2026-06-01T00:25:36.139618Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.139816Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.140079Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
 ok
-test customer_sends_empty_body_and_receives_invalid_argument ... {"timestamp":"2026-05-31T12:31:57.141543Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.141597Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35937"}
-{"timestamp":"2026-05-31T12:31:57.141688Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37265"}
-{"timestamp":"2026-05-31T12:31:57.141705Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.141788Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.142439Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
+test customer_sends_empty_body_and_receives_invalid_argument ... {"timestamp":"2026-06-01T00:25:36.253569Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.253609Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46111"}
+{"timestamp":"2026-06-01T00:25:36.253664Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34271"}
+{"timestamp":"2026-06-01T00:25:36.253682Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.253724Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.254194Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":0}
 ok
-test startup_emits_listener_bound_stderr_line_for_grpc_transport ... {"timestamp":"2026-05-31T12:31:57.144076Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.144132Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46349"}
-{"timestamp":"2026-05-31T12:31:57.144202Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45889"}
-{"timestamp":"2026-05-31T12:31:57.144221Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.144285Z","level":"INFO","event":"ready"}
+test startup_emits_listener_bound_stderr_line_for_grpc_transport ... {"timestamp":"2026-06-01T00:25:36.255582Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.255612Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46375"}
+{"timestamp":"2026-06-01T00:25:36.255660Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40811"}
+{"timestamp":"2026-06-01T00:25:36.255675Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.255722Z","level":"INFO","event":"ready"}
 ok
 
 test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
@@ -383,189 +409,189 @@ test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
      Running tests/slice_02_http_protobuf_and_readiness.rs (target/debug/deps/slice_02_http_protobuf_and_readiness-3a2718c27de0215f)
 
 running 15 tests
-test customer_posts_empty_body_and_receives_status_400 ... {"timestamp":"2026-05-31T12:31:57.159664Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.160232Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43671"}
-{"timestamp":"2026-05-31T12:31:57.160979Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38213"}
-{"timestamp":"2026-05-31T12:31:57.160998Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.161890Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.165729Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
+test customer_posts_empty_body_and_receives_status_400 ... {"timestamp":"2026-06-01T00:25:36.267738Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.268215Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33281"}
+{"timestamp":"2026-06-01T00:25:36.268979Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45373"}
+{"timestamp":"2026-06-01T00:25:36.268993Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.269600Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.272872Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
 ok
-test customer_posts_empty_body_and_response_body_names_empty_input_rule ... {"timestamp":"2026-05-31T12:31:57.167118Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.167146Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37423"}
-{"timestamp":"2026-05-31T12:31:57.167236Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45291"}
-{"timestamp":"2026-05-31T12:31:57.167255Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.167334Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.167751Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
+test customer_posts_empty_body_and_response_body_names_empty_input_rule ... {"timestamp":"2026-06-01T00:25:36.274121Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.274144Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44265"}
+{"timestamp":"2026-06-01T00:25:36.274190Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35135"}
+{"timestamp":"2026-06-01T00:25:36.274205Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.274248Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.274596Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
 ok
-test customer_posts_empty_body_and_response_body_names_http_protobuf_framing ... {"timestamp":"2026-05-31T12:31:57.168660Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.168685Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38749"}
-{"timestamp":"2026-05-31T12:31:57.168741Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41831"}
-{"timestamp":"2026-05-31T12:31:57.168766Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.168856Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.169202Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
+test customer_posts_empty_body_and_response_body_names_http_protobuf_framing ... {"timestamp":"2026-06-01T00:25:36.275401Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.275417Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44589"}
+{"timestamp":"2026-06-01T00:25:36.275491Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36435"}
+{"timestamp":"2026-06-01T00:25:36.275528Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.275570Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.275860Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
 ok
-test customer_posts_empty_body_and_response_content_type_is_text_plain ... {"timestamp":"2026-05-31T12:31:57.170038Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.170071Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35219"}
-{"timestamp":"2026-05-31T12:31:57.170120Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34167"}
-{"timestamp":"2026-05-31T12:31:57.170132Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.170178Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.170489Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
+test customer_posts_empty_body_and_response_content_type_is_text_plain ... {"timestamp":"2026-06-01T00:25:36.276739Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.276785Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41183"}
+{"timestamp":"2026-06-01T00:25:36.276870Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45557"}
+{"timestamp":"2026-06-01T00:25:36.276895Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.276937Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.277202Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":0}
 ok
-test customer_posts_to_unknown_path_and_receives_status_404 ... {"timestamp":"2026-05-31T12:31:57.171305Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.171325Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43153"}
-{"timestamp":"2026-05-31T12:31:57.171364Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41045"}
-{"timestamp":"2026-05-31T12:31:57.171377Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.171416Z","level":"INFO","event":"ready"}
+test customer_posts_to_unknown_path_and_receives_status_404 ... {"timestamp":"2026-06-01T00:25:36.278304Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.278326Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42697"}
+{"timestamp":"2026-06-01T00:25:36.278365Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34931"}
+{"timestamp":"2026-06-01T00:25:36.278378Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.278413Z","level":"INFO","event":"ready"}
 ok
-test customer_posts_valid_logs_body_and_receives_status_200 ... {"timestamp":"2026-05-31T12:31:57.172643Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.172670Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46397"}
-{"timestamp":"2026-05-31T12:31:57.172753Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42055"}
-{"timestamp":"2026-05-31T12:31:57.172768Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.172846Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.173192Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.173293Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_posts_valid_logs_body_and_receives_status_200 ... {"timestamp":"2026-06-01T00:25:36.279485Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.279503Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35667"}
+{"timestamp":"2026-06-01T00:25:36.279540Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45851"}
+{"timestamp":"2026-06-01T00:25:36.279552Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.279599Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.279899Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.279971Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_posts_valid_logs_body_and_record_reaches_sink ... {"timestamp":"2026-05-31T12:31:57.174318Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.174339Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39627"}
-{"timestamp":"2026-05-31T12:31:57.174388Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41889"}
-{"timestamp":"2026-05-31T12:31:57.174400Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.174503Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.174823Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.174845Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_posts_valid_logs_body_and_record_reaches_sink ... {"timestamp":"2026-06-01T00:25:36.280934Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.280958Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33237"}
+{"timestamp":"2026-06-01T00:25:36.280995Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39525"}
+{"timestamp":"2026-06-01T00:25:36.281007Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.281048Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.281310Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.281328Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_posts_valid_logs_body_and_sink_accepted_line_names_http_protobuf_transport ... {"timestamp":"2026-05-31T12:31:57.175757Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.175785Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34917"}
-{"timestamp":"2026-05-31T12:31:57.175838Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:46301"}
-{"timestamp":"2026-05-31T12:31:57.175872Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.175947Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.176279Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.176302Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
+test customer_posts_valid_logs_body_and_sink_accepted_line_names_http_protobuf_transport ... {"timestamp":"2026-06-01T00:25:36.282252Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.282304Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43911"}
+{"timestamp":"2026-06-01T00:25:36.282382Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43687"}
+{"timestamp":"2026-06-01T00:25:36.282402Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.282690Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.283026Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.283046Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"logs","record_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_posts_with_json_content_type_and_no_record_reaches_sink ... {"timestamp":"2026-05-31T12:31:57.177123Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.177144Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39311"}
-{"timestamp":"2026-05-31T12:31:57.177187Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41433"}
-{"timestamp":"2026-05-31T12:31:57.177199Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.177241Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.177559Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
+test customer_posts_with_json_content_type_and_no_record_reaches_sink ... {"timestamp":"2026-06-01T00:25:36.283949Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.283990Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38173"}
+{"timestamp":"2026-06-01T00:25:36.284048Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41713"}
+{"timestamp":"2026-06-01T00:25:36.284060Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.284124Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.284476Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
 ok
-test customer_posts_with_json_content_type_and_receives_status_415 ... {"timestamp":"2026-05-31T12:31:57.281460Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.281535Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38367"}
-{"timestamp":"2026-05-31T12:31:57.281638Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45821"}
-{"timestamp":"2026-05-31T12:31:57.281655Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.281731Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.282513Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
+test customer_posts_with_json_content_type_and_receives_status_415 ... {"timestamp":"2026-06-01T00:25:36.398406Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.398481Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41559"}
+{"timestamp":"2026-06-01T00:25:36.398626Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41759"}
+{"timestamp":"2026-06-01T00:25:36.398652Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.398756Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.399646Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
 ok
-test customer_posts_with_json_content_type_and_unsupported_media_type_event_is_emitted ... {"timestamp":"2026-05-31T12:31:57.283865Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.283905Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37335"}
-{"timestamp":"2026-05-31T12:31:57.283969Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38865"}
-{"timestamp":"2026-05-31T12:31:57.283988Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.284072Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.284586Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
+test customer_posts_with_json_content_type_and_unsupported_media_type_event_is_emitted ... {"timestamp":"2026-06-01T00:25:36.400818Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.400854Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35371"}
+{"timestamp":"2026-06-01T00:25:36.400915Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:32951"}
+{"timestamp":"2026-06-01T00:25:36.400928Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.400974Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.401310Z","level":"WARN","event":"unsupported_media_type","transport":"http","signal":"logs","content_type":"application/json"}
 ok
-test operator_probes_healthz_and_receives_status_200 ... {"timestamp":"2026-05-31T12:31:57.286031Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.286065Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38139"}
-{"timestamp":"2026-05-31T12:31:57.286133Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36991"}
-{"timestamp":"2026-05-31T12:31:57.286162Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.286247Z","level":"INFO","event":"ready"}
+test operator_probes_healthz_and_receives_status_200 ... {"timestamp":"2026-06-01T00:25:36.402482Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.402560Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45717"}
+{"timestamp":"2026-06-01T00:25:36.402727Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37643"}
+{"timestamp":"2026-06-01T00:25:36.402760Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.402867Z","level":"INFO","event":"ready"}
 ok
-test operator_probes_healthz_and_response_body_is_ok ... {"timestamp":"2026-05-31T12:31:57.287722Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.287748Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38849"}
-{"timestamp":"2026-05-31T12:31:57.287807Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40751"}
-{"timestamp":"2026-05-31T12:31:57.287822Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.287932Z","level":"INFO","event":"ready"}
+test operator_probes_healthz_and_response_body_is_ok ... {"timestamp":"2026-06-01T00:25:36.404611Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.404633Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36541"}
+{"timestamp":"2026-06-01T00:25:36.404679Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37997"}
+{"timestamp":"2026-06-01T00:25:36.404691Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.404728Z","level":"INFO","event":"ready"}
 ok
-test operator_probes_readyz_after_startup_and_receives_status_200 ... {"timestamp":"2026-05-31T12:31:57.289601Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.289645Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35203"}
-{"timestamp":"2026-05-31T12:31:57.289693Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33855"}
-{"timestamp":"2026-05-31T12:31:57.289710Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.289764Z","level":"INFO","event":"ready"}
+test operator_probes_readyz_after_startup_and_receives_status_200 ... {"timestamp":"2026-06-01T00:25:36.406059Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.406092Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:32971"}
+{"timestamp":"2026-06-01T00:25:36.406141Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33223"}
+{"timestamp":"2026-06-01T00:25:36.406152Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.406182Z","level":"INFO","event":"ready"}
 ok
-test operator_probes_readyz_after_startup_and_response_body_is_ready ... {"timestamp":"2026-05-31T12:31:57.291381Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.291406Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33507"}
-{"timestamp":"2026-05-31T12:31:57.291505Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38649"}
-{"timestamp":"2026-05-31T12:31:57.291535Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.291628Z","level":"INFO","event":"ready"}
+test operator_probes_readyz_after_startup_and_response_body_is_ready ... {"timestamp":"2026-06-01T00:25:36.407369Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.408372Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43421"}
+{"timestamp":"2026-06-01T00:25:36.408419Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42885"}
+{"timestamp":"2026-06-01T00:25:36.408432Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.408464Z","level":"INFO","event":"ready"}
 ok
 
-test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
 
      Running tests/slice_03_traces.rs (target/debug/deps/slice_03_traces-22f5f8af7ebdaf84)
 
 running 10 tests
-test customer_exports_one_span_over_grpc_and_receives_grpc_ok ... {"timestamp":"2026-05-31T12:31:57.306556Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.307310Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40645"}
-{"timestamp":"2026-05-31T12:31:57.308294Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37983"}
-{"timestamp":"2026-05-31T12:31:57.308312Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.309241Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.310563Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
-{"timestamp":"2026-05-31T12:31:57.310589Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_span_over_grpc_and_receives_grpc_ok ... {"timestamp":"2026-06-01T00:25:36.419787Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.420447Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46273"}
+{"timestamp":"2026-06-01T00:25:36.421157Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37507"}
+{"timestamp":"2026-06-01T00:25:36.421170Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.421961Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.423114Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
+{"timestamp":"2026-06-01T00:25:36.423134Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_span_over_grpc_and_record_carries_traces_variant ... {"timestamp":"2026-05-31T12:31:57.311696Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.311721Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41599"}
-{"timestamp":"2026-05-31T12:31:57.311780Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41573"}
-{"timestamp":"2026-05-31T12:31:57.311814Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.311874Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.312372Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
-{"timestamp":"2026-05-31T12:31:57.312404Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_span_over_grpc_and_record_carries_traces_variant ... {"timestamp":"2026-06-01T00:25:36.424282Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.424308Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44367"}
+{"timestamp":"2026-06-01T00:25:36.424352Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45221"}
+{"timestamp":"2026-06-01T00:25:36.424363Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.424403Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.424879Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
+{"timestamp":"2026-06-01T00:25:36.424896Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_one_span_over_grpc_and_sink_accepted_line_names_span_count ... {"timestamp":"2026-05-31T12:31:57.313506Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.313637Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41419"}
-{"timestamp":"2026-05-31T12:31:57.313699Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44063"}
-{"timestamp":"2026-05-31T12:31:57.313727Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.313790Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.314264Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
-{"timestamp":"2026-05-31T12:31:57.314290Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
+test customer_exports_one_span_over_grpc_and_sink_accepted_line_names_span_count ... {"timestamp":"2026-06-01T00:25:36.425880Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.426011Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35807"}
+{"timestamp":"2026-06-01T00:25:36.426107Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42239"}
+{"timestamp":"2026-06-01T00:25:36.426130Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.426195Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.426559Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":120}
+{"timestamp":"2026-06-01T00:25:36.426590Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
 ok
-test customer_exports_three_spans_and_span_count_field_is_three ... {"timestamp":"2026-05-31T12:31:57.315381Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.315404Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42431"}
-{"timestamp":"2026-05-31T12:31:57.315456Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36655"}
-{"timestamp":"2026-05-31T12:31:57.315491Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.315549Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.316087Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":238}
-{"timestamp":"2026-05-31T12:31:57.316114Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":3,"resource.service.name":"checkout-api"}
+test customer_exports_three_spans_and_span_count_field_is_three ... {"timestamp":"2026-06-01T00:25:36.427652Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.427673Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44709"}
+{"timestamp":"2026-06-01T00:25:36.427717Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:32905"}
+{"timestamp":"2026-06-01T00:25:36.427730Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.427965Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.428359Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":238}
+{"timestamp":"2026-06-01T00:25:36.428383Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":3,"resource.service.name":"checkout-api"}
 ok
-test customer_posts_logs_body_to_traces_path_and_no_record_reaches_sink ... {"timestamp":"2026-05-31T12:31:57.317099Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.317137Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44393"}
-{"timestamp":"2026-05-31T12:31:57.317201Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42835"}
-{"timestamp":"2026-05-31T12:31:57.317215Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.317275Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.320806Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
+test customer_posts_logs_body_to_traces_path_and_no_record_reaches_sink ... {"timestamp":"2026-06-01T00:25:36.429324Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.429345Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40517"}
+{"timestamp":"2026-06-01T00:25:36.429426Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40927"}
+{"timestamp":"2026-06-01T00:25:36.429449Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.429515Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.432237Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
 ok
-test customer_posts_logs_body_to_traces_path_and_receives_status_400 ... {"timestamp":"2026-05-31T12:31:57.428144Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.428222Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36753"}
-{"timestamp":"2026-05-31T12:31:57.428367Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36053"}
-{"timestamp":"2026-05-31T12:31:57.428393Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.428529Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.429390Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
+test customer_posts_logs_body_to_traces_path_and_receives_status_400 ... {"timestamp":"2026-06-01T00:25:36.550464Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.550525Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43045"}
+{"timestamp":"2026-06-01T00:25:36.550610Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41775"}
+{"timestamp":"2026-06-01T00:25:36.550622Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.550674Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.551113Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
 ok
-test customer_posts_logs_body_to_traces_path_and_response_names_asserted_traces ... {"timestamp":"2026-05-31T12:31:57.431034Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.431076Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37409"}
-{"timestamp":"2026-05-31T12:31:57.431158Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:46325"}
-{"timestamp":"2026-05-31T12:31:57.431174Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.431255Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.431786Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
+test customer_posts_logs_body_to_traces_path_and_response_names_asserted_traces ... {"timestamp":"2026-06-01T00:25:36.552283Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.552308Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38687"}
+{"timestamp":"2026-06-01T00:25:36.552367Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38875"}
+{"timestamp":"2026-06-01T00:25:36.552379Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.552423Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.552807Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
 ok
-test customer_posts_logs_body_to_traces_path_and_response_names_observed_logs ... {"timestamp":"2026-05-31T12:31:57.433429Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.433465Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39459"}
-{"timestamp":"2026-05-31T12:31:57.433536Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40867"}
-{"timestamp":"2026-05-31T12:31:57.433558Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.433625Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.434149Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
+test customer_posts_logs_body_to_traces_path_and_response_names_observed_logs ... {"timestamp":"2026-06-01T00:25:36.553854Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.553876Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33649"}
+{"timestamp":"2026-06-01T00:25:36.553939Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44951"}
+{"timestamp":"2026-06-01T00:25:36.553955Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.554022Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.554444Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
 ok
-test customer_posts_logs_body_to_traces_path_and_response_names_signal_mismatch_rule ... {"timestamp":"2026-05-31T12:31:57.435562Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.435592Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43223"}
-{"timestamp":"2026-05-31T12:31:57.435652Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43595"}
-{"timestamp":"2026-05-31T12:31:57.435667Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.435773Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.436349Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
+test customer_posts_logs_body_to_traces_path_and_response_names_signal_mismatch_rule ... {"timestamp":"2026-06-01T00:25:36.555782Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.555806Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40229"}
+{"timestamp":"2026-06-01T00:25:36.555854Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42599"}
+{"timestamp":"2026-06-01T00:25:36.555863Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.555898Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.556320Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":102}
 ok
-test customer_posts_traces_body_to_http_and_receives_status_200 ... {"timestamp":"2026-05-31T12:31:57.437921Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.437956Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39019"}
-{"timestamp":"2026-05-31T12:31:57.438079Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45677"}
-{"timestamp":"2026-05-31T12:31:57.438104Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.438225Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.438786Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":120}
-{"timestamp":"2026-05-31T12:31:57.438842Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
+test customer_posts_traces_body_to_http_and_receives_status_200 ... {"timestamp":"2026-06-01T00:25:36.557374Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.557408Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41131"}
+{"timestamp":"2026-06-01T00:25:36.557491Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43463"}
+{"timestamp":"2026-06-01T00:25:36.557505Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.557559Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.558033Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":120}
+{"timestamp":"2026-06-01T00:25:36.558056Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"traces","span_count":1,"resource.service.name":"payments-api"}
 ok
 
 test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
@@ -573,186 +599,186 @@ test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
      Running tests/slice_04_metrics.rs (target/debug/deps/slice_04_metrics-71abfff8b2ca9d4e)
 
 running 9 tests
-test customer_exports_metrics_and_data_point_count_is_two ... {"timestamp":"2026-05-31T12:31:57.454084Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.455378Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36873"}
-{"timestamp":"2026-05-31T12:31:57.456302Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38949"}
-{"timestamp":"2026-05-31T12:31:57.456330Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.457357Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.458990Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
-{"timestamp":"2026-05-31T12:31:57.459023Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
+test customer_exports_metrics_and_data_point_count_is_two ... {"timestamp":"2026-06-01T00:25:36.569371Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.570446Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44311"}
+{"timestamp":"2026-06-01T00:25:36.571051Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37825"}
+{"timestamp":"2026-06-01T00:25:36.571070Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.572104Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.573489Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
+{"timestamp":"2026-06-01T00:25:36.573514Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
 ok
-test customer_exports_metrics_and_signal_field_is_metrics ... {"timestamp":"2026-05-31T12:31:57.460255Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.460283Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44353"}
-{"timestamp":"2026-05-31T12:31:57.460334Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42393"}
-{"timestamp":"2026-05-31T12:31:57.460349Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.460397Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.460831Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
-{"timestamp":"2026-05-31T12:31:57.460858Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
+test customer_exports_metrics_and_signal_field_is_metrics ... {"timestamp":"2026-06-01T00:25:36.574512Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.574534Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38323"}
+{"timestamp":"2026-06-01T00:25:36.574594Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36753"}
+{"timestamp":"2026-06-01T00:25:36.574623Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.574667Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.575079Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
+{"timestamp":"2026-06-01T00:25:36.575105Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
 ok
-test customer_exports_metrics_over_grpc_and_receives_grpc_ok ... {"timestamp":"2026-05-31T12:31:57.462053Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.462087Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35353"}
-{"timestamp":"2026-05-31T12:31:57.462175Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42767"}
-{"timestamp":"2026-05-31T12:31:57.462205Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.462287Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.462855Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
-{"timestamp":"2026-05-31T12:31:57.462881Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
+test customer_exports_metrics_over_grpc_and_receives_grpc_ok ... {"timestamp":"2026-06-01T00:25:36.576102Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.576161Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34645"}
+{"timestamp":"2026-06-01T00:25:36.576258Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33481"}
+{"timestamp":"2026-06-01T00:25:36.576276Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.576344Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.576797Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
+{"timestamp":"2026-06-01T00:25:36.576817Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
 ok
-test customer_exports_metrics_over_grpc_and_record_carries_metrics_variant ... {"timestamp":"2026-05-31T12:31:57.463971Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.464000Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46697"}
-{"timestamp":"2026-05-31T12:31:57.464045Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34093"}
-{"timestamp":"2026-05-31T12:31:57.464058Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.464112Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.464594Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
-{"timestamp":"2026-05-31T12:31:57.464617Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
+test customer_exports_metrics_over_grpc_and_record_carries_metrics_variant ... {"timestamp":"2026-06-01T00:25:36.577732Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.577761Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40281"}
+{"timestamp":"2026-06-01T00:25:36.577822Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41861"}
+{"timestamp":"2026-06-01T00:25:36.577840Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.577896Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.578258Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":220}
+{"timestamp":"2026-06-01T00:25:36.578276Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
 ok
-test customer_posts_metrics_body_to_http_and_receives_status_200 ... {"timestamp":"2026-05-31T12:31:57.465617Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.465650Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35743"}
-{"timestamp":"2026-05-31T12:31:57.465709Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43443"}
-{"timestamp":"2026-05-31T12:31:57.465721Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.465981Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.469223Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":220}
-{"timestamp":"2026-05-31T12:31:57.469263Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
+test customer_posts_metrics_body_to_http_and_receives_status_200 ... {"timestamp":"2026-06-01T00:25:36.579269Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.579307Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36425"}
+{"timestamp":"2026-06-01T00:25:36.579389Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38495"}
+{"timestamp":"2026-06-01T00:25:36.579410Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.579471Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.581581Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":220}
+{"timestamp":"2026-06-01T00:25:36.581604Z","level":"INFO","event":"sink_accepted","sink":"stub","signal":"metrics","data_point_count":2,"resource.service.name":"payments-api"}
 ok
-test customer_posts_traces_body_to_metrics_path_and_receives_status_400 ... {"timestamp":"2026-05-31T12:31:57.470254Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.470290Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36833"}
-{"timestamp":"2026-05-31T12:31:57.470346Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36895"}
-{"timestamp":"2026-05-31T12:31:57.470359Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.470412Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.470783Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
+test customer_posts_traces_body_to_metrics_path_and_receives_status_400 ... {"timestamp":"2026-06-01T00:25:36.582506Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.582522Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40755"}
+{"timestamp":"2026-06-01T00:25:36.582595Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40203"}
+{"timestamp":"2026-06-01T00:25:36.582611Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.582663Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.583063Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
 ok
-test customer_posts_traces_body_to_metrics_path_and_response_names_asserted_metrics ... {"timestamp":"2026-05-31T12:31:57.471826Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.471865Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45361"}
-{"timestamp":"2026-05-31T12:31:57.471937Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43317"}
-{"timestamp":"2026-05-31T12:31:57.471968Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.472038Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.472437Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
+test customer_posts_traces_body_to_metrics_path_and_response_names_asserted_metrics ... {"timestamp":"2026-06-01T00:25:36.583906Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.583927Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41825"}
+{"timestamp":"2026-06-01T00:25:36.583971Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45427"}
+{"timestamp":"2026-06-01T00:25:36.583983Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.584030Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.584381Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
 ok
-test customer_posts_traces_body_to_metrics_path_and_response_names_observed_traces ... {"timestamp":"2026-05-31T12:31:57.473490Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.473517Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45137"}
-{"timestamp":"2026-05-31T12:31:57.473565Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43679"}
-{"timestamp":"2026-05-31T12:31:57.473583Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.473645Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.474025Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
+test customer_posts_traces_body_to_metrics_path_and_response_names_observed_traces ... {"timestamp":"2026-06-01T00:25:36.585361Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.585389Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44949"}
+{"timestamp":"2026-06-01T00:25:36.585436Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42421"}
+{"timestamp":"2026-06-01T00:25:36.585447Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.585489Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.585797Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
 ok
-test customer_posts_traces_body_to_metrics_path_and_response_names_signal_mismatch ... {"timestamp":"2026-05-31T12:31:57.474989Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.475014Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41399"}
-{"timestamp":"2026-05-31T12:31:57.475054Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40065"}
-{"timestamp":"2026-05-31T12:31:57.475073Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.475120Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.475378Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
+test customer_posts_traces_body_to_metrics_path_and_response_names_signal_mismatch ... {"timestamp":"2026-06-01T00:25:36.586740Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.586760Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33715"}
+{"timestamp":"2026-06-01T00:25:36.586817Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:32845"}
+{"timestamp":"2026-06-01T00:25:36.586832Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.586874Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.587164Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":120}
 ok
 
-test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running tests/slice_05_backpressure.rs (target/debug/deps/slice_05_backpressure-31087f8325155e05)
 
 running 10 tests
-test every_excess_request_under_overload_receives_a_deterministic_refusal_or_acceptance ... {"timestamp":"2026-05-31T12:31:57.487942Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.488886Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46435"}
-{"timestamp":"2026-05-31T12:31:57.490496Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43935"}
-{"timestamp":"2026-05-31T12:31:57.490510Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.491513Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.495357Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495355Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495380Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495381Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495357Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.495357Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.495416Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495355Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495354Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
-{"timestamp":"2026-05-31T12:31:57.495467Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+test every_excess_request_under_overload_receives_a_deterministic_refusal_or_acceptance ... {"timestamp":"2026-06-01T00:25:36.596768Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.597481Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44341"}
+{"timestamp":"2026-06-01T00:25:36.598526Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40133"}
+{"timestamp":"2026-06-01T00:25:36.598541Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.599317Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.601977Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.601982Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601982Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601981Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601981Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601981Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601978Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.602043Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.602054Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+{"timestamp":"2026-06-01T00:25:36.601987Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
 ok
-test fifth_concurrent_grpc_request_at_cap_four_receives_resource_exhausted ... {"timestamp":"2026-05-31T12:31:57.551780Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.551839Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45937"}
-{"timestamp":"2026-05-31T12:31:57.551921Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33847"}
-{"timestamp":"2026-05-31T12:31:57.551934Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.551999Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.553057Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.553057Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.553097Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.553108Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.710869Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":4,"in_flight_at_refusal":4}
+test fifth_concurrent_grpc_request_at_cap_four_receives_resource_exhausted ... {"timestamp":"2026-06-01T00:25:36.662943Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.662983Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36461"}
+{"timestamp":"2026-06-01T00:25:36.663061Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37085"}
+{"timestamp":"2026-06-01T00:25:36.663080Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.663172Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.663800Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.663801Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.663841Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.663853Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.818018Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":4,"in_flight_at_refusal":4}
 ok
-test fifth_concurrent_grpc_request_grpc_message_names_the_cap ... {"timestamp":"2026-05-31T12:31:57.714927Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.715007Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44173"}
-{"timestamp":"2026-05-31T12:31:57.715232Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45929"}
-{"timestamp":"2026-05-31T12:31:57.715255Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.715458Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.716916Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.716934Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.716933Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.716916Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.875728Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":4,"in_flight_at_refusal":4}
+test fifth_concurrent_grpc_request_grpc_message_names_the_cap ... {"timestamp":"2026-06-01T00:25:36.821586Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.821650Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37033"}
+{"timestamp":"2026-06-01T00:25:36.821793Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44881"}
+{"timestamp":"2026-06-01T00:25:36.821825Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.821949Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.823036Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.823037Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.823135Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.823143Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.980940Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":4,"in_flight_at_refusal":4}
 ok
-test fifth_concurrent_http_request_at_cap_four_receives_status_503 ... {"timestamp":"2026-05-31T12:31:57.879943Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:57.880056Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40925"}
-{"timestamp":"2026-05-31T12:31:57.880284Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33129"}
-{"timestamp":"2026-05-31T12:31:57.880339Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:57.880531Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:57.881856Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.881897Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.881855Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:57.881855Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.038168Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
+test fifth_concurrent_http_request_at_cap_four_receives_status_503 ... {"timestamp":"2026-06-01T00:25:36.986989Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:36.987062Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42615"}
+{"timestamp":"2026-06-01T00:25:36.987196Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33313"}
+{"timestamp":"2026-06-01T00:25:36.987222Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:36.987354Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:36.988222Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.988231Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.988265Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:36.988279Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.149037Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
 ok
-test fifth_concurrent_http_request_body_names_the_cap ... {"timestamp":"2026-05-31T12:31:58.042171Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.042247Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34709"}
-{"timestamp":"2026-05-31T12:31:58.042407Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45345"}
-{"timestamp":"2026-05-31T12:31:58.042443Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.042667Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.043754Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.043868Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.043900Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.043753Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.198889Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
+test fifth_concurrent_http_request_body_names_the_cap ... {"timestamp":"2026-06-01T00:25:37.152799Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.152866Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35013"}
+{"timestamp":"2026-06-01T00:25:37.153026Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39521"}
+{"timestamp":"2026-06-01T00:25:37.153059Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.153191Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.153770Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.153777Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.153803Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.153879Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.308384Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
 ok
-test fifth_concurrent_http_request_includes_retry_after_header ... {"timestamp":"2026-05-31T12:31:58.202551Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.202617Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42119"}
-{"timestamp":"2026-05-31T12:31:58.202752Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37447"}
-{"timestamp":"2026-05-31T12:31:58.202776Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.202917Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.204093Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.204150Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.204093Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.204093Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.361614Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
+test fifth_concurrent_http_request_includes_retry_after_header ... {"timestamp":"2026-06-01T00:25:37.313317Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.313360Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40641"}
+{"timestamp":"2026-06-01T00:25:37.313435Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37859"}
+{"timestamp":"2026-06-01T00:25:37.313446Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.313497Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.313892Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.313893Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.313918Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.313944Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.470042Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":4,"in_flight_at_refusal":4}
 ok
-test grpc_concurrency_cap_hit_emits_warn_stderr_event ... {"timestamp":"2026-05-31T12:31:58.367408Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.367498Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40403"}
-{"timestamp":"2026-05-31T12:31:58.367636Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44279"}
-{"timestamp":"2026-05-31T12:31:58.367662Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.367753Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.368773Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.368911Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.521604Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":2,"in_flight_at_refusal":2}
+test grpc_concurrency_cap_hit_emits_warn_stderr_event ... {"timestamp":"2026-06-01T00:25:37.473091Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.473195Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42121"}
+{"timestamp":"2026-06-01T00:25:37.473369Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44493"}
+{"timestamp":"2026-06-01T00:25:37.473402Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.473535Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.474619Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.474636Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.629378Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":2,"in_flight_at_refusal":2}
 ok
-test grpc_concurrency_cap_hit_event_names_grpc_transport ... {"timestamp":"2026-05-31T12:31:58.525672Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.525849Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35201"}
-{"timestamp":"2026-05-31T12:31:58.526052Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45613"}
-{"timestamp":"2026-05-31T12:31:58.526084Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.526228Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.527205Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.527759Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.683502Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":2,"in_flight_at_refusal":2}
+test grpc_concurrency_cap_hit_event_names_grpc_transport ... {"timestamp":"2026-06-01T00:25:37.638869Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.638918Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:33873"}
+{"timestamp":"2026-06-01T00:25:37.638995Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35553"}
+{"timestamp":"2026-06-01T00:25:37.639010Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.639064Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.639742Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.639750Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.797001Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":2,"in_flight_at_refusal":2}
 ok
-test http_concurrency_cap_hit_event_names_http_protobuf_transport ... {"timestamp":"2026-05-31T12:31:58.687204Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.687283Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35919"}
-{"timestamp":"2026-05-31T12:31:58.687449Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41011"}
-{"timestamp":"2026-05-31T12:31:58.687490Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.687629Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.688525Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.688525Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.846111Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
+test http_concurrency_cap_hit_event_names_http_protobuf_transport ... {"timestamp":"2026-06-01T00:25:37.800931Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.801005Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35675"}
+{"timestamp":"2026-06-01T00:25:37.801144Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37463"}
+{"timestamp":"2026-06-01T00:25:37.801179Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.801305Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.802462Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.802463Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.958271Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":2,"in_flight_at_refusal":2}
 ok
-test saturated_grpc_does_not_block_http_requests ... {"timestamp":"2026-05-31T12:31:58.854578Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:58.854654Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36435"}
-{"timestamp":"2026-05-31T12:31:58.854812Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38937"}
-{"timestamp":"2026-05-31T12:31:58.854840Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:58.854952Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:58.856073Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:58.856073Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.010083Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
+test saturated_grpc_does_not_block_http_requests ... {"timestamp":"2026-06-01T00:25:37.963196Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:37.963309Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43181"}
+{"timestamp":"2026-06-01T00:25:37.963525Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38961"}
+{"timestamp":"2026-06-01T00:25:37.963591Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:37.963761Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:37.964772Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:37.964821Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.118884Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102}
 ok
 
 test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.53s
@@ -760,116 +786,116 @@ test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
      Running tests/slice_06_forwarding_sink.rs (target/debug/deps/slice_06_forwarding_sink-7ff4e4363c1882a2)
 
 running 11 tests
-test customer_exports_one_log_record_and_downstream_receives_protobuf_post ... {"timestamp":"2026-05-31T12:31:59.034109Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.040589Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43235"}
-{"timestamp":"2026-05-31T12:31:59.040831Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:46351"}
-{"timestamp":"2026-05-31T12:31:59.040908Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.041066Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.042003Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.042359Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:34697","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
+test customer_exports_one_log_record_and_downstream_receives_protobuf_post ... {"timestamp":"2026-06-01T00:25:38.137633Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.142928Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46559"}
+{"timestamp":"2026-06-01T00:25:38.143065Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34885"}
+{"timestamp":"2026-06-01T00:25:38.143081Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.143137Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.143679Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.143915Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:42757","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
 ok
-test customer_exports_when_downstream_endpoint_is_unreachable_and_receives_unavailable ... {"timestamp":"2026-05-31T12:31:59.043721Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.043994Z","level":"ERROR","event":"health.startup.refused","reason":"downstream unreachable at http://127.0.0.1:1: error sending request for url (http://127.0.0.1:1/v1/logs)"}
+test customer_exports_when_downstream_endpoint_is_unreachable_and_receives_unavailable ... {"timestamp":"2026-06-01T00:25:38.145151Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.145429Z","level":"ERROR","event":"health.startup.refused","reason":"downstream unreachable at http://127.0.0.1:1: error sending request for url (http://127.0.0.1:1/v1/logs)"}
 ok
-test customer_exports_when_downstream_hangs_past_timeout_and_receives_unavailable ... {"timestamp":"2026-05-31T12:31:59.045165Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.045716Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39791"}
-{"timestamp":"2026-05-31T12:31:59.045802Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37863"}
-{"timestamp":"2026-05-31T12:31:59.045818Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.045880Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.046481Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.303507Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:34697","reason":"downstream timeout"}
+test customer_exports_when_downstream_hangs_past_timeout_and_receives_unavailable ... {"timestamp":"2026-06-01T00:25:38.146373Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.146766Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:45329"}
+{"timestamp":"2026-06-01T00:25:38.146810Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43127"}
+{"timestamp":"2026-06-01T00:25:38.146817Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.146849Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.147211Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.404835Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:42757","reason":"downstream timeout"}
 ok
-test customer_exports_when_downstream_returns_503_and_receives_grpc_unavailable ... {"timestamp":"2026-05-31T12:31:59.308643Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.310508Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34321"}
-{"timestamp":"2026-05-31T12:31:59.310788Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:36757"}
-{"timestamp":"2026-05-31T12:31:59.310838Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.311056Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.312079Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.312649Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:34697","reason":"downstream returned 503"}
+test customer_exports_when_downstream_returns_503_and_receives_grpc_unavailable ... {"timestamp":"2026-06-01T00:25:38.408416Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.409841Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43861"}
+{"timestamp":"2026-06-01T00:25:38.410011Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35141"}
+{"timestamp":"2026-06-01T00:25:38.410044Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.410155Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.411371Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.412094Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:42757","reason":"downstream returned 503"}
 ok
-test forwarding_sink_accepted_event_includes_downstream_endpoint ... {"timestamp":"2026-05-31T12:31:59.314665Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.315512Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46107"}
-{"timestamp":"2026-05-31T12:31:59.315617Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44017"}
-{"timestamp":"2026-05-31T12:31:59.315642Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.315729Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.316523Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.317015Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:34697","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
+test forwarding_sink_accepted_event_includes_downstream_endpoint ... {"timestamp":"2026-06-01T00:25:38.413265Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.413708Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38583"}
+{"timestamp":"2026-06-01T00:25:38.413767Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35789"}
+{"timestamp":"2026-06-01T00:25:38.413779Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.413821Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.414220Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.414428Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:42757","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
 ok
-test forwarding_sink_accepted_event_includes_downstream_latency_ms_field ... {"timestamp":"2026-05-31T12:31:59.318846Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.319651Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36877"}
-{"timestamp":"2026-05-31T12:31:59.319748Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41275"}
-{"timestamp":"2026-05-31T12:31:59.319769Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.319874Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.320526Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.320945Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:34697","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
+test forwarding_sink_accepted_event_includes_downstream_latency_ms_field ... {"timestamp":"2026-06-01T00:25:38.415840Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.416363Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38825"}
+{"timestamp":"2026-06-01T00:25:38.416417Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:32997"}
+{"timestamp":"2026-06-01T00:25:38.416434Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.416470Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.417090Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.417438Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://127.0.0.1:42757","signal":"logs","record_count":1,"downstream_latency_ms":0,"resource.service.name":"payments-api"}
 ok
-test forwarding_sink_failure_emits_sink_failed_stderr_event ... {"timestamp":"2026-05-31T12:31:59.323175Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.324040Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42311"}
-{"timestamp":"2026-05-31T12:31:59.324142Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:43289"}
-{"timestamp":"2026-05-31T12:31:59.324168Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.324255Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.325014Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.325472Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:34697","reason":"downstream returned 503"}
+test forwarding_sink_failure_emits_sink_failed_stderr_event ... {"timestamp":"2026-06-01T00:25:38.418605Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.419067Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40223"}
+{"timestamp":"2026-06-01T00:25:38.419114Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:32793"}
+{"timestamp":"2026-06-01T00:25:38.419125Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.419159Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.419487Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.419714Z","level":"ERROR","event":"sink_failed","sink":"forwarding","downstream":"http://127.0.0.1:42757","reason":"downstream returned 503"}
 ok
-test forwarding_sink_probe_failure_emits_health_startup_refused_event ... {"timestamp":"2026-05-31T12:31:59.327251Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.328288Z","level":"ERROR","event":"health.startup.refused","reason":"downstream rejected probe at http://127.0.0.1:34697: status 503"}
+test forwarding_sink_probe_failure_emits_health_startup_refused_event ... {"timestamp":"2026-06-01T00:25:38.421020Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.421638Z","level":"ERROR","event":"health.startup.refused","reason":"downstream rejected probe at http://127.0.0.1:42757: status 503"}
 ok
-test forwarding_sink_probe_falls_back_to_post_when_options_returns_405 ... {"timestamp":"2026-05-31T12:31:59.329492Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.330449Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43373"}
-{"timestamp":"2026-05-31T12:31:59.330532Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41679"}
-{"timestamp":"2026-05-31T12:31:59.330547Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.330613Z","level":"INFO","event":"ready"}
+test forwarding_sink_probe_falls_back_to_post_when_options_returns_405 ... {"timestamp":"2026-06-01T00:25:38.422795Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.423443Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44727"}
+{"timestamp":"2026-06-01T00:25:38.423488Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39721"}
+{"timestamp":"2026-06-01T00:25:38.423500Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.423629Z","level":"INFO","event":"ready"}
 ok
-test forwarding_sink_probe_refuses_startup_when_downstream_lies_with_503_on_post ... {"timestamp":"2026-05-31T12:31:59.332051Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.332942Z","level":"ERROR","event":"health.startup.refused","reason":"downstream rejected probe at http://127.0.0.1:34697: status 503"}
+test forwarding_sink_probe_refuses_startup_when_downstream_lies_with_503_on_post ... {"timestamp":"2026-06-01T00:25:38.424806Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.425459Z","level":"ERROR","event":"health.startup.refused","reason":"downstream rejected probe at http://127.0.0.1:42757: status 503"}
 ok
-test forwarding_sink_probe_succeeds_against_options_responder ... {"timestamp":"2026-05-31T12:31:59.334125Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.334627Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44621"}
-{"timestamp":"2026-05-31T12:31:59.334716Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42663"}
-{"timestamp":"2026-05-31T12:31:59.334733Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.334909Z","level":"INFO","event":"ready"}
+test forwarding_sink_probe_succeeds_against_options_responder ... {"timestamp":"2026-06-01T00:25:38.426372Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.426757Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:34833"}
+{"timestamp":"2026-06-01T00:25:38.426806Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35103"}
+{"timestamp":"2026-06-01T00:25:38.426819Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.426859Z","level":"INFO","event":"ready"}
 ok
 
-test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
 
      Running tests/slice_07_tls_schema_knob.rs (target/debug/deps/slice_07_tls_schema_knob-bccc3721d29cc63c)
 
 running 7 tests
 test config_with_all_security_keys_at_defaults_parses_without_error ... ok
-test config_with_security_keys_omitted_does_not_emit_tls_warn_line ... {"timestamp":"2026-05-31T12:31:59.353071Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.354216Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35795"}
-{"timestamp":"2026-05-31T12:31:59.354643Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41603"}
-{"timestamp":"2026-05-31T12:31:59.354665Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.355657Z","level":"INFO","event":"ready"}
+test config_with_security_keys_omitted_does_not_emit_tls_warn_line ... {"timestamp":"2026-06-01T00:25:38.440696Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.441698Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38667"}
+{"timestamp":"2026-06-01T00:25:38.442266Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:45243"}
+{"timestamp":"2026-06-01T00:25:38.442286Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.443096Z","level":"INFO","event":"ready"}
 ok
 test config_with_unknown_key_is_rejected_at_load ... ok
-test spiffe_enabled_true_emits_warn_line ... {"timestamp":"2026-05-31T12:31:59.357691Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.357711Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships no auth; ignoring auth.spiffe.enabled=true"}
-{"timestamp":"2026-05-31T12:31:59.357734Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44335"}
-{"timestamp":"2026-05-31T12:31:59.357819Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34821"}
-{"timestamp":"2026-05-31T12:31:59.357849Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.357914Z","level":"INFO","event":"ready"}
+test spiffe_enabled_true_emits_warn_line ... {"timestamp":"2026-06-01T00:25:38.444974Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.444990Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships no auth; ignoring auth.spiffe.enabled=true"}
+{"timestamp":"2026-06-01T00:25:38.445009Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36787"}
+{"timestamp":"2026-06-01T00:25:38.445060Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:37575"}
+{"timestamp":"2026-06-01T00:25:38.445074Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.445131Z","level":"INFO","event":"ready"}
 ok
-test tls_enabled_true_emits_exactly_one_warn_line ... {"timestamp":"2026-05-31T12:31:59.358863Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.358878Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
-{"timestamp":"2026-05-31T12:31:59.358895Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40919"}
-{"timestamp":"2026-05-31T12:31:59.358942Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41483"}
-{"timestamp":"2026-05-31T12:31:59.358957Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.359006Z","level":"INFO","event":"ready"}
+test tls_enabled_true_emits_exactly_one_warn_line ... {"timestamp":"2026-06-01T00:25:38.446011Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.446024Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
+{"timestamp":"2026-06-01T00:25:38.446039Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43923"}
+{"timestamp":"2026-06-01T00:25:38.446083Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39397"}
+{"timestamp":"2026-06-01T00:25:38.446095Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.446133Z","level":"INFO","event":"ready"}
 ok
-test tls_enabled_true_emits_tls_not_supported_in_v0_warn_line ... {"timestamp":"2026-05-31T12:31:59.360207Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.360231Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
-{"timestamp":"2026-05-31T12:31:59.360255Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:40673"}
-{"timestamp":"2026-05-31T12:31:59.360328Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:34413"}
-{"timestamp":"2026-05-31T12:31:59.360370Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.360660Z","level":"INFO","event":"ready"}
+test tls_enabled_true_emits_tls_not_supported_in_v0_warn_line ... {"timestamp":"2026-06-01T00:25:38.447113Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.447127Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
+{"timestamp":"2026-06-01T00:25:38.447144Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39705"}
+{"timestamp":"2026-06-01T00:25:38.447189Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39983"}
+{"timestamp":"2026-06-01T00:25:38.447201Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.447244Z","level":"INFO","event":"ready"}
 ok
-test tls_enabled_true_listeners_still_bind_and_readyz_returns_ok ... {"timestamp":"2026-05-31T12:31:59.361653Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.361666Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
-{"timestamp":"2026-05-31T12:31:59.361689Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:42603"}
-{"timestamp":"2026-05-31T12:31:59.361740Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44869"}
-{"timestamp":"2026-05-31T12:31:59.361752Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.361789Z","level":"INFO","event":"ready"}
+test tls_enabled_true_listeners_still_bind_and_readyz_returns_ok ... {"timestamp":"2026-06-01T00:25:38.448188Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.448201Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
+{"timestamp":"2026-06-01T00:25:38.448216Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:38067"}
+{"timestamp":"2026-06-01T00:25:38.448263Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42513"}
+{"timestamp":"2026-06-01T00:25:38.448274Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.448344Z","level":"INFO","event":"ready"}
 ok
 
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
@@ -877,62 +903,62 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/slice_08_graceful_shutdown.rs (target/debug/deps/slice_08_graceful_shutdown-e6a667be57129ffa)
 
 running 6 tests
-test clean_drain_emits_in_flight_drained_stderr_event ... {"timestamp":"2026-05-31T12:31:59.378651Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.379635Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43341"}
-{"timestamp":"2026-05-31T12:31:59.380376Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:40169"}
-{"timestamp":"2026-05-31T12:31:59.380395Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.381089Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.382656Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.434996Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
-{"timestamp":"2026-05-31T12:31:59.435040Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:31:59.690392Z","level":"INFO","event":"in_flight_drained","drained_count":1}
-{"timestamp":"2026-05-31T12:31:59.690573Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test clean_drain_emits_in_flight_drained_stderr_event ... {"timestamp":"2026-06-01T00:25:38.462677Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.463477Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:35327"}
+{"timestamp":"2026-06-01T00:25:38.464032Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:38533"}
+{"timestamp":"2026-06-01T00:25:38.464055Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.464626Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.466022Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.517477Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
+{"timestamp":"2026-06-01T00:25:38.517513Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:38.780386Z","level":"INFO","event":"in_flight_drained","drained_count":1}
+{"timestamp":"2026-06-01T00:25:38.780694Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
-test drain_deadline_exceeded_emits_warn_stderr_event_with_dropped_count ... {"timestamp":"2026-05-31T12:31:59.694084Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:31:59.694176Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46141"}
-{"timestamp":"2026-05-31T12:31:59.694386Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44563"}
-{"timestamp":"2026-05-31T12:31:59.694441Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:31:59.694781Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:31:59.695926Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:31:59.748614Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":200}
-{"timestamp":"2026-05-31T12:31:59.748857Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:32:00.204910Z","level":"WARN","event":"drain_deadline_exceeded","dropped_count":1}
-{"timestamp":"2026-05-31T12:32:00.205063Z","level":"INFO","event":"shutdown_complete","exit_code":1}
+test drain_deadline_exceeded_emits_warn_stderr_event_with_dropped_count ... {"timestamp":"2026-06-01T00:25:38.785748Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:38.785902Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:41409"}
+{"timestamp":"2026-06-01T00:25:38.786200Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39047"}
+{"timestamp":"2026-06-01T00:25:38.786273Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:38.786546Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:38.788021Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:38.838857Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":200}
+{"timestamp":"2026-06-01T00:25:38.839023Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:39.296195Z","level":"WARN","event":"drain_deadline_exceeded","dropped_count":1}
+{"timestamp":"2026-06-01T00:25:39.296315Z","level":"INFO","event":"shutdown_complete","exit_code":1}
 ok
-test in_flight_request_completes_when_drain_finishes_within_deadline ... {"timestamp":"2026-05-31T12:32:00.208782Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:32:00.209018Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:39093"}
-{"timestamp":"2026-05-31T12:32:00.209453Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:44683"}
-{"timestamp":"2026-05-31T12:32:00.209507Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:32:00.209719Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:32:00.211958Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
-{"timestamp":"2026-05-31T12:32:00.264892Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
-{"timestamp":"2026-05-31T12:32:00.265033Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:32:00.520999Z","level":"INFO","event":"in_flight_drained","drained_count":1}
-{"timestamp":"2026-05-31T12:32:00.521140Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test in_flight_request_completes_when_drain_finishes_within_deadline ... {"timestamp":"2026-06-01T00:25:39.299601Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:39.299673Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:36963"}
+{"timestamp":"2026-06-01T00:25:39.299820Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:33863"}
+{"timestamp":"2026-06-01T00:25:39.299852Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:39.299976Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:39.301030Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":102}
+{"timestamp":"2026-06-01T00:25:39.352482Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
+{"timestamp":"2026-06-01T00:25:39.352603Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:39.612026Z","level":"INFO","event":"in_flight_drained","drained_count":1}
+{"timestamp":"2026-06-01T00:25:39.612098Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
-test shutdown_flips_readyz_to_503_draining_within_100ms ... {"timestamp":"2026-05-31T12:32:00.525325Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:32:00.525455Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:46753"}
-{"timestamp":"2026-05-31T12:32:00.525692Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:35501"}
-{"timestamp":"2026-05-31T12:32:00.525731Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:32:00.525898Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:32:00.532100Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
-{"timestamp":"2026-05-31T12:32:00.532151Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:32:00.787628Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-{"timestamp":"2026-05-31T12:32:00.787766Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test shutdown_flips_readyz_to_503_draining_within_100ms ... {"timestamp":"2026-06-01T00:25:39.615048Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:39.615130Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:43901"}
+{"timestamp":"2026-06-01T00:25:39.615307Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:42749"}
+{"timestamp":"2026-06-01T00:25:39.615343Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:39.615492Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:39.620499Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
+{"timestamp":"2026-06-01T00:25:39.620523Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:39.881119Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-06-01T00:25:39.881184Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
-test shutdown_initiated_event_carries_signal_field ... {"timestamp":"2026-05-31T12:32:00.791984Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-05-31T12:32:00.792190Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:37911"}
-{"timestamp":"2026-05-31T12:32:00.792519Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:39673"}
-{"timestamp":"2026-05-31T12:32:00.792569Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-05-31T12:32:00.793354Z","level":"INFO","event":"ready"}
-{"timestamp":"2026-05-31T12:32:00.793390Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
-{"timestamp":"2026-05-31T12:32:00.793413Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
-{"timestamp":"2026-05-31T12:32:01.048771Z","level":"INFO","event":"in_flight_drained","drained_count":0}
-{"timestamp":"2026-05-31T12:32:01.048924Z","level":"INFO","event":"shutdown_complete","exit_code":0}
+test shutdown_initiated_event_carries_signal_field ... {"timestamp":"2026-06-01T00:25:39.883893Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T00:25:39.883985Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"127.0.0.1:44301"}
+{"timestamp":"2026-06-01T00:25:39.884187Z","level":"INFO","event":"listener_bound","transport":"http","addr":"127.0.0.1:41829"}
+{"timestamp":"2026-06-01T00:25:39.884234Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T00:25:39.884394Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T00:25:39.884425Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":5000}
+{"timestamp":"2026-06-01T00:25:39.884447Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-01T00:25:40.145861Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-06-01T00:25:40.145947Z","level":"INFO","event":"shutdown_complete","exit_code":0}
 ok
 test sigterm_and_handle_shutdown_produce_the_same_drain_sequence ... ignored, DELIVER lands the SIGTERM-vs-Handle::shutdown equivalence with a process-spawning fixture
 
-test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.68s
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.69s
 
      Running unittests src/lib.rs (target/debug/deps/aperture_storage_sink-c27b1b58f8144ba7)
 
@@ -1012,7 +1038,7 @@ test persisted_logs_survive_a_gateway_restart ... ok
 test probe_returns_err_when_the_pillar_root_is_not_writable ... ok
 test probe_returns_ok_when_the_pillar_root_is_writable ... ok
 
-test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_traces_to_ray.rs (target/debug/deps/slice_02_traces_to_ray-3539ac5bfdcf7c9b)
 
@@ -1050,7 +1076,7 @@ test persisted_sum_reflects_kind_value_and_point_attribute ... ok
 test probe_returns_err_when_the_pillar_root_is_not_writable ... ok
 test probe_returns_ok_when_the_pillar_root_is_writable ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running unittests src/lib.rs (target/debug/deps/augur-a738eba939c1c820)
 
@@ -1082,7 +1108,7 @@ test previously_fired_rare_event_does_not_re_fire ... ok
 test reset_clears_frequency_table_and_fired_set ... ok
 test warm_up_suppresses_anomalies ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running unittests src/lib.rs (target/debug/deps/beacon-9cfa9032a72429d6)
 
@@ -1212,7 +1238,7 @@ test recovery_p95_latency_under_one_and_a_half_seconds ... ok
 test snapshot_then_post_snapshot_puts_recover_correctly ... ok
 test snapshotted_and_pure_wal_stores_recover_identically ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.08s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_operator_restart_survival.rs (target/debug/deps/v1_slice_02_operator_restart_survival-1b6e8141cf4b2f65)
 
@@ -1271,7 +1297,7 @@ test place_then_get_tier_returns_placed_tier ... ok
 test two_tenants_tier_metadata_is_isolated ... ok
 test unknown_item_returns_none_not_error ... ok
 
-test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_lifecycle.rs (target/debug/deps/slice_02_lifecycle-f43bdec2417c7b19)
 
@@ -1285,7 +1311,7 @@ test evaluate_p95_latency_under_five_milliseconds ... ok
 test hot_items_move_to_warm_when_age_exceeds_threshold ... ok
 test warm_items_move_to_cold_when_age_exceeds_threshold ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-33ad693b9521e565)
 
@@ -1299,7 +1325,7 @@ test restart_recovers_prior_placements_and_migrations ... ok
 test tenant_isolation_preserved_across_restart ... ok
 test timestamps_round_trip_byte_stable_across_restart ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-7eafb531ffbff773)
 
@@ -1310,7 +1336,7 @@ test snapshot_is_idempotent_under_no_intervening_writes ... ok
 test snapshot_plus_wal_recovery_matches_pure_wal_recovery ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.25s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running unittests src/lib.rs (target/debug/deps/codex-16476223c21b8f4d)
 
@@ -1566,7 +1592,7 @@ test migrate_subcommand_unknown_item_with_observe_otlp_leaves_no_emission ... ok
 test migrate_with_observe_otlp_emits_one_cinder_migrate_count_line ... ok
 test migrate_without_observe_otlp_creates_no_file_at_candidate_path ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/migrate_subcommand.rs (target/debug/deps/migrate_subcommand-ef04ab559daa008b)
 
@@ -1589,7 +1615,7 @@ test cross_writer_ndjson_validity_under_sequential_alternation ... ok
 test ingest_with_observe_otlp_emits_cinder_place_and_lumen_ingest_lines_per_batch ... ok
 test no_observe_otlp_means_no_file_is_created_even_after_cinder_wiring ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
 
      Running tests/observe_otlp_flag.rs (target/debug/deps/observe_otlp_flag-90fad6bfc0477e3f)
 
@@ -1618,7 +1644,7 @@ test place_subcommand_invalid_tier_exits_nonzero_with_stderr_naming_value ... ok
 test place_with_observe_otlp_emits_one_cinder_place_count_line ... ok
 test place_without_observe_otlp_creates_no_file_at_candidate_path ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/read_time_range.rs (target/debug/deps/read_time_range-7fbce1201216d1b3)
 
@@ -1641,7 +1667,7 @@ test stats_with_tiers_hot_only_omits_warm_and_cold_lines ... ok
 test stats_with_tiers_populated_lumen_with_zero_cinder_is_byte_equivalent_to_predecessor ... ok
 test stats_with_tiers_populated_multi_tier_emits_six_lines_in_order ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/stats_subcommand.rs (target/debug/deps/stats_subcommand-f47af0df77351f97)
 
@@ -1741,7 +1767,7 @@ test a_result_one_record_over_the_cap_is_refused_with_a_named_400 ... ok
 test a_window_one_second_over_the_cap_is_refused_before_the_store ... ok
 test the_cap_refused_body_never_echoes_raw_values_or_a_credential ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.30s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.32s
 
      Running tests/slice_03_severity_filter.rs (target/debug/deps/slice_03_severity_filter-7a29e20721202508)
 
@@ -1755,7 +1781,7 @@ test operator_filters_to_warn_and_above_during_an_incident ... ok
 test parameter_absent_returns_every_in_window_record_unchanged ... ok
 test the_severity_name_match_is_case_insensitive_on_the_six_otel_names ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.71s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s
 
      Running tests/slice_04_body_contains.rs (target/debug/deps/slice_04_body_contains-23c0ac7ab1d6f4ca)
 
@@ -1878,7 +1904,7 @@ test validate_json_carries_schema_field_at_top ... ok
 test validate_json_diagnostic_carries_file_and_message_and_optional_suggestion ... ok
 test validate_json_includes_rules_loaded_count_and_zero_diagnostics_on_success ... ok
 
-test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running unittests src/lib.rs (target/debug/deps/lumen-ca8d717cbc02eabd)
 
@@ -1898,7 +1924,7 @@ test query_on_unknown_tenant_returns_empty_vec ... ok
 test query_with_time_range_returns_only_matching_records ... ok
 test two_tenants_records_are_isolated ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_structured_query.rs (target/debug/deps/slice_02_structured_query-62e4e37eb65c1753)
 
@@ -1912,7 +1938,7 @@ test service_and_min_severity_compose_as_intersection ... ok
 test service_predicate_excludes_records_without_service_name_resource_attribute ... ok
 test service_predicate_filters_by_service_name_resource_attribute ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-8fc0b7742a25f452)
 
@@ -1926,7 +1952,7 @@ test query_with_predicate_works_against_recovered_state ... ok
 test restart_recovers_records_in_observed_time_order ... ok
 test two_tenants_records_isolated_across_restart ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-08045ec5dc19342f)
 
@@ -1937,7 +1963,7 @@ test snapshot_is_idempotent_under_no_intervening_writes ... ok
 test snapshot_plus_wal_recovery_matches_pure_wal_recovery ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.45s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running unittests src/lib.rs (target/debug/deps/otlp_conformance_harness-a1dfe74971640840)
 
@@ -2058,7 +2084,7 @@ test corpus_runner_validates_every_vector_against_its_descriptor ... ok
 test corpus_walker_refuses_vector_with_mutated_bytes ... ok
 test every_rule_variant_has_at_least_one_defending_reject_vector ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running unittests examples/capture_corpus_vectors.rs (target/debug/examples/capture_corpus_vectors-8471edffc6bb8d07)
 
@@ -2103,7 +2129,7 @@ test query_on_unknown_tenant_returns_empty_vec ... ok
 test query_with_time_range_returns_only_matching_points ... ok
 test two_tenants_points_are_isolated ... ok
 
-test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_structured_query.rs (target/debug/deps/slice_02_structured_query-ce5afc2dac557dc7)
 
@@ -2116,7 +2142,7 @@ test query_p95_latency_under_ten_milliseconds ... ok
 test service_and_multiple_label_eq_compose_as_intersection ... ok
 test service_predicate_filters_by_resource_attribute ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.96s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-c080566257263f2a)
 
@@ -2127,7 +2153,7 @@ test ingest_p95_latency_under_fifty_milliseconds ... ok
 test multiple_ingests_across_reopen_compose_and_remain_sorted ... ok
 test restart_recovers_points_in_time_order ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.16s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-1c69b31655992f58)
 
@@ -2138,7 +2164,7 @@ test snapshot_is_idempotent_under_no_intervening_writes ... ok
 test snapshot_plus_wal_recovery_matches_pure_wal_recovery ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.76s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/v1_slice_03_fsync_probe.rs (target/debug/deps/v1_slice_03_fsync_probe-ce2a978f909d58fe)
 
@@ -2167,7 +2193,7 @@ test second_ingest_does_not_overwrite_first_services_labels ... ok
 test three_services_return_three_distinct_series ... ok
 test walking_skeleton_two_services_return_two_distinct_series ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running tests/v1_slice_04_cardinality_watermark.rs (target/debug/deps/v1_slice_04_cardinality_watermark-dc41707426289737)
 
@@ -2178,7 +2204,7 @@ test cross_tenant_isolation_tenant_b_unaffected_by_tenant_a_at_cap ... ok
 test n_plus_one_new_series_is_refused_existing_series_keep_ingesting ... ok
 test wal_replay_rebuilds_past_cap_then_live_ingest_refuses_above ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 45.51s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 45.90s
 
      Running unittests src/lib.rs (target/debug/deps/query_api-abf19826a6145b1f)
 
@@ -2252,7 +2278,7 @@ test points_split_into_one_series_per_label_set ... ok
 test unknown_metric_returns_a_calm_empty_result ... ok
 test whole_valued_float_renders_without_trailing_zero ... ok
 
-test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/slice_02_same_origin_static.rs (target/debug/deps/slice_02_same_origin_static-7355903393e390dd)
 
@@ -2318,7 +2344,7 @@ test a_result_one_entry_over_the_cap_is_refused_with_a_named_400 ... ok
 test a_window_one_second_over_the_cap_is_refused_before_the_store ... ok
 test the_cap_refused_body_never_echoes_raw_values_or_a_credential ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.96s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.14s
 
      Running unittests src/lib.rs (target/debug/deps/query_http_common-b6f87e33a91adfa6)
 
@@ -2371,7 +2397,7 @@ test query_on_unknown_service_returns_empty ... ok
 test spans_without_service_name_are_unreachable_via_query_but_via_get_trace ... ok
 test two_tenants_traces_are_isolated ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.61s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_structured_query.rs (target/debug/deps/slice_02_structured_query-55b175cbfb510438)
 
@@ -2385,7 +2411,7 @@ test span_name_and_kind_and_status_compose_as_intersection ... ok
 test span_name_predicate_filters_by_name ... ok
 test status_predicate_filters_by_status_code ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-98b04d5cad53a713)
 
@@ -2396,7 +2422,7 @@ test multiple_ingests_across_reopen_compose_and_remain_sorted ... ok
 test restart_recovers_both_trace_and_service_indices ... ok
 test restart_recovers_spans_in_start_time_order ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.40s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-34a9722a38286a0b)
 
@@ -2408,7 +2434,7 @@ test snapshot_is_idempotent_under_no_intervening_writes ... ok
 test snapshot_plus_wal_recovery_matches_pure_wal_recovery ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.27s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running unittests src/main.rs (target/debug/deps/regenerate_codex_corpus-5a83ad29e02c2417)
 
@@ -2619,7 +2645,7 @@ test fifo_ordering_within_a_tenant ... ok
 test nack_returns_message_to_head_of_queue ... ok
 test two_tenants_are_isolated ... ok
 
-test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_observability.rs (target/debug/deps/slice_02_observability-230a3721f36cc3ef)
 
@@ -2632,7 +2658,7 @@ test nack_restores_depth ... ok
 test noop_recorder_records_nothing_observable ... ok
 test total_depth_sums_across_tenants ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-104461adbab766d7)
 
@@ -2648,7 +2674,7 @@ test open_creates_a_fresh_queue_and_enqueue_persists ... ok
 test restart_recovers_pending_messages_in_fifo_order ... ok
 test tenant_isolation_preserved_across_restart ... ok
 
-test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-dcc84e0426f6ceb3)
 
@@ -2660,7 +2686,7 @@ test snapshot_is_idempotent_under_no_intervening_writes ... ok
 test snapshot_plus_wal_recovery_matches_pure_wal_recovery ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.87s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running unittests src/lib.rs (target/debug/deps/spark-35c2264e40b1b7c4)
 
@@ -2698,7 +2724,7 @@ test developer_records_one_span_and_recording_sink_resource_includes_tenant_id .
 test developer_runs_init_and_observes_spark_init_succeeded_event_on_tracing_facade ... ok
 test developer_runs_init_with_canonical_config_and_receives_ok_guard ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
 
      Running tests/slice_02_init_error_paths.rs (target/debug/deps/slice_02_init_error_paths-75a61b8a6034db53)
 
@@ -2715,7 +2741,7 @@ test developer_calls_init_without_require_tenant_id_and_receives_ok_without_tena
 test developer_reads_invalid_endpoint_display_and_finds_endpoint_substring ... ok
 test developer_reads_missing_tenant_id_error_display_and_finds_tenant_id_substring ... ok
 
-test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
 
      Running tests/slice_03_feature_flags_and_experiment.rs (target/debug/deps/slice_03_feature_flags_and_experiment-667dcffd95cc11c4)
 
@@ -2731,7 +2757,7 @@ test developer_uses_only_for_service_and_resource_does_not_include_experiment_id
 test developer_uses_only_for_service_and_resource_does_not_include_feature_flag_attribute ... ok
 test developer_uses_only_for_service_and_resource_does_not_include_tenant_id ... ok
 
-test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
 
      Running tests/slice_04_env_var_precedence.rs (target/debug/deps/slice_04_env_var_precedence-4f802af56fe99b13)
 
@@ -2774,7 +2800,7 @@ test developer_drops_guard_with_healthy_aperture_and_shutdown_complete_message_c
 test developer_drops_guard_with_no_listener_at_endpoint_and_drop_does_not_panic ... ok
 test developer_drops_guard_with_short_deadline_and_drop_completes_close_to_deadline ... ok
 
-test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running tests/slice_07_codex_schema_lint.rs (target/debug/deps/slice_07_codex_schema_lint-79cf7a7e9b05faa9)
 
@@ -2809,7 +2835,7 @@ test query_on_unknown_service_returns_empty ... ok
 test query_with_time_range_returns_only_matching_profiles ... ok
 test two_tenants_profiles_are_isolated ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_structured_query.rs (target/debug/deps/slice_02_structured_query-159aa228669c6539)
 
@@ -2820,7 +2846,7 @@ test predicate_with_no_matches_returns_empty_not_error ... ok
 test profile_type_predicate_filters_by_kind ... ok
 test query_p95_latency_under_ten_milliseconds ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_01_wal_durability.rs (target/debug/deps/v1_slice_01_wal_durability-6fd077480f626d28)
 
@@ -2831,7 +2857,7 @@ test ingest_p95_latency_under_eight_milliseconds ... ok
 test multiple_ingests_across_reopen_compose_and_remain_sorted ... ok
 test restart_recovers_profiles_in_time_order ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.48s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/v1_slice_02_snapshot.rs (target/debug/deps/v1_slice_02_snapshot-e97ac9bb9dbe03eb)
 
@@ -2843,7 +2869,7 @@ test snapshot_then_post_snapshot_wal_survives_reopen ... ok
 test snapshot_writes_state_and_truncates_wal ... ok
 test snapshotted_and_pure_wal_stores_recover_identically ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.55s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running unittests src/lib.rs (target/debug/deps/trace_query_api-4b27be2a51b2f63b)
 
@@ -2884,7 +2910,7 @@ test every_span_field_round_trips_in_the_response ... ok
 test operator_reads_the_in_window_spans_for_a_tenant_and_service ... ok
 test the_half_open_window_includes_start_and_excludes_end ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests/slice_02_caps.rs (target/debug/deps/slice_02_caps-9cae0bcf3fd603ae)
 
@@ -2897,7 +2923,7 @@ test a_window_one_second_over_the_cap_is_refused_before_the_store ... ok
 test the_cap_refused_body_never_echoes_raw_values_or_a_credential ... ok
 test the_missing_service_400_still_fires_before_the_window_cap_400 ... ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.38s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.31s
 
      Running tests/slice_03_lookup_by_id.rs (target/debug/deps/slice_03_lookup_by_id-8077fa0d5d8f3f0d)
 
@@ -2915,5 +2941,5 @@ test ac_04e_uppercase_trace_id_resolves_to_the_same_bytes ... ok
 test ac_05_cross_tenant_isolation_on_the_lookup_arm ... ok
 test ac_cap_result_cap_applies_uniformly_on_the_lookup_arm ... ignored, Result cap is verified structurally at the parse-handler layer; same MAX_RESULT_ROWS path as the existing window arm (see slice_02_caps.rs::a_result_one_row_over_the_cap_is_refused_with_a_named_400). A 100_001-span fixture is too expensive for the acceptance suite; uniform interaction is pinned by ADR-0053 Decision 3 and covered by --in-diff mutation tests.
 
-test result: ok. 11 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 11 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
