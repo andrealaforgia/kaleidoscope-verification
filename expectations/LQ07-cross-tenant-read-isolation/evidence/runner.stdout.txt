@@ -1,0 +1,1 @@
+OK — cross-tenant read isolation: logs ingested under tenant-a are invisible to tenant-b (0 records) while tenant-a reads them (6 records); the empty result for tenant-b is isolation, not absence
