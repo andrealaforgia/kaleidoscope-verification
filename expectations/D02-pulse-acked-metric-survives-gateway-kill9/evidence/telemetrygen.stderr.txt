@@ -1,0 +1,5 @@
+2026-06-01T10:26:39.165Z	INFO	metrics/metrics.go:32	starting the metrics generator with configuration	{"config": {"WorkerCount":1,"Rate":1,"TotalDuration":1000000000,"ReportingInterval":1000000000,"SkipSettingGRPCLogger":false,"CustomEndpoint":"localhost:14325","Insecure":true,"InsecureSkipVerify":false,"UseHTTP":true,"HTTPPath":"/v1/metrics","Headers":{},"ResourceAttributes":{"service.name":"d02-pilot"},"TelemetryAttributes":{},"CaFile":"","ClientAuth":{"Enabled":false,"ClientCertFile":"","ClientKeyFile":""},"NumMetrics":1,"MetricName":"gen","MetricType":"Gauge","SpanID":"","TraceID":""}}
+2026-06-01T10:26:39.165Z	INFO	metrics/metrics.go:86	generation of metrics is limited	{"per-second": 1}
+2026-06-01T10:26:39.166Z	INFO	metrics/metrics.go:39	starting HTTP exporter
+2026-06-01T10:26:40.176Z	INFO	metrics/worker.go:108	metrics generated	{"worker": 0, "metrics": 2}
+2026-06-01T10:26:40.176Z	INFO	metrics/worker.go:43	stopping the exporter	{"worker": 0}

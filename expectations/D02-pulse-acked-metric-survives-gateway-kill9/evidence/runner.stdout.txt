@@ -1,0 +1,1 @@
+OK — durability (Pulse): an acked metric survives a gateway SIGKILL (exit 137, no graceful flush); recovered from the fsync'd Pulse WAL on reopen (status=success, __name__=gen)

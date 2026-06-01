@@ -1,0 +1,7 @@
+{"timestamp":"2026-06-01T10:26:36.964455Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T10:26:36.964731Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-01T10:26:36.965934Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-01T10:26:36.965986Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T10:26:36.966279Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T10:26:39.167568Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":107}
+{"timestamp":"2026-06-01T10:26:40.175594Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":107}

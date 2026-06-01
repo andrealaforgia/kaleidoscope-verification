@@ -1,0 +1,5 @@
+telemetrygen_exit=0
+gateway_kill_exit=137
+query_code=200
+---response head---
+{"data":{"result":[{"metric":{"__name__":"gen","service.name":"d02-pilot"},"values":[[1780309599,"0"],[1780309599,"1"]]}],"resultType":"matrix"},"status":"success"}
