@@ -383,7 +383,16 @@ shape stays Prometheus-compatible JSON
 at `51400b1` (cycle 23), confirming no operator-visible
 contract drift on the query-api binary.
 
-## N24 — trace-lookup-by-id-v0 graduated, still blocked by N17
+## N24 — trace-lookup-by-id-v0 graduated (DONE)
+
+**DONE (2026-05-31).** Verified at the running surface by **TQ01**
+at HEAD `a898e757`: `GET /api/v1/traces/by_id` rejects a non-hex
+and a wrong-length `trace_id` with `400 "invalid trace_id"` (raw
+never echoed), and accepts a valid 32-hex id (`200` on the empty
+store). The "blocked by N17" framing is retired: the catalogue now
+stands trace-query-api up itself via the catalogue-authored
+`harness/Dockerfile.trace-query-api` (same recipe as LQ01), so N17
+is no longer a true blocker either. TQ-prefix is open.
 
 Wave shipped DELIVER at `3908240` ("feat(trace-query-api):
 `/api/v1/traces/by_id` with 32-hex case-insensitive trace_id",

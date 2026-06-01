@@ -1,0 +1,1 @@
+OK — trace-query-api by-id rejects non-hex and wrong-length trace_id with 400 'invalid trace_id' (raw never echoed); a valid 32-hex id is accepted (200) on the empty store

@@ -1,0 +1,7 @@
+code_a_nonhex=400
+code_b_shortlen=400
+code_c_valid=200
+---a body---
+{"status":"error","error":"invalid trace_id"}
+---b body---
+{"status":"error","error":"invalid trace_id"}
