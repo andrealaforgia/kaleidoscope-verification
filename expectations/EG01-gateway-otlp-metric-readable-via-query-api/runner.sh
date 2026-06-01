@@ -44,7 +44,7 @@ docker run --rm -d \
     -v "$SHARED_DATA:/data" \
     -e KALEIDOSCOPE_DEFAULT_TENANT=acme \
     -e RUST_LOG=info \
-    -p 4318:4318 \
+    -p 14323:4318 \
     "$GW_IMAGE" > /dev/null
 # Wait for gateway_starting.
 SAW=""
@@ -62,7 +62,7 @@ sleep 2
 docker run --rm --network host \
     ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.114.0 \
     metrics \
-    --otlp-endpoint localhost:4318 \
+    --otlp-endpoint localhost:14323 \
     --otlp-insecure \
     --otlp-http \
     --duration 1s \
@@ -82,14 +82,14 @@ docker run --rm -d \
     -v "$SHARED_DATA:/data" \
     -e KALEIDOSCOPE_QUERY_TENANT=acme \
     -e RUST_LOG=info \
-    -p 9090:9090 \
+    -p 19097:9090 \
     "$QAPI_IMAGE" > /dev/null
 sleep 3
 
 # Step 5: query.
 START=$(date -u -v-5M +%s 2>/dev/null || date -u -d "-5 minutes" +%s)
 END=$(date -u +%s)
-curl -sS "http://localhost:9090/api/v1/query_range?query=gen&start=${START}&end=${END}&step=15s" \
+curl -sS "http://localhost:19097/api/v1/query_range?query=gen&start=${START}&end=${END}&step=15s" \
     > "'"$EVIDENCE_DIR"'/query-response.json"
 
 docker logs "$QAPI_NAME" > "'"$EVIDENCE_DIR"'/query-api.stderr.txt" 2>&1 || true

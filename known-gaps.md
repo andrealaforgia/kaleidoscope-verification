@@ -333,7 +333,16 @@ first attempt. The cap-before-slice ordering is asserted only
 indirectly; a direct test needs a seed exceeding `MAX_RESULT_ROWS`
 (left for an LQ-cap expectation alongside #17).
 
-## N27 — EG01 binds bare host ports 4318/9090, flakes under a squatter
+## N27 — EG01 binds bare host ports 4318/9090, flakes under a squatter (DONE)
+
+**DONE (2026-06-01).** EG01's runner now binds the gateway on host
+`14323` and query-api on `19097` (unique high ports, the same
+convention LQ02-LQ05/TQ01-TQ02 already use), so a parallel
+`kaleidoscope-e2e` compose stack squatting `4317-4318`/`9090` no
+longer collides with it. Re-verified GREEN at `acca3ec`
+(status=success, __name__=gen). The container-internal ports are
+unchanged (gateway :4318, query-api :9090); only the host
+publish mapping moved.
 
 EG01 (and the original EG driver) publish the gateway on host
 `:4317-4318` and query-api on `:9090`. During cycle 32 a parallel
