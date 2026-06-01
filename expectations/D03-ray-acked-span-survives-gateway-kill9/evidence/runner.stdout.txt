@@ -1,0 +1,1 @@
+OK — durability (Ray): acked spans survive a gateway SIGKILL (exit 137, no graceful flush); 10 span(s) recovered from the Ray WAL on reopen, all carrying service=d03-pilot

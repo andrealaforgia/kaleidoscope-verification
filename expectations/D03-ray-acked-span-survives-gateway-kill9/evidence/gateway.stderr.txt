@@ -1,0 +1,6 @@
+{"timestamp":"2026-06-01T11:14:11.201951Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-01T11:14:11.202081Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-01T11:14:11.202553Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-01T11:14:11.202559Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-01T11:14:11.202645Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-01T11:14:13.358587Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1498}

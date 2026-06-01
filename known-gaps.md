@@ -268,6 +268,34 @@ query-api slice 01-04 commits parse PromQL + label matchers
 
 ## N18 — Durability claim unverified (kill-9 + restart per v1 pillar)
 
+**PARTIALLY RESOLVED (2026-06-01).** The **D-prefix** now verifies
+the kill-9 durability invariant for the three pillars with a direct
+gateway → read-API path: **D01** (Lumen / log via log-query-api),
+**D02** (Pulse / metric via query-api), **D03** (Ray / span via
+trace-query-api). Each ingests through the gateway, hard-kills the
+gateway with SIGKILL (exit 137, confirmed, no graceful flush), then
+reopens the store via the read API (WAL replay) and asserts the acked
+data is recovered. Per-pillar write-path checked in code first: Lumen
+and Ray `flush()` to the kernel before ack (process-kill durable);
+Pulse additionally `fsync`s (ADR-0049 §4, power-loss durable too).
+
+Two honest boundaries remain:
+1. **Scope is acked-survives-kill, not mid-write tearing.** D01-D03
+   kill the gateway AFTER the ack, proving "acked = durable across a
+   process kill". They do NOT kill mid-batch to prove the absence of
+   torn / half-written records during an in-flight write (step 2's
+   "timing-window" variant below). That stronger torn-write invariant
+   is still unverified.
+2. **Power-loss is not black-box demonstrated** — the harness cannot
+   power-cycle the disk; only Pulse's fsync-before-ack mechanism
+   (read from code) implies it.
+
+The Cinder / Strata / Sluice / Beacon-RuleState pillars have no
+gateway → read-API round-trip path, so the D-prefix shape does not
+reach them; they would need bespoke writer+reader fixtures.
+
+Original note:
+
 The kaleidoscope README and ADRs describe the v1 file-backed
 stores as "survives a restart". The catalogue currently verifies
 functional ingest+read round-trips (K03, K05, K12), which prove
