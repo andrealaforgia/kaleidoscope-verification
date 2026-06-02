@@ -1,1 +1,1 @@
-OK — gateway came up healthy: aperture emitted event=ready on stderr
+OK — gateway announces its own structured lifecycle: JSON gateway_starting (INFO) THEN listener_bound (INFO, transport=http) on stderr, in order (issue 005 gateway half resolved)

@@ -8,63 +8,78 @@ OTLP/HTTP/protobuf :4318). Operator-facing.
 ## Behaviour
 
 `kaleidoscope-gateway` started with a writable pillar root and
-`KALEIDOSCOPE_DEFAULT_TENANT` set comes up healthy: the
-storage-sink probe passes, aperture (which the gateway
-delegates to via `aperture::spawn`) binds OTLP/gRPC :4317 +
-OTLP/HTTP :4318, and emits `event=ready` on stderr within a
-short window. This is the Earned-Trust positive path from
-ADR-0041 DD5.
+`KALEIDOSCOPE_DEFAULT_TENANT` set comes up healthy and announces its OWN
+structured lifecycle on stderr, in order:
 
-The gateway's own `tracing::info!(event="gateway_starting")`
-in `crates/kaleidoscope-gateway/src/main.rs` is dropped on the
-floor because main.rs installs no tracing subscriber and
-aperture installs one only post-spawn — see issue 005. We
-therefore assert on aperture's `event=ready`, which fires
-AFTER the subscriber is up.
+```
+{"level":"INFO","event":"gateway_starting","pillar_root":"/data"}
+{"level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+```
+
+G01 asserts that `gateway_starting` and the http `listener_bound` are
+both structured JSON at INFO level, and that `gateway_starting` is
+emitted BEFORE `listener_bound`.
 
 ## Source
 
-- External contract anchor:
-  [`ADR-0041`](https://github.com/andrealaforgia/kaleidoscope/blob/HEAD/docs/product/architecture/adr-0041-aperture-storage-sink-translation-and-tenancy.md)
-  DD5 ("wire → probe → use; gateway refuses startup if the sink
-  probe fails").
-- Code: `crates/kaleidoscope-gateway/src/main.rs` (`tracing::info!(event = "gateway_starting", ...)` and the
-  `sink.probe().await` arm).
+- gateway-tracing-subscriber-v0 (feat `caa8cdf`, "early tracing
+  subscriber makes gateway lifecycle observable"): the gateway now
+  installs a JSON-to-stderr subscriber early in `main`, before any
+  event, so its own lifecycle events render.
+- Code: `crates/kaleidoscope-gateway/src/main.rs`
+  (`init_tracing()` at the top of main; `tracing::info!(event =
+  "gateway_starting", ...)` then aperture's `listener_bound`).
 
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-05-24 UTC at HEAD (`0c1d66b`).
-- Method: `harness/run-gateway.sh` builds the gateway runtime
-  image from the snapshot's `Dockerfile.gateway`. A `docker
-  run -d` brings the container up with /data writable +
-  DEFAULT_TENANT=acme; the runner polls the container's stderr
-  for `gateway_starting` for up to 30 s; then SIGTERMs the
-  container. Asserts the event was observed.
+- Last verified: 2026-06-02 UTC at HEAD (`b286cb4`, clean tree;
+  includes the gateway subscriber feat `caa8cdf`) — TIGHTENED onto the
+  gateway's own structured events. GREEN after a catalogue-side fix (the
+  first `listener_bound` is `transport=grpc`; the http assertion now
+  targets the http line specifically).
+- Earlier `satisfied`: 2026-05-24 at `0c1d66b`, asserting on aperture's
+  post-spawn `event=ready` because the gateway's own events were dropped
+  (no subscriber; issue 005, now resolved).
+- Method: `harness/run-gateway.sh` builds the gateway image; `docker
+  run -d` brings it up with /data writable + DEFAULT_TENANT=acme,
+  publishing :4318 to a UNIQUE high host port (`14329`) so a parallel
+  dev-side `kaleidoscope-e2e` compose stack squatting `4317-4318` does
+  not collide (N27). The runner polls the container stderr for
+  `listener_bound`, then asserts the two structured events + their
+  order.
+
+## The ordering gap
+
+issue 005's gateway half was an ORDERING gap, not just a missing
+subscriber: `gateway_starting` was emitted before `aperture::spawn`
+installed its subscriber and was therefore dropped, while
+`listener_bound` (emitted by aperture after its install) already
+rendered. The early-install fix makes `gateway_starting` render too,
+and G01 now pins the order (`gateway_starting` before `listener_bound`)
+as the regression guard for that exact gap.
 
 ## Evidence
 
-- [`evidence/verification.yaml`](evidence/verification.yaml).
+- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `b286cb4`.
 - [`evidence/G01.stdout.txt`](evidence/G01.stdout.txt) — runner trace.
-- [`evidence/gateway.stderr.txt`](evidence/gateway.stderr.txt) — the gateway's stderr (the startup event lives here).
+- [`evidence/gateway.stderr.txt`](evidence/gateway.stderr.txt) — the
+  gateway's structured JSON lifecycle events.
 
 ## Issues
 
-- [issue 005](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
-  — same pattern as query-api: the gateway's `main.rs` emits
-  `tracing::info!(event="gateway_starting")` and
-  `tracing::error!(event="health.startup.refused")` but
-  installs no subscriber, so both events are dropped. Once a
-  subscriber lands, this runner should tighten to assert the
-  `gateway_starting` event before the `ready` event.
+None. G01 is part of the evidence that closed the gateway half of
+[issue 005](../../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md)
+(now `resolved`). Note: the gateway's `health.startup.refused`
+(fsync-probe refusal arm) is NOT black-box triggerable here — a
+read-only `/data` fails earlier at store-open (G02), and the probe arm
+needs a lying-fsync substrate; it is covered by the implementer's own
+acceptance test. See issue 005.
 
 ## Notes
 
-`.no-compose` marker — the gateway is the compose target, not
-a downstream component, so we run it directly rather than via
-the harness's docker-compose stack.
-
-G01 is a smoke contract: it does NOT exercise OTLP ingest yet.
-Subsequent G expectations should cover gateway accepting traces
-/ logs / metrics and persisting them to the pillars, then a
-round-trip via Q-prefix (read side) and K-prefix (CLI).
+`.no-compose` marker — the gateway is the compose target, not a
+downstream component, so we run it directly. Unique high host port
+(`14329`) per N27. G01 is a smoke + lifecycle contract; OTLP
+round-trips are covered by EG01 (metrics) and the D-prefix (durability).

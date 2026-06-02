@@ -1,8 +1,56 @@
 # 005 — `query-api` and `kaleidoscope-gateway` have no tracing subscriber: pre-spawn structured events are dropped silently
 
-- Status: `partial` — the READ tier (query-api, log-query-api,
-  trace-query-api) is FIXED at `2663eb5`; `kaleidoscope-gateway`
-  still has no subscriber (see "Remaining" below).
+- Status: `resolved` — READ tier FIXED at `2663eb5`; gateway FIXED at
+  `caa8cdf`. All four binaries now install a tracing subscriber and
+  their structured lifecycle events render.
+
+## Resolution — gateway tier (2026-06-02, HEAD caa8cdf)
+
+gateway-tracing-subscriber-v0 landed (feat `caa8cdf`, "early tracing
+subscriber makes gateway lifecycle observable"). The root was an
+ordering gap, confirmed by the implementer: the gateway emitted
+`gateway_starting` (and, on the probe-refusal arm,
+`health.startup.refused`) BEFORE `aperture::spawn` installed its
+subscriber, so they dropped; `listener_bound`, emitted by aperture
+after its install, already rendered. The fix installs a JSON-to-stderr
+subscriber early in the gateway's `main`, before any event, behind
+`OnceLock` + `try_init` (idempotent; aperture's later `try_init` is a
+no-op; aperture standalone unaffected).
+
+Black-box confirmed via G01 (tightened, clean start) at `caa8cdf`,
+observed verbatim on the gateway's stderr, in order:
+
+```
+{"level":"INFO","event":"gateway_starting","pillar_root":"/data"}
+{"level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+```
+
+G01 asserts both events are structured JSON at INFO level AND that
+`gateway_starting` precedes `listener_bound` (the ordering-gap fix).
+
+### One honest limit on the gateway's `health.startup.refused`
+
+The gateway's `health.startup.refused` (ERROR, fields substrate+reason)
+fires only on the Earned-Trust fsync/active-write PROBE refusal arm
+(`probe_or_refuse`). That arm is NOT black-box triggerable in this
+dockerised harness: a read-only `/data` (G02) fails EARLIER, at
+store-open, with a bare `Error: PersistenceFailed { ... Read-only file
+system ... }` before the probe runs, so it does not exercise the
+structured event; and the gateway has no tenant-based fail-closed arm
+(unlike the read tier). Reaching the probe-refusal arm needs a lying
+fsync substrate (a test double). It IS covered by the implementer's
+own `slice_01_tracing_subscriber.rs` acceptance test (asserts
+`health.startup.refused` reaches stderr before the non-zero exit). So
+the subscriber-missing DEFECT is fully fixed (G01 proves the events
+render); the one event I cannot black-box trigger is a harness
+reachability limit, not an unresolved defect. G02 keeps asserting the
+bare `PersistenceFailed` Err for its read-only-data path, which is the
+correct observable there.
+
+----------------------------------------------------------------
+Original report + read-tier resolution
+----------------------------------------------------------------
 - Expectations affected: Q01 (now asserts the structured
   `health.startup.refused`, tightened at `2663eb5`), LQ06 + TQ04
   (new, assert the same on the log/trace read binaries), G01
