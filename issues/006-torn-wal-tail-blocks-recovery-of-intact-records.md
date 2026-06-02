@@ -76,3 +76,23 @@ D04 stays GREEN against the SAFE invariant (no corrupt data served,
 clear error). If option 1 lands, D04's recovery branch (already coded:
 running=true → intact records served, torn tail ignored) becomes the
 asserted path and this issue closes.
+
+## Independent confirmation (four-quadrants report, 2026-06-02)
+
+A separate code-read assessment (`~/dev/kaleidoscope-4-quadrants-theory/
+kaleidoscope-four-quadrants-report.md`, Q2 finding 3) independently
+confirms this defect and sharpens it for **Cinder** specifically:
+
+- Cinder's module doc (`crates/cinder/src/file_backed.rs:36-38`) CLAIMS
+  a truncated last WAL line from a crash is "detected and ignored".
+- The code does the OPPOSITE: any parse error on replay returns
+  `PersistenceFailed` and refuses to open, and an acceptance test
+  CONFIRMS a trailing partial line bricks the store.
+
+So Cinder is the same torn-tail-bricks-recovery defect this issue tracks
+(verified black-box on lumen by D04), made worse by a doc that promises
+the opposite behaviour. The implementer's accepted fix
+(wal-torn-tail-recovery-v0, option 1) should cover lumen, ray, AND
+cinder; the cinder doc must be corrected too. The report classes the
+doc-vs-code contradiction as a documentation overstatement, which is the
+report's headline theme (the prose overstates what the code does).

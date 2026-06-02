@@ -1,0 +1,1 @@
+OK — strict OTLP/HTTP content-type gating: application/json -> 415, application/x-protobuf-foo lookalike -> 415 (no lax starts_with), application/x-protobuf+garbage -> 400 (NOT 415; content-type-specific)

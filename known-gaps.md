@@ -276,6 +276,31 @@ query-api slice 01-04 commits parse PromQL + label matchers
 
 ## N18 — Durability claim unverified (kill-9 + restart per v1 pillar)
 
+**Four-quadrants report (2026-06-02) independently confirms and
+extends the durability picture** (Q2 findings 1, 2, 5, 6; Q1 on
+Pulse). The headline, matching what D01-D04 already scope honestly:
+
+- **fsync gap, four of five stores.** Lumen, Ray, Strata, AND Cinder
+  call `wal.flush()` and stop — zero `fsync`/`sync_all`, against 48 in
+  Pulse. So an acked write survives a process kill (page cache lives;
+  D01/D03 verify this) but NOT a power loss / kernel crash. Only Pulse
+  is genuinely crash-durable (`sync_all` per WAL record + snapshot
+  fsync + parent-dir fsync, ADR-0049). My D02 README already records
+  Pulse's stronger guarantee; D01/D03 record the flush-only limit. The
+  report adds Strata + Cinder to the flush-only list.
+- **non-atomic snapshot, ALL five stores including Pulse** — see the
+  new **[issue 007](issues/007-non-atomic-snapshot-write-can-brick-the-store.md)**:
+  `File::create(path)` straight onto the canonical path, no temp+rename,
+  so a crash mid-snapshot bricks the store (total loss). Defeats Pulse's
+  fsync because the fsynced file is itself torn.
+- **Cinder torn-WAL doc-vs-code contradiction** — folded into
+  [issue 006](issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md).
+- **the test to write is power-loss simulation (kill -9 mid-snapshot,
+  reopen)** which the kaleidoscope suite "deliberately does not do" —
+  exactly the gap D04 began closing on the WAL side (torn tail) and
+  issue 007 names on the snapshot side. Power-loss itself is still not
+  black-box reachable in this harness (cannot power-cycle the disk).
+
 **PARTIALLY RESOLVED (2026-06-01).** The **D-prefix** now verifies
 the kill-9 durability invariant for the three pillars with a direct
 gateway → read-API path: **D01** (Lumen / log via log-query-api),
