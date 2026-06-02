@@ -1,7 +1,22 @@
 # 006 — a torn WAL trailing line blocks recovery of ALL intact prior records
 
-- Status: `open`
+- Status: `partial` — FIXED for lumen at `87d9363`
+  (wal-torn-tail-recovery-v0, shared `wal-recovery` seam); ray + cinder
+  rewires still pending (ray in flight, cinder unstarted as of that SHA).
+  Stays open until all three land.
 - Severity: medium (durability robustness; safe-but-brittle)
+
+## Resolution — lumen (2026-06-03, HEAD 87d9363)
+
+wal-torn-tail-recovery-v0 rewired lumen's `FileBackedLogStore::open`
+onto the shared `crates/wal-recovery` seam (feat `87d9363`, after the
+seam crate landed at `0eb6227`). Black-box re-verified by **D04** at
+`87d9363`: a torn trailing line in `lumen.wal` no longer bricks the
+store — log-query-api starts (`running=true`, exit 0), serves the 6
+intact records (`query_count=6`), and ignores the torn tail. D04's
+pre-coded recovery branch is now the asserted path. ray
+(`crates/ray/src/file_backed.rs` was dirty/uncommitted) and cinder were
+not yet rewired at this SHA, so the issue stays `partial` until they do.
 - Surface: lumen `FileBackedLogStore` (and, by the same code shape, the
   other WAL-backed pillars — ray confirmed identical, pulse likely).
 - Expectations affected: D04 (documents the SAFE half of this behaviour

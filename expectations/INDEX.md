@@ -103,7 +103,7 @@ Original-batch dates:
 
 Open issues:
 [006 — torn WAL tail blocks recovery of intact records](../issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md)
-(`open`; a torn trailing WAL line makes the store fail closed (SAFE) but blocks ALL intact prior records. Found via D04; implementer accepted option 1, queued as wal-torn-tail-recovery-v0. Four-quadrants report confirms it cross-pillar + a Cinder doc-vs-code contradiction).
+(`partial`; FIXED for lumen at `87d9363` (wal-torn-tail-recovery-v0, shared wal-recovery seam) — D04 re-verified GREEN on the RECOVERY branch (6/6 intact recovered, torn tail ignored); ray + cinder rewires pending. Stays open until all three land).
 [007 — non-atomic snapshot write bricks the store](../issues/007-non-atomic-snapshot-write-can-brick-the-store.md)
 (`open`; from the four-quadrants report — `File::create(path)` with no temp+rename in all five stores, so a crash mid-snapshot = total loss; not yet black-box reachable (snapshot not auto-triggered); flagged to the implementer).
 [008 — `tls.enabled=true` claims rejection but binds plaintext](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md)

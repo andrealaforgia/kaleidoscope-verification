@@ -1,1 +1,3 @@
-Error: PersistenceFailed { reason: "WAL parse error at line 7: EOF while parsing an object at line 1 column 86" }
+{"timestamp":"2026-06-02T23:25:55.699592Z","level":"WARN","event":"wal.recovery.torn_tail_dropped","pillar":"lumen","line":7,"dropped_bytes":86}
+{"timestamp":"2026-06-02T23:25:55.700022Z","level":"INFO","event":"log_query_api_starting","pillar_root":"/data","tenant_resolved":true}
+{"timestamp":"2026-06-02T23:25:55.700082Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9091"}

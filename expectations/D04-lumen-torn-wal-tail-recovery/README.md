@@ -37,28 +37,35 @@ crash.
 ## Verification
 
 - Status: `satisfied` (asserts the SAFE invariant only)
-- Last verified: 2026-06-01 UTC at HEAD (`eef7576`). Observed:
-  6 well-formed records ingested + gateway stopped cleanly; one torn
-  partial line appended to `lumen.wal`; log-query-api then
-  `lqapi_running=false`, `lqapi_exitcode=1`, stderr
-  `PersistenceFailed { reason: "WAL parse error at line 7: EOF while parsing an object at line 1 column 86" }`,
-  no data served. Fail-closed branch satisfied.
+- Last verified: 2026-06-03 UTC at HEAD (`87d9363`) — now takes the
+  RECOVERY branch. wal-torn-tail-recovery-v0 rewired lumen's open path
+  onto the shared `wal-recovery` seam (feat `87d9363`). Observed:
+  6 well-formed records ingested, one torn partial line appended to
+  `lumen.wal`; log-query-api then `lqapi_running=true`,
+  `lqapi_exitcode=0`, `query_code=200`, `query_count=6` — all six intact
+  records recovered, the torn trailing line ignored (graceful recovery).
+  (Earlier, at `eef7576`, lumen had no recovery seam: `lqapi_running=false`,
+  exit 1, `PersistenceFailed: WAL parse error`, fail-closed-safe branch —
+  the brittle behaviour issue 006 tracked.)
 - Method: dockerised harness via `harness/run-eg.sh`. Gateway on host
   port `14327` ingests `--body d04-survivor-marker`, stopped with
   SIGTERM; the host-side `lumen.wal` then gets an incomplete JSON line
   appended (no newline); log-query-api on the SAME `/data` (host port
   `19102`) is started and its open behaviour + any query observed.
 
-## The brittle half (issue 006)
+## issue 006 — resolved for lumen (2026-06-03)
 
-The fail-closed behaviour is SAFE but brittle: a single torn trailing
-line — the *normal* residue of an abrupt death — blocks recovery of ALL
-the intact, acked, durable records before it, with no automatic
-truncation. That durability-robustness gap is filed as
-[issue 006](../../issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md)
-and flagged to the implementer. D04 deliberately asserts only the safe
-invariant (no corrupt data) so it stays GREEN whichever way issue 006 is
-resolved; if torn-tail truncation lands, D04's already-coded recovery
+The brittle half this expectation was built around is now FIXED for
+lumen: wal-torn-tail-recovery-v0 (`87d9363`) makes lumen's open tolerate
+the torn final line, recover the intact prefix, and ignore the tail —
+exactly the recovery branch D04 had pre-coded. issue 006 is partially
+resolved (lumen done; ray + cinder rewires were still in flight at this
+SHA — ray's `file_backed.rs` was dirty/uncommitted, cinder unstarted),
+so the issue stays open until ray and cinder land too.
+
+D04 deliberately asserts only the SAFE invariant (no corrupt data
+served) so it stayed GREEN across the transition: fail-closed-safe at
+`eef7576`, graceful-recovery at `87d9363`; if torn-tail truncation
 branch (intact prefix served, torn tail ignored) becomes the asserted
 path.
 

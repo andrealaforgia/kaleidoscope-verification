@@ -1,3 +1,3 @@
- M crates/kaleidoscope-cli/Cargo.toml
-?? crates/kaleidoscope-cli/tests/slice_17_unknown_flag_rejection.rs
-?? docs/feature/cli-unknown-flag-rejection-v0/distill/
+ M crates/ray/Cargo.toml
+ M crates/ray/src/file_backed.rs
+ M crates/ray/tests/v1_slice_03_torn_tail_recovery.rs
