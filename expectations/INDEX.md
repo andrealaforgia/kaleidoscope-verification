@@ -39,7 +39,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 84 (A 14 + S 12 + E 4 + X 14 + L 6 + K 12 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 5) |
+| `satisfied` | 85 (A 14 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 5) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 0 (X01, X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
@@ -108,6 +108,8 @@ Open issues:
 (`open`; from the four-quadrants report — `File::create(path)` with no temp+rename in all five stores, so a crash mid-snapshot = total loss; not yet black-box reachable (snapshot not auto-triggered); flagged to the implementer).
 [008 — `tls.enabled=true` claims rejection but binds plaintext](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md)
 (`open`, security; from the four-quadrants report — the config comment says tls.enabled is rejected but it warns and binds plaintext; black-box expectation to follow; flagged to the implementer).
+[009 — CLI ingest non-atomic (partial commit + double-ingest)](../issues/009-cli-ingest-non-atomic-partial-commit-double-ingest.md)
+(`open`, data integrity; black-box verified by K13 — a malformed mid-stream line aborts non-zero but leaves the flushed batch committed, and a re-run double-ingests; from the four-quadrants per-module report).
 Closed:
 [001 — aperture binary ignores --config](../issues/001-aperture-binary-ignores-config-flag.md) (`fixed` at `6b09c0d`);
 [002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);

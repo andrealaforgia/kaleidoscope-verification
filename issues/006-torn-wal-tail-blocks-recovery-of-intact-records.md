@@ -2,8 +2,10 @@
 
 - Status: `partial` — FIXED + black-box verified for lumen (`87d9363`,
   D04) and ray (`188c6c2`, D05), both on the shared `wal-recovery` seam.
-  cinder (rewire + correct the false file_backed.rs:36-38 doc) and pulse
-  still pending (cinder in flight at `188c6c2`). Closes when all land.
+  Cinder is NOT a torn-tail brick (the earlier claim is RETRACTED — see
+  the Cinder note below; its doc is accurate and it already recovers).
+  pulse to confirm. Closes when the genuinely-affected pillars
+  (lumen ✓, ray ✓, + any other that actually bricked) are covered.
 - Severity: medium (durability robustness; safe-but-brittle)
 
 ## Resolution — lumen (2026-06-03, HEAD 87d9363)
@@ -92,17 +94,33 @@ clear error). If option 1 lands, D04's recovery branch (already coded:
 running=true → intact records served, torn tail ignored) becomes the
 asserted path and this issue closes.
 
-## Independent confirmation (four-quadrants report, 2026-06-02)
+## Cinder note — RETRACTED (per-module report, 2026-06-03)
 
-A separate code-read assessment (`~/dev/kaleidoscope-4-quadrants-theory/
-kaleidoscope-four-quadrants-report.md`, Q2 finding 3) independently
-confirms this defect and sharpens it for **Cinder** specifically:
+An earlier note here (from the system-level four-quadrants report) said
+Cinder's doc CLAIMS torn-tail tolerance while the code bricks. **That is
+withdrawn.** The per-module read
+(`~/dev/kaleidoscope-4-quadrants-theory/reports/cinder.md`, Q2) refuted
+it: Cinder's `open` delegates to
+`wal_recovery::replay_wal_tolerating_torn_tail` and recovers the intact
+prefix correctly (`crates/cinder/src/file_backed.rs:152-165`, test
+`reopen_recovers_the_intact_prefix_after_a_torn_tail`); the doc matches
+the code. The "proof of bricking" the system report cited
+(`corrupted_wal_surfaces_typed_persistence_error_on_open`) appends a
+COMPLETE-but-malformed line WITH a trailing newline — a different case
+(correctly fail-closed), NOT a torn tail. So Cinder is NOT a torn-tail
+brick and its doc is NOT false; this was a first-pass misread, relayed
+to Bea Implementer and now corrected (do not "fix" the cinder doc).
 
-- Cinder's module doc (`crates/cinder/src/file_backed.rs:36-38`) CLAIMS
-  a truncated last WAL line from a crash is "detected and ignored".
-- The code does the OPPOSITE: any parse error on replay returns
-  `PersistenceFailed` and refuses to open, and an acceptance test
-  CONFIRMS a trailing partial line bricks the store.
+This issue 006 stands for the pillars that genuinely bricked: **lumen**
+(D04 confirmed bricking at `eef7576`, fixed `87d9363`) and **ray** (D05,
+fixed `188c6c2`). Cinder's REAL defects are the shared fsync gap +
+non-atomic snapshot ([issue 007](007-non-atomic-snapshot-write-can-brick-the-store.md),
+N18) and the swallowed `place`/`evaluate_at` WAL errors (the
+implementer's cinder-wal-error-surfacing-v0), NOT the torn tail.
+
+----------------------------------------------------------------
+Superseded note (kept for the audit trail; the claim below is WRONG):
+----------------------------------------------------------------
 
 So Cinder is the same torn-tail-bricks-recovery defect this issue tracks
 (verified black-box on lumen by D04), made worse by a doc that promises

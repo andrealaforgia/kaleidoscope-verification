@@ -1,0 +1,1 @@
+OK — non-atomic ingest confirmed (issue 009): a malformed line 101 aborts non-zero, but the flushed batch of 100 is committed (count_after_1=100), and re-running the same input double-ingests it (count_after_2=200). SAFE half holds (typed abort, no corruption); partial-commit + double-ingest is the footgun.
