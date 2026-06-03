@@ -42,15 +42,14 @@ produces a TYPED error naming the line, a non-zero exit, and no
 corruption — it does not silently swallow or panic. The defect is
 purely the non-atomicity + lack of dedup.
 
-## Suggested directions (implementer's call)
+## The expectation
 
-1. All-or-nothing ingest: stage to a temp WAL segment, validate the
-   whole stream, commit atomically (or roll back) — pairs with the
-   snapshot-atomic-write work (issue 007).
-2. Or: idempotent ingest (content-hash or batch-id dedup) so a re-run
-   is a no-op for already-committed batches.
-3. At minimum: document the partial-commit behaviour and surface the
-   committed-count on abort so the operator knows what landed.
+K13 pins the observable contract: after a mid-stream abort, a re-run of
+the same input must NOT increase the committed record count (an ingest
+that aborts should leave the store as it found it, or be idempotent on
+re-run). Today `count_after_1=100` and `count_after_2=200`, so K13
+records the gap. How to close it is the implementer's call; this issue
+only states the observed-vs-expected behaviour.
 
 ## Catalogue status
 

@@ -63,22 +63,14 @@ is manual WAL surgery (truncate the last line). After a real power loss
 that is a sharp edge: the durable data is on disk and intact, but the
 service refuses to start.
 
-## Expected / options (implementer's call)
+## The expectation
 
-This may be a deliberate v1 limitation rather than a bug, so this is a
-finding to triage, not a prescription. Reasonable resolutions:
-
-1. On open, tolerate a torn FINAL line: if the last line fails to parse
-   AND it is the last line AND it has no trailing newline, treat it as a
-   never-completed write, drop it (optionally truncate the file to the
-   last good newline), recover the intact prefix, and log a warning.
-   This is the standard WAL recovery convention.
-2. Keep failing closed, but document the manual recovery step and
-   surface it in the error message (e.g. "truncate the final partial
-   record to recover").
-3. Confirm it is an accepted v1 limitation and document the boundary in
-   the durability ADR, so the "survives a restart" claim is scoped to
-   *graceful* restart only.
+The observable contract: a store reopened after an abrupt death (a torn
+final WAL line, the normal residue of a mid-write crash) must still serve
+the intact, acknowledged records that preceded the torn line — it must
+not become unreadable. D04 (lumen) and D05 (ray) pin this. How a store
+meets it is the implementer's call; this issue states only the
+observed-vs-expected behaviour.
 
 ## Reproduction
 

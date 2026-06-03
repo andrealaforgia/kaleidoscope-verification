@@ -44,9 +44,11 @@ or to seed a pre-written snapshot file and corrupt it. Tracked here so
 the gap is visible; a D-prefix expectation (D05) follows if a snapshot
 trigger becomes reachable. Flagged to the implementer.
 
-## Suggested fix (implementer's call)
+## The expectation
 
-Temp-file + fsync + atomic `rename` + parent-dir fsync for the snapshot
-write, in all five stores. This pairs naturally with
-wal-torn-tail-recovery-v0 (issue 006) as the "make on-disk recovery
-actually durable" slice.
+The observable contract: a store whose snapshot write was interrupted
+mid-flight must still reopen and serve the prior durable state (a crash
+during a snapshot must not lose acknowledged data). Not yet black-box
+reachable here (snapshot is not auto-triggered). How the store achieves
+that is the implementer's call; this issue states only the
+observed-vs-expected behaviour, sourced from the report's code read.

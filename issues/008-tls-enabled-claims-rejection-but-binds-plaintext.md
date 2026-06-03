@@ -20,11 +20,12 @@ binds PLAINTEXT — it is not rejected. An operator who sets
 encryption is enforced when traffic is in fact unencrypted.
 
 This is the security-flavoured member of the report's headline theme
-(the prose overstates what the code does). Per the report, the right fix
-is to the BEHAVIOUR, not the comment: either actually reject
-`tls.enabled=true` at config-validation time (exit 2, config error), or
-implement TLS. A silent downgrade to plaintext under a config that asks
-for TLS is the dangerous outcome.
+(the prose overstates what the code does). The observable contract at
+stake: a config that asks for `tls.enabled=true` must not silently
+result in plaintext traffic — the operator must be able to tell from the
+binary's behaviour whether transport encryption is in force. The
+expectation to pin asserts the OBSERVED behaviour against that claim;
+remediation is the implementer's call.
 
 ## Catalogue status
 
