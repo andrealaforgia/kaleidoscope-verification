@@ -1,0 +1,85 @@
+diff --git a/crates/cinder/Cargo.toml b/crates/cinder/Cargo.toml
+index 1d38943..8a196b5 100644
+--- a/crates/cinder/Cargo.toml
++++ b/crates/cinder/Cargo.toml
+@@ -17,6 +17,13 @@ aegis = { path = "../aegis", version = "0.1.0" }
+ serde = { workspace = true }
+ serde_json = { workspace = true }
+ 
++# Shared torn-tail-tolerant WAL replay (ADR-0059). The file-backed
++# `open` replays its NDJSON WAL through this routine, recovering the
++# intact acked prefix past a single torn final line and staying
++# fail-closed for every other parse failure. Workspace-internal leaf
++# crate, AGPL-3.0-or-later like cinder itself.
++wal-recovery = { path = "../wal-recovery", version = "0.1.0" }
++
+ [[test]]
+ name = "slice_01_walking_skeleton"
+ path = "tests/slice_01_walking_skeleton.rs"
+diff --git a/crates/cinder/src/file_backed.rs b/crates/cinder/src/file_backed.rs
+index 1f73291..46da518 100644
+--- a/crates/cinder/src/file_backed.rs
++++ b/crates/cinder/src/file_backed.rs
+@@ -40,7 +40,7 @@
+ use std::collections::HashMap;
+ use std::fmt;
+ use std::fs::{File, OpenOptions};
+-use std::io::{BufRead, BufReader, BufWriter, Write};
++use std::io::{BufWriter, Write};
+ use std::path::{Path, PathBuf};
+ use std::sync::Mutex;
+ use std::time::SystemTime;
+@@ -128,39 +128,21 @@ impl FileBackedTieringStore {
+             }
+         }
+ 
+-        // 2. Replay WAL.
++        // 2. Replay WAL, recovering the intact acked prefix past a
++        //    single torn final line (ADR-0059, shared wal-recovery).
+         if wal_path.exists() {
+-            let f = File::open(&wal_path).map_err(io)?;
+-            let reader = BufReader::new(f);
+-            for (idx, line) in reader.lines().enumerate() {
+-                let line = match line {
+-                    Ok(l) => l,
+-                    Err(e) => return Err(io(e)),
+-                };
+-                if line.is_empty() {
+-                    continue;
+-                }
+-                let record: WalRecord = match serde_json::from_str(&line) {
+-                    Ok(r) => r,
+-                    Err(e) => {
+-                        // Treat a single truncated last line
+-                        // as a graceful partial write — log
+-                        // its position and stop. We can't
+-                        // know "last" until we have read
+-                        // ahead; we rely on the parser
+-                        // catching the error here, and
+-                        // tolerate it only if it is the EOF
+-                        // boundary (no further lines).
+-                        let line_num = idx + 1;
+-                        return Err(MigrateError::PersistenceFailed {
+-                            reason: format!(
+-                                "WAL parse error at line {line_num}: {e}; raw={line:?}"
+-                            ),
+-                        });
+-                    }
+-                };
+-                apply_to_entries(&mut entries, record);
+-            }
++            let wal_bytes = std::fs::read(&wal_path).map_err(io)?;
++            wal_recovery::replay_wal_tolerating_torn_tail::<WalRecord, MigrateError>(
++                &wal_bytes,
++                "cinder",
++                |record| {
++                    apply_to_entries(&mut entries, record);
++                    Ok(())
++                },
++                |line, error| MigrateError::PersistenceFailed {
++                    reason: format!("WAL parse error at line {line}: {error}"),
++                },
++            )?;
+         }
+ 
+         // 3. Open WAL for append.

@@ -1,0 +1,3 @@
+{"timestamp":"2026-06-03T06:18:22.018794Z","level":"WARN","event":"wal.recovery.torn_tail_dropped","pillar":"ray","line":2,"dropped_bytes":51}
+{"timestamp":"2026-06-03T06:18:22.019107Z","level":"INFO","event":"trace_query_api_starting","pillar_root":"/data","tenant_resolved":true}
+{"timestamp":"2026-06-03T06:18:22.019297Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9092"}

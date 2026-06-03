@@ -1,0 +1,1 @@
+OK — ray torn WAL tail tolerated: trace-query-api recovered 10 intact span(s) (all service=d05-pilot) and ignored the torn trailing line (graceful recovery, the shared wal_recovery seam on the Ray store)

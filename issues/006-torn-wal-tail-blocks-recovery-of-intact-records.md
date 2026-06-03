@@ -1,9 +1,9 @@
 # 006 — a torn WAL trailing line blocks recovery of ALL intact prior records
 
-- Status: `partial` — FIXED for lumen at `87d9363`
-  (wal-torn-tail-recovery-v0, shared `wal-recovery` seam); ray + cinder
-  rewires still pending (ray in flight, cinder unstarted as of that SHA).
-  Stays open until all three land.
+- Status: `partial` — FIXED + black-box verified for lumen (`87d9363`,
+  D04) and ray (`188c6c2`, D05), both on the shared `wal-recovery` seam.
+  cinder (rewire + correct the false file_backed.rs:36-38 doc) and pulse
+  still pending (cinder in flight at `188c6c2`). Closes when all land.
 - Severity: medium (durability robustness; safe-but-brittle)
 
 ## Resolution — lumen (2026-06-03, HEAD 87d9363)

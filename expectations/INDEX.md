@@ -39,7 +39,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 83 (A 14 + S 12 + E 4 + X 14 + L 6 + K 12 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 4) |
+| `satisfied` | 84 (A 14 + S 12 + E 4 + X 14 + L 6 + K 12 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 5) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 0 (X01, X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
@@ -103,7 +103,7 @@ Original-batch dates:
 
 Open issues:
 [006 — torn WAL tail blocks recovery of intact records](../issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md)
-(`partial`; FIXED for lumen at `87d9363` (wal-torn-tail-recovery-v0, shared wal-recovery seam) — D04 re-verified GREEN on the RECOVERY branch (6/6 intact recovered, torn tail ignored); ray + cinder rewires pending. Stays open until all three land).
+(`partial`; FIXED for lumen (`87d9363`, D04) and ray (`188c6c2`, D05) — both re-verified GREEN on the RECOVERY branch (intact prefix recovered, torn tail ignored); cinder + pulse rewires pending. Stays open until all land + the cinder doc is corrected).
 [007 — non-atomic snapshot write bricks the store](../issues/007-non-atomic-snapshot-write-can-brick-the-store.md)
 (`open`; from the four-quadrants report — `File::create(path)` with no temp+rename in all five stores, so a crash mid-snapshot = total loss; not yet black-box reachable (snapshot not auto-triggered); flagged to the implementer).
 [008 — `tls.enabled=true` claims rejection but binds plaintext](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md)

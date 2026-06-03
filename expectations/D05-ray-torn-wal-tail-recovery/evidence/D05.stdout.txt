@@ -1,0 +1,4 @@
+wal_lines_before_tear=1
+tqapi_running=true tqapi_exitcode=0
+query_code=200
+query_count=10
