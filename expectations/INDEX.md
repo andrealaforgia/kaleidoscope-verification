@@ -39,7 +39,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 85 (A 14 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 5) |
+| `satisfied` | 86 (A 14 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 6) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 0 (X01, X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
@@ -102,8 +102,6 @@ Original-batch dates:
   cargo workloads. All 21 confirmed green at the same SHA on retry.
 
 Open issues:
-[006 — torn WAL tail blocks recovery of intact records](../issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md)
-(`partial`; FIXED for lumen (`87d9363`, D04) and ray (`188c6c2`, D05) — both re-verified GREEN on the RECOVERY branch (intact prefix recovered, torn tail ignored); cinder + pulse rewires pending. Stays open until all land + the cinder doc is corrected).
 [007 — non-atomic snapshot write bricks the store](../issues/007-non-atomic-snapshot-write-can-brick-the-store.md)
 (`open`; from the four-quadrants report — `File::create(path)` with no temp+rename in all five stores, so a crash mid-snapshot = total loss; not yet black-box reachable (snapshot not auto-triggered); flagged to the implementer).
 [008 — `tls.enabled=true` claims rejection but binds plaintext](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md)
@@ -115,6 +113,7 @@ Closed:
 [002 — env-var overrides not wired](../issues/002-env-var-overrides-not-wired-in-figment-loader.md) (`fixed` at `c8d8a55`);
 [003 — gRPC backpressure load reproducibility](../issues/003-grpc-backpressure-load-reproducibility.md) (`wontfix`, catalogue tooling);
 [004 — cargo test workspace broken](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) (`resolved` 2026-05-31, harness OOM artefact not a kaleidoscope defect; fixed by `CARGO_BUILD_JOBS=1`);
+[006 — torn WAL tail](../issues/006-torn-wal-tail-blocks-recovery-of-intact-records.md) (`resolved` 2026-06-04; all four pillars recover the intact prefix past a torn tail on the shared wal_recovery seam — lumen D04, ray D05, pulse D06 black-box; cinder credited to acceptance tests. Cinder doc-contradiction note retracted);
 [005 — read/gateway tracing subscriber](../issues/005-query-api-tracing-subscriber-missing-health-events-dropped.md) (`resolved` 2026-06-02; all four binaries install a subscriber — read tier at `2663eb5` (Q01/LQ06/TQ04), gateway at `caa8cdf` (G01 tightened onto gateway_starting→listener_bound ordering); the gateway fsync-probe `health.startup.refused` arm is covered by the implementer's acceptance test, not black-box reachable here).
 
 ## Surfaces overview (catalogue coverage map)

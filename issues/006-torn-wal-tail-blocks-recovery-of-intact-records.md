@@ -1,11 +1,16 @@
 # 006 — a torn WAL trailing line blocks recovery of ALL intact prior records
 
-- Status: `partial` — FIXED + black-box verified for lumen (`87d9363`,
-  D04) and ray (`188c6c2`, D05), both on the shared `wal-recovery` seam.
-  Cinder is NOT a torn-tail brick (the earlier claim is RETRACTED — see
-  the Cinder note below; its doc is accurate and it already recovers).
-  pulse to confirm. Closes when the genuinely-affected pillars
-  (lumen ✓, ray ✓, + any other that actually bricked) are covered.
+- Status: `resolved` (2026-06-04). All four WAL-backed pillars reopen and
+  serve the intact prefix after a torn final WAL line, on the shared
+  `wal_recovery::replay_wal_tolerating_torn_tail` seam. Black-box verified
+  by the catalogue for three (lumen `87d9363` D04, ray `188c6c2` D05,
+  pulse `1653a0d`/seam `7c4a5e2` D06 — each recovered the intact records
+  via the running read API after the WAL tail was torn). cinder
+  (`1886d94`) is credited to the implementer's AC-5/AC-6 negatives +
+  reports/cinder.md; it is reached via the CLI, not a gateway→read-API
+  path, so it is not black-boxed here (a CLI-based D07-cinder is the way
+  to ground it if needed). The earlier cinder doc-contradiction note is
+  retracted (see below). issue 006 closed.
 - Severity: medium (durability robustness; safe-but-brittle)
 
 ## Resolution — lumen (2026-06-03, HEAD 87d9363)

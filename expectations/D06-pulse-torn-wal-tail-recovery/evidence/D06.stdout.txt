@@ -1,0 +1,4 @@
+wal_lines_before_tear=2
+qapi_running=true qapi_exitcode=0
+query_code=200
+result_status=success result_count=1

@@ -1,0 +1,1 @@
+OK — pulse torn WAL tail tolerated: query-api recovered the intact metric (status=success, __name__=gen) and ignored the torn trailing line (graceful recovery, shared wal_recovery seam on the Pulse store)

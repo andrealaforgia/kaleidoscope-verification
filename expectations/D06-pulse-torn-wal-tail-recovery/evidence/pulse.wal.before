@@ -1,0 +1,2 @@
+{"op":"ingest","tenant":"acme","metrics":[{"name":"gen","description":"","unit":"","kind":"Gauge","points":[{"time_unix_nano":1780529050067135335,"start_time_unix_nano":0,"attributes":{},"value":0.0}],"resource_attributes":{"service.name":"d06-pilot"}}]}
+{"op":"ingest","tenant":"acme","metrics":[{"name":"gen","description":"","unit":"","kind":"Gauge","points":[{"time_unix_nano":1780529050071743627,"start_time_unix_nano":0,"attributes":{},"value":1.0}],"resource_attributes":{"service.name":"d06-pilot"}}]}
