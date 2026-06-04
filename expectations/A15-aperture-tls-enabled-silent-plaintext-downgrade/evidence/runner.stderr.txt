@@ -1,3 +1,0 @@
-step 1: build aperture from snapshot
-step 2: run aperture with tls.enabled=true
-RED (issue 008 grounded) — aperture answered /readyz=200 over PLAINTEXT http with tls.enabled=true (warn_tls_not_supported=yes); an operator who asked for transport encryption silently got a plaintext listener. The refuse-or-encrypt contract is VIOLATED at this SHA. This flips GREEN when tls-config-reject-v0 (ADR-0061) lands.

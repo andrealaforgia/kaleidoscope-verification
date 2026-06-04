@@ -1,9 +1,13 @@
 # 008 — `tls.enabled=true` claims rejection but binds plaintext (security)
 
-- Status: `open` — now GROUNDED black-box by **A15** (RED at `ea72f1e`):
-  `tls.enabled=true` yields a plaintext `/readyz=200` listener with a
-  WARN line, not a refusal. Fix `tls-config-reject-v0` (ADR-0061) in
-  flight; A15 flips GREEN on its DELIVER. See "Catalogue status".
+- Status: `resolved` (2026-06-05). `tls-config-reject-v0` (ADR-0061, feat
+  `a56c317`) deleted the warn-and-bind path: aperture now REFUSES TO START
+  on `tls.enabled=true`. Black-box verified by **A17** at `a812193`:
+  exit 2, stderr `event=config_validation_failed` naming `tls.enabled`,
+  no listener bound (connect-refused). The silent plaintext downgrade is
+  gone. (Grounded RED by the same expectation — then numbered A15 — at
+  `ea72f1e`; flipped GREEN on the DELIVER and renumbered A17 after an ID
+  collision with the pre-existing `A15-config-error`.)
 - Severity: high (security; operator could believe transport encryption
   is enforced when it is not)
 - Surface: aperture forwarding sink config.

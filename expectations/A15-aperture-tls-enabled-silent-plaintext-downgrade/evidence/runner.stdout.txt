@@ -1,4 +1,0 @@
-readyz_plaintext=200
-running=true
-exitcode=0
-warn_tls_not_supported=yes

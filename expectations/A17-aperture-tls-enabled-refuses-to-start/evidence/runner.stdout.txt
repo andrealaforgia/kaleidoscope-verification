@@ -1,0 +1,6 @@
+readyz_plaintext=000
+running=false
+exitcode=2
+warn_tls_not_supported=no
+config_validation_failed=yes
+names_tls_enabled=yes

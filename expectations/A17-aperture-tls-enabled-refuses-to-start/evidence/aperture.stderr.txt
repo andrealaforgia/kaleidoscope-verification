@@ -1,0 +1,1 @@
+aperture: config error: event=config_validation_failed reason: aperture v0 implements neither transport encryption nor SPIFFE auth; refusing to start: tls.enabled=true is not implemented in v0

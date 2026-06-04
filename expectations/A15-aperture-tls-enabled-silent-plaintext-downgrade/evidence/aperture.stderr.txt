@@ -1,6 +1,0 @@
-{"timestamp":"2026-06-04T22:13:31.642686Z","level":"INFO","event":"startup","version":"0.1.0"}
-{"timestamp":"2026-06-04T22:13:31.642701Z","level":"WARN","event":"tls_not_supported_in_v0","reason":"aperture v0 ships plaintext only; ignoring tls.enabled=true"}
-{"timestamp":"2026-06-04T22:13:31.642723Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-{"timestamp":"2026-06-04T22:13:31.642771Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-{"timestamp":"2026-06-04T22:13:31.642775Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-{"timestamp":"2026-06-04T22:13:31.642794Z","level":"INFO","event":"ready"}

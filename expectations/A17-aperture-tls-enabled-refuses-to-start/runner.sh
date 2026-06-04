@@ -53,7 +53,8 @@ READYZ=000
 RUNNING=true
 for _ in $(seq 1 40); do
     RUNNING=$(docker inspect -f '{{.State.Running}}' "$NAME" 2>/dev/null || echo false)
-    READYZ=$(curl -sS --max-time 2 -o /dev/null -w '%{http_code}' "http://localhost:${HPORT_HTTP}/readyz" 2>/dev/null || echo 000)
+    READYZ=$(curl -sS --max-time 2 -o /dev/null -w '%{http_code}' "http://localhost:${HPORT_HTTP}/readyz" 2>/dev/null) || true
+    [[ -z "$READYZ" ]] && READYZ=000
     [[ "$READYZ" == "200" ]] && break
     [[ "$RUNNING" != "true" ]] && break
     sleep 0.5
@@ -68,25 +69,34 @@ docker rm -f "$NAME" >/dev/null 2>&1 || true
 WARN_TLS=no
 grep -qE 'tls_not_supported_in_v0' "$EVIDENCE_DIR/aperture.stderr.txt" && WARN_TLS=yes
 echo "warn_tls_not_supported=$WARN_TLS" | tee -a "$EVIDENCE_DIR/observation.txt"
+# The refusal event the implementer wired (message 020, SHA a56c317):
+# `event=config_validation_failed` on stderr, naming the knob, exit 2.
+CFG_REFUSAL=no
+grep -qE 'event=config_validation_failed' "$EVIDENCE_DIR/aperture.stderr.txt" && CFG_REFUSAL=yes
+echo "config_validation_failed=$CFG_REFUSAL" | tee -a "$EVIDENCE_DIR/observation.txt"
+NAMES_KNOB=no
+grep -qE 'tls\.enabled' "$EVIDENCE_DIR/aperture.stderr.txt" && NAMES_KNOB=yes
+echo "names_tls_enabled=$NAMES_KNOB" | tee -a "$EVIDENCE_DIR/observation.txt"
 
 # Classify.
 if [[ "$READYZ" == "200" ]]; then
     # DOWNGRADE: a plaintext listener answered /readyz over plain HTTP
     # while tls.enabled=true. Contract violated -> issue 008 ground. RED.
-    echo "RED (issue 008 grounded) — aperture answered /readyz=200 over PLAINTEXT http with tls.enabled=true (warn_tls_not_supported=${WARN_TLS}); an operator who asked for transport encryption silently got a plaintext listener. The refuse-or-encrypt contract is VIOLATED at this SHA. This flips GREEN when tls-config-reject-v0 (ADR-0061) lands." >&2
+    echo "RED (issue 008 grounded) — aperture answered /readyz=200 over PLAINTEXT http with tls.enabled=true (warn_tls_not_supported=${WARN_TLS}); an operator who asked for transport encryption silently got a plaintext listener. The refuse-or-encrypt contract is VIOLATED at this SHA." >&2
     exit 1
 fi
 
 if [[ "$RUNNING" != "true" && "$EXITCODE" != "0" && "$EXITCODE" != "NA" ]]; then
-    # Candidate REFUSAL: process exited non-zero and no plaintext listener
-    # answered. Require a refusal-shaped event naming the knob (the exact
-    # event name/fields arrive with the implementer's SHA; grep broadly
-    # for now and tighten on her message).
-    if grep -qiE 'refus|reject|tls|unsupported|startup' "$EVIDENCE_DIR/aperture.stderr.txt"; then
-        echo "GREEN (refusal) — aperture REFUSED to start with tls.enabled=true: exit ${EXITCODE}, no plaintext listener bound (readyz=${READYZ}), refusal event present. The refuse-or-encrypt contract is met; issue 008 resolved black-box." >&2
+    # REFUSAL (tls-config-reject-v0, a56c317): config validation fails
+    # BEFORE any Config is built, so the bind path is never entered (the
+    # no-plaintext-bind guarantee is structural). Require the exact event
+    # naming the knob, exit 2, and no plaintext listener.
+    if [[ "$CFG_REFUSAL" == "yes" && "$NAMES_KNOB" == "yes" ]]; then
+        [[ "$EXITCODE" == "2" ]] || echo "NOTE: refusal exit code is ${EXITCODE}, expected 2 (implementer msg 020)" >&2
+        echo "GREEN (refusal) — aperture REFUSES to start with tls.enabled=true: exit ${EXITCODE}, no plaintext listener bound (readyz=${READYZ}), stderr event=config_validation_failed naming tls.enabled. Config validation fails before any bind (structural no-plaintext guarantee). The refuse-or-encrypt contract is met; issue 008 resolved black-box." >&2
         exit 0
     fi
-    echo "FAIL — aperture exited ${EXITCODE} but no refusal-shaped event found in stderr; cannot confirm a clean refusal vs a crash." >&2
+    echo "FAIL — aperture exited ${EXITCODE} but the refusal was not the expected config_validation_failed naming tls.enabled (config_validation_failed=${CFG_REFUSAL}, names_knob=${NAMES_KNOB}); cannot confirm a clean refusal vs a crash." >&2
     tail -20 "$EVIDENCE_DIR/aperture.stderr.txt" >&2
     exit 2
 fi

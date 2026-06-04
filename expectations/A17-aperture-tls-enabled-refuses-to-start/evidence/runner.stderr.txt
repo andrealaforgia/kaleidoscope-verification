@@ -1,0 +1,3 @@
+step 1: build aperture from snapshot
+step 2: run aperture with tls.enabled=true
+GREEN (refusal) — aperture REFUSES to start with tls.enabled=true: exit 2, no plaintext listener bound (readyz=000), stderr event=config_validation_failed naming tls.enabled. Config validation fails before any bind (structural no-plaintext guarantee). The refuse-or-encrypt contract is met; issue 008 resolved black-box.

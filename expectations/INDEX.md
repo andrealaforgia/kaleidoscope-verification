@@ -39,10 +39,10 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 27 (15 in S/E/X + 6 SI blocked on N8 + 6 B blocked on N10) |
-| `satisfied` | 95 (A 14 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 3 + G 3 + EG 1 + LQ 7 + TQ 4 + D 14) |
+| `satisfied` | 96 (A 15 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 3 + G 3 + EG 1 + LQ 7 + TQ 4 + D 14) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 1 (**A15** — deliberate RED grounding [`issue 008`](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md): `tls.enabled=true` binds a plaintext `/readyz=200` listener instead of refusing; flips GREEN when `tls-config-reject-v0` / ADR-0061 DELIVERs. X01/X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
+| `broken` | 0 (**A17** flipped GREEN 2026-06-05 — `tls-config-reject-v0` / ADR-0061 feat `a56c317` made aperture REFUSE to start on `tls.enabled=true`; [`issue 008`](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md) resolved. X01/X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 
@@ -105,7 +105,7 @@ Open issues:
 [007 — non-atomic snapshot write bricks the store](../issues/007-non-atomic-snapshot-write-can-brick-the-store.md)
 (`open`; from the four-quadrants report — `File::create(path)` with no temp+rename in all five stores, so a crash mid-snapshot = total loss; not yet black-box reachable (snapshot not auto-triggered); flagged to the implementer).
 [008 — `tls.enabled=true` claims rejection but binds plaintext](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md)
-(`open`, security; from the four-quadrants report — the config comment says tls.enabled is rejected but it warns and binds plaintext; black-box expectation to follow; flagged to the implementer).
+(`resolved` 2026-06-05; `tls-config-reject-v0` / ADR-0061 feat `a56c317` deleted the warn-and-bind path — aperture now REFUSES to start on `tls.enabled=true` with `event=config_validation_failed` + exit 2 + no listener, black-box verified by **A17** at `a812193`).
 [009 — CLI ingest non-atomic (partial commit + double-ingest)](../issues/009-cli-ingest-non-atomic-partial-commit-double-ingest.md)
 (`open`, data integrity; black-box verified by K13 — a malformed mid-stream line aborts non-zero but leaves the flushed batch committed, and a re-run double-ingests; from the four-quadrants per-module report).
 Closed:
@@ -124,7 +124,7 @@ that can have an expectation, tracked?".
 
 | Kaleidoscope component | Surface | Prefix | Tracked entries | Status |
 |---|---|---|---|---|
-| `crates/aperture` binary | OTLP gateway runtime (operator) | **A** | 16 (14 satisfied, 2 deferred) | Comprehensive. A07 needs raw gRPC client; A14 needs slow downstream. |
+| `crates/aperture` binary | OTLP gateway runtime (operator) | **A** | 17 (15 satisfied, 2 deferred) | Comprehensive. A07 needs raw gRPC client; A14 needs slow downstream. A17 = refuses to start on `tls.enabled=true` (`event=config_validation_failed`, exit 2, no bind; resolves issue 008). |
 | `crates/spark` library | SDK init + signal emission (integrator), via `harness/spark-consumer` fixture | **S** | 22 (12 satisfied, 10 pending) | Consumer fixture in place; remaining S12-S21 are pattern-repetition extensions. |
 | Spark + Aperture round-trip | End-to-end signal flow (operator + integrator) | **E** | 6 (4 satisfied, 2 pending) | E05 implicitly proven by E01-E04 evidence; E06 needs SIGTERM injection on consumer. |
 | `crates/otlp-conformance-harness` | Validator library API (library-consumer) | **H** | 6 — all `out-of-scope` | Excluded per the H-rule (library-consumer concern, not operator/integrator-facing). Documented in [`../known-gaps.md`](../known-gaps.md). |
@@ -184,6 +184,7 @@ yet. The reason lives in this catalogue, not as silent inaction.
 | [A14](A14-drain-deadline-exceeded-exit-one/README.md) | drain-deadline-exceeded-exit-one | If drain deadline expires with requests in flight, exit 1; stderr emits `event=drain_deadline_exceeded`. | `pending` (deferred — needs slow downstream) |
 | [A15](A15-config-error-pre-init-exit-two/README.md) | config-error-pre-init-exit-two | Bad config at startup — stderr `aperture: config error: ...` (pre-tracing) and exit 2. | `satisfied` |
 | [A16](A16-post-init-lifecycle-via-tracing/README.md) | post-init-lifecycle-via-tracing | Post-init, every lifecycle event travels via structured tracing on stderr. | `satisfied` |
+| [A17](A17-aperture-tls-enabled-refuses-to-start/README.md) | aperture-tls-enabled-refuses-to-start | `tls.enabled=true` makes aperture REFUSE to start (`event=config_validation_failed` naming the knob, exit 2, no listener bound). Resolves issue 008; was the first `broken` (RED grounding) then flipped GREEN on `tls-config-reject-v0` (`a56c317`). | `satisfied` |
 
 ## S — Spark (integrator-facing)
 

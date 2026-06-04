@@ -1,2 +1,2 @@
-{"timestamp":"2026-06-04T22:19:59.327317Z","level":"INFO","event":"query_api_starting","pillar_root":"/data","tenant_resolved":true}
-{"timestamp":"2026-06-04T22:19:59.327402Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9090"}
+{"timestamp":"2026-06-04T23:58:22.441323Z","level":"INFO","event":"query_api_starting","pillar_root":"/data","tenant_resolved":true}
+{"timestamp":"2026-06-04T23:58:22.441391Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9090"}

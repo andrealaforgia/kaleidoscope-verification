@@ -41,9 +41,10 @@ re-stepping, Q03's two responses will diverge and the runner fails loudly
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-04 UTC at HEAD (`ea72f1e`). GREEN: both
-  `status=success`, 1 series, 2 raw samples, `.data.result` byte-identical
-  between `step=15s` and `step=3600s`.
+- Last verified: 2026-06-05 UTC at HEAD (`a812193`, re-verified after
+  claims-honesty-pass-v0 / ADR-0062 — a doc pass; behaviour unchanged).
+  GREEN: both `status=success`, 1 series, 2 raw samples, `.data.result`
+  byte-identical between `step=15s` and `step=3600s`.
 - Method: `harness/run-eg.sh` (gateway + query-api built from the HEAD
   snapshot). telemetrygen sends one counter `gen` to the gateway on a
   unique high port (14333); the gateway is SIGTERMed to flush Pulse;
