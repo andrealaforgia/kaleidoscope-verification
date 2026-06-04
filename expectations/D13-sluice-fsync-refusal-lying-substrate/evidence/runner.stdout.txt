@@ -1,0 +1,1 @@
+OK — sluice refuses a lying fsync substrate: --probe-lying exited 1, emitted event=health.startup.refused substrate=fsync-noop, and wrote no store payload (refuse-before-open). WAL-fsync wiring's observable refusal, which a post-ack process kill cannot prove.
