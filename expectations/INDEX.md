@@ -42,7 +42,7 @@ Live status table. Updated when an expectation moves between states.
 | `satisfied` | 89 (A 14 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 2 + G 3 + EG 1 + LQ 7 + TQ 4 + D 9) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
-| `broken` | 0 (X01, X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
+| `broken` | 1 (**A15** — deliberate RED grounding [`issue 008`](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md): `tls.enabled=true` binds a plaintext `/readyz=200` listener instead of refusing; flips GREEN when `tls-config-reject-v0` / ADR-0061 DELIVERs. X01/X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact, now `resolved`) |
 | `unanchored-claim` | 0 |
 | `out-of-scope` | 6 (H1-H6 — see [`../known-gaps.md`](../known-gaps.md)) |
 

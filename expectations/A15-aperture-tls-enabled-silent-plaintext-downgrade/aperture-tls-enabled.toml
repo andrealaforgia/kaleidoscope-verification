@@ -1,0 +1,30 @@
+# A15 fixture: an operator config that ASKS FOR TLS. The observable
+# contract under test is what aperture does with tls.enabled=true.
+# Stub sink so the scenario is self-contained (no otelcol-sink needed):
+# the question is only whether the transport listener is plaintext or
+# whether aperture refuses to start.
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.sink]
+kind = "stub"
+
+[aperture.shutdown]
+drain_deadline_ms = 5000
+
+[aperture.security.tls]
+enabled = true
+cert_path = ""
+key_path = ""
+
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""

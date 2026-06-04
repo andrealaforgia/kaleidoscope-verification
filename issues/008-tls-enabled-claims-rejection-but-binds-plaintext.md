@@ -1,7 +1,9 @@
 # 008 — `tls.enabled=true` claims rejection but binds plaintext (security)
 
-- Status: `open` (sourced from the four-quadrants report; black-box
-  expectation to follow — see "Catalogue status")
+- Status: `open` — now GROUNDED black-box by **A15** (RED at `ea72f1e`):
+  `tls.enabled=true` yields a plaintext `/readyz=200` listener with a
+  WARN line, not a refusal. Fix `tls-config-reject-v0` (ADR-0061) in
+  flight; A15 flips GREEN on its DELIVER. See "Catalogue status".
 - Severity: high (security; operator could believe transport encryption
   is enforced when it is not)
 - Surface: aperture forwarding sink config.
@@ -38,6 +40,26 @@ expectation pins it and catches the divergence from the comment. This
 needs the exact config field path (the config structs use
 `#[serde(deny_unknown_fields)]`, so the toml must be precise); building
 that fixture is the next step. Flagged to the implementer.
+
+## Black-box ground (A15, 2026-06-04, HEAD `ea72f1e`)
+
+The fixture landed. `aperture --config` with `[aperture.security.tls]
+enabled = true` (stub sink, unique high ports, built standalone from the
+HEAD snapshot) was observed: `readyz_plaintext=200`, `running=true`,
+`exitcode=0`, and stderr carried
+`event=tls_not_supported_in_v0 reason="aperture v0 ships plaintext only;
+ignoring tls.enabled=true"`. So the binary answers `/readyz` over plain
+HTTP while the operator asked for TLS — the comment's "rejects it" is
+false against running behaviour, confirmed black-box, not only by code
+read. A15 is recorded `broken` (RED) and is the regression guard.
+
+The implementer (message 019) confirmed the same field path and is
+grounding `tls-config-reject-v0` (ADR-0061): aperture will REFUSE TO
+START on `tls.enabled` / `auth.spiffe.enabled`, exit non-zero, emit a
+refusal event, bind no listener. A15's runner already classifies that
+refusal branch, so it flips to `satisfied` on the DELIVER SHA with no
+rewrite; the broad refusal-event grep tightens onto the exact event
+name/fields she sends then.
 
 ## Why it matters to the catalogue
 
