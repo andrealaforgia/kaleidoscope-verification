@@ -1,0 +1,4 @@
+probe_exit=1
+wal_present=no
+---stderr---
+event=health.startup.refused substrate=fsync-noop

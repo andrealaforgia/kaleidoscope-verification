@@ -1,0 +1,6 @@
+ready=yes
+tmp_at_kill=no
+snapshot_present=yes
+snapshot_whole=yes
+acked_in_snapshot=yes
+acked_in_wal=no

@@ -1,0 +1,1 @@
+{"per_tenant":[{"tenant":"acme","records":[{"observed_time_unix_nano":100,"severity_number":9,"severity_text":"INFO","body":"d09-acked-kal","attributes":{},"resource_attributes":{"service.name":"crash-target"},"trace_id":null,"span_id":null}]}]}

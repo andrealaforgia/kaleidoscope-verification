@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1.7
+#
+# Generic builder+runtime for a per-store `<store>_crash_target`
+# binary (bin name `<store>-crash-target`). These binaries are shipped
+# by store-fsync-durability-v0 to let the durability ACs be exercised
+# out-of-process (black-box): `--probe-lying` drives the composition
+# root against a lying fsync substrate and must refuse to open; and
+# `--seed-then-loop-snapshot` seeds an acked datum, emits
+# CRASH_TARGET_READY, then loops snapshotting so the parent can SIGKILL
+# mid-snapshot and reopen.
+#
+# Parametrised by build args:
+#   CRATE — workspace crate (e.g. lumen)
+#   BIN   — bin target name (e.g. lumen-crash-target)
+#
+# Build (from the HEAD snapshot root):
+#   docker build -f harness/Dockerfile.crash-target \
+#     --build-arg CRATE=lumen --build-arg BIN=lumen-crash-target \
+#     -t kaleidoscope-expectations/lumen-crash-target:under-test .
+
+FROM rust:1.88-slim-bookworm AS builder
+ARG CRATE
+ARG BIN
+WORKDIR /workspace
+COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+COPY crates ./crates
+COPY xtask ./xtask
+# Single codegen unit to avoid the Docker VM OOM that fails parallel
+# builds (the issue-004 lesson: E0463 was harness OOM, not a bug).
+ENV CARGO_BUILD_JOBS=1
+RUN cargo build --release -p "$CRATE" --bin "$BIN"
+RUN cp "target/release/$BIN" /crash-target
+
+FROM debian:bookworm-slim AS runtime
+COPY --from=builder /crash-target /usr/local/bin/crash-target
+ENTRYPOINT ["/usr/local/bin/crash-target"]

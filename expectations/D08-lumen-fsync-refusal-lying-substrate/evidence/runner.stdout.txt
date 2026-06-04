@@ -1,0 +1,1 @@
+OK — lumen refuses a lying fsync substrate: --probe-lying exited 1, emitted event=health.startup.refused substrate=fsync-noop, and wrote no store payload (refuse-before-open). This is the WAL-fsync wiring's observable refusal, which a post-ack process kill cannot prove.

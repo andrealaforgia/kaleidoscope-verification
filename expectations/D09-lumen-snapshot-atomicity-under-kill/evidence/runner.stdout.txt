@@ -1,0 +1,1 @@
+OK — lumen snapshot atomicity holds under a mid-snapshot SIGKILL: canonical store.snapshot is whole-or-absent (whole=yes, present=yes, tmp_at_kill=no), never torn; the acked record 'd09-acked-kal' survived in durable on-disk state (in_snapshot=yes, in_wal=no).
