@@ -1,0 +1,1 @@
+OK — query-api step is accepted and IGNORED at v0: query_range over a fixed window returned BYTE-IDENTICAL .data.result for step=15s and step=3600s (1 series, 2 raw sample(s); no re-stepping, DD5). Disclosed v0 behaviour; this is the regression guard.
