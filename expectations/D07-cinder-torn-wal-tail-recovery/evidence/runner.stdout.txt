@@ -1,0 +1,1 @@
+OK — cinder torn WAL tail tolerated: list-items recovered 1 Hot placement(s) after the cinder.wal tail was torn (graceful recovery, shared wal_recovery seam on the Cinder store, via the CLI)

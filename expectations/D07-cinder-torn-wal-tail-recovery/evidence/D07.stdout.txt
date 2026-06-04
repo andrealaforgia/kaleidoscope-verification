@@ -1,0 +1,5 @@
+ingest_exit=0
+items_before=1
+listitems_exit=0
+items_after=1
+---stderr---

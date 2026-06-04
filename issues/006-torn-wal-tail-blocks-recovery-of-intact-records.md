@@ -2,15 +2,12 @@
 
 - Status: `resolved` (2026-06-04). All four WAL-backed pillars reopen and
   serve the intact prefix after a torn final WAL line, on the shared
-  `wal_recovery::replay_wal_tolerating_torn_tail` seam. Black-box verified
-  by the catalogue for three (lumen `87d9363` D04, ray `188c6c2` D05,
-  pulse `1653a0d`/seam `7c4a5e2` D06 — each recovered the intact records
-  via the running read API after the WAL tail was torn). cinder
-  (`1886d94`) is credited to the implementer's AC-5/AC-6 negatives +
-  reports/cinder.md; it is reached via the CLI, not a gateway→read-API
-  path, so it is not black-boxed here (a CLI-based D07-cinder is the way
-  to ground it if needed). The earlier cinder doc-contradiction note is
-  retracted (see below). issue 006 closed.
+  `wal_recovery::replay_wal_tolerating_torn_tail` seam, ALL four black-box
+  verified by the catalogue: lumen `87d9363` (D04), ray `188c6c2` (D05),
+  pulse seam `7c4a5e2` (D06), cinder `1886d94` (D07, via the CLI:
+  list-items recovered the Hot placement after cinder.wal was torn). Each
+  was fail-closed before its rewire; now the recovery branch. issue 006
+  closed.
 - Severity: medium (durability robustness; safe-but-brittle)
 
 ## Resolution — lumen (2026-06-03, HEAD 87d9363)
@@ -91,29 +88,30 @@ clear error). If option 1 lands, D04's recovery branch (already coded:
 running=true → intact records served, torn tail ignored) becomes the
 asserted path and this issue closes.
 
-## Cinder note — RETRACTED (per-module report, 2026-06-03)
+## Cinder — the retraction was itself an over-correction (audit trail)
 
-An earlier note here (from the system-level four-quadrants report) said
-Cinder's doc CLAIMS torn-tail tolerance while the code bricks. **That is
-withdrawn.** The per-module read
-(`~/dev/kaleidoscope-4-quadrants-theory/reports/cinder.md`, Q2) refuted
-it: Cinder's `open` delegates to
-`wal_recovery::replay_wal_tolerating_torn_tail` and recovers the intact
-prefix correctly (`crates/cinder/src/file_backed.rs:152-165`, test
-`reopen_recovers_the_intact_prefix_after_a_torn_tail`); the doc matches
-the code. The "proof of bricking" the system report cited
-(`corrupted_wal_surfaces_typed_persistence_error_on_open`) appends a
-COMPLETE-but-malformed line WITH a trailing newline — a different case
-(correctly fail-closed), NOT a torn tail. So Cinder is NOT a torn-tail
-brick and its doc is NOT false; this was a first-pass misread, relayed
-to Bea Implementer and now corrected (do not "fix" the cinder doc).
+Three positions, in order, the last one correct:
 
-This issue 006 stands for the pillars that genuinely bricked: **lumen**
-(D04 confirmed bricking at `eef7576`, fixed `87d9363`) and **ray** (D05,
-fixed `188c6c2`). Cinder's REAL defects are the shared fsync gap +
-non-atomic snapshot ([issue 007](007-non-atomic-snapshot-write-can-brick-the-store.md),
-N18) and the swallowed `place`/`evaluate_at` WAL errors (the
-implementer's cinder-wal-error-surfacing-v0), NOT the torn tail.
+1. System-level report: "cinder doc claims torn-tail tolerance while the
+   code bricks." (Cited the wrong test as proof — a complete-but-
+   malformed line WITH a trailing newline, which is correctly
+   fail-closed, NOT a torn tail.)
+2. My retraction (from `reports/cinder.md`): "cinder is NOT a torn-tail
+   brick, doc accurate, never bricked." **This over-corrected.**
+3. Implementer (msg 015, with timestamps): `reports/cinder.md` was
+   written 2026-06-03 ~14:24, AFTER her cinder fix `1886d94` (~06:27).
+   The per-module read therefore saw the POST-FIX state (open delegating
+   to wal_recovery, doc accurate). BEFORE `1886d94`, cinder's open was a
+   parse-or-die loop that DID brick on a real torn tail and the doc DID
+   falsely claim "detected and ignored"; her commit rewired it onto the
+   shared seam AND corrected the doc. So cinder genuinely bricked, was
+   fixed, and the doc is accurate BECAUSE it was corrected.
+
+D07 grounds the present state black-box: at `88d5a3f`, after tearing
+cinder.wal, `list-items` recovers the Hot placement (exit 0,
+items_after=1). cinder is verified, not credited. (The earlier "do not
+fix the cinder doc" message to Bea Implementer was wrong and is
+corrected in message 016.)
 
 ----------------------------------------------------------------
 Superseded note (kept for the audit trail; the claim below is WRONG):
