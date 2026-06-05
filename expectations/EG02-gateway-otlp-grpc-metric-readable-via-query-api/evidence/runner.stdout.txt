@@ -1,0 +1,1 @@
+OK — OTLP/gRPC metric ingested via the gateway is readable via query-api (status=success, __name__=gen, 1 series). The gateway's gRPC receiver persists to Pulse end to end, matching the HTTP path (EG01).

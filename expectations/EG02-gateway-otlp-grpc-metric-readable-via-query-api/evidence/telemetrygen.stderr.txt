@@ -1,0 +1,66 @@
+2026-06-05T02:22:27.407Z	INFO	metrics/metrics.go:32	starting the metrics generator with configuration	{"config": {"WorkerCount":1,"Rate":1,"TotalDuration":1000000000,"ReportingInterval":1000000000,"SkipSettingGRPCLogger":false,"CustomEndpoint":"localhost:14335","Insecure":true,"InsecureSkipVerify":false,"UseHTTP":false,"HTTPPath":"/v1/metrics","Headers":{},"ResourceAttributes":{"service.name":"eg02-pilot"},"TelemetryAttributes":{},"CaFile":"","ClientAuth":{"Enabled":false,"ClientCertFile":"","ClientKeyFile":""},"NumMetrics":1,"MetricName":"gen","MetricType":"Gauge","SpanID":"","TraceID":""}}
+2026-06-05T02:22:27.407Z	INFO	metrics/metrics.go:86	generation of metrics is limited	{"per-second": 1}
+2026-06-05T02:22:27.407Z	INFO	metrics/metrics.go:51	starting gRPC exporter
+2026-06-05T02:22:27.407Z	INFO	grpc@v1.67.1/clientconn.go:162	[core]original dial target is: "localhost:14335"	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.408Z	INFO	grpc@v1.67.1/clientconn.go:440	[core][Channel #1]Channel created	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.409Z	INFO	grpc@v1.67.1/clientconn.go:193	[core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:"dns", Opaque:"", User:(*url.Userinfo)(nil), Host:"", Path:"/localhost:14335", RawPath:"", OmitHost:false, ForceQuery:false, RawQuery:"", Fragment:"", RawFragment:""}}	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.409Z	INFO	grpc@v1.67.1/clientconn.go:194	[core][Channel #1]Channel authority set to "localhost:14335"	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.409Z	INFO	grpc@v1.67.1/clientconn.go:345	[core][Channel #1]Channel exiting idle mode	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/resolver_wrapper.go:200	[core][Channel #1]Resolver state updated: {
+  "Addresses": [
+    {
+      "Addr": "127.0.0.1:14335",
+      "ServerName": "",
+      "Attributes": null,
+      "BalancerAttributes": null,
+      "Metadata": null
+    },
+    {
+      "Addr": "[::1]:14335",
+      "ServerName": "",
+      "Attributes": null,
+      "BalancerAttributes": null,
+      "Metadata": null
+    }
+  ],
+  "Endpoints": [
+    {
+      "Addresses": [
+        {
+          "Addr": "127.0.0.1:14335",
+          "ServerName": "",
+          "Attributes": null,
+          "BalancerAttributes": null,
+          "Metadata": null
+        }
+      ],
+      "Attributes": null
+    },
+    {
+      "Addresses": [
+        {
+          "Addr": "[::1]:14335",
+          "ServerName": "",
+          "Attributes": null,
+          "BalancerAttributes": null,
+          "Metadata": null
+        }
+      ],
+      "Attributes": null
+    }
+  ],
+  "ServiceConfig": null,
+  "Attributes": null
+} (resolver returned new addresses)	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/balancer_wrapper.go:107	[core][Channel #1]Channel switches to new LB policy "pick_first"	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/balancer_wrapper.go:180	[core][Channel #1 SubChannel #2]Subchannel created	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.412Z	INFO	grpc@v1.67.1/clientconn.go:1317	[core][Channel #1 SubChannel #2]Subchannel picks a new address "127.0.0.1:14335" to connect	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.413Z	INFO	grpc@v1.67.1/clientconn.go:1199	[core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:27.413Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to READY	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:28.414Z	INFO	metrics/worker.go:108	metrics generated	{"worker": 0, "metrics": 2}
+2026-06-05T02:22:28.414Z	INFO	metrics/worker.go:43	stopping the exporter	{"worker": 0}
+2026-06-05T02:22:28.414Z	INFO	grpc@v1.67.1/clientconn.go:544	[core][Channel #1]Channel Connectivity change to SHUTDOWN	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:28.414Z	INFO	grpc@v1.67.1/resolver_wrapper.go:100	[core][Channel #1]Closing the name resolver	{"system": "grpc", "grpc_log": true}
+2026-06-05T02:22:28.414Z	INFO	grpc@v1.67.1/balancer_wrapper.go:145	[core][Channel #1]ccBalancerWrapper: closing	{"system": "grpc", "grpc_log": true}
