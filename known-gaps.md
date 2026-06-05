@@ -20,9 +20,19 @@ that never persisted); sluice did the same.
 FIXED at `e271ddd` (`cinder-wal-error-surfacing-v0`): `place` now returns
 `Result<(), MigrateError>`, write-ahead ordered (`append_wal(...)?` BEFORE
 `apply_to_entries`, so a WAL failure returns before the in-memory state is
-touched — no lie), and the CLI propagates it (`Error::CinderMigrate` →
-non-zero exit). Confirmed by code read; the failure-injection behaviour is
-credited to the implementer's in-suite failing-backend test.
+touched — no lie), and the CLI propagates it via `Error::CinderPlace`
+(and `Error::CinderEvaluate` for the sweep) → non-zero exit, printing
+`cinder place: persistence failed: io: <reason>` (implementer message 024;
+NOT `CinderMigrate`, which already had its own Result). Confirmed by code
+read; the failure-injection behaviour is credited to the implementer's
+in-suite `FailingFsyncBackend` test.
+
+If `cinder-wal-fault-injection-v0` ever graduates (the implementer logged
+it as a candidate in message 024 — a size-capped WAL or a hidden
+inject-wal-write-failure affordance), this becomes a real black-box
+assertion (non-zero exit + the structured persistence-failed event), and
+an operator gains a way to drill the failure path. Until then: in-suite
+credit only.
 
 NOT black-box reachable, now with empirical evidence. The only
 operator-reachable induction is a full disk (ENOSPC), via the cinder-only
