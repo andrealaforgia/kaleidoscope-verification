@@ -1,0 +1,1 @@
+OK — query-api HONOURS label matchers: plain gen = 1 series, gen{__name__="gen"} = 1 series (satisfied matcher keeps the row), gen{__name__="q06zznomatch"} = 0 series (contradicting matcher drops it). The matcher CHANGES the result, unlike Q03 where step is ignored.
