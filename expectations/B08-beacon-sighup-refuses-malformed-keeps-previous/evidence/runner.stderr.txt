@@ -1,0 +1,5 @@
+step 1: build beacon-server
+corrupted a.toml; sending SIGHUP
+running_after_hup=true
+--- incidents ---
+{"name":"b08-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780631778,"nanos_since_epoch":776355042},"resolved_at":null}

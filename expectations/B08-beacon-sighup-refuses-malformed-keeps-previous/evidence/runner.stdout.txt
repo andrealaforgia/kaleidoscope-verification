@@ -1,0 +1,1 @@
+OK — beacon SIGHUP reload refuses a malformed (zero-valid-rule) edit and keeps the previous catalogue: beacon.reload.refused (previous_catalogue_retained) on stderr, rule A kept firing with EXACTLY ONE incident (no re-page, state kept by name), and the process stayed running. A bad edit does not take the alerting engine dark.

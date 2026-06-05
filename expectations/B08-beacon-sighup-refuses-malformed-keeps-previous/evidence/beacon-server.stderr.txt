@@ -1,0 +1,9 @@
+2026-06-05T03:56:17.763217Z  INFO beacon_server: beacon-server starting rules_loaded=1 diagnostics=0 backend=http://b08-mock:18091/api/v1
+2026-06-05T03:56:17.764269Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T03:56:18.776875Z  INFO beacon_server: emitting incident rule=b08-rule-a transition="firing"
+2026-06-05T03:56:21.826706Z  WARN beacon_server: beacon.reload.refused event="beacon.reload.refused" file=/rules/a.toml error=/rules/a.toml: TOML parse error at line 5, column 1
+  |
+5 | this_is_not_a_valid_field = "boom"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^
+unknown field `this_is_not_a_valid_field`, expected one of `name`, `query`, `for_duration`, `interval`, `severity`, `labels`, `sinks`, `inhibits`
+ previous_catalogue_retained=true

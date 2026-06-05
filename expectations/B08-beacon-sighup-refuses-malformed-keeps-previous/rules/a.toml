@@ -1,0 +1,10 @@
+[[rules]]
+name = "b08-rule-a"
+query = "up == 0"
+for_duration = "0s"
+interval = "1s"
+severity = "warning"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b08-mock:18091/hook"

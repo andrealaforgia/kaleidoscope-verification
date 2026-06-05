@@ -1,0 +1,1 @@
+{"name":"b08-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780631778,"nanos_since_epoch":776355042},"resolved_at":null}
