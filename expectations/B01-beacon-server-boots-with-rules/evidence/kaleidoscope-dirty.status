@@ -1,0 +1,17 @@
+ M README.md
+ M crates/codex/Cargo.toml
+ M crates/codex/tests/common/mod.rs
+ M crates/codex/tests/slice_01_walking_skeleton.rs
+ M crates/codex/tests/slice_02_otel_semconv_corpus.rs
+ M crates/codex/tests/slice_03_house_attributes.rs
+ M crates/codex/tests/slice_04_unknown_attribute_lint.rs
+ M crates/codex/tests/slice_05_fuzzy_suggestions.rs
+ M crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
+ M crates/otlp-conformance-harness/Cargo.toml
+ M crates/otlp-conformance-harness/README.md
+ M crates/otlp-conformance-harness/src/lib.rs
+ M crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+ M crates/query-http-common/src/lib.rs
+ M crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs
+ M crates/trace-query-api/src/lib.rs
+ M crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs

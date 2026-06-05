@@ -1,0 +1,13 @@
+2026-06-05T00:53:10.931372Z  WARN beacon_server: rule load diagnostic diagnostic=/rules/bad.toml: TOML parse error at line 5, column 1
+  |
+5 | frequency = "1s"
+  | ^^^^^^^^^
+unknown field `frequency`, expected one of `name`, `query`, `for_duration`, `interval`, `severity`, `labels`, `sinks`, `inhibits`
+
+2026-06-05T00:53:10.931392Z  INFO beacon_server: beacon-server starting rules_loaded=1 diagnostics=1 backend=http://127.0.0.1:1/api/v1
+2026-06-05T00:53:10.932276Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T00:53:10.933927Z  WARN beacon_server: PromQL fetch failed; treating as Inactive rule=b01-good error=network: error sending request for url (http://127.0.0.1:1/api/v1/query?query=up+%3D%3D+0)
+2026-06-05T00:53:11.939466Z  WARN beacon_server: PromQL fetch failed; treating as Inactive rule=b01-good error=network: error sending request for url (http://127.0.0.1:1/api/v1/query?query=up+%3D%3D+0)
+2026-06-05T00:53:12.936374Z  WARN beacon_server: PromQL fetch failed; treating as Inactive rule=b01-good error=network: error sending request for url (http://127.0.0.1:1/api/v1/query?query=up+%3D%3D+0)
+2026-06-05T00:53:13.939227Z  WARN beacon_server: PromQL fetch failed; treating as Inactive rule=b01-good error=network: error sending request for url (http://127.0.0.1:1/api/v1/query?query=up+%3D%3D+0)
+2026-06-05T00:53:14.939495Z  WARN beacon_server: PromQL fetch failed; treating as Inactive rule=b01-good error=network: error sending request for url (http://127.0.0.1:1/api/v1/query?query=up+%3D%3D+0)

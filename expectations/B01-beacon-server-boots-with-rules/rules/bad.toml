@@ -1,0 +1,5 @@
+[[rules]]
+name = "b01-bad"
+query = "up == 0"
+severity = "critical"
+frequency = "1s"

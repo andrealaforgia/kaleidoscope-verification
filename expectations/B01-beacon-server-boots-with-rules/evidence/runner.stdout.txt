@@ -1,0 +1,1 @@
+OK — beacon-server boots with rules: loaded the well-formed rule (rules_loaded=1) and surfaced the malformed rule as a diagnostic (diagnostics=1, naming the unknown field 'frequency') WITHOUT refusing to start, and stayed running. Malformed rules are reported and skipped, not fatal.
