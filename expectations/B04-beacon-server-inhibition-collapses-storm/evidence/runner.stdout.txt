@@ -1,0 +1,1 @@
+OK — beacon inhibition collapses the storm: inhibitor b04-x-inhibitor fired and reached the webhook sink, while inhibited b04-y-inhibited reached Firing internally (debug state-transition observed) but its Firing was SUPPRESSED and did NOT reach the sink while X was firing. KPI3 storm-collapse verified black-box.

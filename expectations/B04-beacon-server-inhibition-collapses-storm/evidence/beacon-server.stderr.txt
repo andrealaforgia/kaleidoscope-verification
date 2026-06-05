@@ -1,0 +1,64 @@
+2026-06-05T01:07:58.120836Z  INFO beacon_server: beacon-server starting rules_loaded=2 diagnostics=0 backend=http://b04-mock:18091/api/v1
+2026-06-05T01:07:58.125235Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T01:07:58.126831Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:07:58.126835Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:07:58.127658Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:07:58.127658Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:07:58.127840Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:07:58.127859Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:07:58.128533Z DEBUG beacon_server: state transition rule=b04-x-inhibitor from=Inactive to=Pending { since: SystemTime { tv_sec: 1780621678, tv_nsec: 128532173 } }
+2026-06-05T01:07:58.128566Z DEBUG beacon_server: state transition rule=b04-y-inhibited from=Inactive to=Pending { since: SystemTime { tv_sec: 1780621678, tv_nsec: 128565673 } }
+2026-06-05T01:07:59.130335Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:07:59.130325Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:07:59.130803Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:07:59.130821Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:07:59.131006Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:07:59.131026Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:07:59.131547Z DEBUG beacon_server: state transition rule=b04-x-inhibitor from=Pending { since: SystemTime { tv_sec: 1780621678, tv_nsec: 128532173 } } to=Firing { since: SystemTime { tv_sec: 1780621679, tv_nsec: 131544590 } }
+2026-06-05T01:07:59.133598Z  INFO beacon_server: emitting incident rule=b04-x-inhibitor transition="firing"
+2026-06-05T01:07:59.133813Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:07:59.134337Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:07:59.134514Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:00.134820Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:00.134820Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:00.135334Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:00.135366Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:00.135510Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:00.135554Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:01.137816Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:01.137816Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:01.138461Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:01.138564Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:01.138707Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:01.138782Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:02.134012Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:02.134012Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:02.134445Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:02.134503Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:02.134679Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:02.134790Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:02.135178Z DEBUG beacon_server: state transition rule=b04-y-inhibited from=Pending { since: SystemTime { tv_sec: 1780621678, tv_nsec: 128565673 } } to=Firing { since: SystemTime { tv_sec: 1780621682, tv_nsec: 135176258 } }
+2026-06-05T01:08:03.129057Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:03.129057Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:03.129572Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:03.129588Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:03.129801Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:03.129814Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:04.131144Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:04.131144Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:04.131594Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:04.131621Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:04.131806Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:04.131808Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:05.134078Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:05.134078Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:05.134489Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:05.134508Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:05.134690Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:05.134743Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:06.130559Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:06.130559Z DEBUG reqwest::connect: starting new connection: http://b04-mock:18091/
+2026-06-05T01:08:06.131072Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:06.131088Z DEBUG hyper_util::client::legacy::connect::http: connecting to 172.19.0.2:18091
+2026-06-05T01:08:06.131246Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091
+2026-06-05T01:08:06.131308Z DEBUG hyper_util::client::legacy::connect::http: connected to 172.19.0.2:18091

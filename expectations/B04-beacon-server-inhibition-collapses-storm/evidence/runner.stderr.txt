@@ -1,0 +1,5 @@
+step 1: build beacon-server
+step 2: start mock (both queries Active throughout)
+step 3: run beacon-server ~8s (X fires ~1s, Y reaches Firing ~5s, suppressed)
+--- incidents captured ---
+{"name":"b04-x-inhibitor","query":"up == 0","severity":"critical","labels":{},"started_at":{"secs_since_epoch":1780621679,"nanos_since_epoch":131544590},"resolved_at":null}

@@ -1,0 +1,16 @@
+# One rule, TWO webhook sinks at distinct endpoints. Each incident must
+# reach BOTH (ADR-0035 multi-sink fan-out).
+[[rules]]
+name = "b05-multi-sink"
+query = "up == 0"
+for_duration = "0s"
+interval = "1s"
+severity = "critical"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b05-mock:18091/hook-a"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b05-mock:18091/hook-b"

@@ -1,0 +1,4 @@
+step 1: build beacon-server
+--- deliveries captured ---
+{"path": "/hook-a", "body": {"name": "b05-multi-sink", "query": "up == 0", "severity": "critical", "labels": {}, "started_at": {"secs_since_epoch": 1780621779, "nanos_since_epoch": 675494679}, "resolved_at": null}}
+{"path": "/hook-b", "body": {"name": "b05-multi-sink", "query": "up == 0", "severity": "critical", "labels": {}, "started_at": {"secs_since_epoch": 1780621779, "nanos_since_epoch": 675494679}, "resolved_at": null}}

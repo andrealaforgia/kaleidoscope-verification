@@ -1,0 +1,1 @@
+OK — beacon multi-sink routing: the Firing incident for rule b05-multi-sink was POSTed to BOTH configured webhook sinks (/hook-a and /hook-b). Each incident fans out to every configured sink.

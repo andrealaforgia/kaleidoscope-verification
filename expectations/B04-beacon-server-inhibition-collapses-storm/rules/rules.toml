@@ -1,0 +1,25 @@
+# X is the inhibitor (fires immediately, for_duration 0s) and inhibits Y.
+# Y dwells longer (for_duration 4s) so it only reaches Firing AFTER X is
+# already Firing -- making the suppression deterministic, not a race.
+[[rules]]
+name = "b04-x-inhibitor"
+query = "up == 0"
+for_duration = "0s"
+interval = "1s"
+severity = "critical"
+inhibits = ["b04-y-inhibited"]
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b04-mock:18091/hook"
+
+[[rules]]
+name = "b04-y-inhibited"
+query = "latency_seconds > 1"
+for_duration = "4s"
+interval = "1s"
+severity = "warning"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b04-mock:18091/hook"
