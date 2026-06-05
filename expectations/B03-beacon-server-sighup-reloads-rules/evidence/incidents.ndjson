@@ -1,1 +1,2 @@
-{"name":"b03-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780622688,"nanos_since_epoch":617790502},"resolved_at":null}
+{"name":"b03-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780630599,"nanos_since_epoch":506338469},"resolved_at":null}
+{"name":"b03-rule-b","query":"errors_total > 0","severity":"critical","labels":{},"started_at":{"secs_since_epoch":1780630603,"nanos_since_epoch":571818804},"resolved_at":null}

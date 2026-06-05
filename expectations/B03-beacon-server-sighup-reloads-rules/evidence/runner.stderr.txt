@@ -2,5 +2,6 @@ step 1: build beacon-server
 added b.toml; sending SIGHUP
 running_after_hup=true exitcode=0
 --- incidents ---
-{"name":"b03-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780622688,"nanos_since_epoch":617790502},"resolved_at":null}
-RED (issue 010) — SIGHUP is a SILENT NO-OP: the added rule b03-rule-b never fired, beacon-server kept running the original catalogue (running=true), and there is no reload. The documented SIGHUP hot-reload (c4/slice-02/wave-decisions) is absent. Flips GREEN if a SIGHUP reload handler lands.
+{"name":"b03-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780630599,"nanos_since_epoch":506338469},"resolved_at":null}
+{"name":"b03-rule-b","query":"errors_total > 0","severity":"critical","labels":{},"started_at":{"secs_since_epoch":1780630603,"nanos_since_epoch":571818804},"resolved_at":null}
+GREEN (reload works) — after SIGHUP the added rule b03-rule-b began firing: beacon-server hot-reloaded the rule catalogue. issue 010 resolved.

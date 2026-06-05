@@ -1,3 +1,5 @@
-2026-06-05T01:24:47.603067Z  INFO beacon_server: beacon-server starting rules_loaded=1 diagnostics=0 backend=http://b03-mock:18091/api/v1
-2026-06-05T01:24:47.604409Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
-2026-06-05T01:24:48.618542Z  INFO beacon_server: emitting incident rule=b03-rule-a transition="firing"
+2026-06-05T03:36:38.500673Z  INFO beacon_server: beacon-server starting rules_loaded=1 diagnostics=0 backend=http://b03-mock:18091/api/v1
+2026-06-05T03:36:38.501677Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T03:36:39.506673Z  INFO beacon_server: emitting incident rule=b03-rule-a transition="firing"
+2026-06-05T03:36:42.565916Z  INFO beacon_server: beacon.reload.succeeded event="beacon.reload.succeeded" rules_loaded=2 added=1 removed=0 diagnostics=0
+2026-06-05T03:36:43.572607Z  INFO beacon_server: emitting incident rule=b03-rule-b transition="firing"

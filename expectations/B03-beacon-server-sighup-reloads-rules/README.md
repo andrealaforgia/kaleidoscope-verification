@@ -2,71 +2,71 @@
 
 ## Surface
 
-Beacon (`beacon-server`), SIGHUP rule-catalogue hot-reload. Operator-facing.
-Reuses the B02 Beacon harness. Grounds
+Beacon (`beacon-server`), SIGHUP rule-catalogue hot-reload (ADR-0063).
+Operator-facing. Reuses the B02 Beacon harness. Resolves
 [issue 010](../../issues/010-beacon-sighup-reload-claimed-but-absent.md).
 
-## Behaviour (documented contract under test)
+## Behaviour
 
 Given beacon-server is running with a rule catalogue
-When the rules directory is edited and SIGHUP is delivered
-Then the new catalogue takes effect without a restart: added rules start
-ticking, removed rules stop. (Docs: c4-context "loaded on start +
-SIGHUP", c4-container "SIGHUP handler triggers Loader reload", slice-02
-"SIGHUP triggers reload; the previous catalogue stays active",
-wave-decisions [D3].)
+When the rules directory is edited (a rule added) and SIGHUP is delivered
+Then the new catalogue takes effect without a restart: the added rule
+starts ticking and firing, the process keeps running, and beacon emits
+`event=beacon.reload.succeeded` with the new counts. A reload that finds a
+broken or empty catalogue is refused and the previous catalogue is kept
+(`beacon.reload.refused`), so a bad edit never takes the alerting engine
+dark.
 
-## Status: `broken` — RED at HEAD, grounding issue 010
+## History — this expectation flipped
 
-The documented reload is absent. beacon-server installs only SIGINT and
-SIGTERM handlers (`main.rs:177-186`); rules are loaded ONCE at startup
-(`main.rs:164`) with one task spawned per rule, and there is no SIGHUP
-handler. Black-box at `be893c5`: rule A fired; rule B was then added to
-the live rules dir and SIGHUP delivered; B NEVER fired and beacon kept
-running the original catalogue (`running_after_hup=true`, exit 0, no
-reload log). SIGHUP is a SILENT NO-OP — the process neither reloads nor
-stops (it runs as PID 1, so the kernel ignores SIGHUP's default-terminate
-with no handler installed).
+Authored RED at `be893c5` to ground issue 010: the docs promised SIGHUP
+hot-reload but beacon-server installed no SIGHUP handler, so SIGHUP was a
+silent no-op (it survived only because it ran as PID 1). The implementer
+accepted the finding and chose to IMPLEMENT rather than doc-fix
+(`beacon-sighup-reload-v0`, feat `d9f88ba`, atomic all-or-nothing reload).
+B03 was written transition-proof (the A17 pattern) and flipped GREEN on
+the DELIVER with no rewrite.
 
-The runner therefore exits non-zero here by design: the documented
-contract is violated, and a verifier records the failing expectation.
-
-Transition-proof (the A17 pattern): the runner asserts the documented
-reload (the added rule fires after SIGHUP). It flips GREEN automatically
-if a SIGHUP reload handler lands. If instead the docs are corrected to
-state v0 loads rules only at startup, B03 is re-framed to pin that
-load-once behaviour and issue 010 closes as a doc fix.
+Worth recording: the handler was uncommitted work-in-progress at the
+DISTILL SHA `15533b2` (it appeared only in the dirty working tree, not in
+`git show HEAD:`). The harness builds from `git archive HEAD`, so B03
+correctly stayed RED until the feat was COMMITTED at `d9f88ba`.
 
 ## Verification
 
-- Status: `broken` (RED, known defect; tracks issue 010)
-- Last verified: 2026-06-05 UTC at HEAD (`be893c5`). RED:
-  `running_after_hup=true`, only `{"name":"b03-rule-a"}` at the webhook,
-  `b03-rule-b` absent, no reload log.
+- Status: `satisfied`
+- Last verified: 2026-06-05 UTC at HEAD (`d9f88ba`). GREEN: after adding
+  `b03-rule-b` to the live rules dir and sending SIGHUP, beacon emitted
+  `beacon.reload.succeeded rules_loaded=2 added=1 removed=0`, and BOTH
+  `b03-rule-a` (original) and `b03-rule-b` (added) fired at the webhook —
+  the added rule began ticking without a restart.
 - Method: self-contained (`.no-compose`). beacon-server + the always-Active
   mock on a throwaway docker network; start with rule A, add rule B to the
-  live rules dir, `docker kill -s HUP`, then assert whether B begins
-  firing (reload) or not (silent no-op).
+  live rules dir, `docker kill -s HUP`, assert B begins firing (reload).
+  The runner is transition-proof: it asserts the documented reload and
+  flips between RED (silent no-op) and GREEN (reload) on behaviour alone.
 
 ## Evidence
 
-- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `be893c5`.
-- [`evidence/incidents.ndjson`](evidence/incidents.ndjson) — only A fired.
-- [`evidence/observation.txt`](evidence/observation.txt) — running after HUP.
+- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `d9f88ba`.
+- [`evidence/incidents.ndjson`](evidence/incidents.ndjson) — A and B both fired.
 - [`evidence/beacon-server.stderr.txt`](evidence/beacon-server.stderr.txt)
-  — one `rules_loaded=1` at startup, no reload.
+  — the `beacon.reload.succeeded` event.
 - [`rules/a.toml`](rules/a.toml), [`rules/b.toml`](rules/b.toml).
 
 ## Source
 
-- `crates/beacon-server/src/main.rs:164` (load once), `:172` (spawn per
-  rule), `:177-186` (SIGINT + SIGTERM only; no SIGHUP). Comment at
-  `main.rs:45` says "SIGHUP reload arrives at slice 03" while slice-02 doc
-  claims it shipped.
+- `crates/beacon-server/src/main.rs` (`SignalKind::hangup()` handler in the
+  select loop → `reload(...)`: re-read the rules dir, validate
+  (refuse-and-keep-previous on a broken/empty catalogue), atomic swap of
+  the task generation + resolver, `beacon.reload.succeeded`). ADR-0063
+  (single-orchestrator atomic all-or-nothing reload), feat `d9f88ba`.
 
 ## Notes
 
-The first `broken` Beacon expectation. Pairs with the satisfied B01/B02/
-B04/B05. The PID-1 detail matters: under an init/tini, an unhandled
-SIGHUP would TERMINATE beacon-server instead of being ignored — arguably
-worse for an operator who runs the documented "SIGHUP to reload".
+The catalogue's first `broken`→`satisfied` flip via an IMPLEMENT (vs A17's
+flip via a refuse-to-start). Completes the satisfied Beacon set
+(B01/B02/B03/B04/B05/B07); B06 (SLO) stays pending as an unreachable
+engine. The refuse-and-keep-previous branch (a malformed edit + SIGHUP
+keeps the old catalogue, `beacon.reload.refused`) is the natural B03
+follow-on, not separately pinned here.

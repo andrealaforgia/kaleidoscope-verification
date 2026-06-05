@@ -1,6 +1,14 @@
 # 010 — beacon-server SIGHUP rule reload is documented but absent (silent no-op)
 
-- Status: `open` — grounded black-box by **B03** (RED at `be893c5`).
+- Status: `resolved` (2026-06-05). The implementer accepted the finding
+  and IMPLEMENTED the reload (`beacon-sighup-reload-v0`, ADR-0063, feat
+  `d9f88ba`, atomic all-or-nothing) rather than correcting the docs.
+  **B03** flipped GREEN at `d9f88ba`: after adding a rule to the live
+  rules dir and sending SIGHUP, beacon emitted `beacon.reload.succeeded
+  rules_loaded=2 added=1 removed=0` and the added rule began firing
+  without a restart. Grounded RED at `be893c5` (silent no-op); flipped on
+  the COMMITTED DELIVER (the handler was uncommitted WIP at the DISTILL
+  SHA `15533b2`, so B03 correctly stayed RED until `d9f88ba`).
 - Severity: medium (operational; an intended rule reload silently does
   nothing, leaving stale alerting rules with no error to the operator).
 - Surface: `beacon-server` signal handling / rule reload.
