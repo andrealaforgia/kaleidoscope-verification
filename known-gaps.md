@@ -9,6 +9,32 @@ Source: inter-session feed from the kaleidoscope-developing session,
 2026-05-06. Each entry below should be revisited when its referenced phase or
 component graduates.
 
+## cinder/sluice swallowed append_wal — code-read finding, NOT black-box reachable
+
+**Noted 2026-06-05 (implementer message 023 + code read).** cinder
+`place` (`crates/cinder/src/store.rs:81`) returns `()` — it has NO error
+channel — so a WAL append failure is STRUCTURALLY swallowed
+(`file_backed.rs:270` `if let Err(_e)`, `:364` `let _ = append_wal(...)`);
+sluice does the same. The consequence is the acked-but-not-durable lie: a
+placement/enqueue "succeeds" (the operation cannot report failure) while
+its WAL write was dropped, so a later read can serve data that never
+persisted.
+
+This is real, but NOT black-box reachable from the CLI: inducing a WAL
+append failure requires the held writer's `write` to fail AFTER a
+successful `open`, within one CLI process. A read-only `/data` or a bad
+WAL path fails at OPEN (earlier, like issue 005), not at the append; the
+CLI runs as root so file-permission tricks do not bite. The failure is
+inducible only via an in-suite failing WAL backend (cf. the fsync
+`CountingFsyncBackend` count and power-loss, also not black-box
+reachable). So no expectation and no black-box issue is filed.
+
+The implementer is fixing it (give `place` an error channel / surface the
+append failure). When it lands, the SURFACED-error behaviour is creditable
+to her in-suite failing-backend test; revisit only if a clean black-box
+induction (an operator-reachable way to force the WAL write to fail
+post-open) becomes available.
+
 ## 009-adjacent — ingest re-run of a SUCCESSFUL file doubles (no idempotency key)
 
 **Noted 2026-06-05 (implementer message 023).** issue 009 (non-atomic
