@@ -1,11 +1,14 @@
 # 009 — `kaleidoscope-cli ingest` is non-atomic: partial commit + re-run double-ingest
 
-- Status: `open` — grounded black-box by **K13** (RED at `8f388a5`:
-  `count_after_1=100` partial commit, `count_after_2=200` double-ingest).
-  Fix in flight: `cli-ingest-atomic-v0` (ADR-0064, buffer-all-then-flush,
-  all-or-nothing on a parse error); DISCUSS `f03b22e` + DESIGN `8f388a5`
-  landed, no DELIVER yet. K13 was retrofitted transition-proof (2026-06-05)
-  and flips GREEN (count 0/0) on the DELIVER.
+- Status: `resolved` (2026-06-05). `cli-ingest-atomic-v0` (ADR-0064,
+  buffer-all-then-flush, feat `fdfbc28`) made ingest ALL-OR-NOTHING: it
+  parses the whole input before committing any batch, so a malformed line
+  aborts non-zero with NOTHING committed. **K13** flipped GREEN at
+  `fdfbc28`: `count_after_1=0`, `count_after_2=0` (was 100/200). Grounded
+  RED through DISCUSS/DESIGN/DEVOPS/DISTILL; flipped on the committed
+  DELIVER. NOTE: a re-run of a SUCCESSFUL fully-valid ingest still doubles
+  (lumen has no idempotency key) — a separate `009-adjacent` concern
+  deferred to a future `ingest-dedup-v0` (known-gaps), NOT this issue.
 - Severity: medium (data integrity; operational footgun, undocumented)
 - Surface: kaleidoscope-cli `ingest` (operator binary).
 - Opened: 2026-06-03

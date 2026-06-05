@@ -1,5 +1,5 @@
 input_lines=101
 ingest1_exit=1
-count_after_1=100
+count_after_1=0
 ingest2_exit=1
-count_after_2=200
+count_after_2=0

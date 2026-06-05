@@ -1,0 +1,2 @@
+step 1: build kaleidoscope-cli image (cache hit if no source change)
+GREEN (atomic) — kaleidoscope-cli ingest is all-or-nothing: a malformed line aborts non-zero and commits NOTHING (count_after_1=0), and re-running the same bad input still commits nothing (count_after_2=0). No partial commit, no double-ingest. issue 009 resolved.

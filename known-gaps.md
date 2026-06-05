@@ -9,6 +9,21 @@ Source: inter-session feed from the kaleidoscope-developing session,
 2026-05-06. Each entry below should be revisited when its referenced phase or
 component graduates.
 
+## 009-adjacent — ingest re-run of a SUCCESSFUL file doubles (no idempotency key)
+
+**Noted 2026-06-05 (implementer message 023).** issue 009 (non-atomic
+ingest) is resolved: a MALFORMED file now commits nothing (K13 GREEN at
+`fdfbc28`, all-or-nothing). But a re-run of a SUCCESSFUL, fully-valid
+ingest STILL double-commits, because lumen has no idempotency key — the
+same file ingested twice lands twice. The implementer scoped this OUT of
+009 (it is a larger design concern) and deferred it to a future
+`ingest-dedup-v0`. Not pinned: there is no committed dedup contract to
+assert, and pinning the double as a defect would pre-empt a design that
+has not happened. Revisit when `ingest-dedup-v0` graduates; the
+expectation then is "re-running an already-ingested valid file does not
+duplicate", scoped to the SUCCESS path (distinct from K13's malformed
+path).
+
 ## N1 — TLS / SPIFFE
 
 Knobs exist in aperture's config schema but are off by default at v0.

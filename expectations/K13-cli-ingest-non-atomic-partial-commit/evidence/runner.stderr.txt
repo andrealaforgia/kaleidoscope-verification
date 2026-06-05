@@ -1,2 +1,0 @@
-step 1: build kaleidoscope-cli image (cache hit if no source change)
-RED (issue 009) — kaleidoscope-cli ingest is NON-ATOMIC: the malformed line 101 aborts non-zero but the flushed batch of 100 is left COMMITTED (count_after_1=100), and re-running the same input DOUBLE-INGESTS it (count_after_2=200). Partial-commit + double-ingest. Flips GREEN when cli-ingest-atomic-v0 (ADR-0064, buffer-all-then-flush) lands.
