@@ -1,0 +1,10 @@
+[[rules]]
+name = "b03-rule-b"
+query = "errors_total > 0"
+for_duration = "0s"
+interval = "1s"
+severity = "critical"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b03-mock:18091/hook"

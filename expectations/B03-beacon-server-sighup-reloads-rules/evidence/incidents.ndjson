@@ -1,0 +1,1 @@
+{"name":"b03-rule-a","query":"up == 0","severity":"warning","labels":{},"started_at":{"secs_since_epoch":1780622688,"nanos_since_epoch":617790502},"resolved_at":null}
