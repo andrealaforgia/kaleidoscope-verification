@@ -1,0 +1,15 @@
+diff --git a/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs b/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+index bc16b92..4ca72ae 100644
+--- a/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
++++ b/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+@@ -21,8 +21,8 @@
+ //! ## nWave order — why most of these are `#[ignore]`d (RED, not BROKEN)
+ //!
+ //! DISTILL runs BEFORE DELIVER. The prose corrections these guards check
+-//! for DO NOT EXIST YET — DELIVER makes them. So the "false string ABSENT
+-//! + corrected string PRESENT" guards FAIL today (the false string is
++//! for DO NOT EXIST YET — DELIVER makes them. So the false-string-absent
++//! and corrected-string-present guards FAIL today (the false string is
+ //! still present). They are marked `#[ignore = "RED until DELIVER:
+ //! claims-honesty-pass-v0"]` so `cargo test --workspace` stays GREEN at
+ //! the DISTILL commit. DELIVER removes each `#[ignore]` immediately after

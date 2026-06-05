@@ -1,0 +1,2 @@
+http_code=400
+body={"status":"error","error":"invalid regex matcher"}

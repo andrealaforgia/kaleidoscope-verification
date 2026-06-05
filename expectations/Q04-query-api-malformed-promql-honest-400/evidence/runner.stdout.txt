@@ -1,0 +1,1 @@
+OK — query-api rejects malformed PromQL with honest 400 status:error and a reason, and does NOT echo the raw query (empty/unterminated-brace/unrecognised-syntax all 400; the ZZLEAKZZ canary did not leak into the body).

@@ -1,0 +1,6 @@
+code_empty=400
+body_empty={"status":"error","error":"unsupported query: expected a bare metric name"}
+code_brace=400
+body_brace={"status":"error","error":"malformed query: the label matcher section is not closed"}
+code_syntax=400
+body_syntax={"status":"error","error":"malformed query: a matcher is missing its label name"}

@@ -1,0 +1,1 @@
+OK — query-api rejects an invalid regex matcher with 400 status:error (reason: invalid regex matcher) and does NOT echo the offending pattern (ZZRELEAKZZ absent from the body).

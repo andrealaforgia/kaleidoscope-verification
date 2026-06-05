@@ -1,0 +1,11 @@
+A  crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
+AM crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+A  crates/otlp-conformance-harness/tests/slice_09_claims_honesty_behaviour.rs
+A  crates/query-api/tests/slice_06_claims_honesty_step_invariance.rs
+A  crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs
+A  crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs
+A  docs/feature/claims-honesty-pass-v0/distill/ac-coverage.md
+A  docs/feature/claims-honesty-pass-v0/distill/acceptance-design.md
+A  docs/feature/claims-honesty-pass-v0/distill/io-strategy.md
+A  docs/feature/claims-honesty-pass-v0/distill/mandate-compliance.md
+A  docs/feature/claims-honesty-pass-v0/distill/wave-decisions.md
