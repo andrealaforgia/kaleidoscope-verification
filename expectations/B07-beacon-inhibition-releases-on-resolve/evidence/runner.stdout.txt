@@ -1,0 +1,1 @@
+OK — beacon inhibition RELEASE on resolve: X fired then resolved (t=9.03), and Y's suppressed Firing was RELEASED to the sink at t=9.04 (>= X-resolve). The suppressed alert was deferred, not lost: it is delivered once the inhibitor clears. Completes the inhibition contract with B04.

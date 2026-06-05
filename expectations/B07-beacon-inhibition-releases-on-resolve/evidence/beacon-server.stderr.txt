@@ -1,0 +1,5 @@
+2026-06-05T01:54:07.208688Z  INFO beacon_server: beacon-server starting rules_loaded=2 diagnostics=0 backend=http://b07-mock:18091/api/v1
+2026-06-05T01:54:07.209664Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T01:54:08.214193Z  INFO beacon_server: emitting incident rule=b07-x-inhibitor transition="firing"
+2026-06-05T01:54:14.222646Z  INFO beacon_server: emitting incident rule=b07-x-inhibitor transition="resolved"
+2026-06-05T01:54:14.224204Z  INFO beacon_server: emitting incident rule=b07-x-inhibitor transition="firing"

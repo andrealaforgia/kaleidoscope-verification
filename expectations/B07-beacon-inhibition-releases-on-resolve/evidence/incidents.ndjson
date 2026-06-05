@@ -1,0 +1,3 @@
+{"t": 3.03, "body": {"name": "b07-x-inhibitor", "query": "up == 0", "severity": "critical", "labels": {}, "started_at": {"secs_since_epoch": 1780624448, "nanos_since_epoch": 213835761}, "resolved_at": null}}
+{"t": 9.03, "body": {"name": "b07-x-inhibitor", "query": "up == 0", "severity": "critical", "labels": {}, "started_at": {"secs_since_epoch": 1780624448, "nanos_since_epoch": 213835761}, "resolved_at": {"secs_since_epoch": 1780624454, "nanos_since_epoch": 222298180}}}
+{"t": 9.04, "body": {"name": "b07-y-inhibited", "query": "latency_seconds > 1", "severity": "warning", "labels": {}, "started_at": {"secs_since_epoch": 1780624450, "nanos_since_epoch": 217529554}, "resolved_at": null}}

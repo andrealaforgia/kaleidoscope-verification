@@ -1,0 +1,25 @@
+# X inhibits Y. X's query goes inactive after the firing window (so X
+# resolves); Y's query stays active throughout. While X fires, Y is
+# suppressed; when X resolves, Y's held Firing is released to the sink.
+[[rules]]
+name = "b07-x-inhibitor"
+query = "up == 0"
+for_duration = "0s"
+interval = "1s"
+severity = "critical"
+inhibits = ["b07-y-inhibited"]
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b07-mock:18091/hook"
+
+[[rules]]
+name = "b07-y-inhibited"
+query = "latency_seconds > 1"
+for_duration = "3s"
+interval = "1s"
+severity = "warning"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b07-mock:18091/hook"
