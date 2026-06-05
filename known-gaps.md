@@ -9,31 +9,34 @@ Source: inter-session feed from the kaleidoscope-developing session,
 2026-05-06. Each entry below should be revisited when its referenced phase or
 component graduates.
 
-## cinder/sluice swallowed append_wal — code-read finding, NOT black-box reachable
+## cinder/sluice append_wal surfacing — FIXED, but NOT black-box reachable (ENOSPC attempted)
 
-**Noted 2026-06-05 (implementer message 023 + code read).** cinder
-`place` (`crates/cinder/src/store.rs:81`) returns `()` — it has NO error
-channel — so a WAL append failure is STRUCTURALLY swallowed
-(`file_backed.rs:270` `if let Err(_e)`, `:364` `let _ = append_wal(...)`);
-sluice does the same. The consequence is the acked-but-not-durable lie: a
-placement/enqueue "succeeds" (the operation cannot report failure) while
-its WAL write was dropped, so a later read can serve data that never
-persisted.
+**Noted 2026-06-05, updated when the fix landed.** The defect: cinder
+`place` returned `()` (no error channel), so a WAL append failure was
+STRUCTURALLY swallowed (the acked-but-not-durable lie — a placement
+"succeeds" while its WAL write was dropped, and a later read serves data
+that never persisted); sluice did the same.
 
-This is real, but NOT black-box reachable from the CLI: inducing a WAL
-append failure requires the held writer's `write` to fail AFTER a
-successful `open`, within one CLI process. A read-only `/data` or a bad
-WAL path fails at OPEN (earlier, like issue 005), not at the append; the
-CLI runs as root so file-permission tricks do not bite. The failure is
-inducible only via an in-suite failing WAL backend (cf. the fsync
-`CountingFsyncBackend` count and power-loss, also not black-box
-reachable). So no expectation and no black-box issue is filed.
+FIXED at `e271ddd` (`cinder-wal-error-surfacing-v0`): `place` now returns
+`Result<(), MigrateError>`, write-ahead ordered (`append_wal(...)?` BEFORE
+`apply_to_entries`, so a WAL failure returns before the in-memory state is
+touched — no lie), and the CLI propagates it (`Error::CinderMigrate` →
+non-zero exit). Confirmed by code read; the failure-injection behaviour is
+credited to the implementer's in-suite failing-backend test.
 
-The implementer is fixing it (give `place` an error channel / surface the
-append failure). When it lands, the SURFACED-error behaviour is creditable
-to her in-suite failing-backend test; revisit only if a clean black-box
-induction (an operator-reachable way to force the WAL write to fail
-post-open) becomes available.
+NOT black-box reachable, now with empirical evidence. The only
+operator-reachable induction is a full disk (ENOSPC), via the cinder-only
+`place` subcommand on a tiny tmpfs `/data`. Tested: even on a 100%-full
+4k tmpfs, a second `place` SUCCEEDS — because `cinder.wal` already holds
+an allocated page (133/4096 bytes used) and the ~133-byte append fits in
+the existing page, so no new allocation and no ENOSPC. Forcing a
+cross-page append on a precisely-full filesystem is too fragile and
+fs-implementation-dependent to be a reliable expectation. A read-only
+`/data` or a bad WAL path fails at OPEN (like issue 005), not at the
+append. So the swallowed-then-surfaced append failure is, like power-loss
+and the fsync `CountingFsyncBackend` count, inducible only in-suite.
+Revisit only if a deterministic operator-reachable WAL-write-failure
+induction appears.
 
 ## 009-adjacent — ingest re-run of a SUCCESSFUL file doubles (no idempotency key)
 
