@@ -46,13 +46,27 @@ N2=$(read_count);   echo "count_after_2=$N2"; cp /tmp/rd.out "'"$EVIDENCE_DIR"'/
 
 OUT="$EVIDENCE_DIR/K13.stdout.txt"
 val() { grep -oE "$1=[0-9]+" "$OUT" | tail -1 | cut -d= -f2; }
+EC1=$(val ingest1_exit); EC2=$(val ingest2_exit)
+N1=$(val count_after_1); N2=$(val count_after_2)
 
-# (a) SAFE: both ingests abort non-zero on the malformed line.
-[[ "$(val ingest1_exit)" != "0" ]] || { echo "ingest1 should exit non-zero on the malformed line" >&2; exit 1; }
-[[ "$(val ingest2_exit)" != "0" ]] || { echo "ingest2 should exit non-zero on the malformed line" >&2; exit 1; }
-# (b) NON-ATOMIC: the first 100 (one flushed batch) are committed despite the abort.
-[[ "$(val count_after_1)" == "100" ]] || { echo "expected 100 committed after the aborted ingest (partial commit), got $(val count_after_1)" >&2; exit 1; }
-# (c) DOUBLE-INGEST: re-running the same input commits another 100.
-[[ "$(val count_after_2)" == "200" ]] || { echo "expected 200 after re-run (double-ingest), got $(val count_after_2)" >&2; exit 1; }
+# SAFE invariant (holds atomic OR non-atomic): a malformed line always
+# aborts with a non-zero exit and never serves corrupt data.
+[[ "$EC1" != "0" ]] || { echo "FAIL: ingest1 should exit non-zero on the malformed line" >&2; exit 1; }
+[[ "$EC2" != "0" ]] || { echo "FAIL: ingest2 should exit non-zero on the malformed line" >&2; exit 1; }
 
-echo "OK — non-atomic ingest confirmed (issue 009): a malformed line 101 aborts non-zero, but the flushed batch of 100 is committed (count_after_1=100), and re-running the same input double-ingests it (count_after_2=200). SAFE half holds (typed abort, no corruption); partial-commit + double-ingest is the footgun."
+# Transition-proof classification (grounds issue 009; the A17/B03 pattern).
+# ATOMIC (the contract): all-or-nothing — a file with any malformed line
+# commits NOTHING, no matter how many times it is run.
+if [[ "$N1" == "0" && "$N2" == "0" ]]; then
+    echo "GREEN (atomic) — kaleidoscope-cli ingest is all-or-nothing: a malformed line aborts non-zero and commits NOTHING (count_after_1=0), and re-running the same bad input still commits nothing (count_after_2=0). No partial commit, no double-ingest. issue 009 resolved." >&2
+    exit 0
+fi
+# NON-ATOMIC (the defect): a flushed batch is left committed and a re-run
+# double-ingests it.
+if [[ "$N1" == "100" && "$N2" == "200" ]]; then
+    echo "RED (issue 009) — kaleidoscope-cli ingest is NON-ATOMIC: the malformed line 101 aborts non-zero but the flushed batch of 100 is left COMMITTED (count_after_1=100), and re-running the same input DOUBLE-INGESTS it (count_after_2=200). Partial-commit + double-ingest. Flips GREEN when cli-ingest-atomic-v0 (ADR-0064, buffer-all-then-flush) lands." >&2
+    exit 1
+fi
+echo "FAIL — indeterminate ingest atomicity: count_after_1=$N1, count_after_2=$N2 (expected atomic 0/0 or the non-atomic 100/200). The fixture or the batch size may have changed; re-examine." >&2
+cat "$EVIDENCE_DIR/read-after-2.ndjson" 2>/dev/null | head -5 >&2
+exit 2

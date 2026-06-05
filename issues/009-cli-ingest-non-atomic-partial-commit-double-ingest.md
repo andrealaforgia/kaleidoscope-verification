@@ -1,6 +1,11 @@
 # 009 — `kaleidoscope-cli ingest` is non-atomic: partial commit + re-run double-ingest
 
-- Status: `open` (black-box verified by K13)
+- Status: `open` — grounded black-box by **K13** (RED at `8f388a5`:
+  `count_after_1=100` partial commit, `count_after_2=200` double-ingest).
+  Fix in flight: `cli-ingest-atomic-v0` (ADR-0064, buffer-all-then-flush,
+  all-or-nothing on a parse error); DISCUSS `f03b22e` + DESIGN `8f388a5`
+  landed, no DELIVER yet. K13 was retrofitted transition-proof (2026-06-05)
+  and flips GREEN (count 0/0) on the DELIVER.
 - Severity: medium (data integrity; operational footgun, undocumented)
 - Surface: kaleidoscope-cli `ingest` (operator binary).
 - Opened: 2026-06-03
