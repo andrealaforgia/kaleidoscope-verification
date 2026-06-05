@@ -1,0 +1,1 @@
+OK — pulse snapshot atomicity holds under a mid-snapshot SIGKILL: canonical store.snapshot is whole-or-absent (whole=yes, present=yes, tmp_at_kill=yes), never torn; the seeded acked datum survived in durable on-disk state (in_snapshot=yes, in_wal=no). Black-box ground for issue 007.

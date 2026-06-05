@@ -1,0 +1,6 @@
+total 16
+drwx------@     5 andrealaforgia  staff     160  5 Jun 01:08 .
+drwx------@ 30765 andrealaforgia  staff  984480  5 Jun 01:08 ..
+-rw-r--r--      1 andrealaforgia  staff     274  5 Jun 01:08 store.snapshot
+-rw-r--r--      1 andrealaforgia  staff     274  5 Jun 01:08 store.snapshot.tmp
+-rw-r--r--      1 andrealaforgia  staff       0  5 Jun 01:08 store.wal

@@ -1,0 +1,7 @@
+?? crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
+?? crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+?? crates/otlp-conformance-harness/tests/slice_09_claims_honesty_behaviour.rs
+?? crates/query-api/tests/slice_06_claims_honesty_step_invariance.rs
+?? crates/query-http-common/tests/
+?? crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs
+?? docs/feature/claims-honesty-pass-v0/distill/

@@ -1,0 +1,6 @@
+ready=yes
+tmp_at_kill=yes
+snapshot_present=yes
+snapshot_whole=yes
+record_in_snapshot=yes
+record_in_wal=no

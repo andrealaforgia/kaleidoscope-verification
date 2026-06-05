@@ -1,7 +1,16 @@
 # 007 — non-atomic snapshot write: a crash mid-snapshot bricks the store (total loss)
 
-- Status: `open` (sourced from the four-quadrants report; not yet
-  black-box re-verified by the catalogue — see "Catalogue status")
+- Status: `resolved` (2026-06-05). store-fsync-durability-v0 rewired every
+  store's snapshot onto `wal_recovery::atomic_write_snapshot`
+  (tmp + fsync + rename + fsync-dir, ADR-0060 §2), so a mid-snapshot crash
+  leaves the canonical `store.snapshot` whole-or-absent, never torn. Now
+  BLACK-BOX REACHABLE (the `<store>-crash-target --seed-then-loop-snapshot`
+  binaries loop snapshots, closing the "snapshot not auto-triggered" gap)
+  and verified across all seven stores: **D09** lumen + **D15-D20** ray /
+  pulse / strata / cinder / sluice / beacon. Each: SIGKILL mid-snapshot →
+  canonical snapshot parses whole (or absent) and the acked datum
+  survives; several runs froze a `.tmp` in flight while the canonical
+  stayed whole. See "Catalogue status".
 - Severity: high (durability; total data loss, affects ALL five stores
   including Pulse)
 - Surface: lumen / ray / strata / cinder / pulse `FileBacked*Store`
@@ -35,14 +44,17 @@ reopen its own on-disk state after an abrupt death".
 
 ## Catalogue status
 
-Not yet black-box re-verified. The snapshot path is harder to reach than
-the WAL: `snapshot()` is never triggered automatically (the report and
-N18 both note this), so a plain dockerised ingest produces only a WAL,
-no snapshot file to corrupt. A black-box expectation would need a way to
-force a snapshot (a CLI/admin trigger, which is not currently exposed)
-or to seed a pre-written snapshot file and corrupt it. Tracked here so
-the gap is visible; a D-prefix expectation (D05) follows if a snapshot
-trigger becomes reachable. Flagged to the implementer.
+RESOLVED black-box. The reachability gap is closed: store-fsync-durability-v0
+ships a `<store>-crash-target --seed-then-loop-snapshot` binary per store
+that seeds one acked datum, signals `CRASH_TARGET_READY` once it is
+durable, then loops writing snapshots — so a SIGKILL lands mid-snapshot
+without needing an admin trigger. D09 (lumen) and D15-D20
+(ray/pulse/strata/cinder/sluice/beacon) drive exactly that and assert,
+on-disk, that the canonical `store.snapshot` is whole-or-absent (`jq`
+parse) and the seeded datum survives in snapshot or WAL. All GREEN at
+`a812193`. The original `File::create`-no-rename finding no longer holds
+against running behaviour; snapshot writes go through
+`wal_recovery::atomic_write_snapshot`.
 
 ## The expectation
 

@@ -1,0 +1,1 @@
+{"series":[{"tenant":"acme","metric":{"name":"http_requests_total","description":"seeded gauge","unit":"1","kind":"Gauge","points":[],"resource_attributes":{"service.name":"checkout"}},"points":[{"time_unix_nano":100,"start_time_unix_nano":0,"attributes":{},"value":1.0}]}]}
