@@ -1,0 +1,4 @@
+[2m2026-06-05T00:47:22.962475Z[0m [32m INFO[0m [2mbeacon_server[0m[2m:[0m beacon-server starting [3mrules_loaded[0m[2m=[0m1 [3mdiagnostics[0m[2m=[0m0 [3mbackend[0m[2m=[0mhttp://b02-mock:18091/api/v1
+[2m2026-06-05T00:47:22.966052Z[0m [32m INFO[0m [2mbeacon_server[0m[2m:[0m recovered alert state [3mrules_recovered[0m[2m=[0m0 [3mfiring[0m[2m=[0m0 [3mpending[0m[2m=[0m0
+[2m2026-06-05T00:47:23.975007Z[0m [32m INFO[0m [2mbeacon_server[0m[2m:[0m emitting incident [3mrule[0m[2m=[0mb02-synthetic-up-down [3mtransition[0m[2m=[0m"firing"
+[2m2026-06-05T00:47:25.974016Z[0m [32m INFO[0m [2mbeacon_server[0m[2m:[0m emitting incident [3mrule[0m[2m=[0mb02-synthetic-up-down [3mtransition[0m[2m=[0m"resolved"

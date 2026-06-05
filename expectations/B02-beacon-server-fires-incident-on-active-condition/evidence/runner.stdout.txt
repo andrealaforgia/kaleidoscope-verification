@@ -1,0 +1,1 @@
+OK — beacon-server fired AND resolved: one Firing incident (resolved_at null) then one Resolved incident (resolved_at set) for rule b02-synthetic-up-down, query 'up == 0', captured at the webhook sink. Full Inactive->Firing->Resolved cycle observed black-box.

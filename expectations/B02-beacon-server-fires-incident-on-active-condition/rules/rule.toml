@@ -1,0 +1,10 @@
+[[rules]]
+name = "b02-synthetic-up-down"
+query = "up == 0"
+for_duration = "0s"
+interval = "1s"
+severity = "critical"
+
+[[rules.sinks]]
+kind = "webhook"
+url = "http://b02-mock:18091/hook"

@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1.7
+#
+# Builder + runtime for the beacon-server binary (the alerting engine).
+# beacon-server polls a PromQL instant-query backend, evaluates rule
+# TOML, and POSTs a canonical Incident JSON to each rule's webhook sink
+# on a Firing/Resolved transition.
+#
+# Invoked via `docker build --build-context kaleidoscope=<snapshot>`
+# (the kaleidoscope source is the `kaleidoscope` named context; the
+# default `.` context is this harness/ dir and is unused by the build).
+
+FROM rust:1.88-slim-bookworm AS builder
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates pkg-config libssl-dev \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY --from=kaleidoscope . .
+# Single codegen unit to avoid the Docker VM OOM on parallel builds
+# (the issue-004 lesson).
+ENV CARGO_BUILD_JOBS=1
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/src/target \
+    cargo build --release -p beacon-server --bin beacon-server --locked \
+ && cp /src/target/release/beacon-server /beacon-server.bin
+
+FROM debian:bookworm-slim AS runtime
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /beacon-server.bin /usr/local/bin/beacon-server
+ENTRYPOINT ["/usr/local/bin/beacon-server"]

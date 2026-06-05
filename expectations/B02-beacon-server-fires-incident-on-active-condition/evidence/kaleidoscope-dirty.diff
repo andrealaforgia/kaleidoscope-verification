@@ -1,0 +1,482 @@
+diff --git a/README.md b/README.md
+index 3bf8601..a9fd60d 100644
+--- a/README.md
++++ b/README.md
+@@ -103,9 +103,12 @@ second runnable binary, `kaleidoscope-cli`, wires Lumen v1 + Cinder v1 +
+ self-observability into an operator-facing ingest / read pipeline.
+ 
+ The read loop closes too. A third binary, `query-api`, serves a
+-Prometheus-compatible `/api/v1/query_range` HTTP endpoint over the durable
+-Pulse store, so a metric written through the gateway can be queried back and
+-plotted by the Prism frontend. The loop is complete: ingest, store, query, see.
++Prometheus-shaped `/api/v1/query_range` HTTP endpoint over the durable
++Pulse store. At v0 it returns the raw in-window points as stored: the `step`
++parameter is accepted but not honoured (no grid re-sampling), so the response
++is raw points rather than a re-stepped Prometheus grid (ADR-0062). A metric
++written through the gateway can be queried back and plotted by the Prism
++frontend. The loop is complete: ingest, store, query, see.
+ `query-api` can also serve Prism's built bundle from the same origin (point
+ `KALEIDOSCOPE_QUERY_STATIC_DIR` at `apps/prism/dist`), so the whole read side
+ runs from one binary with no separate web server and no CORS.
+@@ -168,7 +171,7 @@ named but not implemented.
+ | Codename       | Role                                                  | Replaces                                 | Status |
+ | -------------- | ----------------------------------------------------- | ---------------------------------------- | ------ |
+ | **Harness**    | OTLP conformance test suite                           | (internal)                               | shipped |
+-| **Spark**      | Auto-instrumentation SDKs                             | Datadog APM agents, NR APM agents        | v0 |
++| **Spark**      | manual-init OTel SDK wrapper (auto-instrumentation: v0.2/v1) | Datadog APM agents, NR APM agents        | v0 |
+ | **Aperture**   | OTLP-compatible ingest gateway                        | Datadog Agent, Splunk UF, OTel Collector | v0 |
+ | **Sluice**     | Durable ingest buffer                                 | Datadog's internal queues                | **v1** |
+ | **Sieve**      | Sampling and filtering                                | Datadog Live Search filters, Honeycomb Refinery | v0 |
+@@ -176,13 +179,13 @@ named but not implemented.
+ | **Pulse**      | Time-series metrics engine                            | Datadog Metrics, NR Metrics, Cloud Monitoring | **v1** |
+ | **Lumen**      | Log storage and search                                | Datadog Logs, Splunk, Loki, Elastic      | **v1** |
+ | **Ray**        | Distributed trace storage and query                   | Datadog APM, NR Distributed Tracing, Tempo | **v1** |
+-| **Strata**     | Continuous profiling                                  | Datadog Profiler, NR Code-Level Metrics  | **v1** |
+-| **Cinder**     | Tier-metadata governor / cold-tier coordinator        | Datadog Flex Logs, S3 Archives           | **v1** |
++| **Strata**     | Passive profile storage (continuous scraping: roadmap) | Datadog Profiler, NR Code-Level Metrics  | **v1** |
++| **Cinder**     | Local tier-metadata governor (object-storage cold tier: v2) | Datadog Flex Logs, S3 Archives           | **v1** |
+ | **Prism**      | Unified query and visualisation frontend              | Datadog dashboards, NR One, Grafana      | v0 |
+ | **Beacon**     | Alerting + SLO burn-rate engine                       | Datadog Monitors, NR Alerts, PagerDuty   | **v1** |
+ | **Augur**      | Anomaly detection / AIops                             | Datadog Watchdog, NR AI                  | v0 |
+ | **Aegis**      | AuthN/Z, multi-tenancy, audit                         | Datadog RBAC, NR User Management         | v0 |
+-| **Loom**       | Dashboards-as-code, alert-rules-as-code               | Terraform Datadog provider               | v0 |
++| **Loom**       | TOML rule-catalogue change control (dashboards-as-code: v1+) | Terraform Datadog provider               | v0 |
+ 
+ Plus six cross-cutting crates: `integration-suite` (cross-crate composition
+ tests pinning that the platform behaves as one thing), `self-observe`
+@@ -191,7 +194,8 @@ primitives), `aperture-storage-sink` (the storage `OtlpSink` translating OTLP
+ into the durable pillars), `kaleidoscope-cli` (operator-facing ingest / read
+ binary), `kaleidoscope-gateway` (the runnable OTLP gateway that persists
+ received telemetry into the pillars), and `query-api` (the
+-Prometheus-compatible `/api/v1/query_range` read service over Pulse that the
++Prometheus-shaped `/api/v1/query_range` read service over Pulse (raw points;
++`step` accepted but not honoured at v0, ADR-0062) that the
+ Prism frontend queries).
+ 
+ See the [implementation roadmap](docs/roadmap/kaleidoscope-implementation-roadmap.md)
+@@ -210,7 +214,7 @@ expensive:
+ | Per-GB log ingest, with surge pricing                    | Lumen is a first-party log engine on Apache Parquet in your object storage. You pay the cloud storage bill. |
+ | Custom metrics over a low free quota                     | Pulse has no metric-count surcharge. Your TSDB has whatever cardinality your hardware supports. |
+ | Per-million-span APM                                     | Ray charges nothing per span; Sieve drops what you don't need.         |
+-| Continuous profiling as a top-tier add-on                | Strata is included.                                                    |
++| Profile storage as a top-tier add-on (continuous scraping is roadmap) | Strata is included as a passive profile store.            |
+ | Long-term retention as a separate "Flex" / "Archive" SKU | Cinder's tiering is built in; cold storage is just S3 / GCS / R2.      |
+ | Per-user dashboard seats                                 | Prism has no seat licensing.                                           |
+ | SSO, RBAC, audit log, SAML/SCIM as "Enterprise" tier     | Aegis is in the free product. Always.                                  |
+diff --git a/crates/codex/Cargo.toml b/crates/codex/Cargo.toml
+index f075c1e..4cc4faa 100644
+--- a/crates/codex/Cargo.toml
++++ b/crates/codex/Cargo.toml
+@@ -15,12 +15,14 @@ publish = false
+ path = "src/lib.rs"
+ 
+ # ----------------------------------------------------------------------
+-# DISTILL-state stub. Per `docs/feature/codex/distill/wave-decisions.md`:
++# This crate is delivered and green. Per
++# `docs/feature/codex/distill/wave-decisions.md`:
+ # the production-tree dependency surface matches ADR-0024. Every
+-# acceptance test under `tests/` panics with `unimplemented!()` until the
+-# corresponding DELIVER slice lands. Slice 06 lives in `crates/spark/tests/`,
+-# not here, per ADR-0025 + the cross-crate touch convention the workspace
+-# already follows for `aperture::testing::RecordingSink` fixtures.
++# acceptance test under `tests/` exercises real, implemented code (see
++# `src/lib.rs`: "Fully implemented and green"). Slice 06 lives in
++# `crates/spark/tests/`, not here, per ADR-0025 + the cross-crate touch
++# convention the workspace already follows for
++# `aperture::testing::RecordingSink` fixtures.
+ # ----------------------------------------------------------------------
+ 
+ # ----------------------------------------------------------------------
+@@ -43,9 +45,9 @@ path = "src/lib.rs"
+ #
+ # Per ADR-0022's crate skeleton: `insta` is reserved for the slice-04
+ # `Display` snapshot tests when DELIVER lands the `LintReport` rendering.
+-# At DISTILL state, the dev-deps stay minimal — every test exercises the
+-# public surface via `use codex::{...}` and calls into the production
+-# methods which panic with `unimplemented!()`.
++# The dev-deps stay minimal — every test exercises the public surface
++# via `use codex::{...}` and calls into the live, implemented production
++# methods (`SchemaCatalogue::validate` et al.).
+ # ----------------------------------------------------------------------
+ 
+ [dev-dependencies]
+diff --git a/crates/codex/tests/common/mod.rs b/crates/codex/tests/common/mod.rs
+index 3c0f181..8afe26b 100644
+--- a/crates/codex/tests/common/mod.rs
++++ b/crates/codex/tests/common/mod.rs
+@@ -7,13 +7,13 @@
+ //! hexagonal-boundary contract per `journey-codex.yaml >
+ //! mandate_compliance > hexagonal_boundary`.
+ //!
+-//! ## DISTILL state
++//! ## Helper status
+ //!
+ //! Every helper is **real** — these are pure-function pair-builders
+ //! that hand back `&'static`-lifetimed `(&str, &str)` slices the slice
+ //! tests pass into `SchemaCatalogue::validate`. The validation method
+-//! itself panics with `unimplemented!()` until DELIVER drives each
+-//! slice GREEN.
++//! itself is delivered and green; the slice tests exercise its real
++//! behaviour.
+ //!
+ //! ## Why no test infrastructure
+ //!
+diff --git a/crates/codex/tests/slice_01_walking_skeleton.rs b/crates/codex/tests/slice_01_walking_skeleton.rs
+index 88f7a1e..bdfd554 100644
+--- a/crates/codex/tests/slice_01_walking_skeleton.rs
++++ b/crates/codex/tests/slice_01_walking_skeleton.rs
+@@ -8,8 +8,8 @@
+ //! tests: a canonical attribute pair validates clean, and an empty
+ //! attribute set validates clean.
+ //!
+-//! Tests panic on `unimplemented!()` until DELIVER lands
+-//! `SchemaCatalogue::validate`.
++//! Delivered and green: these tests exercise the live
++//! `SchemaCatalogue::validate` implementation.
+ 
+ mod common;
+ 
+diff --git a/crates/codex/tests/slice_02_otel_semconv_corpus.rs b/crates/codex/tests/slice_02_otel_semconv_corpus.rs
+index a6b3acc..d9719fe 100644
+--- a/crates/codex/tests/slice_02_otel_semconv_corpus.rs
++++ b/crates/codex/tests/slice_02_otel_semconv_corpus.rs
+@@ -9,8 +9,8 @@
+ //! `common/mod.rs`, which selects representative attributes from the
+ //! full corpus (host.name, process.pid, telemetry.sdk.language, etc.).
+ //!
+-//! Tests panic on `unimplemented!()` until DELIVER lands the
+-//! generated corpus + `validate`.
++//! Delivered and green: these tests exercise the live generated corpus
++//! and `validate`.
+ 
+ mod common;
+ 
+diff --git a/crates/codex/tests/slice_03_house_attributes.rs b/crates/codex/tests/slice_03_house_attributes.rs
+index 7412c80..5def280 100644
+--- a/crates/codex/tests/slice_03_house_attributes.rs
++++ b/crates/codex/tests/slice_03_house_attributes.rs
+@@ -9,8 +9,8 @@
+ //! `feature_flag.{key}` shape with arbitrary suffix, and the negative
+ //! case `feature_flag.` (empty suffix) being rejected.
+ //!
+-//! Tests panic on `unimplemented!()` until DELIVER lands
+-//! house-attribute support in `validate`.
++//! Delivered and green: these tests exercise the live house-attribute
++//! support in `validate`.
+ 
+ mod common;
+ 
+diff --git a/crates/codex/tests/slice_04_unknown_attribute_lint.rs b/crates/codex/tests/slice_04_unknown_attribute_lint.rs
+index f01a15a..c23be79 100644
+--- a/crates/codex/tests/slice_04_unknown_attribute_lint.rs
++++ b/crates/codex/tests/slice_04_unknown_attribute_lint.rs
+@@ -8,8 +8,8 @@
+ //! `Display` impl renders human-readable text naming each offending
+ //! attribute.
+ //!
+-//! Tests panic on `unimplemented!()` until DELIVER lands the Err
+-//! path + the Display impl in `lint.rs`.
++//! Delivered and green: these tests exercise the live Err path and the
++//! Display impl in `lint.rs`.
+ 
+ mod common;
+ 
+diff --git a/crates/codex/tests/slice_05_fuzzy_suggestions.rs b/crates/codex/tests/slice_05_fuzzy_suggestions.rs
+index e18e771..4a92d09 100644
+--- a/crates/codex/tests/slice_05_fuzzy_suggestions.rs
++++ b/crates/codex/tests/slice_05_fuzzy_suggestions.rs
+@@ -7,8 +7,8 @@
+ //! `LintViolation::nearest_blessed_match`, and far-distance unknown
+ //! attributes do not.
+ //!
+-//! Tests panic on `unimplemented!()` until DELIVER lands the
+-//! Levenshtein loop + the suggestion-population logic.
++//! Delivered and green: these tests exercise the live Levenshtein loop
++//! and the suggestion-population logic.
+ 
+ mod common;
+ 
+diff --git a/crates/codex/tests/slice_06_claims_honesty_stub_headers.rs b/crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
+index e62de14..7c163dd 100644
+--- a/crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
++++ b/crates/codex/tests/slice_06_claims_honesty_stub_headers.rs
+@@ -60,7 +60,6 @@ fn assert_present(rel: &str, needle: &str) {
+ /// whose tests "panic with `unimplemented!()`". Aligned TO
+ /// `codex/src/lib.rs:43-48` ("Fully implemented and green").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us02_codex_cargo_toml_no_longer_declares_a_stub() {
+     assert_absent("Cargo.toml", "DISTILL-state stub");
+     assert_absent("Cargo.toml", "panics with `unimplemented!()`");
+@@ -73,7 +72,6 @@ fn us02_codex_cargo_toml_no_longer_declares_a_stub() {
+ /// All five `codex/tests/slice_0*.rs` headers no longer claim the tests
+ /// "panic on `unimplemented!()` until DELIVER".
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us02_codex_slice_headers_no_longer_claim_unimplemented_panic() {
+     for rel in [
+         "tests/slice_01_walking_skeleton.rs",
+@@ -91,7 +89,6 @@ fn us02_codex_slice_headers_no_longer_claim_unimplemented_panic() {
+ /// `codex/tests/common/mod.rs` no longer claims the validation method
+ /// "panics with `unimplemented!()` until DELIVER drives each slice GREEN".
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us02_codex_common_mod_no_longer_claims_unimplemented_panic() {
+     assert_absent(
+         "tests/common/mod.rs",
+diff --git a/crates/otlp-conformance-harness/Cargo.toml b/crates/otlp-conformance-harness/Cargo.toml
+index a9ba04c..96033ba 100644
+--- a/crates/otlp-conformance-harness/Cargo.toml
++++ b/crates/otlp-conformance-harness/Cargo.toml
+@@ -8,7 +8,7 @@ edition.workspace = true
+ # contamination. See `LICENSING.md`.
+ license = "Apache-2.0"
+ rust-version.workspace = true
+-description = "Validates byte sequences against the OpenTelemetry OTLP wire specification. Phase-0 leaf dependency for Kaleidoscope."
++description = "Structural decode-level validation of byte sequences as OTLP protobuf messages. Phase-0 leaf dependency for Kaleidoscope."
+ repository = "https://github.com/andrealaforgia/kaleidoscope"
+ readme = "README.md"
+ publish = false
+diff --git a/crates/otlp-conformance-harness/README.md b/crates/otlp-conformance-harness/README.md
+index 530be0c..9169739 100644
+--- a/crates/otlp-conformance-harness/README.md
++++ b/crates/otlp-conformance-harness/README.md
+@@ -1,19 +1,32 @@
+ # `otlp-conformance-harness`
+ 
+-A Rust crate that validates byte sequences against the
+-OpenTelemetry OTLP wire specification. Phase-0 leaf dependency for
++A Rust crate that performs **structural decode-level** validation of
++byte sequences as OTLP protobuf messages. Phase-0 leaf dependency for
+ Kaleidoscope. Apache-2.0 licensed (SDK / protocol-library class per
+ the workspace's `LICENSING.md`).
+ 
++## Validation depth
++
++Validation is structural decode-level: the bytes must decode as the
++expected `ExportFooServiceRequest` protobuf for the asserted signal. It
++does NOT perform the OTLP semantic checks — no trace_id/span_id length
++check, no timestamp validation, no attribute validation, no
++semantic-convention enforcement. A structurally-valid but
++semantically-bogus message is accepted.
++
++`Framing::GrpcProtobuf` is an inert label at v0: it is echoed into
++violations, not branched on. The caller strips the 5-byte gRPC length
++prefix before invoking the harness; a body that still carries its
++length prefix fails to decode.
++
+ ## Status
+ 
+-DISTILL wave complete. The crate's public API is locked (see
++Delivered and green. The crate's public API is locked (see
+ [`docs/product/architecture/adr-0001-public-api-surface-and-crate-layout.md`](../../docs/product/architecture/adr-0001-public-api-surface-and-crate-layout.md)).
+-Implementation is intentionally absent at this point — every
+-`validate_*` function returns `unimplemented!()`. The acceptance tests
+-under `tests/slice_*.rs` define the contract; the DELIVER wave's
+-`nw-software-crafter` agent replaces each `unimplemented!()` panic with
+-real production code, one slice at a time.
++The three `validate_*` functions are implemented and green; the
++acceptance tests under `tests/slice_*.rs` lock their behaviour (empty
++input, malformed protobuf, signal mismatch, and the accept paths for
++logs, traces and metrics).
+ 
+ ## Public API (locked, US-06 AC 5)
+ 
+diff --git a/crates/otlp-conformance-harness/src/lib.rs b/crates/otlp-conformance-harness/src/lib.rs
+index da683fa..341e714 100644
+--- a/crates/otlp-conformance-harness/src/lib.rs
++++ b/crates/otlp-conformance-harness/src/lib.rs
+@@ -1,10 +1,29 @@
+ //! # `otlp-conformance-harness`
+ //!
+-//! A CC0-1.0 Rust crate that validates byte sequences against the
+-//! OpenTelemetry OTLP wire specification. Phase-0 leaf dependency for
+-//! Kaleidoscope. Consumed by every later Kaleidoscope component (Aperture,
+-//! Codex, Spark, Pulse, Lumen, Ray, Strata) and by third-party OTel
+-//! implementers.
++//! A CC0-1.0 Rust crate that performs **structural decode-level**
++//! validation of byte sequences as OTLP protobuf messages. Phase-0 leaf
++//! dependency for Kaleidoscope. Consumed by every later Kaleidoscope
++//! component (Aperture, Codex, Spark, Pulse, Lumen, Ray, Strata) and by
++//! third-party OTel implementers.
++//!
++//! ## Validation depth (be precise about what this checks)
++//!
++//! Validation is structural decode-level: the bytes must decode as the
++//! expected `ExportFooServiceRequest` protobuf for the asserted signal.
++//! It does NOT perform the OpenTelemetry OTLP semantic checks — there is
++//! no trace_id/span_id length check, no timestamp validation, no
++//! attribute validation, and no semantic-convention enforcement. A
++//! structurally-valid but semantically-bogus message (e.g. a zero-length
++//! trace_id) is accepted.
++//!
++//! ## Framing (`Framing::GrpcProtobuf` is an inert label at v0)
++//!
++//! `Framing` is a non-behavioural label: it is echoed into violations,
++//! not branched on. The caller is responsible for stripping the 5-byte
++//! gRPC length prefix before invoking the harness under
++//! `Framing::GrpcProtobuf`; the harness validates the message bytes it
++//! is given. A body that still carries its gRPC length prefix fails to
++//! decode (propagated up from `framing.rs`).
+ //!
+ //! ## Public surface (locked by ADR-0001 and US-06 AC 5)
+ //!
+diff --git a/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs b/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+index 4ca72ae..ec111d3 100644
+--- a/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
++++ b/crates/otlp-conformance-harness/tests/slice_08_claims_honesty_doc_guards.rs
+@@ -95,7 +95,6 @@ fn assert_present(rel: &str, needle: &str) {
+ /// future-tensed (matching `spark/src/lib.rs`: "thin wrapper around the
+ /// upstream opentelemetry crates").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us01_readme_spark_row_names_manual_init_not_auto_instrumentation() {
+     assert_absent("README.md", "| **Spark**      | Auto-instrumentation SDKs");
+     assert_present("README.md", "manual-init OTel SDK wrapper");
+@@ -108,7 +107,6 @@ fn us01_readme_spark_row_names_manual_init_not_auto_instrumentation() {
+ /// `strata/src/lib.rs`: "first-party profile storage engine … Library
+ /// only at v0. No daemon, no network.").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us01_readme_strata_row_and_cost_line_name_passive_profile_storage() {
+     // Component-table row: the bare present-tense "Continuous profiling"
+     // claim is gone.
+@@ -127,7 +125,6 @@ fn us01_readme_strata_row_and_cost_line_name_passive_profile_storage() {
+ /// tier future-tensed (matching `cinder/src/lib.rs`: "stores tier
+ /// metadata, not payloads … In-memory only at v0").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us01_readme_cinder_row_names_local_tier_metadata_not_cold_tier_coordinator() {
+     assert_absent("README.md", "cold-tier coordinator");
+     assert_present("README.md", "tier-metadata");
+@@ -139,7 +136,6 @@ fn us01_readme_cinder_row_names_local_tier_metadata_not_cold_tier_coordinator()
+ /// TOML rule-catalogue change control with dashboards future-tensed
+ /// (matching `loom/src/lib.rs`: "change-control surface", "reads `.toml`").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us01_readme_loom_row_names_toml_change_control_not_dashboards_as_code() {
+     assert_absent(
+         "README.md",
+@@ -216,7 +212,6 @@ fn us03_in_flight_scaffold_markers_remain_present() {
+ /// specification**"; they describe structural decode-level validation and
+ /// name the absent semantic checks. Aligned TO `decode.rs`/`validate.rs`.
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us04_harness_describes_structural_decode_not_wire_spec_conformance() {
+     for rel in [
+         "crates/otlp-conformance-harness/src/lib.rs",
+@@ -238,7 +233,6 @@ fn us04_harness_describes_structural_decode_not_wire_spec_conformance() {
+ /// intentionally absent / every `validate_*` returns `unimplemented!()`".
+ /// Aligned TO `lib.rs:17-22` ("implemented and green").
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us04_harness_readme_status_reflects_delivered_green_code() {
+     assert_absent(
+         "crates/otlp-conformance-harness/README.md",
+@@ -264,7 +258,6 @@ fn us04_harness_readme_status_reflects_delivered_green_code() {
+ /// "`step` is accepted and ignored at v0 (DD5: raw points, no
+ /// re-stepping)") and ADR-0062.
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us05_readme_query_range_no_longer_implies_a_prometheus_stepped_grid() {
+     // The corrected README states `step` is not honoured at v0.
+     assert_present("README.md", "raw");
+@@ -291,7 +284,6 @@ fn us05_readme_query_range_no_longer_implies_a_prometheus_stepped_grid() {
+ /// that the caller strips the gRPC length prefix — propagating the
+ /// already-honest enum doc (`framing.rs:14-18`) up to the loud surfaces.
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us06_harness_docs_flag_grpc_framing_as_a_non_behavioural_label() {
+     // lib.rs propagates the "caller strips the prefix; framing is inert"
+     // note up from framing.rs.
+diff --git a/crates/query-http-common/src/lib.rs b/crates/query-http-common/src/lib.rs
+index fb2d381..28bf13b 100644
+--- a/crates/query-http-common/src/lib.rs
++++ b/crates/query-http-common/src/lib.rs
+@@ -27,18 +27,19 @@
+ //! - the `error_response` JSON envelope helper
+ //! - the `resolve_tenant_or_refuse` fail-closed tenant seam
+ //!
+-//! ## Public surface (DISTILL scaffold — DELIVER fills the bodies)
++//! ## Public surface (delivered and green)
+ //!
+-//! All free functions are `unimplemented!("__SCAFFOLD__ query-http-common-v0 RED")`
+-//! at DISTILL close. The `#[cfg(test)] mod tests` block contains:
++//! All four free functions are implemented and live — each carries its
++//! own "DELIVER state: implemented" note over a real body:
+ //!
+-//! - data-only tests that already pass (cap constant values, reason text
+-//!   literals, [`ErrorBody`] serialisation) — these are the GREEN tests at
+-//!   the end of DISTILL
+-//! - function-body tests guarded by `#[ignore]` so the workspace pre-commit
+-//!   gate passes; the Crafty wave de-ignores them one at a time as it
+-//!   implements each fn body (Mandate 7 RED-not-BROKEN with `#[ignore]`
+-//!   guarding the unblocked tests)
++//! - [`parse_time_range`] — the epoch-seconds window parser
++//! - [`resolve_tenant_or_refuse`] — the fail-closed tenant seam
++//! - [`error_response`] — the JSON error-envelope builder
++//! - [`init_tracing`] — the tracing-subscriber initialiser
++//!
++//! The `#[cfg(test)] mod tests` block exercises that live surface: the
++//! cap-constant values, the reason-text literals, [`ErrorBody`]
++//! serialisation, and each function's behaviour against real inputs.
+ //!
+ //! ## Architectural posture
+ //!
+diff --git a/crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs b/crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs
+index 4126b77..68cfd25 100644
+--- a/crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs
++++ b/crates/query-http-common/tests/slice_01_claims_honesty_module_doc.rs
+@@ -42,7 +42,6 @@ fn lib_rs() -> String {
+ /// describes the four implemented helpers, matching the live bodies and
+ /// each fn's own "DELIVER state: implemented" note.
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us03_module_doc_no_longer_claims_unimplemented_scaffold() {
+     let body = lib_rs();
+     assert!(
+diff --git a/crates/trace-query-api/src/lib.rs b/crates/trace-query-api/src/lib.rs
+index 8d21406..5e1efdc 100644
+--- a/crates/trace-query-api/src/lib.rs
++++ b/crates/trace-query-api/src/lib.rs
+@@ -204,9 +204,9 @@ async fn handle_traces(
+ /// (rather than axum's default rejection body), mirroring
+ /// `TracesParams`.
+ ///
+-/// Scaffold for DISTILL Mandate 7 RED-not-BROKEN: the type is declared
+-/// so the acceptance suite compiles; the handler is `unimplemented!`
+-/// until DELIVER lands the parse + wire.
++/// Delivered and green: the lookup-by-id handler reads this parameter,
++/// parses it, and serves a real `get_trace` response (see
++/// [`handle_traces_by_id`]).
+ #[derive(Debug, Deserialize)]
+ pub struct TracesByIdParams {
+     pub trace_id: Option<String>,
+@@ -225,11 +225,10 @@ pub struct TracesByIdParams {
+ /// the raw parameter value (ADR-0053 Decision 2, ADR-0048 Decision 2
+ /// redaction extended).
+ ///
+-/// Scaffold for DISTILL Mandate 7 RED-not-BROKEN: the handler is
+-/// `unimplemented!` so the suite compiles and every scenario fails
+-/// RED (panic on call) rather than BROKEN (compile error). DELIVER
+-/// implements the body per the architecture brief and the scenarios
+-/// go green one at a time per the outer-loop convention.
++/// Delivered and green: the body below is the live
++/// resolve->parse->`get_trace`->cap->serialise orchestration described
++/// above. Every scenario in the acceptance suite exercises this real
++/// implementation.
+ async fn handle_traces_by_id(
+     State(state): State<ApiState>,
+     Query(params): Query<TracesByIdParams>,
+diff --git a/crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs b/crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs
+index 3d058a6..69257e4 100644
+--- a/crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs
++++ b/crates/trace-query-api/tests/slice_04_claims_honesty_handler_doc.rs
+@@ -43,7 +43,6 @@ fn lib_rs() -> String {
+ /// DISTILL Mandate 7. The corrected doc describes the implemented
+ /// lookup-by-id orchestration, matching the body.
+ #[test]
+-#[ignore = "RED until DELIVER: claims-honesty-pass-v0"]
+ fn us03_handler_doc_no_longer_claims_unimplemented_scaffold() {
+     let body = lib_rs();
+     assert!(

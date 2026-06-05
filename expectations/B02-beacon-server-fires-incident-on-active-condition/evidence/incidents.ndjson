@@ -1,0 +1,2 @@
+{"name":"b02-synthetic-up-down","query":"up == 0","severity":"critical","labels":{},"started_at":{"secs_since_epoch":1780620443,"nanos_since_epoch":973191463},"resolved_at":null}
+{"name":"b02-synthetic-up-down","query":"up == 0","severity":"critical","labels":{},"started_at":{"secs_since_epoch":1780620443,"nanos_since_epoch":973191463},"resolved_at":{"secs_since_epoch":1780620445,"nanos_since_epoch":971785506}}
