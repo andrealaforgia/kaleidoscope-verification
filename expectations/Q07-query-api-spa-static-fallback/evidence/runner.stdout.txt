@@ -1,0 +1,1 @@
+OK — query-api SPA static fallback: /config.json served directly (200, file bytes); unknown deep link /dashboards/42 falls back to index.html (200, not 404); /api/v1/query_range stays the API (status=success, not html); and with no static dir the same deep link is a 404. Same-origin SPA serving with the API route winning.
