@@ -1,0 +1,11 @@
+2026-06-05T04:07:32.817012Z  INFO beacon_server: beacon-server starting rules_loaded=1 diagnostics=0 backend=http://b09-mock:18091/api/v1
+2026-06-05T04:07:32.818181Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-05T04:07:33.829351Z  INFO beacon_server: emitting incident rule=b09-rule-a transition="firing"
+2026-06-05T04:07:36.879399Z  WARN beacon_server: rule load diagnostic diagnostic=/rules/c.toml: TOML parse error at line 5, column 1
+  |
+5 | bogus_unknown_field = "boom"
+  | ^^^^^^^^^^^^^^^^^^^
+unknown field `bogus_unknown_field`, expected one of `name`, `query`, `for_duration`, `interval`, `severity`, `labels`, `sinks`, `inhibits`
+
+2026-06-05T04:07:36.879430Z  INFO beacon_server: beacon.reload.succeeded event="beacon.reload.succeeded" rules_loaded=2 added=1 removed=0 diagnostics=1
+2026-06-05T04:07:37.883534Z  INFO beacon_server: emitting incident rule=b09-rule-b transition="firing"

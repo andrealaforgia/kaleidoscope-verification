@@ -1,0 +1,5 @@
+[[rules]]
+name = "b09-rule-c"
+query = "x > 0"
+severity = "critical"
+bogus_unknown_field = "boom"

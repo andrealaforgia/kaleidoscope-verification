@@ -1,0 +1,1 @@
+OK — beacon SIGHUP reload applies the valid new rule and skips the malformed one: beacon.reload.succeeded (added=1, diagnostics>=1), added rule B fired, malformed rule C was reported-and-skipped (never fired), A kept firing, process up. A typo in one added rule does not block the good ones (report-and-skip on reload, matching startup).
