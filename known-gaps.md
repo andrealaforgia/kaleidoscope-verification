@@ -111,7 +111,7 @@ that operators run directly. Kaleidoscope's own integration tests
 under `crates/spark/tests/` and `crates/codex/tests/` cover the
 contracts internally.
 
-## N10 — Beacon harness not yet built (binary IS runnable now)
+## N10 — Beacon harness (DONE — built 2026-06-05; B01/B02/B04/B05/B07 green, B03 broken/issue 010, B06 unreachable)
 
 **Updated 2026-05-12 wake-up cycle**: Beacon v0 graduated at
 commit `f2c28b5`. The binary is real now: `beacon-server --rules
@@ -122,20 +122,31 @@ sinks. SIGHUP reload + grouping + inhibition (Slice 03), multi-
 sink routing (Slice 04), SLO multi-window multi-burn-rate
 synthesis (Slice 05) all GREEN.
 
-The B-prefix is now opened with six placeholder stubs (B01-B06)
-anchored to the slice docs in `docs/feature/beacon-v0/slices/`.
-Verification is blocked on the catalogue side: a Beacon harness
-similar in shape to `harness/spark-consumer/` is needed, plus a
-mock Prometheus HTTP backend (wiremock or a small adapter) and a
-wiremock-based webhook sink fixture so the harness can capture
-incident deliveries. The harness has not been built.
+**RESOLVED (2026-06-05).** The Beacon harness is built:
+`harness/Dockerfile.beacon-server` plus a small Python mock that
+doubles as the PromQL instant-query backend AND the webhook sink
+catcher on a throwaway docker network (a query-aware variant lets X
+and Y diverge for inhibition tests). beacon persists rule-state at
+`<rules>/.beacon-state`, so the rules dir is mounted writable.
 
-This is the next natural EDD investment, comparable in scope to
-the spark-consumer fixture that unblocked S/E. Deferred to a
-session with operator review since the harness layout
-(in-container Prom vs sidecar prometheus, webhook fixture, time
-travel for the SLO MWMBR alerts) wants a design conversation
-first.
+B-prefix outcome on this harness:
+- **B01** boots + loads (malformed rule → diagnostic, not fatal); **B02**
+  fires + resolves to the webhook; **B04** inhibition storm-collapse
+  (Y suppressed while X fires); **B05** multi-sink fan-out; **B07**
+  inhibition RELEASE on resolve (Y delivered after X clears). All
+  satisfied.
+- **B03** (SIGHUP reload) is `broken`, grounding
+  [issue 010](issues/010-beacon-sighup-reload-claimed-but-absent.md):
+  the docs promise SIGHUP hot-reload but the committed binary installs
+  no SIGHUP handler (the handler is in-flight as `beacon-sighup-reload-v0`,
+  uncommitted at HEAD `15533b2`). B03 flips GREEN on the DELIVER commit.
+- **B06** (SLO MWMBR) stays `pending` — NOT black-box reachable: the SLO
+  engine (`synthesise_slo`) is library + in-suite-tests only, not wired
+  into beacon-server or the loader (the assessment's "unreachable SLO
+  engine"). Buildable once an SLO loading path is wired.
+
+The old "blocked on a harness / deferred to a design conversation"
+framing is retired.
 
 ## N11 — Prism UI behaviour needs a Playwright-in-container harness
 
@@ -353,7 +364,18 @@ by K-prefix). Sluice / Cinder may need bespoke writer fixtures.
 
 This is the catalogue's biggest credibility lever for v1.
 
-## N19 — E2E through kaleidoscope-gateway unverified
+## N19 — E2E through kaleidoscope-gateway (LARGELY RESOLVED — EG01/EG02 + LQ02 + TQ02)
+
+**Updated 2026-06-05.** The gateway loop is now under contract across all
+three pillars: **EG01** (OTLP/HTTP metric → gateway → Pulse → query-api
+matrix), **EG02** (the OTLP/gRPC counterpart, gateway :4317 → Pulse →
+query-api), **LQ02** (OTLP/HTTP log → gateway → Lumen → log-query-api
+body_contains round-trip), **TQ02** (span → gateway → Ray →
+trace-query-api window+by-id round-trip). Both OTLP transports (HTTP +
+gRPC) and all three pillars round-trip end to end. EG03-EG05 (multi-tenant
+already covered by LQ07; durability mid-write by the D-prefix) are
+optional extensions, not blockers. The original detail below is kept for
+the audit trail.
 
 The current E-prefix (E01-E04, E05-E06 pending) exercises
 Spark → aperture → otelcol-sink, which is a forwarding path.
