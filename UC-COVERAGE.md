@@ -28,7 +28,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-GWLOG | 9 | 7 (LQ02,LQ04,LQ05,LQ10,D01) | 1 (007 🟡) | 0 | 1 (009 HTTP🔭) |
 | UC-GWTRC | 7 | 6 (TQ02,TQ06,TQ07,D03) | 0 | 1 (007 multi-service) | 0 |
 | UC-GWMET | 7 | 5 (EG01/EG02,EG03,Q10,D02) | 0 | 1 (005 timestamps) | 1 (007 🟡) |
-| UC-GWTEN | 5 | 4 (EG04,LQ02,Q08,LQ07) | 0 | 1 (003 fail-closed) | 0 |
+| UC-GWTEN | 5 | 5 (EG04,LQ02,G07,Q08,LQ07) | 0 | 0 | 0 |
 | UC-GWHEALTH | 6 | 3 (G02,G06) | 3 | 0 | 0 |
 | UC-GWLIFE | 8 | 5 (G01,G04,G05) | 1 (006 🟡) | 1 (008 RUST_LOG) | 1 (003 image-pinned) |
 | UC-MET | 18 | 15 (Q01-Q06,Q09,Q10,EG01) | 1 (008 half-open) | 0 | 2 (011 cap,015 store-500) |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~170** | **~25** | **~23** | **~35** |
+| **Total** | **~253** | **~171** | **~25** | **~22** | **~35** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**

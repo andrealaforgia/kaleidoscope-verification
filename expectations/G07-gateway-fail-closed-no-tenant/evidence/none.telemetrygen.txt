@@ -1,0 +1,5 @@
+2026-06-06T15:47:38.012Z	INFO	logs/logs.go:84	generation of logs is limited	{"per-second": 2}
+2026-06-06T15:47:38.012Z	INFO	logs/logs.go:37	starting HTTP exporter
+2026-06-06T15:48:21.529Z	FATAL	logs/worker.go:96	exporter failed	{"worker": 0, "error": "max retry time elapsed: retry-able request failure: sink internal error: no tenant: record carries no tenant.id resource attribute and no default_tenant is configured; refusing per ADR-0041 Decision 2"}
+github.com/open-telemetry/opentelemetry-collector-contrib/cmd/telemetrygen/internal/logs.worker.simulateLogs
+	github.com/open-telemetry/opentelemetry-collector-contrib/cmd/telemetrygen/internal/logs/worker.go:96

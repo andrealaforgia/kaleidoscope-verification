@@ -1,0 +1,1 @@
+OK — no default tenant + a record with no tenant.id is REFUSED with a reason (fail-closed, not a silent void); the same record is ACCEPTED when a default tenant is configured

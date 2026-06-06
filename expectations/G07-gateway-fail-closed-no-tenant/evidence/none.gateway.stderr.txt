@@ -1,0 +1,11 @@
+{"timestamp":"2026-06-06T15:47:37.776195Z","level":"INFO","event":"gateway_starting","pillar_root":"/data"}
+{"timestamp":"2026-06-06T15:47:37.782856Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-06T15:47:37.782923Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-06T15:47:37.783099Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-06T15:47:37.783124Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-06T15:47:37.783219Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-06T15:47:38.014450Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":93}
+{"timestamp":"2026-06-06T15:47:41.369567Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":93}
+{"timestamp":"2026-06-06T15:47:47.749621Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":93}
+{"timestamp":"2026-06-06T15:48:01.244512Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":93}
+{"timestamp":"2026-06-06T15:48:21.527528Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":93}

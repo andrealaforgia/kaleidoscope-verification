@@ -1,0 +1,2 @@
+none_exit=1
+default_exit=0
