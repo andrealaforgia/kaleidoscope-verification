@@ -15,7 +15,7 @@ A Spark-instrumented app emits one span via `opentelemetry::global::tracer`. The
 
 ## Verification
 
-- Status: `satisfied`
+- Status: `pending` (blocked: Spark SDK has no ingest-auth knob; cannot authenticate to the now-auth-mandatory aperture — see known-gaps.md N29; was satisfied pre-auth at 545a2ba)
 - Last verified: 2026-05-27 UTC at HEAD (`29f109b`).
   `span observed: spark-consumer-emit-trace` — GREEN at the
   fourth attempt this cycle, after three consecutive

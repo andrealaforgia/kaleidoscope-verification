@@ -15,7 +15,7 @@ All four Kaleidoscope-house Resource attributes (`service.name`, `tenant.id`, `f
 
 ## Verification
 
-- Status: `satisfied`
+- Status: `pending` (blocked: Spark SDK has no ingest-auth knob; cannot authenticate to the now-auth-mandatory aperture — see known-gaps.md N29; was satisfied pre-auth at 545a2ba)
 - Last verified: 2026-05-11 UTC at HEAD.
 - Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
 - Method: driven by the **spark-consumer** fixture under

@@ -1,9 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-27T21:30:27.840459Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:27.842936Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:27.843139Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:27.843146Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:27.843289Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:29.404048Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":151}
-aperture-1  | {"timestamp":"2026-05-27T21:30:29.404903Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-E01-pilot"}
-aperture-1  | {"timestamp":"2026-05-27T21:30:29.405882Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":16540}
-aperture-1  | {"timestamp":"2026-05-27T21:30:29.410863Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":208,"downstream_latency_ms":4,"resource.service.name":"expectation-E01-pilot"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:18.459970Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:18.461191Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:18.461457Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:18.461517Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:18.461643Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:31.902487Z","level":"WARN","message":"aperture ingest authz decision","tenant_id":"","role":"","decision":"deny","subject":"ingest_traces","reason":"missing_claim","transport":"grpc"}
+aperture-1  | {"timestamp":"2026-06-06T13:19:31.903889Z","level":"WARN","message":"aperture ingest authz decision","tenant_id":"","role":"","decision":"deny","subject":"ingest_logs","reason":"missing_claim","transport":"grpc"}
