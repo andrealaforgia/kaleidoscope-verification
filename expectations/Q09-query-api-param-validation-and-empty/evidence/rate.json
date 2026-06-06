@@ -1,0 +1,1 @@
+{"status":"error","error":"unsupported query: only a bare metric name with optional = / != label matchers is supported at v0 (range vectors, functions, aggregations, and operators are not yet supported)"}

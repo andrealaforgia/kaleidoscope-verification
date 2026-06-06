@@ -1,0 +1,6 @@
+empty_code=200
+empty_status=success
+empty_len=0
+badtime_code=400
+float_code=200
+rate_code=400

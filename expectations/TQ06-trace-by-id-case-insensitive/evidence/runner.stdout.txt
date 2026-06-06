@@ -1,0 +1,1 @@
+OK — an uppercase 32-hex trace_id resolves the same trace as its lowercase canonical id (2 spans both ways)

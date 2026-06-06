@@ -1,0 +1,1 @@
+OK — nonexistent query is success+empty (200); non-numeric time 400; float epoch 1.5 accepted (200); rate() rejected 400 (no agg at v0)
