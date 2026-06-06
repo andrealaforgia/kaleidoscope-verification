@@ -1,0 +1,1 @@
+OK — migrate appends cinder.migrate.count with from/to + tenant_id; evaluate-policy emits one cinder.migrate.count per migration plus a migrated=2 summary; the observation file is append-only
