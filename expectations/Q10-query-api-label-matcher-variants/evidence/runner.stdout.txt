@@ -1,0 +1,1 @@
+OK — !=, =~, !~ each select the right series; multiple matchers AND together (job=x,env=prod matches; job=x,env=dev is empty)

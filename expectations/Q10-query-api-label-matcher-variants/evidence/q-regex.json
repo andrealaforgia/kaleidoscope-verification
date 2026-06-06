@@ -1,0 +1,1 @@
+{"data":{"result":[{"metric":{"__name__":"gen","env":"prod","job":"x"},"values":[[1780754564,"0"],[1780754564,"1"],[1780754565,"2"]]}],"resultType":"matrix"},"status":"success"}

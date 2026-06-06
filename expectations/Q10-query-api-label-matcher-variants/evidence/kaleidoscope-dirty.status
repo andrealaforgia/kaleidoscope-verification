@@ -1,0 +1,2 @@
+ M crates/kaleidoscope-cli/Cargo.toml
+?? crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs

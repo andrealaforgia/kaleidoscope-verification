@@ -1,0 +1,5 @@
+neq=y
+regex=x
+negregex=y
+and_match= and_match=
+and_nomatch=0 and_nomatch=0

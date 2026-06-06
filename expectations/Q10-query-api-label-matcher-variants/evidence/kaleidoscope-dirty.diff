@@ -1,0 +1,15 @@
+diff --git a/crates/kaleidoscope-cli/Cargo.toml b/crates/kaleidoscope-cli/Cargo.toml
+index d39f4e9..3a67925 100644
+--- a/crates/kaleidoscope-cli/Cargo.toml
++++ b/crates/kaleidoscope-cli/Cargo.toml
+@@ -92,6 +92,10 @@ path = "tests/slice_17_unknown_flag_rejection.rs"
+ name = "ingest_atomic"
+ path = "tests/ingest_atomic.rs"
+ 
++[[test]]
++name = "unknown_item_diagnostic"
++path = "tests/unknown_item_diagnostic.rs"
++
+ [lints.rust]
+ unsafe_code = "forbid"
+ 
