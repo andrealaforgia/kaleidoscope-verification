@@ -1,0 +1,1 @@
+OK — empty-stdin ingest is a no-op success; read of the empty store is records=0

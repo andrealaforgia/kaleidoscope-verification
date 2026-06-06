@@ -1,0 +1,1 @@
+OK — 250 ingested, 250 read back in order (b0..b249), no batch-boundary loss

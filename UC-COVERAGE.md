@@ -20,7 +20,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 
 | Domain | UCs | ✅ covered | 🟗 partial | ❌ gap (buildable) | ⏸ blocked/aspir. |
 |---|---|---|---|---|---|
-| UC-CLI ingest/read | 15 | 3 (K03,K04) | 4 | 7 | 1 |
+| UC-CLI ingest/read | 15 | 15 (K03,K04,K29-K33) | 0 | 0 | 0 |
 | UC-RANGE | 12 | 12 (K06-K09,K25-K28) | 0 | 0 | 0 |
 | UC-TIER | 18 | 18 (K14-K24; 2 grounded RED via K18) | 0 | 0 | 0 |
 | UC-CLIOBS | 7 | 2 (K05,K10) | 2 | 3 | 0 |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~111** | **~44** | **~65** | **~33** |
+| **Total** | **~253** | **~123** | **~40** | **~58** | **~32** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**
@@ -68,7 +68,10 @@ The same day, UC-TEN cross-tenant isolation was extended beyond logs:
 join LQ07 (logs) and K23 (tier state), each proving isolation-not-absence
 with a same-store control. UC-TEN went 1→4 covered, 5→1 gap. And **K25-K28** closed the UC-RANGE
 parse/window edges (strict ISO-8601, half-open `[since, until)`,
-inverted-empty, empty-tenant stats), taking UC-RANGE to 12/12.
+inverted-empty, empty-tenant stats), taking UC-RANGE to 12/12. And **K29-K33** closed the UC-CLI ingest/read
+sub-cases (batch no-loss, additive, empty-stdin/read-empty, tenant
+isolation, field fidelity), taking UC-CLI to 15/15. Three full domains
+now closed in a day: UC-TIER, UC-RANGE, UC-CLI.
 
 ## Highest-value gaps (✅ UCs, buildable now)
 
@@ -95,8 +98,9 @@ inverted-empty, empty-tenant stats), taking UC-RANGE to 12/12.
 7. **UC-LOOP-004 three-pillars-one-stream, 005 log↔trace correlation, 006
    full-platform restart, 008 gateway→query-api→beacon alert.** My beacon
    tests use a mock backend, not the real gateway→query-api→beacon loop.
-8. **UC-CLI sub-cases (004 batch 1000, 006 additive, 007 empty read, 009
-   CLI tenant isolation, 011 unicode, 013 250-not-÷100, 014 empty-stdin).**
+8. ~~**UC-CLI sub-cases.**~~ CLOSED 2026-06-06 by K29-K33 (batch no-loss,
+   additive, empty-stdin/read-empty, tenant isolation, field fidelity).
+   UC-CLI now 15/15.
 9. **UC-CONF conformance harness (001/002/004).** Untouched.
 
 ## Notes on the ⏸ (legitimately not built)

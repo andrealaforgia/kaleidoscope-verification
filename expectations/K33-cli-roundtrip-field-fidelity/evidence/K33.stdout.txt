@@ -1,0 +1,4 @@
+---read---
+{"observed_time_unix_nano":100,"severity_number":1,"severity_text":"TRACE","body":"trace-line","attributes":{},"resource_attributes":{"service.name":"alpha"},"trace_id":null,"span_id":null}
+{"observed_time_unix_nano":200,"severity_number":21,"severity_text":"FATAL","body":"fatal-line","attributes":{},"resource_attributes":{"service.name":"beta"},"trace_id":null,"span_id":null}
+{"observed_time_unix_nano":300,"severity_number":9,"severity_text":"INFO","body":"héllo 世界 ✓ tab\there","attributes":{},"resource_attributes":{"service.name":"gamma"},"trace_id":null,"span_id":null}

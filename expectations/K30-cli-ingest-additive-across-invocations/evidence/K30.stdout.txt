@@ -1,0 +1,6 @@
+---ingest 1---
+ingest ok: records=1 batches=1 tier_items=1
+---ingest 2---
+ingest ok: records=1 batches=1 tier_items=1
+---read bodies---
+first second 

@@ -1,0 +1,1 @@
+OK — tenants on the same data dir are isolated on read (acme sees only acme, globex only globex)

@@ -1,0 +1,2 @@
+{"observed_time_unix_nano":1700000000000000000,"severity_number":9,"severity_text":"INFO","body":"first","attributes":{},"resource_attributes":{},"trace_id":null,"span_id":null}
+{"observed_time_unix_nano":1700000060000000000,"severity_number":9,"severity_text":"INFO","body":"second","attributes":{},"resource_attributes":{},"trace_id":null,"span_id":null}

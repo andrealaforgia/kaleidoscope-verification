@@ -1,0 +1,8 @@
+---empty-stdin ingest---
+ingest-exit=0
+ingest ok: records=0 batches=0 tier_items=0
+---read empty store---
+read-exit=0
+[stdout]
+[stderr]
+read ok: records=0

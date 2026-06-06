@@ -1,0 +1,3 @@
+---ingest---
+ingest ok: records=250 batches=3 tier_items=3
+read-records=250
