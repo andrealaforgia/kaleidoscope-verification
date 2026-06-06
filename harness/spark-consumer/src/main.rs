@@ -47,6 +47,13 @@ struct Args {
     /// Mapped 1:1 into SparkConfig::with_feature_flags.
     #[arg(long = "feature-flag", value_name = "KEY=VALUE")]
     feature_flags: Vec<String>,
+
+    /// Optional bearer token (SparkConfig::with_bearer_token) — the
+    /// PROGRAMMATIC ingest-auth path (spark-ingest-auth-v0). Attaches
+    /// `authorization: Bearer <token>` metadata to all three OTLP
+    /// exporters, distinct from the OTEL_EXPORTER_OTLP_HEADERS env path.
+    #[arg(long)]
+    auth_token: Option<String>,
 }
 
 fn build_config(args: &Args) -> spark::SparkConfig {
@@ -75,6 +82,9 @@ fn build_config(args: &Args) -> spark::SparkConfig {
     }
     if let Some(e) = &args.endpoint {
         cfg = cfg.with_endpoint(e.clone());
+    }
+    if let Some(t) = &args.auth_token {
+        cfg = cfg.with_bearer_token(t.clone());
     }
     // Tight flush timeout so the consumer doesn't hang in shutdown
     // when expected-broken scenarios kill the downstream.

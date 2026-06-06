@@ -1,0 +1,7 @@
+step 1: build consumer (with the --auth-token / with_bearer_token arg)
+step 2: NEGATIVE control — emit with NO token (expect denial, no span)
+noauth_span=[]
+step 3: POSITIVE — emit WITH the programmatic bearer (--auth-token)
+  consumer outcome: scenario=s01-init-and-emit-trace result=ok detail=init + one span + clean drop
+auth_span=[spark-consumer-emit-trace]
+OK — SparkConfig::with_bearer_token attaches the bearer: the authenticated span round-trips to otelcol-sink (aperture decision=allow); the same emission WITHOUT a token is denied (no span). The programmatic auth path works and is enforced.
