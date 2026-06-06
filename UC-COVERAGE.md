@@ -32,7 +32,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-GWHEALTH | 6 | 2 (G02) | 3 | 1 | 0 |
 | UC-GWLIFE | 8 | 1 (G01) | 1 | 6 | 0 |
 | UC-MET | 18 | 6 (Q01-Q06) | 2 | 8 | 2 |
-| UC-LOG | 19 | 7 (LQ01-LQ07) | 3 | 9 | 0 |
+| UC-LOG | 19 | 18 (LQ01-LQ09) | 0 | 0 | 1 (016 result-cap >100k not reachable) |
 | UC-TRC | 8 | 5 (TQ01-TQ04) | 1 | 2 | 0 |
 | UC-LOOP | 9 | 3 (EG01,LQ02,TQ02) | 1 | 4 | 1 (Prism🟡) |
 | UC-DUR | 12 | 8 (D01-D20) | 3 | 0 | 1 (cinder-wal not reachable) |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~125** | **~39** | **~58** | **~31** |
+| **Total** | **~253** | **~136** | **~36** | **~49** | **~32** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**

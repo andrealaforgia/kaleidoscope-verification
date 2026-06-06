@@ -1,0 +1,1 @@
+OK — unknown severity / empty + oversized body_contains / invalid regex / over-cap window all 400; valid baseline 200

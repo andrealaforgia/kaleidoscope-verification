@@ -1,0 +1,1 @@
+OK — min_severity is case-insensitive (warn==WARN, 18 records); ERROR+body_contains=db composes to only the db-error record (body-only kept the INFO/db too)

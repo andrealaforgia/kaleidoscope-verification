@@ -1,0 +1,6 @@
+unknown_severity=400
+empty_body_contains=400
+oversized_body_contains=400
+invalid_regex=400
+window_over_cap=400
+valid_baseline=200
