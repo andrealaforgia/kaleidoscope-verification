@@ -1,0 +1,2 @@
+2026-06-06T05:10:55.722773Z  WARN beacon_server: rule load diagnostic diagnostic=/rules/slo.toml: unsupported error_budget_period "7d" (only "30d" is supported at v0) in SLO "b10svc"
+2026-06-06T05:10:55.722785Z ERROR beacon_server: no rules loaded; refusing to start rules_dir=/rules diagnostics=1

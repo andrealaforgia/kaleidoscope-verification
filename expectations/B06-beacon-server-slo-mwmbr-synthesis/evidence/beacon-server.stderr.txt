@@ -1,6 +1,6 @@
-2026-06-06T04:25:33.385269Z  INFO beacon_server: beacon-server starting rules_loaded=4 diagnostics=0 backend=http://b06-mock:18091/api/v1
-2026-06-06T04:25:33.386239Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
-2026-06-06T04:26:03.392898Z  INFO beacon_server: emitting incident rule=b06svc_slo_page_6h_30m transition="firing"
-2026-06-06T04:26:03.393305Z  INFO beacon_server: emitting incident rule=b06svc_slo_page_1h_5m transition="firing"
-2026-06-06T04:26:03.393710Z  INFO beacon_server: emitting incident rule=b06svc_slo_ticket_1d_2h transition="firing"
-2026-06-06T04:26:03.394424Z  INFO beacon_server: emitting incident rule=b06svc_slo_ticket_3d_6h transition="firing"
+2026-06-06T05:07:12.747477Z  INFO beacon_server: beacon-server starting rules_loaded=4 diagnostics=0 backend=http://b06-mock:18091/api/v1
+2026-06-06T05:07:12.751693Z  INFO beacon_server: recovered alert state rules_recovered=0 firing=0 pending=0
+2026-06-06T05:07:42.764094Z  INFO beacon_server: emitting incident rule=b06svc_slo_page_6h_30m transition="firing"
+2026-06-06T05:07:42.764317Z  INFO beacon_server: emitting incident rule=b06svc_slo_page_1h_5m transition="firing"
+2026-06-06T05:07:42.764637Z  INFO beacon_server: emitting incident rule=b06svc_slo_ticket_3d_6h transition="firing"
+2026-06-06T05:07:42.769763Z  INFO beacon_server: emitting incident rule=b06svc_slo_ticket_1d_2h transition="firing"

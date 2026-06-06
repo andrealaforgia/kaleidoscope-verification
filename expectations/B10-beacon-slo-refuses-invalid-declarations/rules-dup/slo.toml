@@ -1,0 +1,19 @@
+[[slo]]
+service = "b10dup"
+good_events_query = "good"
+total_events_query = "total"
+target_availability = 0.999
+error_budget_period = "30d"
+[[slo.sinks]]
+kind = "webhook"
+url = "http://127.0.0.1:1/hook"
+
+[[slo]]
+service = "b10dup"
+good_events_query = "good2"
+total_events_query = "total2"
+target_availability = 0.99
+error_budget_period = "30d"
+[[slo.sinks]]
+kind = "webhook"
+url = "http://127.0.0.1:1/hook"

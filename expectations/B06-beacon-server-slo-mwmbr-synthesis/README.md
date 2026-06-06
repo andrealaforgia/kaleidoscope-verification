@@ -27,14 +27,14 @@ referenced it. So B06 was documented `pending` — not black-box reachable
 (the four-quadrants assessment's "unreachable SLO engine"), credited to the
 in-suite test. The verifier flagged exactly this gap; the implementer then
 wired the operator path (`beacon-slo-operator-path-v0`, ADR-0067, feat
-`41e7844`): `[[slo]]` is validated (`RawSlo::into_slo`) and expanded via
+`4bc8d58`): `[[slo]]` is validated (`RawSlo::into_slo`) and expanded via
 `synthesise_slo` VERBATIM in the loader, on both startup and SIGHUP reload.
 B06 is now grounded end to end.
 
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-06 UTC at HEAD (`41e7844`). GREEN:
+- Last verified: 2026-06-06 UTC at HEAD (`905abaa`, re-verified after the SHA reconciliation below). GREEN:
   `rules_loaded=4` from one `[[slo]]`; all four synthesised rules fired to
   the webhook (`b06svc_slo_page_1h_5m`, `_page_6h_30m`, `_ticket_1d_2h`,
   `_ticket_3d_6h`), each `labels.slo_service=b06svc`.
@@ -48,7 +48,7 @@ B06 is now grounded end to end.
 
 ## Evidence
 
-- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `41e7844`.
+- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `905abaa`.
 - [`evidence/incidents.ndjson`](evidence/incidents.ndjson) — the four
   synthesised-rule incidents.
 - [`evidence/beacon-server.stderr.txt`](evidence/beacon-server.stderr.txt)
@@ -61,11 +61,11 @@ B06 is now grounded end to end.
   `synthesise_slo` → extend rules), `crates/beacon/src/slo.rs`
   (`synthesise_slo`, the four-row `MWMBR_TABLE`, `synthesise_row` naming +
   `slo_service`/`slo_window` labels, `for_duration=0` / `interval=30s`).
-  ADR-0067, feat `41e7844`.
+  ADR-0067, feat `4bc8d58` (origin/main; `41e7844` was a transient pre-push local HEAD that was amended — message 026).
 
 ## Notes
 
-Completes the Beacon set (B01-B09 all satisfied). The SLO PromQL
+Completes the Beacon happy path; with B10 (the refusals) the SLO operator path is fully pinned. The SLO PromQL
 correctness (the burn-rate expressions) stays credited to the in-suite
 `slice_05_slo_burn_rate.rs` byte-equal test — the mock fires every rule
 regardless of the query, so B06 proves the OPERATOR PATH (declare → load →

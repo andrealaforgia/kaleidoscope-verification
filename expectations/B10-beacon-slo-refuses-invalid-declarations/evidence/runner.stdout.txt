@@ -1,0 +1,7 @@
+badtarget_running=false
+badtarget_exit=1
+badperiod_running=false
+badperiod_exit=1
+dup_running=false
+dup_exit=1
+OK — beacon refuses invalid [[slo]] declarations at load (no always-fire footgun): target_availability=1.0 -> 'invalid target_availability ... must be strictly greater than 0 and strictly less than 1'; error_budget_period=7d -> 'unsupported error_budget_period "7d" (only "30d")'; duplicate synthesised names -> the collision refuses+drops (diagnostic names the duplicate). Each leaves zero rules and beacon refuses to start (exit 1) — no degenerate rule reaches the catalogue. The SLO honesty guardrails (ADR-0067 F2/F3).

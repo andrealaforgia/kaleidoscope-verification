@@ -1,0 +1,2 @@
+2026-06-06T05:10:52.307828Z  WARN beacon_server: rule load diagnostic diagnostic=/rules/slo.toml: invalid target_availability 1 (must be strictly greater than 0 and strictly less than 1) in SLO "b10svc"
+2026-06-06T05:10:52.307848Z ERROR beacon_server: no rules loaded; refusing to start rules_dir=/rules diagnostics=1

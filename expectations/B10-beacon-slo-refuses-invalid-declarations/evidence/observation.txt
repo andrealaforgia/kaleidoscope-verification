@@ -1,0 +1,6 @@
+badtarget_running=false
+badtarget_exit=1
+badperiod_running=false
+badperiod_exit=1
+dup_running=false
+dup_exit=1

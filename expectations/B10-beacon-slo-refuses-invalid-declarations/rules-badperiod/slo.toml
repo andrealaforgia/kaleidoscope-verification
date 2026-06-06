@@ -1,0 +1,9 @@
+[[slo]]
+service = "b10svc"
+good_events_query = "good"
+total_events_query = "total"
+target_availability = 0.999
+error_budget_period = "7d"
+[[slo.sinks]]
+kind = "webhook"
+url = "http://127.0.0.1:1/hook"
