@@ -25,7 +25,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-TIER | 18 | 18 (K14-K24; 2 grounded RED via K18) | 0 | 0 | 0 |
 | UC-CLIOBS | 7 | 6 (K05,K10,K34) | 0 | 0 | 1 (006 🟡 dogfood) |
 | UC-CLIROB | 8 | 4 (K02,K11,K13,D04/D07) | 2 | 2 | 0 |
-| UC-GWLOG | 9 | 2 (LQ02) | 3 | 3 | 1 (HTTP🔭) |
+| UC-GWLOG | 9 | 7 (LQ02,LQ04,LQ05,LQ10,D01) | 1 (007 🟡) | 0 | 1 (009 HTTP🔭) |
 | UC-GWTRC | 7 | 3 (TQ02) | 2 | 2 | 0 |
 | UC-GWMET | 7 | 3 (EG01/EG02,Q06) | 1 | 3 | 0 |
 | UC-GWTEN | 5 | 1 (LQ07) | 2 | 2 | 0 |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~157** | **~32** | **~30** | **~34** |
+| **Total** | **~253** | **~162** | **~30** | **~27** | **~34** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**

@@ -1,0 +1,1 @@
+OK — gateway preserves resource service.name (lq10-svc) and the trace_id/span_id correlation IDs (deadbeefdeadbeefdeadbeefdeadbeef / cafef00dcafef00d) into Lumen, readable via log-query-api

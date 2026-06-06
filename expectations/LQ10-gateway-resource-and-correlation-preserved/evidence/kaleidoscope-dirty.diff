@@ -1,0 +1,34 @@
+diff --git a/crates/cinder/src/store.rs b/crates/cinder/src/store.rs
+index 8e8f5aa..8eb6b6a 100644
+--- a/crates/cinder/src/store.rs
++++ b/crates/cinder/src/store.rs
+@@ -54,7 +54,8 @@ impl fmt::Display for MigrateError {
+         match self {
+             MigrateError::UnknownItem { tenant, item } => write!(
+                 f,
+-                "cannot migrate unknown item {item:?} for tenant {tenant}"
++                "cannot migrate unknown item {:?} for tenant {tenant}",
++                item.as_str()
+             ),
+             MigrateError::PersistenceFailed { reason } => {
+                 write!(f, "persistence failed: {reason}")
+diff --git a/crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs b/crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs
+index a6b9562..4cef759 100644
+--- a/crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs
++++ b/crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs
+@@ -163,7 +163,6 @@ fn bin() -> &'static str {
+ // ====================================================================
+ 
+ #[test]
+-#[ignore = "RED until DELIVER: store.rs:57 arm still emits ItemId(\"ghost\") (Debug of the newtype) instead of the quoted bare id"]
+ fn unknown_item_migrate_names_the_bare_quoted_id() {
+     // Given a fresh data_dir with NO placement for (acme, ghost).
+     let root = temp_root("migrate_unknown_ghost");
+@@ -226,7 +225,6 @@ fn unknown_item_migrate_names_the_bare_quoted_id() {
+ // ====================================================================
+ 
+ #[test]
+-#[ignore = "RED until DELIVER: the shared store.rs:57 arm leaks ItemId(...) on the get-tier unknown-item path too"]
+ fn unknown_item_get_tier_names_the_bare_quoted_id() {
+     // Given a fresh data_dir with NO placement for
+     // (globex, acme/batch-00042).
