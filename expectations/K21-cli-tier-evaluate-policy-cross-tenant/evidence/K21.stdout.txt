@@ -1,0 +1,5 @@
+---evaluate (cross-tenant)---
+evaluated migrated=2
+---tiers after---
+acme item-1: tier=warm
+globex item-2: tier=warm

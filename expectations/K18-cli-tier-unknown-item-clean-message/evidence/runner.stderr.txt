@@ -1,0 +1,2 @@
+step 1: build kaleidoscope-cli image (cache hit if no source change)
+migrate diagnostic does not name the item cleanly as "ghost" (UC-TIER-008)

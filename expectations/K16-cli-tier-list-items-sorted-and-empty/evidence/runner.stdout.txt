@@ -1,0 +1,1 @@
+OK — list-items is lex-sorted; empty tier prints nothing, exit 0

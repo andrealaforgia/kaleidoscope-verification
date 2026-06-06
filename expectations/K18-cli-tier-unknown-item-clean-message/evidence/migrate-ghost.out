@@ -1,0 +1,2 @@
+kaleidoscope-cli: cinder migrate: cannot migrate unknown item ItemId("ghost") for tenant acme
+

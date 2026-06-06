@@ -1,0 +1,1 @@
+OK — HOT and archive are both rejected with the invalid-tier diagnostic

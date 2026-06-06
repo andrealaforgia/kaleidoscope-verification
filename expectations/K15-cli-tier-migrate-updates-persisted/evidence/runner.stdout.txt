@@ -1,0 +1,1 @@
+OK — migrate reports hot->warm; the new tier persists across a fresh reader

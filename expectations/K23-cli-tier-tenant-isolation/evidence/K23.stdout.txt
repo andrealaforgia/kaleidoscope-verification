@@ -1,0 +1,7 @@
+---isolation view---
+acme-hot: item-x,
+acme-cold: 
+globex-cold: item-x,
+globex-hot: 
+acme tier: tier=hot
+globex tier: tier=cold

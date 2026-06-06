@@ -1,0 +1,4 @@
+---migrate---
+migrated tenant=acme item=item-1 from=hot to=warm
+---get-tier---
+tier=warm

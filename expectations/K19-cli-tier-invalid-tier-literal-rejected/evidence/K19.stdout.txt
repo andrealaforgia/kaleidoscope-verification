@@ -1,0 +1,8 @@
+---place HOT---
+upper-exit=1
+kaleidoscope-cli: invalid tier "HOT": expected one of hot, warm, cold
+
+---place archive---
+arch-exit=1
+kaleidoscope-cli: invalid tier "archive": expected one of hot, warm, cold
+

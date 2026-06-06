@@ -1,0 +1,5 @@
+---second place---
+placed tenant=acme item=item-1 tier=cold
+place2-exit=0
+---get-tier---
+tier=cold

@@ -1,0 +1,1 @@
+OK — evaluate-policy ages hot->warm then warm->cold, one step per pass

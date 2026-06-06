@@ -1,0 +1,8 @@
+---migrate ghost---
+mig-exit=1
+kaleidoscope-cli: cinder migrate: cannot migrate unknown item ItemId("ghost") for tenant acme
+
+---get-tier ghost---
+gt-exit=1
+kaleidoscope-cli: cinder migrate: cannot migrate unknown item ItemId("ghost") for tenant acme
+

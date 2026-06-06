@@ -1,0 +1,4 @@
+---place---
+placed tenant=acme item=item-1 tier=hot
+---get-tier---
+tier=hot

@@ -1,0 +1,7 @@
+---list hot---
+item-a
+item-b
+item-c
+---list cold (rc)---
+list-cold-exit=0
+[contents below]

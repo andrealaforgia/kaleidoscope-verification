@@ -1,0 +1,10 @@
+---evaluate #1---
+evaluated migrated=2
+---tiers after #1---
+tier=warm
+tier=warm
+---evaluate #2---
+evaluated migrated=2
+---tiers after #2---
+tier=cold
+tier=cold

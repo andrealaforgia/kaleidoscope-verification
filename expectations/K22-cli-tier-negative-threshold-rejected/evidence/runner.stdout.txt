@@ -1,0 +1,1 @@
+OK — a negative threshold is rejected as a usage error (exit 2)

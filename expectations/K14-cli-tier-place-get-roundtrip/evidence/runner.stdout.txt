@@ -1,0 +1,1 @@
+OK — place reports placement; a fresh get-tier reads back tier=hot
