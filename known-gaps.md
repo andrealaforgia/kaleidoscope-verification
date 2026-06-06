@@ -194,10 +194,15 @@ B-prefix outcome on this harness:
   the docs promise SIGHUP hot-reload but the committed binary installs
   no SIGHUP handler (the handler is in-flight as `beacon-sighup-reload-v0`,
   uncommitted at HEAD `15533b2`). B03 flips GREEN on the DELIVER commit.
-- **B06** (SLO MWMBR) stays `pending` — NOT black-box reachable: the SLO
-  engine (`synthesise_slo`) is library + in-suite-tests only, not wired
-  into beacon-server or the loader (the assessment's "unreachable SLO
-  engine"). Buildable once an SLO loading path is wired.
+- **B06** (SLO MWMBR) — RESOLVED 2026-06-06, was the "unreachable SLO
+  engine". `synthesise_slo` had no caller outside the in-suite slice_05
+  test, so it was NOT black-box reachable. The verifier flagged it; the
+  implementer wired the operator path (`beacon-slo-operator-path-v0`,
+  ADR-0067, feat `41e7844`): `[[slo]]` is now validated and expanded via
+  `synthesise_slo` in the loader on startup + SIGHUP reload. B06 GREEN at
+  `41e7844`: one `[[slo]]` declaration synthesises four firing MWMBR rules
+  to the sink (`<service>_slo_page_1h_5m` etc., labelled `slo_service`).
+  The documented-but-unwired gap is closed.
 
 The old "blocked on a harness / deferred to a design conversation"
 framing is retired.

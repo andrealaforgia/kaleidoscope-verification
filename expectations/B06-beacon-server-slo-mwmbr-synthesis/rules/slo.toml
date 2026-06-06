@@ -1,0 +1,15 @@
+# One operator [[slo]] declaration. The loader validates it (ADR-0067) and
+# runs synthesise_slo, expanding it into four Multi-Window Multi-Burn-Rate
+# rules (page 1h/5m, page 6h/30m, ticket 1d/2h, ticket 3d/6h) that tick and
+# emit to the SLO's sinks. The mock returns a non-empty result for any
+# query, so each synthesised burn-rate rule goes Active and fires.
+[[slo]]
+service = "b06svc"
+good_events_query = "sum(rate(http_requests_total{code!~\"5..\"}[5m]))"
+total_events_query = "sum(rate(http_requests_total[5m]))"
+target_availability = 0.999
+error_budget_period = "30d"
+
+[[slo.sinks]]
+kind = "webhook"
+url = "http://b06-mock:18091/hook"

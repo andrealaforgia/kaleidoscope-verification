@@ -2,65 +2,73 @@
 
 ## Surface
 
-Beacon (alerting engine). SLO multi-window multi-burn-rate synthesis.
-Operator-facing in intent.
+Beacon (`beacon-server`), SLO multi-window multi-burn-rate synthesis via
+the `[[slo]]` operator path (ADR-0067, `beacon-slo-operator-path-v0`).
+Operator-facing. Reuses the B02 Beacon harness.
 
-## Behaviour (intended)
+## Behaviour
 
-An SLO declaration (objective + window) synthesises a set of Multi-Window
-Multi-Burn-Rate alert rules per Google SRE conventions. The synthesised
-rules tick on their own schedules and emit incidents through the same
-sink path as hand-authored rules.
+Given a rules dir holding one `[[slo]]` declaration (service, good/total
+event queries, target availability, a webhook sink) and a backend that
+reports the burn condition Active
+When beacon-server loads it and evaluates the synthesised rules
+Then the loader validates the SLO and expands it into FOUR Multi-Window
+Multi-Burn-Rate rules — `<service>_slo_page_1h_5m`, `_page_6h_30m`,
+`_ticket_1d_2h`, `_ticket_3d_6h` — which tick and emit Firing incidents to
+the SLO's sinks, each labelled `slo_service=<service>` and
+`slo_window=<long>/<short>`. One declaration, four firing rules.
 
-## Status: `pending` — NOT black-box reachable (SLO engine is unwired)
+## History — was the "unreachable SLO engine", now reachable
 
-The Beacon harness exists now (B01/B02/B04/B05 prove it), so the old
-blocker is gone. B06 stays unverifiable for a different, specific reason:
-the SLO engine is library-and-tests only and is not wired into the
-operator surface. At `dc826da`:
-
-- `crates/beacon/src/slo.rs` exposes `pub fn synthesise_slo(slo: &Slo) ->
-  Vec<Rule>`, and it is correct and exhaustively tested
-  (`crates/beacon/tests/slice_05_slo_burn_rate.rs`, byte-equal firing
-  patterns).
-- But `synthesise_slo` is called by NOTHING except those tests. The rule
-  loader (`crates/beacon/src/loader.rs`) does not parse SLO declarations,
-  and `beacon-server` (`crates/beacon-server/src/`) never references
-  `slo`/`Slo`/`synthesise_slo`. There is no `--slo` flag and no SLO file
-  type.
-
-So an operator cannot configure an SLO through beacon-server and get
-synthesised MWMBR rules ticking. There is no externally observable
-surface to drive, hence no black-box expectation. This is the
-assessment's known "unreachable SLO engine" finding, acknowledged by the
-implementer (message 021).
+`synthesise_slo` was correct and exhaustively in-suite tested
+(`crates/beacon/tests/slice_05_slo_burn_rate.rs`) but had NO caller
+outside those tests: the loader did not parse SLOs and beacon-server never
+referenced it. So B06 was documented `pending` — not black-box reachable
+(the four-quadrants assessment's "unreachable SLO engine"), credited to the
+in-suite test. The verifier flagged exactly this gap; the implementer then
+wired the operator path (`beacon-slo-operator-path-v0`, ADR-0067, feat
+`41e7844`): `[[slo]]` is validated (`RawSlo::into_slo`) and expanded via
+`synthesise_slo` VERBATIM in the loader, on both startup and SIGHUP reload.
+B06 is now grounded end to end.
 
 ## Verification
 
-- Status: `pending` (not black-box reachable at `dc826da`; SLO synthesis
-  is library + in-suite tests only, not wired into beacon-server or the
-  rule loader).
-- The synthesis correctness is credited to the in-suite test
-  `crates/beacon/tests/slice_05_slo_burn_rate.rs` (byte-equal MWMBR
-  firing patterns), not claimed black-box here.
-- Becomes buildable on the same Beacon harness the moment an SLO loading
-  path is wired into beacon-server (an SLO file type or `--slo` flag that
-  feeds `synthesise_slo` into the live catalogue).
+- Status: `satisfied`
+- Last verified: 2026-06-06 UTC at HEAD (`41e7844`). GREEN:
+  `rules_loaded=4` from one `[[slo]]`; all four synthesised rules fired to
+  the webhook (`b06svc_slo_page_1h_5m`, `_page_6h_30m`, `_ticket_1d_2h`,
+  `_ticket_3d_6h`), each `labels.slo_service=b06svc`.
+- Method: self-contained (`.no-compose`). beacon-server + the always-Active
+  mock (backend + webhook catcher) on a throwaway docker network; the rules
+  dir holds one `[[slo]]`. The synthesised rules have a fixed
+  `interval=30s` (the MWMBR construction; ADR-0067), and beacon promotes
+  Pending→Firing on a subsequent tick, so the runner waits ~38s for the
+  first firings. Asserts a Firing incident from a synthesised rule (name +
+  `slo_service` label) and ≥2 distinct synthesised rules (the fan-out).
 
 ## Evidence
 
-None black-box (no operator surface to exercise).
+- [`evidence/verification.yaml`](evidence/verification.yaml) — SHA `41e7844`.
+- [`evidence/incidents.ndjson`](evidence/incidents.ndjson) — the four
+  synthesised-rule incidents.
+- [`evidence/beacon-server.stderr.txt`](evidence/beacon-server.stderr.txt)
+  — `rules_loaded=4` from one `[[slo]]`.
+- [`rules/slo.toml`](rules/slo.toml), [`mock/server.py`](mock/server.py).
 
 ## Source
 
-- `crates/beacon/src/slo.rs:106` (`synthesise_slo`), `slice-05-slo-burn-rate.md`.
-- Unreachability: no caller outside `crates/beacon/tests/slice_05_slo_burn_rate.rs`;
-  `loader.rs` has no SLO parse; `beacon-server/src/` has no SLO reference.
+- `crates/beacon/src/loader.rs:241-243` (`[[slo]]` → `RawSlo::into_slo` →
+  `synthesise_slo` → extend rules), `crates/beacon/src/slo.rs`
+  (`synthesise_slo`, the four-row `MWMBR_TABLE`, `synthesise_row` naming +
+  `slo_service`/`slo_window` labels, `for_duration=0` / `interval=30s`).
+  ADR-0067, feat `41e7844`.
 
 ## Notes
 
-Distinct from the other B-series: B01/B02/B04/B05 are satisfied and B03 is
-a `broken` doc-vs-behaviour finding (issue 010); B06 is a reachability
-gap, not a behaviour defect — the code is right and tested, it is simply
-not exposed to operators yet. Recorded honestly rather than faked or left
-looking merely harness-blocked.
+Completes the Beacon set (B01-B09 all satisfied). The SLO PromQL
+correctness (the burn-rate expressions) stays credited to the in-suite
+`slice_05_slo_burn_rate.rs` byte-equal test — the mock fires every rule
+regardless of the query, so B06 proves the OPERATOR PATH (declare → load →
+synthesise → tick → emit), not the PromQL maths. The loader's
+refuse-on-collision and SLO-validation (ADR-0067 F3) are the natural B10
+follow-ons if pinned.
