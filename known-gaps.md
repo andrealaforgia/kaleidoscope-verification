@@ -103,16 +103,24 @@ All 14 compose-path A entries re-verified GREEN under mandatory auth
 Tenant ripple (TenantScoped tagging) stays in-suite — not observable
 through the stub sink — credited to the implementer.
 
-**E01-E04 (Spark→Aperture round-trip) BLOCKED on Spark ingest-auth.** The
-Spark SDK (`SparkConfig`) exposes `with_endpoint` but NO auth-header knob,
-and the exporter does not honor `OTEL_EXPORTER_OTLP_HEADERS`. So the
-spark-consumer fixture cannot attach a bearer, and every Spark emission to
-the now-auth-mandatory aperture is 401'd at the door. This is an
-observable gap reported to the implementer: the SDK/integrator persona
-currently cannot send authenticated telemetry through aperture. E01-E04
-were GREEN pre-auth; they cannot be re-verified black-box until Spark
-gains ingest-auth support (a bearer/header on its OTLP exporter). Flagged,
-not silently left satisfied.
+**E01-E04 (Spark→Aperture round-trip) RE-FLIPPED GREEN 2026-06-06 — the
+block was OVERSTATED.** I originally marked these blocked, taking the
+implementer's "the exporter does not honor `OTEL_EXPORTER_OTLP_HEADERS`"
+(msg 028) at face value. On 2026-06-06 (HEAD `8620439`, after the ADR-0069
+amendment "the env path is already upstream's") I TESTED it instead of
+assuming: set `OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer <jwt>"`
+(token from `harness/mint-ingest-jwt.sh`) on the spark-consumer container,
+and all four round-tripped — aperture logged `decision=allow ingest_*
+tenant_id=harness-tenant role=operator` and the signal reached
+otelcol-sink. The Spark SDK's exporter DOES honour the standard OTLP env
+header (it is upstream opentelemetry-rust's, not Spark's to add). So the
+*env* path was a valid key the whole time; only the *programmatic*
+`SparkConfig` auth knob was missing. `spark-ingest-auth-v0` (in flight)
+adds that programmatic knob — a real convenience for code-config SDK
+users — but it was never a prerequisite for authenticated ingest. E01-E04
+are `satisfied` via the env path. Lesson: verify the claim against
+observable behaviour, even the implementer's — see
+[[fail-closed-contract-ripples-both-sides]].
 
 ## N1 — TLS / SPIFFE
 

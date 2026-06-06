@@ -15,7 +15,7 @@ A counter incremented via `opentelemetry::global::meter(...).u64_counter(...).bu
 
 ## Verification
 
-- Status: `pending` (blocked: Spark SDK has no ingest-auth knob; cannot authenticate to the now-auth-mandatory aperture — see known-gaps.md N29; was satisfied pre-auth at 545a2ba)
+- Status: `satisfied` — re-flipped 2026-06-06 at HEAD `8620439` via the standard OTLP env auth path (`OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer <jwt>`), which the Spark exporter already honours (upstream, ADR-0069 amendment). The compose aperture carries the matching auth block + secret/catalogue (N29). The earlier "blocked on Spark ingest-auth" was overstated: only the *programmatic* SparkConfig knob was missing; the env path was always a valid key.
 - Last verified: 2026-05-11 UTC at HEAD.
 - Kaleidoscope SHA: `3a18514d51711bc1e9a611f44eb3e86f42ec353e`
 - Method: driven by the **spark-consumer** fixture under

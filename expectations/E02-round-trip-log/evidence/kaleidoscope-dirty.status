@@ -1,3 +1,6 @@
  M Cargo.lock
- M Cargo.toml
-?? crates/trace-query-api/
+ M crates/spark/Cargo.toml
+ M crates/spark/src/config.rs
+ M crates/spark/tests/common/mod.rs
+?? crates/spark/tests/slice_08_ingest_auth.rs
+?? docs/feature/spark-ingest-auth-v0/distill/

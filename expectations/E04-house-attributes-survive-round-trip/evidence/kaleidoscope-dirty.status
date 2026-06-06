@@ -1,4 +1,6 @@
-A  docs/feature/trace-lookup-by-id-v0/design/application-architecture.md
-A  docs/feature/trace-lookup-by-id-v0/design/wave-decisions.md
-A  docs/product/architecture/adr-0053-trace-lookup-by-id.md
-M  docs/product/architecture/brief.md
+ M Cargo.lock
+ M crates/spark/Cargo.toml
+ M crates/spark/src/config.rs
+ M crates/spark/tests/common/mod.rs
+?? crates/spark/tests/slice_08_ingest_auth.rs
+?? docs/feature/spark-ingest-auth-v0/distill/

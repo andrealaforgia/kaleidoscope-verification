@@ -1,7 +1,11 @@
-aperture-1  | {"timestamp":"2026-06-06T13:19:18.459970Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:18.461191Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:18.461457Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:18.461517Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:18.461643Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:31.902487Z","level":"WARN","message":"aperture ingest authz decision","tenant_id":"","role":"","decision":"deny","subject":"ingest_traces","reason":"missing_claim","transport":"grpc"}
-aperture-1  | {"timestamp":"2026-06-06T13:19:31.903889Z","level":"WARN","message":"aperture ingest authz decision","tenant_id":"","role":"","decision":"deny","subject":"ingest_logs","reason":"missing_claim","transport":"grpc"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:46.561739Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:46.564334Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:46.565074Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:46.565081Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:46.565543Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.298752Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.299418Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":151}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.307689Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":1,"downstream_latency_ms":7,"resource.service.name":"expectation-E01-pilot"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.310705Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_logs","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.310740Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":16231}
+aperture-1  | {"timestamp":"2026-06-06T17:31:56.315238Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":202,"downstream_latency_ms":4,"resource.service.name":"expectation-E01-pilot"}

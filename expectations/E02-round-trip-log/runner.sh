@@ -13,7 +13,10 @@ SERVICE_NAME="expectation-E02-pilot"
     > "$EVIDENCE_DIR/spark-consumer-build.txt" 2>&1
 
 echo "step 1: run e02-emit-log scenario"
+# Mandatory ingest auth (N29): authenticate via the standard OTLP env path.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 docker run --rm --network "$COMPOSE_NETWORK" \
+    -e OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer ${JWT}" \
     kaleidoscope-expectations/spark-consumer:under-test \
     --scenario e02-emit-log \
     --service-name "$SERVICE_NAME" \

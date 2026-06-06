@@ -1,39 +1,251 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index a6d1749..d62c757 100644
+index 980fd2e..c5823f2 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2619,6 +2619,22 @@ version = "0.3.3"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
- 
-+[[package]]
-+name = "trace-query-api"
-+version = "0.1.0"
-+dependencies = [
-+ "aegis",
-+ "axum",
-+ "hyper",
-+ "mutants",
-+ "ray",
+@@ -2254,12 +2254,14 @@ version = "0.1.0"
+ dependencies = [
+  "aperture",
+  "codex",
++ "jsonwebtoken",
+  "opentelemetry",
+  "opentelemetry-appender-tracing",
+  "opentelemetry-otlp",
+  "opentelemetry-proto",
+  "opentelemetry-semantic-conventions",
+  "opentelemetry_sdk",
 + "serde",
-+ "serde_json",
-+ "tokio",
-+ "tower 0.5.3",
-+ "tracing",
-+]
-+
- [[package]]
- name = "tracing"
- version = "0.1.44"
-diff --git a/Cargo.toml b/Cargo.toml
-index cc1df58..b6484a7 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -24,6 +24,7 @@ members = [
-     "crates/kaleidoscope-cli",
-     "crates/query-api",
-     "crates/log-query-api",
-+    "crates/trace-query-api",
-     "xtask/regenerate_codex_corpus",
- ]
+  "serde_json",
+  "serial_test",
+  "thiserror 2.0.18",
+diff --git a/crates/spark/Cargo.toml b/crates/spark/Cargo.toml
+index 60bdd26..55099a5 100644
+--- a/crates/spark/Cargo.toml
++++ b/crates/spark/Cargo.toml
+@@ -98,6 +98,14 @@ tokio = { version = "1.40", features = ["full"] }
+ tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "json", "env-filter", "registry"] }
+ serde_json = "1"
+ serial_test = "3"
++# spark-ingest-auth-v0 (ADR-0069) — the slice_08 acceptance tests mint
++# in-suite HS256 bearer tokens (the ADR-0068 F5 mint seam) and drive a
++# real aegis-authenticated aperture. `jsonwebtoken` is the same engine
++# aegis/aperture use (already resolved in Cargo.lock); `serde`'s derive
++# builds the test `Claims`. Dev-deps only — they do not propagate to
++# Spark's Apache-2.0 consumers (Gate 4 licence containment intact).
++jsonwebtoken = "9"
++serde = { version = "1", features = ["derive"] }
+ # Pattern-match against the upstream OTLP wire types reaching the
+ # RecordingSink. Aperture's `ports::SinkRecord::Traces(...)` exposes
+ # `opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest`
+@@ -114,7 +122,8 @@ opentelemetry-proto = { version = "=0.27.0", default-features = false, features
+ # pristine OTel global state. This is the structural defence of the
+ # single-init invariant.
+ #
+-# Six slice tests + two cross-cutting invariant tests = eight binaries.
++# Eight slice tests + two cross-cutting invariant tests = ten binaries
++# (slice_08 added by spark-ingest-auth-v0 / ADR-0069).
+ # ----------------------------------------------------------------------
  
+ [[test]]
+@@ -145,6 +154,10 @@ path = "tests/slice_06_flush_deadline.rs"
+ name = "slice_07_codex_schema_lint"
+ path = "tests/slice_07_codex_schema_lint.rs"
+ 
++[[test]]
++name = "slice_08_ingest_auth"
++path = "tests/slice_08_ingest_auth.rs"
++
+ [[test]]
+ name = "invariant_single_init"
+ path = "tests/invariant_single_init.rs"
+diff --git a/crates/spark/src/config.rs b/crates/spark/src/config.rs
+index 34cf572..751cf2a 100644
+--- a/crates/spark/src/config.rs
++++ b/crates/spark/src/config.rs
+@@ -39,6 +39,70 @@ pub struct SparkConfig {
+     /// `tracing::warn!` event. Useful for CI integration tests where
+     /// a misconfigured resource attribute should fail-fast.
+     pub(crate) strict_schema_lint: bool,
++    /// spark-ingest-auth-v0 / ADR-0069 DD2/DD3: the bearer token
++    /// attached as `authorization: Bearer <token>` metadata to all
++    /// three OTLP exporters (when resolved). Stored in a redacting
++    /// [`BearerToken`] newtype so it never reaches a loggable surface
++    /// (System Constraint 1). Defaulted `None` in `for_service`.
++    ///
++    /// DISTILL SCAFFOLD (Mandate 7, RED-not-BROKEN): this field +
++    /// [`SparkConfig::with_bearer_token`] are the minimal compile
++    /// scaffold so the `slice_08_ingest_auth.rs` acceptance tests
++    /// COMPILE against the intended API. At DISTILL the token is
++    /// stored but NOT yet attached to the exporters (DELIVER lands
++    /// `build_auth_metadata` + the apply-shim in `init.rs`), so an
++    /// export to an authenticated aperture is still DENIED — which is
++    /// exactly what makes the auth acceptance tests behaviourally RED.
++    pub(crate) bearer_token: Option<BearerToken>,
++}
++
++/// spark-ingest-auth-v0 / ADR-0069 DD3: a redacting newtype around the
++/// bearer-token secret. Its `Debug` renders `BearerToken(<redacted>)`
++/// and there is no value-`Display`, so `SparkConfig`'s derived `Debug`
++/// (which recurses into this type) never echoes the JWT. The raw value
++/// is reached only via [`BearerToken::expose`], whose single intended
++/// caller (DELIVER) is `build_auth_metadata` in `init.rs`.
++///
++/// DISTILL SCAFFOLD (Mandate 7): the redacting `Debug` is implemented
++/// NOW because the never-log acceptance test (`the_configured_token_*`)
++/// asserts the redacted shape; the structural redaction is the
++/// load-bearing security property (System Constraint 1) and is the one
++/// behaviour the scaffold must already honour so the test classifies as
++/// a genuine guardrail rather than BROKEN.
++#[derive(Clone)]
++pub(crate) struct BearerToken(
++    // DISTILL SCAFFOLD: `expose` (the only reader) is consumed by
++    // DELIVER's `build_auth_metadata`; at DISTILL the value is stored
++    // and redacted but not yet read on any non-test path. `dead_code`
++    // is allowed only for the scaffold window — DELIVER removes the
++    // allow when it wires the accessor into `init.rs`.
++    #[allow(dead_code)] String,
++);
++
++impl BearerToken {
++    /// Wrap a raw token value. The secret-ness travels with the value
++    /// through every move/clone (DD3).
++    pub(crate) fn new(token: impl Into<String>) -> Self {
++        BearerToken(token.into())
++    }
++
++    /// The raw token bytes. The single intended call site (DELIVER) is
++    /// `build_auth_metadata`, which writes it into a gRPC `MetadataMap`
++    /// (the wire) — never into a `tracing` macro.
++    ///
++    /// DISTILL SCAFFOLD: unused on non-test paths until DELIVER wires
++    /// the metadata attachment; the never-log acceptance test exercises
++    /// the redacting `Debug`, not this accessor.
++    #[allow(dead_code)]
++    pub(crate) fn expose(&self) -> &str {
++        &self.0
++    }
++}
++
++impl std::fmt::Debug for BearerToken {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        f.write_str("BearerToken(<redacted>)")
++    }
+ }
+ 
+ impl SparkConfig {
+@@ -57,6 +121,7 @@ impl SparkConfig {
+             endpoint: None,
+             flush_timeout: None,
+             strict_schema_lint: false,
++            bearer_token: None,
+         }
+     }
+ 
+@@ -131,6 +196,34 @@ impl SparkConfig {
+         self
+     }
+ 
++    /// Set the bearer token attached as `authorization: Bearer <token>`
++    /// metadata to all three OTLP exporters (spans, logs, metrics),
++    /// uniformly (ADR-0069 DD1/DD2). Highest precedence in the auth
++    /// resolution chain (`with_bearer_token` >
++    /// `OTEL_EXPORTER_OTLP_HEADERS` > none).
++    ///
++    /// The token is a SECRET: it is stored in a redacting newtype and
++    /// never appears on any loggable surface (System Constraint 1).
++    ///
++    /// No-token behaviour: when neither this knob nor
++    /// `OTEL_EXPORTER_OTLP_HEADERS` is set, Spark attaches no
++    /// `authorization` header — an unauthenticated collector keeps
++    /// working unchanged (System Constraint 4). Exporting to an
++    /// authenticated gateway without a token yields gateway-side
++    /// `missing_claim` denials (the gateway's surfacing, not Spark's).
++    ///
++    /// DISTILL SCAFFOLD (Mandate 7, RED-not-BROKEN): at DISTILL this
++    /// method only STORES the token; it does NOT yet attach it to the
++    /// exporters (DELIVER lands the attachment in `init.rs`). An export
++    /// to an authenticated aperture is therefore still DENIED at
++    /// DISTILL — the deliberate RED state the `slice_08_ingest_auth.rs`
++    /// acceptance tests pin.
++    #[must_use]
++    pub fn with_bearer_token(mut self, token: impl Into<String>) -> Self {
++        self.bearer_token = Some(BearerToken::new(token));
++        self
++    }
++
+     /// Configure strict-mode schema lint (Slice 07 / ADR-0025).
+     ///
+     /// Default: `false` (warn mode). A `codex::LintReport` from the
+diff --git a/crates/spark/tests/common/mod.rs b/crates/spark/tests/common/mod.rs
+index d3a5395..7c43275 100644
+--- a/crates/spark/tests/common/mod.rs
++++ b/crates/spark/tests/common/mod.rs
+@@ -157,9 +157,47 @@ impl Drop for ApertureFixture {
+ /// regardless of ordering because both helpers install through the
+ /// same [`Once`] gate.
+ pub async fn spawn_aperture_with_recording_sink() -> ApertureFixture {
++    spawn_aperture_internal(None).await
++}
++
++/// Spawn a real Aperture instance whose INGEST PATH IS AUTHENTICATED
++/// (aegis-ingest-auth-v0 / ADR-0068, live), on ephemeral loopback ports,
++/// fronted by a fresh [`RecordingSink`]. Used by `slice_08_ingest_auth.rs`
++/// (spark-ingest-auth-v0 / ADR-0069): a tokenless export is genuinely
++/// denied at the door, and a valid-bearer export is genuinely accepted —
++/// the live validator is what makes today's no-knob Spark fail RED.
++///
++/// The `issuer`/`audience` are exact-match; `secret_file` points at the
++/// HS256 secret bytes; `catalogue_path` lists the catalogued tenant. The
++/// caller owns the temp files (and reaps them); this only references
++/// their paths. Mirrors `aperture/tests/.../start_with_auth`'s use of the
++/// `Config::builder().jwt_auth(...)` seam.
++pub async fn spawn_aperture_with_jwt_auth(
++    issuer: &str,
++    audience: &str,
++    secret_file: std::path::PathBuf,
++    catalogue_path: std::path::PathBuf,
++) -> ApertureFixture {
++    spawn_aperture_internal(Some(JwtAuthParams {
++        issuer: issuer.to_owned(),
++        audience: audience.to_owned(),
++        secret_file,
++        catalogue_path,
++    }))
++    .await
++}
++
++struct JwtAuthParams {
++    issuer: String,
++    audience: String,
++    secret_file: std::path::PathBuf,
++    catalogue_path: std::path::PathBuf,
++}
++
++async fn spawn_aperture_internal(jwt_auth: Option<JwtAuthParams>) -> ApertureFixture {
+     INSTALL_SUBSCRIBER.call_once(install_spark_capture_subscriber);
+ 
+-    let config = Config::builder()
++    let mut builder = Config::builder()
+         .grpc_bind_addr(
+             "127.0.0.1:0"
+                 .parse()
+@@ -169,9 +207,18 @@ pub async fn spawn_aperture_with_recording_sink() -> ApertureFixture {
+             "127.0.0.1:0"
+                 .parse()
+                 .expect("loopback ipv4 with ephemeral port parses"),
+-        )
++        );
++    if let Some(auth) = jwt_auth {
++        builder = builder.jwt_auth(
++            auth.issuer,
++            auth.audience,
++            auth.secret_file,
++            auth.catalogue_path,
++        );
++    }
++    let config = builder
+         .build()
+-        .expect("default Aperture test config builds");
++        .expect("Aperture test config builds (auth or no-auth)");
+ 
+     let sink = Arc::new(RecordingSink::new());
+     let sink_dyn: Arc<dyn OtlpSink> = sink.clone();

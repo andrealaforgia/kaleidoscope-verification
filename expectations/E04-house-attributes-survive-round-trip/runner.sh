@@ -14,7 +14,10 @@ echo "step 1: build consumer (cache hit if no source changes)"
     > "$EVIDENCE_DIR/spark-consumer-build.txt" 2>&1
 
 echo "step 2: run consumer scenario"
+# Mandatory ingest auth (N29): authenticate via the standard OTLP env path.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 docker run --rm --network "$COMPOSE_NETWORK" \
+    -e OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer ${JWT}" \
     kaleidoscope-expectations/spark-consumer:under-test \
     --scenario s01-init-and-emit-trace \
     --service-name "$SERVICE_NAME" \

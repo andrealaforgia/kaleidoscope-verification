@@ -1,9 +1,11 @@
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.117015Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.117951Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.118129Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.118138Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.118204Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.946733Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":269}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.947788Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-E03-pilot"}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.949105Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":131}
-aperture-1  | {"timestamp":"2026-05-27T03:46:32.949800Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-E03-pilot"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:05.725763Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:05.726942Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:05.726995Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:05.727002Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:05.727032Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.582874Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_logs","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.582895Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":269}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.584981Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":2,"downstream_latency_ms":2,"resource.service.name":"expectation-E03-pilot"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.587087Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_metrics","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.587099Z","level":"INFO","event":"request_received","transport":"grpc","signal":"metrics","bytes":131}
+aperture-1  | {"timestamp":"2026-06-06T17:33:06.588339Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"metrics","data_point_count":1,"downstream_latency_ms":0,"resource.service.name":"expectation-E03-pilot"}
