@@ -1,0 +1,4 @@
+restart_ready=yes
+metric_series=1
+log_count=4
+trace_spans=6

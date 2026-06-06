@@ -1,0 +1,6 @@
+{"timestamp":"2026-06-06T16:31:33.699739Z","level":"INFO","event":"gateway_starting","pillar_root":"/data"}
+{"timestamp":"2026-06-06T16:31:33.703419Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-06T16:31:33.703891Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-06T16:31:33.704052Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-06T16:31:33.704066Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-06T16:31:33.704082Z","level":"INFO","event":"ready"}

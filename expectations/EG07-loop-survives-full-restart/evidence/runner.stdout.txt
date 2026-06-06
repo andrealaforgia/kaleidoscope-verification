@@ -1,0 +1,1 @@
+OK — after populating all three pillars and a graceful gateway restart over the same volume (re-opened healthy), all three signals remain queryable (metric=1, log=4, trace=6)
