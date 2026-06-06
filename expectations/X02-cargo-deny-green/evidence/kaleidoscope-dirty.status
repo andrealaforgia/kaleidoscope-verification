@@ -1,5 +1,5 @@
-M  crates/log-query-api/src/lib.rs
-A  crates/log-query-api/tests/slice_04_body_contains.rs
-M  crates/lumen/src/predicate.rs
-A  docs/feature/log-body-text-search-v0/distill/test-scenarios.md
-A  docs/feature/log-body-text-search-v0/distill/wave-decisions.md
+A  docs/feature/perf-kpi-ci-non-gating-v0/discuss/dor-validation.md
+A  docs/feature/perf-kpi-ci-non-gating-v0/discuss/outcome-kpis.md
+A  docs/feature/perf-kpi-ci-non-gating-v0/discuss/story-map.md
+A  docs/feature/perf-kpi-ci-non-gating-v0/discuss/user-stories.md
+A  docs/feature/perf-kpi-ci-non-gating-v0/discuss/wave-decisions.md

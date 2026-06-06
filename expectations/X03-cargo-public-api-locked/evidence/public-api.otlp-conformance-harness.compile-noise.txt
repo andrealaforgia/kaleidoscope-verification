@@ -1,18 +1,32 @@
-    Checking serde_core v1.0.228
+   Compiling libc v0.2.186
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.117
+    Checking getrandom v0.2.17
+    Checking rand_core v0.6.4
+    Checking rand_chacha v0.3.1
+    Checking rand v0.8.6
+    Checking serde_json v1.0.149
+   Compiling tracing-attributes v0.1.31
+   Compiling futures-macro v0.3.32
+   Compiling thiserror-impl v1.0.69
+   Compiling async-trait v0.1.89
+   Compiling pin-project-internal v1.1.11
+   Compiling prost-derive v0.13.5
+    Checking pin-project v1.1.11
     Checking tracing v0.1.44
     Checking thiserror v1.0.69
-    Checking prost v0.13.5
-    Checking pin-project v1.1.11
+    Checking futures-util v0.3.32
     Checking opentelemetry v0.27.1
+    Checking prost v0.13.5
     Checking tonic v0.12.3
-    Checking serde_json v1.0.149
+    Checking futures-executor v0.3.32
     Checking opentelemetry_sdk v0.27.1
     Checking opentelemetry-proto v0.27.0
  Documenting otlp-conformance-harness v0.1.0 (/src/crates/otlp-conformance-harness)
 warning: redundant explicit link target
-  --> crates/otlp-conformance-harness/src/lib.rs:50:34
+  --> crates/otlp-conformance-harness/src/lib.rs:69:34
    |
-50 | /// [`ExportLogsServiceRequest`](opentelemetry_proto::tonic::collector::logs::v1::ExportLogsServiceRequest)
+69 | /// [`ExportLogsServiceRequest`](opentelemetry_proto::tonic::collector::logs::v1::ExportLogsServiceRequest)
    |      --------------------------  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ explicit target is redundant
    |      |
    |      because label contains path that resolves to same destination
@@ -22,14 +36,14 @@ warning: redundant explicit link target
    = note: `#[warn(rustdoc::redundant_explicit_links)]` on by default
 help: remove explicit link target
    |
-50 - /// [`ExportLogsServiceRequest`](opentelemetry_proto::tonic::collector::logs::v1::ExportLogsServiceRequest)
-50 + /// [`ExportLogsServiceRequest`]
+69 - /// [`ExportLogsServiceRequest`](opentelemetry_proto::tonic::collector::logs::v1::ExportLogsServiceRequest)
+69 + /// [`ExportLogsServiceRequest`]
    |
 
 warning: redundant explicit link target
-  --> crates/otlp-conformance-harness/src/lib.rs:67:36
+  --> crates/otlp-conformance-harness/src/lib.rs:86:36
    |
-67 | /// ([`ExportTraceServiceRequest`](opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest))
+86 | /// ([`ExportTraceServiceRequest`](opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest))
    |       ---------------------------  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ explicit target is redundant
    |       |
    |       because label contains path that resolves to same destination
@@ -38,14 +52,14 @@ warning: redundant explicit link target
            the label is used to resolve intra-doc links
 help: remove explicit link target
    |
-67 - /// ([`ExportTraceServiceRequest`](opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest))
-67 + /// ([`ExportTraceServiceRequest`])
+86 - /// ([`ExportTraceServiceRequest`](opentelemetry_proto::tonic::collector::trace::v1::ExportTraceServiceRequest))
+86 + /// ([`ExportTraceServiceRequest`])
    |
 
 warning: redundant explicit link target
-  --> crates/otlp-conformance-harness/src/lib.rs:79:37
+  --> crates/otlp-conformance-harness/src/lib.rs:98:37
    |
-79 | /// [`ExportMetricsServiceRequest`](opentelemetry_proto::tonic::collector::metrics::v1::ExportMetricsServiceRequest).
+98 | /// [`ExportMetricsServiceRequest`](opentelemetry_proto::tonic::collector::metrics::v1::ExportMetricsServiceRequest).
    |      -----------------------------  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ explicit target is redundant
    |      |
    |      because label contains path that resolves to same destination
@@ -54,9 +68,9 @@ warning: redundant explicit link target
            the label is used to resolve intra-doc links
 help: remove explicit link target
    |
-79 - /// [`ExportMetricsServiceRequest`](opentelemetry_proto::tonic::collector::metrics::v1::ExportMetricsServiceRequest).
-79 + /// [`ExportMetricsServiceRequest`].
+98 - /// [`ExportMetricsServiceRequest`](opentelemetry_proto::tonic::collector::metrics::v1::ExportMetricsServiceRequest).
+98 + /// [`ExportMetricsServiceRequest`].
    |
 
 warning: `otlp-conformance-harness` (lib doc) generated 3 warnings
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.16s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.62s

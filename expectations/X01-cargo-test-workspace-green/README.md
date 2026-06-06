@@ -21,7 +21,19 @@ Gate 1 of the CI contract per ADR-0005.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-01 UTC at HEAD (`eed810d`) — GREEN, exit 0,
+- Last verified: 2026-06-06 UTC at HEAD (`742536b`, after the
+  spark-ingest-auth-v0 DELIVER) — GREEN, exit 0, every `test result: ok`
+  including `place_onto_failing_disk_fails_loudly_and_is_not_durable`.
+  **Now runs the tests as a NON-ROOT user (N30).** That cinder test
+  (added `ddbe982`) chmods the WAL file read-only and asserts the append
+  fails loudly; root bypasses the read-only bit, so under root the append
+  succeeded and the test FAILED — a false RED in the harness, not a
+  kaleidoscope defect (green in the implementer's non-root CI). Caught by
+  re-running X01 after the spark DELIVER (I had not re-run it since
+  `ddbe982` — the "test, don't assume" lesson). Fixed by `useradd tester`
+  + `chown` the caches + `su tester -c cargo test`; the fault injection
+  now bites and every workspace test runs faithfully. See known-gaps N30.
+- Prior: 2026-06-01 at HEAD (`eed810d`) — GREEN, exit 0,
   every `test result: ok`. This is the first run after
   perf-kpi-ci-gating-v0 (ADR-0058) landed: the 28 wall-clock p95 KPI
   tests now early-return because the runner deliberately does NOT set

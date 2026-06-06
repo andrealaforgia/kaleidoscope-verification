@@ -58,7 +58,19 @@ docker run --rm \
         rm -rf /var/lib/apt/lists/*
         rustc --version
         cargo --version
-        cargo test --workspace --all-targets --locked 2>&1
+        # Run cargo test as a NON-ROOT user. Permission-based fault-
+        # injection tests (e.g. cinder place_onto_failing_disk, added in
+        # ddbe982: it chmods the WAL file read-only and asserts the append
+        # fails loudly) need real permission enforcement. ROOT bypasses the
+        # read-only bit, so the append would succeed and the failure be
+        # masked — a false RED in the harness, not a kaleidoscope defect
+        # (issue 004 family: harness env must match real env). apt-get + the
+        # mounted caches need root, so we set up as root, hand the caches to
+        # a non-root user, then run the tests as that user. See
+        # known-gaps.md N30.
+        id -u tester >/dev/null 2>&1 || useradd -m -u 1000 tester
+        chown -R 1000:1000 /src /usr/local/cargo/registry /usr/local/cargo/git /src/target
+        su tester -c "cd /src && CARGO_BUILD_JOBS=1 CARGO_PROFILE_TEST_DEBUG=0 CARGO_PROFILE_DEV_DEBUG=0 cargo test --workspace --all-targets --locked" 2>&1
     ' \
     > "$EVIDENCE_DIR/cargo-test.stdout.txt" \
     2> "$EVIDENCE_DIR/cargo-test.stderr.txt"

@@ -1,13 +1,12 @@
 step 1: ensure pinned nightly toolchain + cargo-public-api
   setup tail:
-    info: checking for self-update
-    info: downloading self-update
+    debconf: delaying package configuration, since apt-utils is not installed
     cargo-public-api 0.51.0
     nightly-2026-04-15-aarch64-unknown-linux-gnu
 step 2.otlp-conformance-harness: cargo +nightly-2026-04-15 public-api -p otlp-conformance-harness
   otlp-conformance-harness: 127 surface lines captured (compile noise in .compile-noise.txt)
 step 2.spark: cargo +nightly-2026-04-15 public-api -p spark
-  spark: 59 surface lines captured (compile noise in .compile-noise.txt)
+  spark: 60 surface lines captured (compile noise in .compile-noise.txt)
 step 3: surface summary
   otlp-conformance-harness top 4 surface lines:
     pub mod otlp_conformance_harness

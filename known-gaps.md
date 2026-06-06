@@ -122,6 +122,36 @@ are `satisfied` via the env path. Lesson: verify the claim against
 observable behaviour, even the implementer's — see
 [[fail-closed-contract-ripples-both-sides]].
 
+## N30 — workspace tests must run NON-ROOT (root masks permission-based fault injection)
+
+`cargo test --workspace` (X01) runs inside a `rust:1.88-slim-bookworm`
+container. It used to run as ROOT (the default container user; root is
+needed for `apt-get` + the bind-mounted cargo/target caches). That hid a
+real test contract: the cinder test
+`place_onto_failing_disk_fails_loudly_and_is_not_durable`
+(`crates/kaleidoscope-cli/tests/wal_error_surfacing_cli_skeleton.rs`,
+added in `ddbe982`) simulates a failing disk by `chmod`-ing the WAL file
+read-only (`perms.set_readonly(true)`) and asserting the next append fails
+loudly. **Root bypasses the read-only permission bit**, so under root the
+append SUCCEEDS and the "fails loudly" assertion FAILS — a false RED in
+the harness, not a kaleidoscope defect (the test is correct and GREEN in
+the implementer's non-root CI).
+
+**Caught the honest way (2026-06-06):** I had NOT re-run X01 after `ddbe982`
+added that test — I assumed the spark commits would not touch the test gate
+and reasoned X01 green from the `#[ignore]` gating instead of running it.
+Re-running it after the spark-ingest-auth-v0 DELIVER (`742536b`) surfaced
+the deterministic failure. Same trap as the E01-E04 "blocked" overstatement:
+re-verify a gate by RUNNING it when HEAD advances, do not reason about it.
+
+**Fix:** X01 now sets up as root (apt + cache ownership) then runs the
+tests as a non-root user (`useradd tester`; `chown` the caches to it;
+`su tester -c 'cargo test --workspace --all-targets --locked'`). Permission
+enforcement is then real and the fault-injection test passes faithfully —
+every workspace test runs, none skipped. Sibling of issue 004 (the harness
+must match the real environment: there it was the Docker VM memory cap,
+here it is the container user).
+
 ## N1 — TLS / SPIFFE
 
 Knobs exist in aperture's config schema but are off by default at v0.

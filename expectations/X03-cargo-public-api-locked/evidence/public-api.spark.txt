@@ -27,6 +27,7 @@ impl !core::panic::unwind_safe::UnwindSafe for spark::SparkError
 impl spark::SparkConfig
 pub fn spark::SparkConfig::for_service(name: impl core::convert::Into<alloc::string::String>) -> spark::SparkConfig
 pub fn spark::SparkConfig::require_tenant_id(self) -> Self
+pub fn spark::SparkConfig::with_bearer_token(self, token: impl core::convert::Into<alloc::string::String>) -> Self
 pub fn spark::SparkConfig::with_endpoint(self, endpoint: impl core::convert::Into<alloc::string::String>) -> Self
 pub fn spark::SparkConfig::with_experiment_id(self, experiment_id: impl core::convert::Into<alloc::string::String>) -> Self
 pub fn spark::SparkConfig::with_feature_flags<I, K, V>(self, flags: I) -> Self where I: core::iter::traits::collect::IntoIterator<Item = (K, V)>, K: core::convert::Into<alloc::string::String>, V: core::convert::Into<alloc::string::String>
