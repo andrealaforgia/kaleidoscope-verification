@@ -1,0 +1,1 @@
+OK — a log carries trace_id 3696a9785822003815b19243d428610e and the trace resolves by that same id (2 spans); the log<->trace join holds across pillars
