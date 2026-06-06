@@ -1,0 +1,1 @@
+OK — two services on metric gen are kept as two distinct series, identified by service.name (svc-a, svc-b)

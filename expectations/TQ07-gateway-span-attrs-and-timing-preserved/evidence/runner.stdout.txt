@@ -1,0 +1,1 @@
+OK — span name, start/end timing (end>start>0), and attributes (peer.service, net.peer.ip) all survive gateway -> Ray -> trace-query-api
