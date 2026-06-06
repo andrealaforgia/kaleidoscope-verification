@@ -21,7 +21,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | Domain | UCs | ✅ covered | 🟗 partial | ❌ gap (buildable) | ⏸ blocked/aspir. |
 |---|---|---|---|---|---|
 | UC-CLI ingest/read | 15 | 3 (K03,K04) | 4 | 7 | 1 |
-| UC-RANGE | 12 | 4 (K06-K08) | 2 | 6 | 0 |
+| UC-RANGE | 12 | 12 (K06-K09,K25-K28) | 0 | 0 | 0 |
 | UC-TIER | 18 | 18 (K14-K24; 2 grounded RED via K18) | 0 | 0 | 0 |
 | UC-CLIOBS | 7 | 2 (K05,K10) | 2 | 3 | 0 |
 | UC-CLIROB | 8 | 4 (K02,K11,K13,D04/D07) | 2 | 2 | 0 |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~103** | **~46** | **~71** | **~33** |
+| **Total** | **~253** | **~111** | **~44** | **~65** | **~33** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**
@@ -66,7 +66,9 @@ RED (the unknown-item diagnostic leaks `ItemId("ghost")` vs the documented
 The same day, UC-TEN cross-tenant isolation was extended beyond logs:
 **Q08** (metrics via query-api) and **TQ05** (traces via trace-query-api)
 join LQ07 (logs) and K23 (tier state), each proving isolation-not-absence
-with a same-store control. UC-TEN went 1→4 covered, 5→1 gap.
+with a same-store control. UC-TEN went 1→4 covered, 5→1 gap. And **K25-K28** closed the UC-RANGE
+parse/window edges (strict ISO-8601, half-open `[since, until)`,
+inverted-empty, empty-tenant stats), taking UC-RANGE to 12/12.
 
 ## Highest-value gaps (✅ UCs, buildable now)
 
@@ -81,9 +83,8 @@ with a same-store control. UC-TEN went 1→4 covered, 5→1 gap.
 3. **UC-GWLIFE gateway drain/shutdown (004/005) + pillar-root (001-003).**
    I have aperture drain (A11-A14) but NOT the `kaleidoscope-gateway`
    binary's SIGTERM/SIGINT drain or pillar-root resolution.
-4. **UC-RANGE ISO-8601 edges (009 lowercase z, 010 +00:00, 008 fractional,
-   002 half-open, 011 inverted).** CLI `--since/--until` strict-parse
-   contracts, each a clean exit-code assertion.
+4. ~~**UC-RANGE ISO-8601 edges.**~~ CLOSED 2026-06-06 by K25-K28 (strict
+   parse, half-open, inverted-empty, empty-tenant stats). UC-RANGE 12/12.
 5. **UC-MET matcher variants (003 !=, 005 !~, 006 multi-AND), 007 empty
    success, 014 bad-time-params 400, 017 float epoch.** Q-prefix only
    pins `__name__` equality (Q06), step-ignored (Q03), window cap (Q02),

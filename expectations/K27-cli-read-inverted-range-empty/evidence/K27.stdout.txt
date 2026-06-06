@@ -1,0 +1,5 @@
+---inverted---
+inv-exit=0
+[stdout]
+[stderr]
+read ok: records=0

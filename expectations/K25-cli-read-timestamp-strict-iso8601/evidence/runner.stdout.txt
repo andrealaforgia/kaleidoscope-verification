@@ -1,0 +1,1 @@
+OK — fractional accepted+filters; lowercase z and +00:00 rejected with position diagnostics

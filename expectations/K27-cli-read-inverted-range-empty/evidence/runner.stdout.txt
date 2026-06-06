@@ -1,0 +1,1 @@
+OK — inverted window is a calm empty result (exit 0, records=0, no rows)

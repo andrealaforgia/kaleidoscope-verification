@@ -1,0 +1,4 @@
+---stats (empty tenant)---
+stats-exit=0
+records=0
+stats ok: records=0

@@ -1,0 +1,11 @@
+---fractional---
+frac-exit=0
+t60 
+---lowercase z---
+lz-exit=1
+kaleidoscope-cli: --since "2023-11-14T22:13:20z": invalid ISO 8601 punctuation at position 19: expected 'Z', got 'z'
+
+---+00:00---
+off-exit=1
+kaleidoscope-cli: --since "2023-11-14T22:13:20+00:00": invalid ISO 8601 punctuation at position 19: expected '.', got '+'
+

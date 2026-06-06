@@ -1,0 +1,1 @@
+OK — empty tenant stats: records=0, no earliest/latest lines
