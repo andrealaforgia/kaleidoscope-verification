@@ -1,0 +1,6 @@
+HTTP/1.1 401 Unauthorized
+content-type: text/plain; charset=utf-8
+www-authenticate: Bearer error="invalid_token", error_description="missing_claim"
+content-length: 14
+date: Sat, 06 Jun 2026 12:49:14 GMT
+

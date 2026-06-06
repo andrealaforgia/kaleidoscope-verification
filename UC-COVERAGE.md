@@ -42,7 +42,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-PRISM | 18 | 1 (Q07) | 0 | 0 | 17 (N11 Playwright) |
 | UC-OBS | 5 | 2 (K05/K10/K12) | 2 | 1 | 0 |
 | UC-CONF | 4 | 0 | 1 (A07/A08) | 3 | 0 |
-| UC-AUTH | 6 | 1 (S03/S07) | 1 (A17 spiffe) | 0 | 4 (aegis-auth in flight + 🔭) |
+| UC-AUTH | 6 | 3 (A19,A20,S03/S07) | 0 | 0 | 3 (🔭 RBAC/audit/SSO) |
 | UC-SAMP | 3 | 0 | 0 | 0 | 3 (SI01-06 pending N8) |
 | UC-SCHEMA | 3 | 1 (X09) | 0 | 0 | 2 |
 | UC-PROF | 3 | 1 (D11/D17) | 0 | 0 | 2 (🔭 query) |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~123** | **~40** | **~58** | **~32** |
+| **Total** | **~253** | **~125** | **~39** | **~58** | **~31** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**
@@ -109,9 +109,11 @@ now closed in a day: UC-TIER, UC-RANGE, UC-CLI.
   Playwright-in-container harness (known-gaps N11). Build-side covered by
   X10-X15; same-origin serving by Q07. The rest are 🟡/🔭.
 - **Sieve (UC-SAMP):** SI01-SI06 exist `pending`, blocked on N8.
-- **Aegis ingest auth (UC-AUTH-002/003):** `aegis-ingest-auth-v0` is in
-  flight (DISTILL at `545a2ba`); will be buildable on DELIVER (refuse-to-
-  start + at-the-door reject, the A17 pattern).
+- **Aegis ingest auth (UC-AUTH-002/003):** DELIVERED 2026-06-06
+  (`7f72db8`) and now COVERED by **A19** (refuse-to-start) and **A20**
+  (door enforcement: 401 reject + WWW-Authenticate challenge, valid-JWT
+  accept). Mandatory auth ripples into the compose harness — see
+  `known-gaps.md` N29 (A01-A16 pending re-verification + migration).
 - **TLS encrypt / SPIFFE / mTLS (UC-SEC-001/003/004), Augur (UC-ANOM),
   Strata query (UC-PROF-002/003):** 🔭 aspirational, not runnable.
 - **UC-DUR-010 cinder WAL surfaced:** fixed in code (`e271ddd`) but not

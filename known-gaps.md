@@ -63,6 +63,39 @@ expectation then is "re-running an already-ingested valid file does not
 duplicate", scoped to the SUCCESS path (distinct from K13's malformed
 path).
 
+## N29 — mandatory ingest auth ripples into the compose aperture harness
+
+`aegis-ingest-auth-v0` (ADR-0068, deliver `7f72db8`, HEAD `9817ec9`) makes
+aperture ingest auth MANDATORY — "no off switch". Aperture now refuses to
+start without a complete, readable `[aperture.security.auth.jwt]` block
+(proven black-box by **A19**), and 401s every OTLP ingest request without
+a valid HS256 bearer (proven by **A20**). Both new expectations are GREEN.
+
+The ripple: the catalogue's compose harness predates this. `harness/
+aperture.toml` carries NO `auth.jwt` block, so at this HEAD aperture
+refuses to start under `docker compose up` and the centralised
+`/readyz=200` gate (run-expectation.sh) can never pass. This affects the
+COMPOSE-path aperture expectations:
+
+- A10-A16 (readyz, drain/lifecycle, config, post-init) only need aperture
+  to START — fixed by adding a valid auth block + mounting a baked HS256
+  secret + tenant catalogue into the compose service.
+- A01-A09 (OTLP ingest accept, backpressure, malformed) ALSO send ingest
+  traffic, so each sender (telemetrygen / curl / load client) must attach
+  a valid `Authorization: Bearer <jwt>` or it will now (correctly) 401.
+
+NOT affected: the kaleidoscope-GATEWAY path (G, EG, LQ, TQ, D) — auth is
+aperture-only at this feature. A17/A18/A19/A20 are `.no-compose` and
+unaffected (A19/A20 exercise auth directly).
+
+These A01-A16 entries were last verified GREEN at the pre-auth SHA
+(`545a2ba` and earlier); they are PENDING RE-VERIFICATION under the new
+mandatory-auth regime until the harness migration lands. The migration
+(auth block + secret/catalogue mounts in docker-compose.yml + bearer on
+each aperture-bound sender) is the next work item. Tenant ripple
+(TenantScoped tagging through the sink) stays in-suite — not observable
+through aperture's stub sink — credited to the implementer.
+
 ## N1 — TLS / SPIFFE
 
 Knobs exist in aperture's config schema but are off by default at v0.

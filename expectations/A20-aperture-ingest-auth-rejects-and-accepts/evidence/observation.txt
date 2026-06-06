@@ -1,0 +1,13 @@
+noauth_code=401
+bogus_code=401
+valid_code=415
+noauth_code=401
+bogus_code=401
+valid_code=415
+tg_accept_exit=1
+tg_reject_exit=1
+noauth_code=401
+bogus_code=401
+valid_code=415
+tg_accept_exit=0
+tg_reject_exit=1

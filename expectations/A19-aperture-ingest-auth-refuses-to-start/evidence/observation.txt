@@ -1,0 +1,3 @@
+[absent] readyz=000 running=false exitcode=2
+[missing-field] readyz=000 running=false exitcode=2
+[unreadable] readyz=000 running=false exitcode=2

@@ -1,0 +1,6 @@
+noauth_code=401
+bogus_code=401
+valid_code=415
+tg_accept_exit=0
+tg_reject_exit=1
+OK — unauthenticated ingest is 401 + WWW-Authenticate: Bearer (no bearer and bogus bearer); a valid HS256 JWT for a catalogued tenant clears the door (json probe 415), and a real OTLP/protobuf batch is ACCEPTED with the bearer (telemetrygen exit 0) but REFUSED without it

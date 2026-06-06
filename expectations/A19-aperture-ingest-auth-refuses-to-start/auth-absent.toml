@@ -1,0 +1,27 @@
+# A19 fixture A: a complete config with NO [aperture.security.auth.jwt]
+# block. Auth is mandatory (no off switch) -> refuse naming auth/jwt.
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.sink]
+kind = "stub"
+
+[aperture.shutdown]
+drain_deadline_ms = 5000
+
+[aperture.security.tls]
+enabled = false
+cert_path = ""
+key_path = ""
+
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""

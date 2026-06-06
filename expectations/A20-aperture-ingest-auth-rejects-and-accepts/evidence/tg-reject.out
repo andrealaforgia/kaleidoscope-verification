@@ -1,0 +1,5 @@
+2026-06-06T12:49:15.655Z	INFO	logs/logs.go:84	generation of logs is limited	{"per-second": 1}
+2026-06-06T12:49:15.655Z	INFO	logs/logs.go:37	starting HTTP exporter
+2026-06-06T12:49:15.656Z	FATAL	logs/worker.go:96	exporter failed	{"worker": 0, "error": "failed to send logs to http://localhost:34518/v1/logs: 401 Unauthorized"}
+github.com/open-telemetry/opentelemetry-collector-contrib/cmd/telemetrygen/internal/logs.worker.simulateLogs
+	github.com/open-telemetry/opentelemetry-collector-contrib/cmd/telemetrygen/internal/logs/worker.go:96

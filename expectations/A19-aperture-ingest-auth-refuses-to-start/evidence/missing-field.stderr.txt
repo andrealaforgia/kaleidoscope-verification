@@ -1,0 +1,1 @@
+aperture: config error: event=config_validation_failed reason: [aperture.security.auth.jwt] is missing the required field secret_file

@@ -1,0 +1,1 @@
+aperture: config error: event=config_validation_failed reason: missing [aperture.security.auth.jwt] block: ingest auth is mandatory (no off switch); configure issuer/audience/secret_file/catalogue_path

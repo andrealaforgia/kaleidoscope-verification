@@ -1,0 +1,7 @@
+[absent] readyz=000 running=false exitcode=2
+OK [absent] — refused: exit 2, config_validation_failed, names the offender, no listener
+[missing-field] readyz=000 running=false exitcode=2
+OK [missing-field] — refused: exit 2, config_validation_failed, names the offender, no listener
+[unreadable] readyz=000 running=false exitcode=2
+OK [unreadable] — refused: exit 2, config_validation_failed, names the offender, no listener
+A19 — all three refusal shapes confirmed; ingest auth has no off switch

@@ -1,0 +1,1 @@
+aperture: config error: event=config_validation_failed reason: secret_file /nonexistent/hs256.key is unreadable: entity not found

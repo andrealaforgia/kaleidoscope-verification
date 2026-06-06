@@ -1,0 +1,2 @@
+step 1: build aperture from snapshot
+step 2: run aperture with a valid auth config
