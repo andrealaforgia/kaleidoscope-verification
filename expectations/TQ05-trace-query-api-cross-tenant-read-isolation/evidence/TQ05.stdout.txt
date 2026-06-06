@@ -1,0 +1,4 @@
+code_b=200
+code_a=200
+count_b=0
+count_a=10

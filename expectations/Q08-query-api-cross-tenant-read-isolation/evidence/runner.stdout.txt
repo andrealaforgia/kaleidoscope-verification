@@ -1,0 +1,1 @@
+OK — metric ingested under tenant-a is invisible to tenant-b (0 series) while tenant-a reads it (1); empty is isolation, not absence

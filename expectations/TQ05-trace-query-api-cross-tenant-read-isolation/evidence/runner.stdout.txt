@@ -1,0 +1,1 @@
+OK — spans ingested under tenant-a are invisible to tenant-b (0) while tenant-a reads them (10); empty is isolation, not absence

@@ -36,7 +36,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-TRC | 8 | 5 (TQ01-TQ04) | 1 | 2 | 0 |
 | UC-LOOP | 9 | 3 (EG01,LQ02,TQ02) | 1 | 4 | 1 (Prism🟡) |
 | UC-DUR | 12 | 8 (D01-D20) | 3 | 0 | 1 (cinder-wal not reachable) |
-| UC-TEN | 7 | 1 (LQ07) | 1 | 5 | 0 |
+| UC-TEN | 7 | 4 (LQ07,Q08,TQ05,K23) | 2 | 1 | 0 |
 | UC-ALR | 11 | 8 (B01-B10) | 1 | 2 | 0 |
 | UC-LOOM | 5 | 4 (L01-L06) | 0 | 1 | 0 |
 | UC-PRISM | 18 | 1 (Q07) | 0 | 0 | 17 (N11 Playwright) |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~100** | **~45** | **~75** | **~33** |
+| **Total** | **~253** | **~103** | **~46** | **~71** | **~33** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**
@@ -63,14 +63,21 @@ whole Cinder tiering command surface (`place`/`migrate`/`get-tier`/
 grounding [issue 011](issues/011-cli-unknown-item-diagnostic-leaks-itemid-debug.md)
 RED (the unknown-item diagnostic leaks `ItemId("ghost")` vs the documented
 `"ghost"`). UC-TIER went from 1 covered / 16 gaps to 18 covered / 0 gaps.
+The same day, UC-TEN cross-tenant isolation was extended beyond logs:
+**Q08** (metrics via query-api) and **TQ05** (traces via trace-query-api)
+join LQ07 (logs) and K23 (tier state), each proving isolation-not-absence
+with a same-store control. UC-TEN went 1→4 covered, 5→1 gap.
 
 ## Highest-value gaps (✅ UCs, buildable now)
 
 1. ~~**UC-TIER-001..018.**~~ CLOSED 2026-06-06 by K14-K24 (see update
    above). Was the single biggest hole; now 18/18 covered.
-2. **UC-TEN-002..005 (metrics/traces/tier isolation).** Only logs
-   (LQ07) are pinned; the same cross-tenant isolation for query-api,
-   trace-query-api and Cinder tiers is unpinned.
+2. ~~**UC-TEN-002..004 (metrics/traces/tier isolation).**~~ CLOSED
+   2026-06-06: Q08 (metrics, query-api), TQ05 (traces, trace-query-api)
+   and K23 (tier state) join LQ07 (logs). UC-TEN-006 (per-instance tenant
+   binding) is demonstrated in passing by all three env-var-bound
+   instances. Remaining: UC-TEN-005 (same metric name both-populated,
+   partial via Q08) and UC-TEN-007 (default-tenant fallback no-leak).
 3. **UC-GWLIFE gateway drain/shutdown (004/005) + pillar-root (001-003).**
    I have aperture drain (A11-A14) but NOT the `kaleidoscope-gateway`
    binary's SIGTERM/SIGINT drain or pillar-root resolution.
