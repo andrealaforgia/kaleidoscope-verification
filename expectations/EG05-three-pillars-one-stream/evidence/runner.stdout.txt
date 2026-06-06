@@ -1,0 +1,1 @@
+OK — one gateway ingesting metrics+logs+traces stores each into its own pillar; all three are independently queryable (metric=1 series, log=4, trace=6 spans)

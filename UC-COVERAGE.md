@@ -34,7 +34,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-MET | 18 | 15 (Q01-Q06,Q09,Q10,EG01) | 1 (008 half-open) | 0 | 2 (011 cap,015 store-500) |
 | UC-LOG | 19 | 18 (LQ01-LQ09) | 0 | 0 | 1 (016 result-cap >100k not reachable) |
 | UC-TRC | 8 | 8 (TQ01-TQ06) | 0 | 0 | 0 |
-| UC-LOOP | 9 | 3 (EG01,LQ02,TQ02) | 1 | 4 | 1 (Prism🟡) |
+| UC-LOOP | 9 | 5 (EG01,LQ02,TQ02,EG05,B02) | 2 (005,009) | 1 (006 restart) | 1 (007 Prism🟡) |
 | UC-DUR | 12 | 8 (D01-D20) | 3 | 0 | 1 (cinder-wal not reachable) |
 | UC-TEN | 7 | 4 (LQ07,Q08,TQ05,K23) | 2 | 1 | 0 |
 | UC-ALR | 11 | 8 (B01-B10) | 1 | 2 | 0 |
@@ -50,7 +50,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 | UC-SDK | 6 | 2 (S01,S09) | 2 (S12,S18 pending) | 0 | 2 (🔭) |
 | UC-SEC | 4 | 1 (A17) | 0 | 0 | 3 (TLS/SPIFFE 🔭) |
 | UC-COST | 7 | 2 (X07,X08) | 1 | 1 | 3 |
-| **Total** | **~253** | **~171** | **~25** | **~22** | **~35** |
+| **Total** | **~253** | **~173** | **~26** | **~19** | **~35** |
 
 So roughly **40% of the use cases have a direct expectation**, a fifth are
 partially touched, and **~75 are ✅ E2E-NOW UCs with NO expectation yet**
