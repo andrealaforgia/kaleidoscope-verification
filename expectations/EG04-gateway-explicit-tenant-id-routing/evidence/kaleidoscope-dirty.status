@@ -1,0 +1,3 @@
+M  crates/cinder/src/store.rs
+A  crates/cinder/tests/migrate_error_display.rs
+M  crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs

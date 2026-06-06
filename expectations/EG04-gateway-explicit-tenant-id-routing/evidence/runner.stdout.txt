@@ -1,0 +1,1 @@
+OK — an explicit resource tenant.id=globex routes the record to globex (1 series), overriding the default tenant acme (0 series)
