@@ -1,0 +1,1 @@
+OK — gateway drains and exits 0 on SIGTERM, and runs the same drain to exit 0 on SIGINT

@@ -1,0 +1,4 @@
+M  crates/kaleidoscope-cli/Cargo.toml
+A  crates/kaleidoscope-cli/tests/unknown_item_diagnostic.rs
+A  docs/feature/cinder-unknown-item-diagnostic-v0/distill/acceptance-test-scenarios.md
+A  docs/feature/cinder-unknown-item-diagnostic-v0/distill/wave-decisions.md

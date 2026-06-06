@@ -1,0 +1,1 @@
+OK — /healthz returns 200 (liveness, body: ok); /readyz returns 200 READY

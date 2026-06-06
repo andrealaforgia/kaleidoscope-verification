@@ -1,0 +1,2 @@
+healthz_code=200
+readyz_code=200

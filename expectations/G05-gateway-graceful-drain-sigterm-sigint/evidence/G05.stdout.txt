@@ -1,0 +1,3 @@
+sigterm_exit=0
+sigint_exit=0
+sigint_running=false

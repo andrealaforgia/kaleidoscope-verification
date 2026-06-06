@@ -1,0 +1,10 @@
+{"timestamp":"2026-06-06T14:16:17.828985Z","level":"INFO","event":"gateway_starting","pillar_root":"/data"}
+{"timestamp":"2026-06-06T14:16:17.848871Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-06T14:16:17.848921Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-06T14:16:17.848985Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-06T14:16:17.848989Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-06T14:16:17.849002Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-06T14:16:17.885459Z","level":"INFO","event":"shutdown_initiated","signal":"handle_shutdown","drain_deadline_ms":30000}
+{"timestamp":"2026-06-06T14:16:17.885474Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"shutdown_drain"}
+{"timestamp":"2026-06-06T14:16:18.140024Z","level":"INFO","event":"in_flight_drained","drained_count":0}
+{"timestamp":"2026-06-06T14:16:18.140046Z","level":"INFO","event":"shutdown_complete","exit_code":0}

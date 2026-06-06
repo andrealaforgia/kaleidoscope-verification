@@ -1,0 +1,1 @@
+OK — CLI positional pillar root /data/cliroot honoured (overrides image env) with pillars created under it; KALEIDOSCOPE_PILLAR_ROOT=/data/envroot honoured
