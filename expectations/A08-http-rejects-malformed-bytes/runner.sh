@@ -24,13 +24,19 @@ done
 
 # 2. POST garbage bytes to /v1/traces. The body is intentionally not
 #    a valid protobuf-encoded ExportTraceServiceRequest.
-echo "step 2: POST 32 random-looking garbage bytes to ${URL}"
+echo "step 2: POST 32 random-looking garbage bytes to ${URL} (authenticated)"
+# Mandatory ingest auth (N29): attach a valid bearer so the malformed
+# body reaches the protobuf parser (400), rather than being 401'd at the
+# door before any body work. The contract under test is body validation,
+# not auth — A20 owns the auth-reject contract.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 GARBAGE_BYTES=$'\xff\x00\xff\x01\x02\x03this-is-not-protobuf-bytes\xfe'
 RESPONSE_CODE="$(curl -sS --max-time 5 \
                  -o "$EVIDENCE_DIR/response.body.txt" \
                  -w '%{http_code}' \
                  -X POST \
                  -H 'Content-Type: application/x-protobuf' \
+                 -H "Authorization: Bearer ${JWT}" \
                  --data-binary "$GARBAGE_BYTES" \
                  "$URL")"
 

@@ -1,15 +1,22 @@
-aperture-1  | {"timestamp":"2026-05-27T07:14:57.092741Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T07:14:57.093223Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T07:14:57.093416Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T07:14:57.093425Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T07:14:57.093486Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.586697Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":1,"in_flight_at_refusal":1}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.586746Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":387}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.588004Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":1,"in_flight_at_refusal":1}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.592524Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":5,"resource.service.name":"expectation-A09-grpc-3"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.594608Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":387}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.595667Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A09-grpc-1"}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.949972Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":0}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.949971Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":1,"in_flight_at_refusal":1}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.955232Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":0}
-aperture-1  | {"timestamp":"2026-05-27T07:15:05.955270Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":1,"in_flight_at_refusal":1}
+aperture-1  | {"timestamp":"2026-06-06T13:16:47.807431Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:47.808986Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:47.809031Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:47.809036Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:47.809051Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.288418Z","level":"WARN","event":"concurrency_cap_hit","transport":"grpc","cap":1,"in_flight_at_refusal":1}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.288448Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.288467Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":387}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.289421Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A09-grpc-4"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.303369Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.303388Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":387}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.303891Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A09-grpc-3"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.307097Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.307120Z","level":"INFO","event":"request_received","transport":"grpc","signal":"traces","bytes":387}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.307962Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":0,"resource.service.name":"expectation-A09-grpc-2"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600453Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600479Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":0}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600480Z","level":"WARN","event":"concurrency_cap_hit","transport":"http_protobuf","cap":1,"in_flight_at_refusal":1}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600518Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600523Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":0}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600634Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:48.600647Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":0}

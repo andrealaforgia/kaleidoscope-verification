@@ -88,13 +88,31 @@ NOT affected: the kaleidoscope-GATEWAY path (G, EG, LQ, TQ, D) — auth is
 aperture-only at this feature. A17/A18/A19/A20 are `.no-compose` and
 unaffected (A19/A20 exercise auth directly).
 
-These A01-A16 entries were last verified GREEN at the pre-auth SHA
-(`545a2ba` and earlier); they are PENDING RE-VERIFICATION under the new
-mandatory-auth regime until the harness migration lands. The migration
-(auth block + secret/catalogue mounts in docker-compose.yml + bearer on
-each aperture-bound sender) is the next work item. Tenant ripple
-(TenantScoped tagging through the sink) stays in-suite — not observable
-through aperture's stub sink — credited to the implementer.
+**A01-A16 migration DONE (2026-06-06, HEAD `b2ae2f3`).** The harness now
+carries the auth block (`harness/aperture.toml`), a baked HS256 secret +
+catalogue (`harness/jwt.secret`, `harness/tenants.toml`) mounted by
+`docker-compose.yml`, a token minter (`harness/mint-ingest-jwt.sh`), and
+the senders attach a bearer (the shared `assert-signal-acceptance.sh` for
+A02/A03/A05/A06; inline in A01/A04/A08/A09). `run-expectation.sh` was also
+fixed to start otelcol-sink and confirm it accepts OTLP BEFORE starting
+aperture — aperture's forwarding sink runs a fail-closed Earned-Trust
+probe (~2 s budget) as the very first step of `run()`, before the tracing
+subscriber, so a not-yet-ready downstream made aperture exit 1 SILENTLY.
+All 14 compose-path A entries re-verified GREEN under mandatory auth
+(A01-A06, A08-A13, A15, A16). A07/A14 stay pending for unrelated reasons.
+Tenant ripple (TenantScoped tagging) stays in-suite — not observable
+through the stub sink — credited to the implementer.
+
+**E01-E04 (Spark→Aperture round-trip) BLOCKED on Spark ingest-auth.** The
+Spark SDK (`SparkConfig`) exposes `with_endpoint` but NO auth-header knob,
+and the exporter does not honor `OTEL_EXPORTER_OTLP_HEADERS`. So the
+spark-consumer fixture cannot attach a bearer, and every Spark emission to
+the now-auth-mandatory aperture is 401'd at the door. This is an
+observable gap reported to the implementer: the SDK/integrator persona
+currently cannot send authenticated telemetry through aperture. E01-E04
+were GREEN pre-auth; they cannot be re-verified black-box until Spark
+gains ingest-auth support (a bearer/header on its OTLP exporter). Flagged,
+not silently left satisfied.
 
 ## N1 — TLS / SPIFFE
 

@@ -1,6 +1,7 @@
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.716550Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.717101Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.717285Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.717299Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.717371Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T22:41:47.774958Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.597293Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.598817Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.598930Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.598938Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.598994Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.921824Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_traces","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:43.921847Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1}

@@ -26,6 +26,11 @@ services:
       # run-expectation.sh sets APERTURE_TOML to that absolute path
       # so compose mounts it instead of the harness default.
       - ${APERTURE_TOML:-./aperture.toml}:/etc/aperture/aperture.toml:ro
+      # Mandatory ingest auth (aegis-ingest-auth-v0, N29): the HS256
+      # secret + tenant catalogue the [aperture.security.auth.jwt] block
+      # references. Senders mint a matching token via mint-ingest-jwt.sh.
+      - ./jwt.secret:/etc/aperture/jwt.secret:ro
+      - ./tenants.toml:/etc/aperture/tenants.toml:ro
     environment:
       # RUST_LOG always set; APERTURE__* env vars are listed without
       # values so they pass through from the calling shell only when

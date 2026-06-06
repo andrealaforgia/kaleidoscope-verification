@@ -32,13 +32,16 @@ if [[ "${code:-}" != "200" ]]; then
     exit 1
 fi
 
-echo "step 2: sending one OTLP/HTTP/protobuf trace via telemetrygen"
+echo "step 2: sending one OTLP/HTTP/protobuf trace via telemetrygen (authenticated)"
+# Mandatory ingest auth (N29): attach a valid HS256 bearer.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 docker run --rm --network "$COMPOSE_NETWORK" \
     "$TELEMETRYGEN_IMAGE" \
     traces \
         --otlp-http \
         --otlp-endpoint=aperture:4318 \
         --otlp-insecure \
+        --otlp-header "authorization=\"Bearer ${JWT}\"" \
         --traces=1 \
         --otlp-attributes "service.name=\"${SERVICE_NAME}\"" \
     > "$EVIDENCE_DIR/telemetrygen.stdout.txt" \

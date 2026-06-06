@@ -1,8 +1,8 @@
 step 1: waiting for aperture /readyz to return 200
   aperture ready
-step 2: sending one OTLP/gRPC trace via telemetrygen
+step 2: sending one OTLP/gRPC trace via telemetrygen (authenticated)
   telemetrygen exited 0
 step 3: checking aperture stderr for sink_accepted line
-  found: aperture-1  | {"timestamp":"2026-05-27T20:12:25.269225Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":10,"resource.service.name":"expectation-A01-pilot"}
+  found: aperture-1  | {"timestamp":"2026-06-06T13:15:55.965688Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"traces","span_count":2,"downstream_latency_ms":5,"resource.service.name":"expectation-A01-pilot"}
   observed span_count=2, expected=2
 OK — aperture acked the OTLP/gRPC request and emitted sink_accepted with matching span_count and service.name

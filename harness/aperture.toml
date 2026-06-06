@@ -49,3 +49,15 @@ key_path = ""
 enabled = false
 workload_api_socket = ""
 trust_domain = ""
+
+# Ingest auth is MANDATORY since aegis-ingest-auth-v0 (ADR-0068, deliver
+# 7f72db8): aperture refuses to start without a complete, readable
+# [aperture.security.auth.jwt] block (proven by A19), and 401s every OTLP
+# ingest without a valid HS256 bearer (A20). The secret + catalogue are
+# mounted into the container by docker-compose.yml; the senders mint a
+# matching token via harness/mint-ingest-jwt.sh. See known-gaps.md N29.
+[aperture.security.auth.jwt]
+issuer = "kaleidoscope-harness"
+audience = "kaleidoscope-cluster"
+secret_file = "/etc/aperture/jwt.secret"
+catalogue_path = "/etc/aperture/tenants.toml"

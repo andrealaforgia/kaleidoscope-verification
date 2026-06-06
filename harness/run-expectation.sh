@@ -144,7 +144,36 @@ if [[ -f "$EXP_DIR/.no-compose" ]]; then
 fi
 
 if (( SKIP_COMPOSE == 0 )); then
-    docker compose up -d --build
+    # Ordering matters since aegis-ingest-auth-v0 (N29): aperture's
+    # forwarding sink runs a fail-closed Earned-Trust probe at startup
+    # (a ~2 s budget) BEFORE it binds, and `run()` does this as its very
+    # first step (before the tracing subscriber, so a failure is a SILENT
+    # exit 1). If otelcol-sink is not yet accepting OTLP when aperture
+    # probes, aperture refuses to start. So bring the downstream up and
+    # confirm it is READY before starting aperture — the same operational
+    # ordering a real deployment owes a fail-closed gateway.
+    COMPOSE_NET="kaleidoscope-expectations_default"
+    echo "step: build images" >&2
+    docker compose build >&2
+    echo "step: start otelcol-sink and wait until it accepts OTLP" >&2
+    docker compose up -d otelcol-sink >&2
+    OTELCOL_READY=0
+    for _ in $(seq 1 30); do
+        code=$(docker run --rm --network "$COMPOSE_NET" curlimages/curl:8.10.1 \
+                 -sS --max-time 2 -o /dev/null -w '%{http_code}' \
+                 -X POST -H 'Content-Type: application/json' --data '{"resourceLogs":[]}' \
+                 http://otelcol-sink:4318/v1/logs 2>/dev/null || echo 000)
+        [[ "$code" == "200" ]] && { OTELCOL_READY=1; echo "  otelcol-sink ready" >&2; break; }
+        sleep 1
+    done
+    if (( OTELCOL_READY == 0 )); then
+        echo "otelcol-sink never accepted OTLP; aperture's startup probe would refuse" >&2
+        docker compose logs --no-color otelcol-sink > "$EVIDENCE_DIR/otelcol-sink.stderr.txt" 2>&1 || true
+        docker compose down --volumes --remove-orphans >/dev/null 2>&1 || true
+        exit 70
+    fi
+    echo "step: start aperture (downstream now ready for its Earned-Trust probe)" >&2
+    docker compose up -d aperture >&2
 fi
 
 if (( SKIP_COMPOSE == 0 )); then

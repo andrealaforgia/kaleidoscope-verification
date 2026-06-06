@@ -71,14 +71,17 @@ if [[ "${code:-}" != "200" ]]; then
     exit 1
 fi
 
-# 2. Send one signal payload.
-echo "step 2: sending one ${SIGNAL} payload via telemetrygen (${TRANSPORT})"
+# 2. Send one signal payload. Mandatory ingest auth (N29): attach a
+#    valid HS256 bearer or aperture 401s before the body is parsed.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
+echo "step 2: sending one ${SIGNAL} payload via telemetrygen (${TRANSPORT}, authenticated)"
 docker run --rm --network "$COMPOSE_NETWORK" \
     "$TELEMETRYGEN_IMAGE" \
     "$SIGNAL" \
         ${TRANSPORT_FLAGS[@]+"${TRANSPORT_FLAGS[@]}"} \
         --otlp-endpoint="$ENDPOINT" \
         --otlp-insecure \
+        --otlp-header "authorization=\"Bearer ${JWT}\"" \
         "$TELEMETRYGEN_COUNT_FLAG" \
         --otlp-attributes "service.name=\"${SERVICE_NAME}\"" \
     > "$EVIDENCE_DIR/telemetrygen.stdout.txt" \

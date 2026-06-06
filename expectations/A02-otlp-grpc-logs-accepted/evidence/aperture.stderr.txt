@@ -1,7 +1,8 @@
-aperture-1  | {"timestamp":"2026-05-27T22:42:56.954573Z","level":"INFO","event":"startup","version":"0.1.0"}
-aperture-1  | {"timestamp":"2026-05-27T22:42:56.955500Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
-aperture-1  | {"timestamp":"2026-05-27T22:42:56.955672Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
-aperture-1  | {"timestamp":"2026-05-27T22:42:56.955678Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
-aperture-1  | {"timestamp":"2026-05-27T22:42:56.955735Z","level":"INFO","event":"ready"}
-aperture-1  | {"timestamp":"2026-05-27T22:42:57.275035Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":139}
-aperture-1  | {"timestamp":"2026-05-27T22:42:57.276357Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":1,"resource.service.name":"expectation-A02-pilot"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:21.873557Z","level":"INFO","event":"startup","version":"0.1.0"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:21.874779Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:21.874830Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:21.874832Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:21.874860Z","level":"INFO","event":"ready"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:22.429007Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"operator","decision":"allow","subject":"ingest_logs","reason":"allow"}
+aperture-1  | {"timestamp":"2026-06-06T13:16:22.429027Z","level":"INFO","event":"request_received","transport":"grpc","signal":"logs","bytes":139}
+aperture-1  | {"timestamp":"2026-06-06T13:16:22.430057Z","level":"INFO","event":"sink_accepted","sink":"forwarding","downstream":"http://otelcol-sink:4318","signal":"logs","record_count":1,"downstream_latency_ms":1,"resource.service.name":"expectation-A02-pilot"}

@@ -1,1 +1,1 @@
-aperture: config error: config parse failed: invalid socket address syntax for key "default.aperture.transport.grpc.bind_addr" in etc/aperture/aperture.toml TOML file
+aperture: config error: event=config_validation_failed reason: config parse failed: invalid socket address syntax for key "default.aperture.transport.grpc.bind_addr" in etc/aperture/aperture.toml TOML file

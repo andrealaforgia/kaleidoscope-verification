@@ -34,13 +34,19 @@ done
 #    not produce concurrent in-flight requests at the wire because
 #    workers share a single ClientConn and the OTLP exporter
 #    serialises export calls into batched messages.
-echo "step 2: gRPC burst (4 PARALLEL telemetrygen containers, cap=1)"
+echo "step 2: gRPC burst (4 PARALLEL telemetrygen containers, cap=1, authenticated)"
+# Mandatory ingest auth (N29): attach a valid HS256 bearer so the only
+# rejection cause under test is backpressure, not auth. (Auth runs AFTER
+# the concurrency permit, so an over-cap request is RESOURCE_EXHAUSTED
+# before auth anyway, but an authenticated burst keeps the signal clean.)
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 GRPC_PIDS=()
 for i in 1 2 3 4; do
     (
         docker run --rm --network "$COMPOSE_NETWORK" \
             "$TELEMETRYGEN_IMAGE" traces \
                 --otlp-endpoint=aperture:4317 --otlp-insecure \
+                --otlp-header "authorization=\"Bearer ${JWT}\"" \
                 --traces=1 \
                 --otlp-attributes "service.name=\"expectation-A09-grpc-${i}\"" \
             > "$EVIDENCE_DIR/telemetrygen.grpc.${i}.stdout.txt" \
@@ -85,6 +91,7 @@ for i in 1 2 3 4; do
              -w '%{http_code}' \
              -X POST \
              -H 'Content-Type: application/x-protobuf' \
+             -H "Authorization: Bearer ${JWT}" \
              --data-binary "$EMPTY_BODY" \
              http://localhost:4318/v1/traces \
              > "$EVIDENCE_DIR/http.${i}.code.txt" 2>/dev/null

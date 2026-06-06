@@ -41,12 +41,15 @@ if [[ "${code:-}" != "200" ]]; then
 fi
 
 # 2. Send one OTLP/gRPC trace with a recognisable resource attribute.
-echo "step 2: sending one OTLP/gRPC trace via telemetrygen"
+echo "step 2: sending one OTLP/gRPC trace via telemetrygen (authenticated)"
+# Mandatory ingest auth (N29): attach a valid HS256 bearer.
+JWT="$("$HARNESS_DIR/mint-ingest-jwt.sh")"
 docker run --rm --network "$COMPOSE_NETWORK" \
     "$TELEMETRYGEN_IMAGE" \
     traces \
         --otlp-endpoint=aperture:4317 \
         --otlp-insecure \
+        --otlp-header "authorization=\"Bearer ${JWT}\"" \
         --traces=1 \
         --otlp-attributes "service.name=\"${SERVICE_NAME}\"" \
     > "$EVIDENCE_DIR/telemetrygen.stdout.txt" \
