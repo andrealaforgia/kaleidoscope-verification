@@ -20,23 +20,27 @@ per **UC-TIER-008** and **UC-TIER-009** and the CLI's own help text
 
 ## Verification
 
-- Status: `broken` — grounds [issue 011](../../issues/011-cli-unknown-item-diagnostic-leaks-itemid-debug.md).
-- Last verified: 2026-06-06 UTC at HEAD (`545a2ba`).
+- Status: `satisfied` — flipped GREEN 2026-06-06 at HEAD (`ddbe982`),
+  resolving [issue 011](../../issues/011-cli-unknown-item-diagnostic-leaks-itemid-debug.md).
+- Last verified: 2026-06-06 UTC at HEAD (`ddbe982`).
 - Method: `migrate acme /data ghost warm` and `get-tier acme /data ghost`;
-  assert exit 1 (holds) AND stderr contains `unknown item "ghost"` (fails).
+  exit 1 AND stderr now reads `cannot migrate unknown item "ghost" for
+  tenant acme` (the clean documented form).
 
-## Observed vs desired
+## Transition (RED → GREEN)
 
-Fail-closed already holds: both paths exit 1. The message assertion is
-RED because the binary leaks the internal newtype Debug form:
+Grounded RED at `545a2ba`: fail-closed held (exit 1) but the diagnostic
+leaked the internal newtype Debug form `ItemId("ghost")`. The implementer
+fixed it in `cinder-unknown-item-diagnostic-v0` (deliver `ddbe982`):
+`store.rs` now formats `{:?}` of `item.as_str()` (Debug of the `&str`),
+so the message reads the documented `unknown item "ghost"`:
 
 ```
-kaleidoscope-cli: cinder migrate: cannot migrate unknown item ItemId("ghost") for tenant acme
+kaleidoscope-cli: cinder migrate: cannot migrate unknown item "ghost" for tenant acme
 ```
 
-`ItemId("ghost")` should read `"ghost"`. This is a transition-proof
-expectation: it asserts the documented contract and flips GREEN unchanged
-once the `ItemId(...)` wrapper is dropped from the diagnostic.
+The transition-proof expectation flipped GREEN unchanged on the committed
+fix — it always asserted the desired contract, never the leak.
 
 ## Evidence
 
@@ -45,7 +49,7 @@ once the `ItemId(...)` wrapper is dropped from the diagnostic.
 
 ## Issues
 
-- [011](../../issues/011-cli-unknown-item-diagnostic-leaks-itemid-debug.md) — unknown-item diagnostic leaks `ItemId(...)` Debug form.
+- [011](../../issues/011-cli-unknown-item-diagnostic-leaks-itemid-debug.md) — `resolved` (deliver `ddbe982`); the diagnostic now names the bare id.
 
 ## Notes
 

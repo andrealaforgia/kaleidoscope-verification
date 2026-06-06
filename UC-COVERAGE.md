@@ -22,7 +22,7 @@ now (a ✅ E2E-NOW UC with no expectation) · ⏸ blocked/aspirational
 |---|---|---|---|---|---|
 | UC-CLI ingest/read | 15 | 15 (K03,K04,K29-K33) | 0 | 0 | 0 |
 | UC-RANGE | 12 | 12 (K06-K09,K25-K28) | 0 | 0 | 0 |
-| UC-TIER | 18 | 18 (K14-K24; 2 grounded RED via K18) | 0 | 0 | 0 |
+| UC-TIER | 18 | 18 (K14-K24; K18 flipped GREEN at ddbe982) | 0 | 0 | 0 |
 | UC-CLIOBS | 7 | 6 (K05,K10,K34) | 0 | 0 | 1 (006 🟡 dogfood) |
 | UC-CLIROB | 8 | 4 (K02,K11,K13,D04/D07) | 2 | 2 | 0 |
 | UC-GWLOG | 9 | 7 (LQ02,LQ04,LQ05,LQ10,D01) | 1 (007 🟡) | 0 | 1 (009 HTTP🔭) |

@@ -1,7 +1,12 @@
 # 011 — CLI unknown-item diagnostic leaks the internal `ItemId(...)` Debug form
 
-- Status: `open` (2026-06-06). Grounded RED by **K18** at kaleidoscope
-  HEAD `545a2ba`.
+- Status: `resolved` (2026-06-06). Grounded RED by **K18** at kaleidoscope
+  HEAD `545a2ba`; FIXED in `cinder-unknown-item-diagnostic-v0` (deliver
+  `ddbe982`) — `store.rs` now formats `{:?}` of `item.as_str()` (Debug of
+  the `&str`), so the diagnostic reads the documented `unknown item
+  "ghost"`. K18 flipped GREEN at `ddbe982`, exit 1 unchanged. The
+  implementer fixed the behaviour (not the doc), as she said she would in
+  message 027.
 - Severity: low (cosmetic / contract-fidelity; the command already fails
   closed with exit 1, but the operator-facing message exposes an internal
   Rust newtype representation instead of the documented item id).
