@@ -1,0 +1,7 @@
+{"timestamp":"2026-06-06T00:56:08.830270Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-06T00:56:08.830306Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-06T00:56:08.830352Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-06T00:56:08.830358Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-06T00:56:08.830373Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-06T00:56:08.830375Z","level":"ERROR","event":"serve_loop_failed","transport":"grpc","error":"injected post-bind serve failure (test seam)"}
+{"timestamp":"2026-06-06T00:56:08.830377Z","level":"INFO","event":"readiness_changed","ready":"false","reason":"serve_loop_failed"}

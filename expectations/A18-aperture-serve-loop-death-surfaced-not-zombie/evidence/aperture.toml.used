@@ -1,0 +1,23 @@
+# A18 fixture: stub sink so aperture starts standalone (no otelcol-sink
+# dependency); tls off. The behaviour under test is the serving-loop death
+# surfacing, driven by the APERTURE_TEST_INJECT_SERVE_FAILURE trigger.
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+[aperture.sink]
+kind = "stub"
+[aperture.shutdown]
+drain_deadline_ms = 5000
+[aperture.security.tls]
+enabled = false
+cert_path = ""
+key_path = ""
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""

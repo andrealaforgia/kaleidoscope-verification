@@ -1,0 +1,4 @@
+step 1: build aperture from snapshot
+step 2: inject grpc serve-loop death
+step 3: inject http serve-loop death
+step 4: negative control (no injection)

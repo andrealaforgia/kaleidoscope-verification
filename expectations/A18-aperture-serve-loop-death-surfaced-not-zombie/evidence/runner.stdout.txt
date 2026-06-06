@@ -1,0 +1,7 @@
+grpc_running=false
+grpc_exit=3
+http_running=false
+http_exit=3
+none_running=true
+none_exit=0
+OK — aperture surfaces a post-bind serving-loop death instead of a silent zombie: with APERTURE_TEST_INJECT_SERVE_FAILURE=grpc (and =http), aperture binds then emits event=serve_loop_failed transport=<t> (ERROR), flips readiness to false (reason=serve_loop_failed; /readyz -> sticky 503), and exits 3 — not a bound-but-dead zombie. Negative control: no injection -> aperture stays up and ready, no serve_loop_failed.

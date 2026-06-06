@@ -39,7 +39,7 @@ Live status table. Updated when an expectation moves between states.
 | Status | Count |
 |---|---|
 | `pending` | 22 (15 in S/E/X + 6 SI blocked on N8 + 1 B — B06 unreachable SLO; B01-B05/B07 satisfied) |
-| `satisfied` | 115 (A 15 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 7 + G 3 + EG 2 + LQ 7 + TQ 4 + D 20 + B 8) |
+| `satisfied` | 116 (A 16 + S 12 + E 4 + X 14 + L 6 + K 13 + Q 7 + G 3 + EG 2 + LQ 7 + TQ 4 + D 20 + B 8) |
 | `held` | 0 (K11 came off held 2026-06-01 — re-anchored at `307e447` via cli-unknown-flag-rejection-v0, see [`../known-gaps.md`](../known-gaps.md) N14) |
 | `partial` | 0 |
 | `broken` | 0 (**K13** flipped GREEN 2026-06-05 — `cli-ingest-atomic-v0` / ADR-0064 feat `fdfbc28` made ingest all-or-nothing; [`issue 009`](../issues/009-cli-ingest-non-atomic-partial-commit-double-ingest.md) resolved. B03 flipped GREEN — `beacon-sighup-reload-v0` resolved [`issue 010`](../issues/010-beacon-sighup-reload-claimed-but-absent.md). A17 flipped GREEN — `tls-config-reject-v0` resolved [`issue 008`](../issues/008-tls-enabled-claims-rejection-but-binds-plaintext.md). X01/X05 recovered 2026-05-31 — [`issue 004`](../issues/004-cargo-test-workspace-broken-self-observe-path-deps.md) was a harness OOM artefact) |
@@ -124,7 +124,7 @@ that can have an expectation, tracked?".
 
 | Kaleidoscope component | Surface | Prefix | Tracked entries | Status |
 |---|---|---|---|---|
-| `crates/aperture` binary | OTLP gateway runtime (operator) | **A** | 17 (15 satisfied, 2 deferred) | Comprehensive. A07 needs raw gRPC client; A14 needs slow downstream. A17 = refuses to start on `tls.enabled=true` (`event=config_validation_failed`, exit 2, no bind; resolves issue 008). |
+| `crates/aperture` binary | OTLP gateway runtime (operator) | **A** | 18 (16 satisfied, 2 deferred) | Comprehensive. A07 needs raw gRPC client; A14 needs slow downstream. A17 = refuses to start on `tls.enabled=true` (`event=config_validation_failed`, exit 2, no bind; resolves issue 008). A18 = surfaces a post-bind serving-loop death instead of a silent zombie (`event=serve_loop_failed` + readiness flip to sticky Failed/503 + exit 3; ADR-0066, feat `d9f0f83`), driven black-box by the shipped `APERTURE_TEST_INJECT_SERVE_FAILURE=grpc|http` trigger. |
 | `crates/spark` library | SDK init + signal emission (integrator), via `harness/spark-consumer` fixture | **S** | 22 (12 satisfied, 10 pending) | Consumer fixture in place; remaining S12-S21 are pattern-repetition extensions. |
 | Spark + Aperture round-trip | End-to-end signal flow (operator + integrator) | **E** | 6 (4 satisfied, 2 pending) | E05 implicitly proven by E01-E04 evidence; E06 needs SIGTERM injection on consumer. |
 | `crates/otlp-conformance-harness` | Validator library API (library-consumer) | **H** | 6 — all `out-of-scope` | Excluded per the H-rule (library-consumer concern, not operator/integrator-facing). Documented in [`../known-gaps.md`](../known-gaps.md). |
