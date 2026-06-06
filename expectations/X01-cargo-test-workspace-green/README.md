@@ -21,7 +21,17 @@ Gate 1 of the CI contract per ADR-0005.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-06 UTC at HEAD (`742536b`, after the
+- Re-verified: 2026-06-07 UTC at HEAD (`1eda9d9`, after the
+  perf-kpi-ci-non-gating-v0 DELIVER) — GREEN. That deliver supersedes the
+  ADR-0058 gating: the wall-clock perf KPIs move to a non-gating CI job
+  and the Gate-1 `KALEIDOSCOPE_PERF_TESTS=1` is deleted. It is pure
+  CI-config (`.github/workflows/ci.yml`) plus un-ignoring two structural
+  tests that assert the edited workflow shape — the perf test CODE is
+  unchanged (still early-returns when `KALEIDOSCOPE_PERF_TESTS` is unset,
+  which this runner deliberately leaves unset). So X01 is unaffected and
+  now matches the non-gating intent. (Re-verified by RUNNING, per the N30
+  lesson.)
+- Last full verify: 2026-06-06 UTC at HEAD (`742536b`, after the
   spark-ingest-auth-v0 DELIVER) — GREEN, exit 0, every `test result: ok`
   including `place_onto_failing_disk_fails_loudly_and_is_not_durable`.
   **Now runs the tests as a NON-ROOT user (N30).** That cinder test
