@@ -1,0 +1,40 @@
+# A21 fixture: a valid-auth config whose FORWARDING sink points at an
+# unreachable downstream (192.0.2.1, TEST-NET-1). The sink's fail-closed
+# Earned-Trust probe (run as run()'s first step, BEFORE the tracing
+# subscriber) cannot reach it and refuses. The contract under test: that
+# refusal must SAY SOMETHING on stderr, not exit silently.
+[aperture.transport.grpc]
+bind_addr = "0.0.0.0:4317"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.transport.http]
+bind_addr = "0.0.0.0:4318"
+max_recv_msg_size = 4194304
+max_concurrent_requests = 16
+
+[aperture.sink]
+kind = "forwarding"
+
+[aperture.sink.forwarding]
+endpoint = "http://192.0.2.1:9999"
+timeout_ms = 2000
+
+[aperture.shutdown]
+drain_deadline_ms = 5000
+
+[aperture.security.tls]
+enabled = false
+cert_path = ""
+key_path = ""
+
+[aperture.security.auth.spiffe]
+enabled = false
+workload_api_socket = ""
+trust_domain = ""
+
+[aperture.security.auth.jwt]
+issuer = "acme-observability"
+audience = "kaleidoscope-ingest"
+secret_file = "/etc/aperture/hs256.key"
+catalogue_path = "/etc/aperture/tenants.toml"
