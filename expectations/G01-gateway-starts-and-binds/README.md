@@ -34,7 +34,16 @@ emitted BEFORE `listener_bound`.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-02 UTC at HEAD (`b286cb4`, clean tree;
+- Last verified: 2026-06-07 UTC at HEAD (`7138b88`, clean tree) — GREEN,
+  exit 0. Re-run as the behavioural falsifier for claims-honesty-pass-2-v0:
+  the deliver (`80f8949`) corrected gateway `main.rs` to claim
+  `init_tracing` installs the real JSON-to-stderr subscriber (was: a
+  "RED-ready NO-OP" comment). G01 proves that claim true-of-behaviour —
+  stderr carries `{"level":"INFO","event":"gateway_starting",...}` and
+  `listener_bound` as real JSON INFO events, ordered. The corrected comment
+  is not a new lie. (Deliver diff to `main.rs` was comment-only; the
+  subscriber code is unchanged.)
+- Earlier `satisfied`: 2026-06-02 UTC at HEAD (`b286cb4`, clean tree;
   includes the gateway subscriber feat `caa8cdf`) — TIGHTENED onto the
   gateway's own structured events. GREEN after a catalogue-side fix (the
   first `listener_bound` is `transport=grpc`; the http assertion now
