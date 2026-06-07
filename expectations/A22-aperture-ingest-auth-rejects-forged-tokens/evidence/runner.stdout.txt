@@ -1,0 +1,9 @@
+baseline=415
+expired=401
+algnone=401
+forgedsig=401
+uncatalogued=401
+wrongiss=401
+wrongaud=401
+unknownrole=401
+OK — every forged HS256 token is rejected 401 (expired, alg=none, forged-sig, uncatalogued-tenant, wrong-iss, wrong-aud, unknown-role); a valid token clears the door (415). No auth bypass.
