@@ -2,19 +2,19 @@ step 1: ensure cargo-deny installed (Step 3 of the hook needs it)
 step 2: run scripts/hooks/pre-commit on the snapshot
   hook exited 0 (cleanly)
   last 15 lines of hook output:
-    test ac_01_known_trace_id_returns_all_spans ... ok
-    test ac_02_unknown_trace_id_returns_empty_array ... ok
-    test ac_03_missing_tenant_returns_401_with_no_store_call_and_no_leak ... ok
-    test ac_04a_missing_trace_id_returns_400 ... ok
-    test ac_04b_empty_trace_id_returns_400 ... ok
-    test ac_04c_trace_id_31_chars_returns_400 ... ok
-    test ac_04c_trace_id_33_chars_returns_400 ... ok
-    test ac_04d_non_hex_trace_id_returns_400_with_no_echo ... ok
-    test ac_04e_uppercase_trace_id_resolves_to_the_same_bytes ... ok
-    test ac_05_cross_tenant_isolation_on_the_lookup_arm ... ok
-    test ac_cap_result_cap_applies_uniformly_on_the_lookup_arm ... ignored, Result cap is verified structurally at the parse-handler layer; same MAX_RESULT_ROWS path as the existing window arm (see slice_02_caps.rs::a_result_one_row_over_the_cap_is_refused_with_a_named_400). A 100_001-span fixture is too expensive for the acceptance suite; uniform interaction is pinned by ADR-0053 Decision 3 and covered by --in-diff mutation tests.
+    test tests::lying_truncating_on_an_empty_file_does_not_underflow ... ok
+    test tests::lying_truncating_substrate_refuses_with_bytes_lost ... ok
+    test tests::probe_creates_a_missing_root_directory ... ok
+    test tests::propagates_apply_error_without_treating_it_as_a_parse_failure ... ok
+    test tests::real_backend_fsync_dir_errors_on_a_missing_directory ... ok
+    test tests::real_backend_fsyncs_a_real_file_and_dir ... ok
+    test tests::refuses_a_mid_file_parse_failure_and_emits_no_warning ... ok
+    test tests::refuses_a_mid_file_parse_failure_even_when_the_wal_lacks_a_trailing_newline ... ok
+    test tests::refuses_a_newline_terminated_malformed_final_line_and_emits_no_warning ... ok
+    test tests::reports_the_emitting_pillar_verbatim_in_the_warning ... ok
+    test tests::substrate_descriptor_is_distinct_per_variant ... ok
     
-    test result: ok. 11 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+    test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
     
     [32m[pass] all pre-commit gates green[0m
 OK — pre-commit hook ran every local gate and exited 0

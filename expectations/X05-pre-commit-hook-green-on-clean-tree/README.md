@@ -8,11 +8,15 @@ Operations / build. Build-engineer-facing.
 
 `scripts/hooks/pre-commit` runs all four local quality gates (cargo
 fmt --check, cargo clippy --all-targets --locked -- -D warnings,
-cargo deny --all-features check, cargo test --workspace
---all-targets --locked) and exits 0 with the success marker
+cargo deny --all-features check, cargo test --workspace --lib
+--locked) and exits 0 with the success marker
 `[pass] all pre-commit gates green`. This is the kaleidoscope
 contributor's local quality gate, mirroring as much of the CI
-contract (ADR-0005) as can run in seconds.
+contract (ADR-0005) as can run in seconds. Since
+speed-up-local-precommit-v0 (deliver `7e628d7`) the test gate is the
+fast `--lib` subset; the deep `--all-targets --locked` run gates in CI
+(exercised black-box by X01), keeping the local hook well under the
+5-minute budget.
 
 ## Source
 
@@ -24,11 +28,17 @@ contract (ADR-0005) as can run in seconds.
 ## Verification
 
 - Status: `satisfied`
-- Last verified: 2026-06-01 UTC at HEAD (`2e8bc8b`, clean tree) — GREEN,
-  exit 0, `[pass] all pre-commit gates green`. First run after
-  perf-kpi-ci-gating-v0 (ADR-0058): the hook does not set
-  `KALEIDOSCOPE_PERF_TESTS` (nor does this runner), so the 28 p95 KPI
-  tests skip deterministically, matching the hook's own local posture.
+- Last verified: 2026-06-07 UTC at HEAD (`f919c59`, clean tree) — GREEN,
+  exit 0, `[pass] all pre-commit gates green`. Re-verified after
+  speed-up-local-precommit-v0 (deliver `7e628d7`): the hook now runs the
+  fast `cargo test --workspace --lib --locked` subset and stays green on a
+  clean tree. Evidence shows the hook's own line
+  `→ cargo test --workspace --lib --locked  (fast subset; deep
+  --all-targets gates in CI)`.
+- Earlier `satisfied`: 2026-06-01 at HEAD (`2e8bc8b`, clean tree) — GREEN,
+  exit 0. First run after perf-kpi-ci-gating-v0 (ADR-0058): the hook does
+  not set `KALEIDOSCOPE_PERF_TESTS` (nor does this runner), so the 28 p95
+  KPI tests skip deterministically, matching the hook's own local posture.
 - Earlier `satisfied`: 2026-05-31 at `bbded968`. The 2026-05-19 `broken`
   verdict inherited X01's harness OOM artefact, not a kaleidoscope
   defect; see

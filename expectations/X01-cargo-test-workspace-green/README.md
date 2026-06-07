@@ -21,6 +21,14 @@ Gate 1 of the CI contract per ADR-0005.
 ## Verification
 
 - Status: `satisfied`
+- Re-verified: 2026-06-07 UTC at HEAD (`f919c59`, after the
+  speed-up-local-precommit-v0 DELIVER `7e628d7`) — GREEN, exit 0. The deep
+  `cargo test --workspace --all-targets --locked` (the run that moved OUT
+  of the local hook and now gates only in CI) stays green here, and the
+  new `crates/integration-suite/tests/v0_fast_precommit_structure.rs`
+  (asserts the hook runs `--lib` and CI runs `--all-targets`) runs
+  un-ignored under `--all-targets` and passes. X01 is the black-box guard
+  that the deep run CI relies on still holds. (Run non-root per N30.)
 - Re-verified: 2026-06-07 UTC at HEAD (`1eda9d9`, after the
   perf-kpi-ci-non-gating-v0 DELIVER) — GREEN. That deliver supersedes the
   ADR-0058 gating: the wall-clock perf KPIs move to a non-gating CI job
