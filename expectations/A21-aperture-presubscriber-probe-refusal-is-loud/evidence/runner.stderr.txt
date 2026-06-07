@@ -1,3 +1,2 @@
 step 1: build aperture from snapshot
 step 2: run aperture with a forwarding sink to an unreachable downstream
-RED — the probe refusal is SILENT: exit 1, no listener, but stderr carries no reason (0 bytes). Grounds aperture-presubscriber-probe-stderr-v0 (the pre-subscriber probe failure is dropped because tracing has no subscriber yet). Flips GREEN when aperture prints a refusal line.

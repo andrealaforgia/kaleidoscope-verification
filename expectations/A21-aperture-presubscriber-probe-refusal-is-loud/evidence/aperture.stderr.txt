@@ -1,0 +1,3 @@
+{"timestamp":"2026-06-07T10:42:24.733851Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-07T10:42:26.736371Z","level":"ERROR","event":"health.startup.refused","reason":"probe timed out after 2000 ms against http://192.0.2.1:9999"}
+{"timestamp":"2026-06-07T10:42:26.736671Z","level":"ERROR","message":"aperture exited with error","error":"sink probe failed: probe timed out after 2000 ms against http://192.0.2.1:9999"}

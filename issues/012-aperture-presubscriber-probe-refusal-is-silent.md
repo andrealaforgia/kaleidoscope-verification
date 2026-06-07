@@ -1,9 +1,13 @@
 # 012 — aperture's pre-subscriber sink-probe refusal exits silently
 
-- Status: `open` (2026-06-07). Grounded RED by **A21** at kaleidoscope
-  HEAD `3532459`. The implementer is already fixing it in
-  `aperture-presubscriber-probe-stderr-v0` (DISCUSS at the grounding SHA);
-  A21 will flip GREEN on its DELIVER.
+- Status: `resolved` (2026-06-07). Grounded RED by **A21** at kaleidoscope
+  HEAD `3532459`; FIXED in `aperture-presubscriber-probe-stderr-v0`
+  (deliver `b4ff12a`) — a net deletion of the pre-subscriber probe, so the
+  surviving post-subscriber probe emits `event=health.startup.refused`
+  (with a reason naming the downstream) on stderr before refusing,
+  fail-closed unchanged. A21 flipped GREEN at `b4ff12a` (stderr 447 bytes,
+  exit 1, no listener). The implementer fixed the behaviour, not just the
+  symptom.
 - Severity: low (honesty / operability; the fail-closed safety property
   already holds — aperture exits non-zero and binds no listener — only
   the operator-facing reason is missing).

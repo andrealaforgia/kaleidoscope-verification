@@ -25,19 +25,34 @@ so it is dropped — the operator sees a bare exit 1 with no line.
 
 ## Verification
 
-- Status: `broken` — grounds [issue 012](../../issues/012-aperture-presubscriber-probe-refusal-is-silent.md).
-- Last verified: 2026-06-07 UTC at HEAD (`3532459`).
+- Status: `satisfied` — flipped GREEN 2026-06-07 at HEAD (`b4ff12a`,
+  `aperture-presubscriber-probe-stderr-v0` deliver), resolving
+  [issue 012](../../issues/012-aperture-presubscriber-probe-refusal-is-silent.md).
+- Last verified: 2026-06-07 UTC at HEAD (`b4ff12a`).
 - Method: run aperture with a valid auth config whose forwarding sink
   points at an unreachable downstream (`192.0.2.1`, TEST-NET-1); the probe
-  refuses → exit 1, no `/readyz` listener, and **0 bytes of stderr**.
+  refuses → exit 1, no `/readyz` listener, and now a 447-byte stderr
+  carrying the refusal reason.
 
-## Observed vs desired
+## Transition (RED → GREEN)
 
-Fail-closed already holds: exit 1, no listener. The message assertion is
-RED because the refusal is silent (`stderr_bytes=0`). Transition-proof: it
-asserts the desired contract (a non-empty reason naming the
-probe/sink/refusal) format-agnostically, so it flips GREEN unchanged once
-aperture prints any pre-subscriber refusal line on probe failure.
+Grounded RED at `3532459`: fail-closed held (exit 1, no listener) but the
+refusal was silent (`stderr_bytes=0`). The implementer fixed it in
+`aperture-presubscriber-probe-stderr-v0` (deliver `b4ff12a`) — a net
+deletion: aperture probed the forwarding sink TWICE (in `wire_sink`
+BEFORE the tracing subscriber, silent; and in `spawn_with_readiness`
+AFTER it). She dropped the pre-subscriber probe; the surviving
+post-subscriber probe runs after the subscriber installs and before any
+bind, so on refusal it now emits:
+
+```
+{"level":"ERROR","event":"health.startup.refused","reason":"probe timed out after 2000 ms against http://192.0.2.1:9999"}
+```
+
+still returning `Err` before binding (fail-closed unchanged). The
+transition-proof flipped GREEN unchanged — it asserted the desired
+contract (a non-empty reason naming the refusal) format-agnostically,
+never the silence.
 
 ## Evidence
 
@@ -46,7 +61,7 @@ aperture prints any pre-subscriber refusal line on probe failure.
 
 ## Issues
 
-- [012](../../issues/012-aperture-presubscriber-probe-refusal-is-silent.md) — the pre-subscriber sink-probe refusal exits silently.
+- [012](../../issues/012-aperture-presubscriber-probe-refusal-is-silent.md) — `resolved` (deliver `b4ff12a`); the refusal now emits `event=health.startup.refused`.
 
 ## Notes
 
