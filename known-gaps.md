@@ -152,6 +152,22 @@ every workspace test runs, none skipped. Sibling of issue 004 (the harness
 must match the real environment: there it was the Docker VM memory cap,
 here it is the container user).
 
+**Implementer fix-forward, root-proof at the source (2026-06-07, `ad8436d`):**
+the test no longer injects its fault by `chmod` at all. It now replaces the
+WAL file with a **directory** at the WAL path, so the binary's
+`OpenOptions::append(true).open(<dir>)` returns a kernel-enforced `EISDIR`
+("Is a directory") for ANY user, root included — a structural inode error,
+not a bypassable permission bit. **Re-verified root-proof:** ran
+`cargo test -p kaleidoscope-cli --test wal_error_surfacing_cli_skeleton
+place_onto_failing_disk` in a container **as root (`--user 0:0`, uid 0
+confirmed)** at HEAD `ad8436d` → GREEN, and its load-bearing assertions
+require a non-zero exit + `persistence failed: io:` stderr, so the fault
+genuinely bites under root (the old `chmod 0444` did not). No live
+`set_readonly`/`set_permissions` remains (only prose mentions of the old
+mechanism). The N30 non-root runner stays as defence-in-depth for any
+future permission-based fault test, but this specific test no longer
+depends on it.
+
 ## N1 — TLS / SPIFFE
 
 Knobs exist in aperture's config schema but are off by default at v0.
