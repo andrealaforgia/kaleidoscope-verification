@@ -1,7 +1,21 @@
 # 013 — aperture's unset/no-cap HTTP path drops axum's 2 MiB DefaultBodyLimit
 
-- Status: `open` (2026-06-08). Grounded RED by **A23** at kaleidoscope HEAD
-  `cd567e0` (aperture-body-size-cap-v0 deliver `7138b88`/`7313f0b`).
+- Status: `resolved` (2026-06-08). Grounded RED by **A23** at kaleidoscope HEAD
+  `cd567e0`; FIXED in `88ef2aa` (aperture-body-size-cap-v0 fix-forward) — the
+  unset/no-cap HTTP path now falls back to a restored 2 MiB bound
+  (`const DEFAULT_HTTP_BODY_LIMIT_BYTES = 2 * 1024 * 1024`), so an oversized
+  body is refused 413 before the sink, matching the pre-feature `Bytes`
+  `DefaultBodyLimit`. **A23 flipped GREEN at `1f60ff5`**: 20 MiB → 413, small
+  bodies still pass, boundary byte-exact (2097152 → 400 inclusive, 2097153 →
+  413). The false "byte-for-byte today's behaviour" doc-comment is corrected to
+  describe the 2 MiB fallback, with a drift-guard `assert_eq!`. The implementer
+  fixed the behaviour AND the prose, not just the symptom.
+  **Note:** the SEPARATE config-reachability facet originally raised here (a
+  TOML-set `max_recv_msg_size` is still ignored because `into_config` does not
+  wire it) is NOT addressed by `88ef2aa` and is split to
+  [`issue 014`](014-aperture-toml-max-recv-msg-size-not-wired.md) / **A24**.
+- Was: `open` (2026-06-08), grounded RED by **A23** at HEAD `cd567e0`
+  (aperture-body-size-cap-v0 deliver `7138b88`/`7313f0b`).
 - Severity: medium (availability / DoS-surface regression + a false design-
   decision claim). The new feature, on its only operator-reachable
   configuration path, makes the body-size posture STRICTLY WEAKER than the

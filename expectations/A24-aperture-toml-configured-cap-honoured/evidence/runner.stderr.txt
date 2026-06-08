@@ -1,0 +1,2 @@
+step 1: build aperture from snapshot (HEAD)
+RED — TOML max_recv_msg_size=16384 IGNORED: a 100 KiB body got 400 (expected 413). into_config never wires the cap (unlike max_concurrent_requests), so only the 2 MiB default applies; the operator's configured cap does nothing — the very 'disclosed-but-unwired knob, operator gets none' that ADR-0073 (lines 8/67/121) says this feature closes.

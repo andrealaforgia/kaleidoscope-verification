@@ -1,0 +1,9 @@
+{"timestamp":"2026-06-08T10:15:32.303754Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-08T10:15:32.304192Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-08T10:15:32.304524Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-08T10:15:32.304788Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-08T10:15:32.304856Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-08T10:15:32.346230Z","level":"INFO","message":"aegis authz decision","tenant_id":"acme-prod","role":"operator","decision":"allow","subject":"ingest_logs","reason":"allow"}
+{"timestamp":"2026-06-08T10:15:32.346260Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":1024}
+{"timestamp":"2026-06-08T10:15:32.360686Z","level":"INFO","message":"aegis authz decision","tenant_id":"acme-prod","role":"operator","decision":"allow","subject":"ingest_logs","reason":"allow"}
+{"timestamp":"2026-06-08T10:15:32.360818Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":102400}

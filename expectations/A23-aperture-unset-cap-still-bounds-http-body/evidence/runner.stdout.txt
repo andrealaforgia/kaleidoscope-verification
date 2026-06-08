@@ -1,2 +1,3 @@
 small_100B=400
-body_20MB=400
+body_20MB=413
+OK — no-cap path refuses a 20 MiB body (413); DD2/C2 'byte-for-byte today' holds. A23 GREEN.

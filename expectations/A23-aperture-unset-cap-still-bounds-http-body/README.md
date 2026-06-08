@@ -36,23 +36,35 @@ pre-feature binary refused it.
 
 ## Verification
 
-- Status: `broken` (transition-proof RED).
-- Grounded RED: 2026-06-08 UTC at HEAD (`cd567e0`).
-- Method: build aperture from the HEAD snapshot; boot with a complete valid
-  ingest-auth config carrying **no** `max_recv_msg_size` anywhere (the
-  unambiguous no-cap path), stub sink; mint a valid HS256 bearer; POST
-  `/v1/logs` with `Content-Type: application/x-protobuf`.
-  - Control `100 B` body → `400` (auth + content-type clear; malformed
-    protobuf). Not 401/415, so a differing large-body verdict is attributable
-    to body **size** alone.
-  - `20 MiB` body → **`400`** (accepted past the size gate and fully buffered,
-    reaching protobuf decode). Expected for GREEN: `413`.
-- Differential proof (the regression): the pre-feature parent `ad8436d`,
-  same config + bearer + body, returns **`413`** for both a 3 MiB and a
-  20 MiB body (axum's 2 MiB `Bytes` `DefaultBodyLimit`). HEAD returns `400`
-  for both. The no-cap path is therefore NOT "byte-for-byte today's
-  behaviour" — the refactor dropped the `DefaultBodyLimit` the comment claims
-  it mirrors. See [issue 013](../../issues/013-aperture-unset-cap-drops-2mib-default-body-limit.md).
+- Status: `satisfied` (transition-proof flipped RED→GREEN).
+- Verified GREEN: 2026-06-08 UTC at HEAD (`1f60ff5`, fix `88ef2aa`).
+  - Control `100 B` body → `400` (auth + content-type clear; small body still
+    passes the size gate — not over-rejected).
+  - `20 MiB` body → **`413`** (refused, sink untouched). The no-cap path again
+    bounds the body.
+  - Boundary spot-check confirms the restored bound is **byte-for-byte** axum's
+    2 MiB `DefaultBodyLimit`: `1.5 MiB → 400`, `2097152 (exactly 2 MiB) → 400`
+    (inclusive), `2097153 (one over) → 413`, `2.5 MiB → 413`. Not
+    over-corrected (small bodies pass) nor under-corrected (just-over refused).
+  - The previously-false `body_size_cap.rs` doc-comment is corrected: the unset
+    path now documents + enforces the 2 MiB fallback (`const
+    DEFAULT_HTTP_BODY_LIMIT_BYTES = 2 * 1024 * 1024`, drift-guard `assert_eq!`),
+    so prose and behaviour agree.
+- Grounded RED: 2026-06-08 UTC at HEAD (`cd567e0`). Method: build aperture from
+  the HEAD snapshot; boot with a complete valid ingest-auth config carrying
+  **no** `max_recv_msg_size` (the unambiguous no-cap path), stub sink; mint a
+  valid HS256 bearer; POST `/v1/logs` with `Content-Type:
+  application/x-protobuf`. At `cd567e0` the `20 MiB` body returned `400`
+  (accepted + fully buffered).
+- Differential proof of the regression: the pre-feature parent `ad8436d`,
+  same config + bearer + body, returned **`413`** for both 3 MiB and 20 MiB
+  (axum's 2 MiB `Bytes` `DefaultBodyLimit`); `cd567e0` returned `400` for both.
+  The fix `88ef2aa` restores parity. See
+  [issue 013](../../issues/013-aperture-unset-cap-drops-2mib-default-body-limit.md)
+  (resolved). The SEPARATE config-reachability facet (a TOML-set
+  `max_recv_msg_size` is still ignored) is split to
+  [issue 014](../../issues/014-aperture-toml-max-recv-msg-size-not-wired.md) /
+  **A24**.
 
 ## Evidence
 
