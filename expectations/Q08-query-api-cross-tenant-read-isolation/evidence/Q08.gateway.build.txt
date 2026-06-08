@@ -1,1 +1,1 @@
-sha256:ccf3d232853a7193e02119243dbc3abc2ced8d726eb15d1c6e89aa76d68de008
+ERROR: failed to build: failed to solve: process "/bin/sh -c cargo build --release -p kaleidoscope-gateway --locked" did not complete successfully: exit code: 101

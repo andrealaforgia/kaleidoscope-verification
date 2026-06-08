@@ -1,1 +1,1 @@
-sha256:cbf2ec1bde4c526bc31d5b9a8beefaaa2ad83ec7ecea2b8932f12d724056b47a
+ERROR: failed to build: failed to solve: process "/bin/sh -c cargo build --release -p query-api --locked" did not complete successfully: exit code: 101

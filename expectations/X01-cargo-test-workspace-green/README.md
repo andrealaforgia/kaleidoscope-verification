@@ -20,8 +20,26 @@ Gate 1 of the CI contract per ADR-0005.
 
 ## Verification
 
-- Status: `satisfied`
-- Re-verified: 2026-06-07 UTC at HEAD (`f919c59`, after the
+- Status: `broken`
+- Grounded RED: 2026-06-08 UTC at HEAD (`cdccb51`,
+  `read-path-query-api-auth-v0` slice 1) — exit 101. `cargo test --workspace
+  --all-targets --locked` fails BEFORE compiling: `error: the lock file
+  /src/Cargo.lock needs to be updated but --locked was passed to prevent
+  this`. The commit added direct deps (`jsonwebtoken`, `reqwest`, `serde`,
+  `tracing`) to `query-api` + `query-http-common` manifests but committed a
+  `Cargo.lock` (+7 lines) that does not record the new dependency edges, so
+  the committed tree is inconsistent under `--locked`. Reproduced with a
+  CLEAN registry over the network (`cargo update --workspace --locked` →
+  "Locking 0 packages" yet "lock file needs to be updated"), so it is NOT a
+  harness cache artefact — it is the committed tree. Blast radius: every
+  `--locked` build fails — CI, the `query-api`/`log-query-api`/`trace-query-api`
+  Docker image builds (so Q/LQ/TQ expectations cannot rebuild at `cdccb51`),
+  and the `cargo test --workspace --lib --locked` pre-commit hook. Classic
+  committed-tree-vs-working-tree: the implementer's local tree has the
+  updated lock (her hook/tests/mutation passed), the committed tree does not.
+  See [issue 015](../../issues/015-cargo-lock-stale-at-cdccb51-locked-build-fails.md).
+  Transition-proof: flips GREEN when a consistent `Cargo.lock` is committed.
+- Previously `satisfied`: 2026-06-07 UTC at HEAD (`f919c59`, after the
   speed-up-local-precommit-v0 DELIVER `7e628d7`) — GREEN, exit 0. The deep
   `cargo test --workspace --all-targets --locked` (the run that moved OUT
   of the local hook and now gates only in CI) stays green here, and the
