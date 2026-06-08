@@ -1,0 +1,2 @@
+step 1: build aperture from snapshot (HEAD)
+RED — no-cap path ACCEPTED a 20 MiB body (got 400, expected 413). The streaming-Body refactor dropped axum's 2 MiB DefaultBodyLimit; DD2/C2 'unset = today's behaviour' is violated, the body is fully buffered, and into_config wires no TOML cap to restore the bound. Pre-feature parent ad8436d refuses the same body 413.
