@@ -38,6 +38,15 @@ Gate 1 of the CI contract per ADR-0005.
   "Locking 0 packages", no error). Issue 015 RESOLVED. (Run non-root per
   N30; verified by RUNNING the full `--all-targets --locked` build, not just
   the lock-consistency gate.)
+- Re-verified GREEN: 2026-06-13 UTC at HEAD (`fd5a1e3`,
+  `prism-echarts-paint-e2e-v0` "Gate 1 fix-forward") — exit 0, 218
+  `test result: ok`, no `FAILED` / `error[` / lock error. The commit edits a
+  structural test (`crates/integration-suite/tests/v0_claims_honesty_pass_2_structure.rs`,
+  +18) plus prism frontend + docs; no `Cargo.toml`/`Cargo.lock` change. Re-run
+  because the "Gate 1 fix-forward" title signals a recently-red cargo-test gate
+  (the committed-tree-vs-working-tree class that bit `cdccb51`); confirmed the
+  committed tree is green, not just the implementer's working tree. (Ran
+  non-root per N30, verified by RUNNING.)
 - Previously `broken`: 2026-06-08 UTC at HEAD (`cdccb51`,
   `read-path-query-api-auth-v0` slice 1) — exit 101. `cargo test --workspace
   --all-targets --locked` fails BEFORE compiling: `error: the lock file
