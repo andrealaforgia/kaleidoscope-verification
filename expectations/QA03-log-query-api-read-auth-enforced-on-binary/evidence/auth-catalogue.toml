@@ -1,0 +1,4 @@
+# Harness tenant catalogue (aegis::load_catalogue). Local test fixture.
+[[tenants]]
+id = "harness-tenant"
+display_name = "Harness"

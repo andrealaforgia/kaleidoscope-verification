@@ -1,0 +1,3 @@
+ M crates/trace-query-api/src/composition.rs
+ M crates/trace-query-api/src/main.rs
+?? crates/trace-query-api/tests/slice_06_auth_config_reject.rs

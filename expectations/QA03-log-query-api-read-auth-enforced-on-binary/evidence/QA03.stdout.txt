@@ -1,0 +1,11 @@
+code_valid=200
+code_nobearer=401
+code_ingest=401
+code_wrongiss=401
+code_ghost=401
+code_badrole=401
+code_expired=401
+code_wrongkey=401
+code_forged=401
+code_algnone=401
+code_malformed=401

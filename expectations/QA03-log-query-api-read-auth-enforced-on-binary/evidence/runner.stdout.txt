@@ -1,0 +1,4 @@
+OK valid -> 200 (log API serves an authorised query)
+OK no-bearer -> 401 (R3); ingest-audience -> 401 (audience fence) on the log API
+OK adversarial battery (wrongiss/ghost/badrole/expired/wrongkey/forged/algnone/malformed) -> 401 each
+QA03 satisfied — deployed log-query-api enforces read-auth: valid query-audience bearer served, every adversarial bearer (incl no-bearer R3 and ingest-audience fence) refused 401, no env-tenant fall-through, no secret leak
