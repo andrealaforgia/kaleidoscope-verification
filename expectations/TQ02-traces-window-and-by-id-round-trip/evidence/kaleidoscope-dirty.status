@@ -1,8 +1,2 @@
- M Cargo.lock
- M crates/log-query-api/src/main.rs
- M crates/query-api/src/main.rs
- M crates/query-http-common/Cargo.toml
  M crates/query-http-common/src/lib.rs
- M crates/trace-query-api/src/main.rs
-?? crates/log-query-api/tests/slice_07_tracing_subscriber.rs
-?? docs/feature/read-api-tracing-subscriber-v0/distill/
+?? crates/query-api/tests/slice_08_auth_config_reject.rs

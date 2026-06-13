@@ -1,1 +1,1 @@
-OK — traces round-trip gateway->Ray->trace-query-api: window arm returns 10 spans all carrying service=tq02-pilot (bogus service -> []); by-id arm resolves discovered trace_id ece636b61a81ad53d94be410cb15f29a to 2 spans, all sharing it
+OK — traces round-trip gateway->Ray->trace-query-api: window arm returns 10 spans all carrying service=tq02-pilot (bogus service -> []); by-id arm resolves discovered trace_id 55d1b91ffa2239bbe0f4c09a7af1fdf0 to 2 spans, all sharing it

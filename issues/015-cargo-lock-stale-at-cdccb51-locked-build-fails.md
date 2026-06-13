@@ -1,6 +1,16 @@
 # 015 — committed Cargo.lock is stale at cdccb51: every `--locked` build fails
 
-- Status: `open` (2026-06-08). Grounded RED by **X01** at kaleidoscope HEAD
+- Status: `resolved` (2026-06-13) at kaleidoscope HEAD `2552981`
+  (`read-path-query-api-auth-v0` slice 2) — X01 GREEN, exit 0, 215
+  `test result: ok`, no lock error. Slice 2 added the `jsonwebtoken` /
+  `reqwest` / `serde` dev-deps to the `log-query-api` (+10) and
+  `trace-query-api` (+11) manifests, reconciling them with the lock edges
+  that were already present (and over-specified) at `cdccb51`. The committed
+  `Cargo.lock` is byte-identical across the two SHAs; the fix landed in the
+  manifests, not the lock. Correction to the framing below: the lock was not
+  "missing edges" for the new deps — it already carried them and was AHEAD
+  of the slice-1 manifests, which is why `--locked` demanded regeneration.
+  Was: `open` (2026-06-08). Grounded RED by **X01** at kaleidoscope HEAD
   `cdccb51` (`read-path-query-api-auth-v0` slice 1).
 - Severity: high (the committed tree does not build under `--locked` — CI, all
   three query-API Docker images, and the pre-commit hook all fail; no `--locked`

@@ -1,5 +1,5 @@
 exit=1
 ---stderr---
-{"timestamp":"2026-06-01T09:41:37.704637Z","level":"INFO","event":"trace_query_api_starting","pillar_root":"/data","tenant_resolved":false}
-{"timestamp":"2026-06-01T09:41:37.704667Z","level":"ERROR","event":"health.startup.refused","reason":"KALEIDOSCOPE_TRACE_QUERY_TENANT is unset or empty (fail-closed)"}
+{"timestamp":"2026-06-13T08:22:29.016711Z","level":"INFO","event":"trace_query_api_starting","pillar_root":"/data","tenant_resolved":false}
+{"timestamp":"2026-06-13T08:22:29.016728Z","level":"ERROR","event":"health.startup.refused","reason":"KALEIDOSCOPE_TRACE_QUERY_TENANT is unset or empty (fail-closed)"}
 Error: "KALEIDOSCOPE_TRACE_QUERY_TENANT is unset or empty (fail-closed)"

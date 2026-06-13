@@ -20,8 +20,25 @@ Gate 1 of the CI contract per ADR-0005.
 
 ## Verification
 
-- Status: `broken`
-- Grounded RED: 2026-06-08 UTC at HEAD (`cdccb51`,
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-13 UTC at HEAD (`2552981`,
+  `read-path-query-api-auth-v0` slice 2) — exit 0, 215 `test result: ok`
+  lines, no `FAILED` / `error[` / lock error. The slice-1 `--locked` failure
+  is RESOLVED. Mechanism (settled by black-box diff, correcting the original
+  "missing edge" framing): the committed `Cargo.lock` is BYTE-IDENTICAL at
+  `cdccb51` and `2552981`, and it already carried the `jsonwebtoken` /
+  `reqwest` / `serde` edges for `log-query-api` and `trace-query-api`. At
+  `cdccb51` those two manifests had not yet DECLARED those deps, so the lock
+  was AHEAD of the manifests (over-specified relative to the declared graph)
+  and `--locked` demanded regeneration → exit 101. Slice 2 added exactly
+  those dev-deps to the `log-query-api` (+10) and `trace-query-api` (+11)
+  `Cargo.toml`, reconciling the manifests with the already-present lock
+  edges. Same command, same registry, reproduced side-by-side: `cdccb51`
+  fails `--locked`, `2552981` passes (`cargo update --workspace --locked` →
+  "Locking 0 packages", no error). Issue 015 RESOLVED. (Run non-root per
+  N30; verified by RUNNING the full `--all-targets --locked` build, not just
+  the lock-consistency gate.)
+- Previously `broken`: 2026-06-08 UTC at HEAD (`cdccb51`,
   `read-path-query-api-auth-v0` slice 1) — exit 101. `cargo test --workspace
   --all-targets --locked` fails BEFORE compiling: `error: the lock file
   /src/Cargo.lock needs to be updated but --locked was passed to prevent

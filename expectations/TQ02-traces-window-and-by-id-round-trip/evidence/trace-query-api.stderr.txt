@@ -1,0 +1,2 @@
+{"timestamp":"2026-06-13T08:22:02.580902Z","level":"INFO","event":"trace_query_api_starting","pillar_root":"/data","tenant_resolved":true}
+{"timestamp":"2026-06-13T08:22:02.580960Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9092"}

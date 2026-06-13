@@ -1,6 +1,0 @@
- M crates/log-query-api/Cargo.toml
- M crates/log-query-api/src/lib.rs
- M crates/trace-query-api/Cargo.toml
- M crates/trace-query-api/src/lib.rs
-?? crates/log-query-api/tests/slice_09_read_auth.rs
-?? crates/trace-query-api/tests/slice_05_read_auth.rs

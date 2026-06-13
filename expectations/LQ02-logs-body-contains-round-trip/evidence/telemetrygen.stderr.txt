@@ -1,4 +1,4 @@
-2026-05-29T22:09:49.601Z	INFO	logs/logs.go:84	generation of logs is limited	{"per-second": 5}
-2026-05-29T22:09:49.603Z	INFO	logs/logs.go:37	starting HTTP exporter
-2026-05-29T22:09:51.611Z	INFO	logs/worker.go:105	logs generated	{"worker": 0, "logs": 11}
-2026-05-29T22:09:51.611Z	INFO	logs/worker.go:49	stopping the exporter	{"worker": 0}
+2026-06-13T08:21:27.587Z	INFO	logs/logs.go:84	generation of logs is limited	{"per-second": 5}
+2026-06-13T08:21:27.588Z	INFO	logs/logs.go:37	starting HTTP exporter
+2026-06-13T08:21:29.592Z	INFO	logs/worker.go:105	logs generated	{"worker": 0, "logs": 11}
+2026-06-13T08:21:29.592Z	INFO	logs/worker.go:49	stopping the exporter	{"worker": 0}

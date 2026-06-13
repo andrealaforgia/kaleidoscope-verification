@@ -1,3 +1,4 @@
 step 1a: build kaleidoscope-gateway image
 step 1b: build query-api image
 step 1c: build log-query-api image
+step 1d: build trace-query-api image
