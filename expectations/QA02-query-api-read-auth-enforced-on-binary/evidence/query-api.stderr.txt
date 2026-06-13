@@ -1,0 +1,13 @@
+{"timestamp":"2026-06-13T09:06:52.525845Z","level":"INFO","event":"query_api_starting","pillar_root":"/data","tenant_resolved":false,"auth_enabled":true}
+{"timestamp":"2026-06-13T09:06:52.526093Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9090"}
+{"timestamp":"2026-06-13T09:06:53.709735Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"viewer","decision":"allow","subject":"query_range","reason":"allow"}
+{"timestamp":"2026-06-13T09:06:53.722512Z","level":"WARN","message":"read-path authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"missing_claim"}
+{"timestamp":"2026-06-13T09:06:53.734608Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"wrong_audience"}
+{"timestamp":"2026-06-13T09:06:53.746968Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"wrong_issuer"}
+{"timestamp":"2026-06-13T09:06:53.758097Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"unknown_tenant"}
+{"timestamp":"2026-06-13T09:06:53.769073Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"unknown_role"}
+{"timestamp":"2026-06-13T09:06:53.780408Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"expired"}
+{"timestamp":"2026-06-13T09:06:53.791880Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"invalid_signature"}
+{"timestamp":"2026-06-13T09:06:53.805002Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"invalid_signature"}
+{"timestamp":"2026-06-13T09:06:53.817479Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"malformed"}
+{"timestamp":"2026-06-13T09:06:53.830905Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"malformed"}

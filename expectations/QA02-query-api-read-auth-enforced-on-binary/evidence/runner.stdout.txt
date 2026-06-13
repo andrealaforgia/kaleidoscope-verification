@@ -1,0 +1,4 @@
+OK valid -> 200 success
+OK no-bearer -> 401 (R3 holds); ingest-audience -> 401 (audience fence holds)
+OK adversarial battery (wrongiss/ghost/badrole/expired/wrongkey/forged/algnone/malformed) -> 401 each
+QA02 satisfied — deployed query-api enforces read-auth: valid query-audience bearer served, every adversarial bearer (incl no-bearer R3 and ingest-audience fence) refused 401, no env-tenant fall-through, no secret leak

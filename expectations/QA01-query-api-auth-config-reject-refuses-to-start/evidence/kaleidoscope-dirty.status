@@ -1,0 +1,3 @@
+ M crates/log-query-api/src/composition.rs
+ M crates/log-query-api/src/main.rs
+?? crates/log-query-api/tests/slice_10_auth_config_reject.rs

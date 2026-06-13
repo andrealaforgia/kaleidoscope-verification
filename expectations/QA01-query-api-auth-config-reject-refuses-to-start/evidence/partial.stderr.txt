@@ -1,0 +1,1 @@
+{"timestamp":"2026-06-13T09:05:11.840715Z","level":"ERROR","event":"config_validation_failed","reason":"partial read-auth config: missing KALEIDOSCOPE_QUERY_AUTH_SECRET_FILE, KALEIDOSCOPE_QUERY_AUTH_CATALOGUE (all four KALEIDOSCOPE_QUERY_AUTH_* keys are required when read-auth is enabled)"}

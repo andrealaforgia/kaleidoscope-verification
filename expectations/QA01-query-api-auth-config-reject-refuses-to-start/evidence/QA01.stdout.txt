@@ -1,0 +1,2 @@
+partial_exit=2
+unreadable_exit=2

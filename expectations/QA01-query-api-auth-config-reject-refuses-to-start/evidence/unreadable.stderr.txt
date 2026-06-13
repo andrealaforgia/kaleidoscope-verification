@@ -1,0 +1,1 @@
+{"timestamp":"2026-06-13T09:05:12.058122Z","level":"ERROR","event":"config_validation_failed","reason":"read-auth secret_file /auth/absent-secret is unreadable: entity not found"}
