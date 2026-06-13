@@ -1,0 +1,4 @@
+OK no-bearer -> 401, 0 rows; expired -> 401, 0 rows (no env-tenant fall-through despite tenant-a having data)
+OK tenant-a bearer -> 200 success, 1 series (valid bearer reads the token tenant's data)
+OK tenant-b bearer -> 200 success, 0 series (bearer scopes to tenant-b, isolating tenant-a's data)
+QA04 satisfied — no-bearer-bypass (R3) holds with env tenant + seeded data (401, 0 rows), invalid bearer no fall-through, valid bearer reads the TOKEN tenant, cross-tenant isolation via bearer holds, no token leak

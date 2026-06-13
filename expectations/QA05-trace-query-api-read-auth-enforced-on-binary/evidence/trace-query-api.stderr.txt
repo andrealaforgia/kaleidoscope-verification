@@ -1,0 +1,11 @@
+{"timestamp":"2026-06-13T09:34:30.817556Z","level":"INFO","event":"trace_query_api_starting","pillar_root":"/data","tenant_resolved":false,"auth_enabled":true}
+{"timestamp":"2026-06-13T09:34:30.817748Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9092"}
+{"timestamp":"2026-06-13T09:34:30.833633Z","level":"WARN","message":"read-path authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"missing_claim"}
+{"timestamp":"2026-06-13T09:34:31.865149Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"viewer","decision":"allow","subject":"trace_query","reason":"allow"}
+{"timestamp":"2026-06-13T09:34:31.878031Z","level":"WARN","message":"read-path authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"missing_claim"}
+{"timestamp":"2026-06-13T09:34:31.890356Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"wrong_audience"}
+{"timestamp":"2026-06-13T09:34:31.901327Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"expired"}
+{"timestamp":"2026-06-13T09:34:31.911443Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"malformed"}
+{"timestamp":"2026-06-13T09:34:31.921657Z","level":"INFO","message":"aegis authz decision","tenant_id":"harness-tenant","role":"viewer","decision":"allow","subject":"trace_query","reason":"allow"}
+{"timestamp":"2026-06-13T09:34:31.930531Z","level":"WARN","message":"read-path authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"missing_claim"}
+{"timestamp":"2026-06-13T09:34:31.940836Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"trace_query","reason":"wrong_audience"}

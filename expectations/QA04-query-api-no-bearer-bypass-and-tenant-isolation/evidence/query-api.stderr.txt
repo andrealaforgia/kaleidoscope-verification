@@ -1,0 +1,6 @@
+{"timestamp":"2026-06-13T09:32:38.922103Z","level":"INFO","event":"query_api_starting","pillar_root":"/data","tenant_resolved":true,"auth_enabled":true}
+{"timestamp":"2026-06-13T09:32:38.922200Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:9090"}
+{"timestamp":"2026-06-13T09:32:40.002428Z","level":"WARN","message":"read-path authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"missing_claim"}
+{"timestamp":"2026-06-13T09:32:40.027716Z","level":"WARN","message":"aegis authz decision","tenant_id":"","role":"","decision":"deny","subject":"query_range","reason":"expired"}
+{"timestamp":"2026-06-13T09:32:40.045547Z","level":"INFO","message":"aegis authz decision","tenant_id":"tenant-a","role":"viewer","decision":"allow","subject":"query_range","reason":"allow"}
+{"timestamp":"2026-06-13T09:32:40.062075Z","level":"INFO","message":"aegis authz decision","tenant_id":"tenant-b","role":"viewer","decision":"allow","subject":"query_range","reason":"allow"}

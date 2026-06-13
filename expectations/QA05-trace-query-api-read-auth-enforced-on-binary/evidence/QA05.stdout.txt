@@ -1,0 +1,8 @@
+code_win_valid=200
+code_win_nobearer=401
+code_win_ingest=401
+code_win_expired=401
+code_win_malformed=401
+code_byid_valid=200
+code_byid_nobearer=401
+code_byid_ingest=401

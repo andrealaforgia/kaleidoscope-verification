@@ -1,0 +1,3 @@
+OK window /api/v1/traces: valid 200; no-bearer/ingest/expired/malformed 401
+OK by_id /api/v1/traces/by_id: valid non-401 (200); no-bearer/ingest 401 (route IS guarded)
+QA05 satisfied — deployed trace-query-api enforces read-auth on BOTH the window and by_id routes (no-bearer R3 + audience fence hold on each), no unguarded route

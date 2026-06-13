@@ -1,0 +1,7 @@
+# QA04 two-tenant catalogue (aegis::load_catalogue).
+[[tenants]]
+id = "tenant-a"
+display_name = "Tenant A"
+[[tenants]]
+id = "tenant-b"
+display_name = "Tenant B"
