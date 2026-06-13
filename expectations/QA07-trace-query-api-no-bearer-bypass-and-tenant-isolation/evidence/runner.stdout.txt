@@ -1,0 +1,4 @@
+OK no-bearer -> 401, 0 spans; expired -> 401, 0 spans (no env-tenant fall-through on traces)
+OK tenant-a bearer -> 200, 10 spans (valid bearer reads the token tenant's spans)
+OK tenant-b bearer -> 200, 0 spans (bearer scopes to tenant-b, isolating tenant-a's spans)
+QA07 satisfied — trace-query-api: no-bearer-bypass (R3) holds with env tenant + seeded spans, invalid bearer no fall-through, valid bearer reads the TOKEN tenant, cross-tenant isolation via bearer holds

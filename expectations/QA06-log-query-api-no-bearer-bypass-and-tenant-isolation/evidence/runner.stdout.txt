@@ -1,0 +1,4 @@
+OK no-bearer -> 401, 0 records; expired -> 401, 0 records (no env-tenant fall-through on logs)
+OK tenant-a bearer -> 200, 6 records (valid bearer reads the token tenant's logs)
+OK tenant-b bearer -> 200, 0 records (bearer scopes to tenant-b, isolating tenant-a's logs)
+QA06 satisfied — log-query-api: no-bearer-bypass (R3) holds with env tenant + seeded logs, invalid bearer no fall-through, valid bearer reads the TOKEN tenant, cross-tenant isolation via bearer holds
