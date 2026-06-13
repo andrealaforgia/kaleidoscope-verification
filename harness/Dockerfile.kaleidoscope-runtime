@@ -1,0 +1,56 @@
+# syntax=docker/dockerfile:1.7
+#
+# Kaleidoscope consolidated-runtime image — CATALOGUE-AUTHORED.
+#
+# Honesty note: the kaleidoscope project ships no Dockerfile for the
+# consolidated runtime binary at HEAD (fbcacca); the root `Dockerfile`
+# builds `kaleidoscope-cli`, not this. This image is authored by the
+# expectations catalogue purely to stand the new `kaleidoscope` binary
+# (crate `kaleidoscope-runtime`, consolidated-runtime-v0, ADR-0076) up
+# as a black-box service so its single-process live-loop contract can be
+# observed. It is modelled verbatim on the project's Dockerfile.query-api
+# (same rust:1.88-slim-bookworm builder, same debian:bookworm-slim
+# runtime, same `--locked` release build). The binary, workspace and
+# Cargo.lock are all the project's own, from the `git archive HEAD`
+# snapshot; the only catalogue-introduced artefact is this file.
+#
+# The binary boots ONE tokio runtime that builds one durable store per
+# signal and Arc::clones each into BOTH the OTLP ingest listeners
+# (gRPC :4317 / HTTP :4318) AND the three query routers (metrics :9090 /
+# logs :9091 / traces :9092), so an ingested signal is queryable from the
+# same process with no restart.
+
+# -----------------------------------------------------------------
+# Stage 1 — Build
+# -----------------------------------------------------------------
+FROM rust:1.88-slim-bookworm AS builder
+
+WORKDIR /workspace
+
+COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+COPY crates ./crates
+COPY xtask ./xtask
+
+# `--locked` enforces the workspace's shipped Cargo.lock, matching CI.
+# The [[bin]] is named `kaleidoscope` (crate kaleidoscope-runtime).
+RUN cargo build --release -p kaleidoscope-runtime --locked
+
+# -----------------------------------------------------------------
+# Stage 2 — Runtime
+# -----------------------------------------------------------------
+FROM debian:bookworm-slim AS runtime
+
+COPY --from=builder /workspace/target/release/kaleidoscope \
+    /usr/local/bin/kaleidoscope
+
+# One pillar root holds pulse/lumen/ray sub-stores; the consolidated
+# runtime is the SOLE writer of its root (ADR-0076 DD4). The binary
+# defaults pillar_root to /data.
+ENV KALEIDOSCOPE_PILLAR_ROOT=/data
+WORKDIR /data
+VOLUME ["/data"]
+
+# Two OTLP ingest listeners + three query HTTP APIs, all one process.
+EXPOSE 4317 4318 9090 9091 9092
+
+ENTRYPOINT ["/usr/local/bin/kaleidoscope"]

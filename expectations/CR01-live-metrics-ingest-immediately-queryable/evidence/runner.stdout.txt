@@ -1,0 +1,1 @@
+CR01 satisfied — consolidated runtime live metrics loop: gen absent before ingest (0 series), present after ingest (1 series) from the SAME process (StartedAt unchanged), no restart. Shared-Arc live visibility holds (ADR-0076 DD2).
