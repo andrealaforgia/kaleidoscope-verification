@@ -1,0 +1,3 @@
+total_logs=217 app_logs=1 noise_logs=24
+noise_sample=['poll_ready; idle', 'poll_ready; connecting', 'poll_ready; not ready']
+FAIL: 24 transport-noise records present (must be 0); total log count is 217, expected exactly 1 (secondary)
