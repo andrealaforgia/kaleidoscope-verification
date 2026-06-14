@@ -1,0 +1,1 @@
+FIXB2 satisfied — all three query APIs (:9090/:9091/:9092) accept RFC3339 AND unix-seconds (200), and an unparseable timestamp returns 400 naming both formats.

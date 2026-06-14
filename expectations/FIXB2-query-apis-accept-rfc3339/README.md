@@ -23,14 +23,16 @@ NAMES both accepted formats — not the bare "is not a number".
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the fix commits).
-- Grounded RED: 2026-06-14 UTC at committed HEAD `0d398b9`. On all three APIs:
-  unix-seconds → `200`; **RFC3339 → `400`**; unparseable → `400` with body
-  `{"status":"error","error":"invalid time bounds: start is not a number"}`
-  (does not name the accepted formats). The symptom is uniform across the three
-  APIs (observed identically on each).
-- Flips GREEN when `parse_time_range` accepts RFC3339 (RFC3339 window → `200` on
-  all three) and the `400` message names both RFC3339 and unix-seconds.
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-14 UTC at committed HEAD `eac5f2f` (fix(query-http-common)
+  FIX-B.2). On all three APIs (:9090/:9091/:9092): unix-seconds → `200`, RFC3339
+  → `200`, unparseable → `400` with body `{"status":"error","error":"invalid
+  time bounds: start must be RFC3339 (e.g. 2026-06-14T17:00:00Z) or unix
+  seconds"}` — names both accepted formats, no raw-value echo. Flipped from RED
+  on the implementer's commit, exactly as the transition-proof expectation was
+  pre-authored.
+- Previously `broken`: grounded RED 2026-06-14 at HEAD `0d398b9` — RFC3339 → `400`
+  on all three with the bare `"start is not a number"` (no format named).
 - Method: `harness/run-kaleidoscope-runtime.sh` builds the runtime from the HEAD
   snapshot; the runner boots one runtime and probes the three APIs with a
   unix-seconds window, an RFC3339 window, and an unparseable value.

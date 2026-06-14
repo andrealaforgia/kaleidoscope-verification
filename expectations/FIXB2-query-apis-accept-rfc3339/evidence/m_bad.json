@@ -1,1 +1,1 @@
-{"status":"error","error":"invalid time bounds: start is not a number"}
+{"status":"error","error":"invalid time bounds: start must be RFC3339 (e.g. 2026-06-14T17:00:00Z) or unix seconds"}

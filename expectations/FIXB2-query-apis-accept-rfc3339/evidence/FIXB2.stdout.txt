@@ -1,9 +1,9 @@
 m_unix=200
-m_rfc=400
+m_rfc=200
 m_bad=400
 l_unix=200
-l_rfc=400
+l_rfc=200
 l_bad=400
 t_unix=200
-t_rfc=400
+t_rfc=200
 t_bad=400
