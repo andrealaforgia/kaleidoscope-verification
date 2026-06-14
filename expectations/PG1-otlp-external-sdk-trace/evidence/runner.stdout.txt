@@ -1,0 +1,4 @@
+OK criteria 1-4: external OTel SDK -> real wire -> by-id retrieval; parent+child tree intact (root c4f4776e37d6e36d, child b8c24ba3a3821de3), customer.id=bea-test present, nanos round-trip exact, parent encloses child.
+BONUS GREEN: a log retrieved on :9091 carries the same trace_id=9a377e9e4656585fd36ea2fb63208db7 as the trace (PG-2 seed: log<->trace correlation works from an external SDK). NOTE the logs API serialises trace_id as a byte-array ([154, 55, 126, 158, 70, 86, 88, 95, 211, 110, 162, 251, 99, 32, 141, 183]) while the traces API uses a hex string — the exact PG-2 criterion-5 inconsistency, corroborated black-box.
+PG1 satisfied.
+PG1 GREEN — external OTel SDK round-trips through the real OTLP wire; the Customer's ad-hoc proof is now a repeatable committed black-box net.

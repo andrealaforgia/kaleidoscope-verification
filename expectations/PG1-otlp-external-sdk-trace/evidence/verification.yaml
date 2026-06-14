@@ -1,0 +1,8 @@
+expectation_id: "PG1"
+verified_at_utc: "2026-06-14T17:55:27Z"
+kaleidoscope_dir: "/Users/andrealaforgia/dev/kaleidoscope"
+kaleidoscope_sha: "0d398b96aed94c31ced242c23d97b59733009a7b"
+kaleidoscope_dirty: "yes"
+host_uname: "Darwin Andreas-MacBook-Pro.local 25.4.0 Darwin Kernel Version 25.4.0: Thu Mar 19 19:33:25 PDT 2026; root:xnu-12377.101.15~1/RELEASE_ARM64_T6041 arm64"
+harness_dir: "/Users/andrealaforgia/dev/kaleidoscope-expectations/harness"
+note: "build used HEAD via git archive; dirty diff saved for reference only"
