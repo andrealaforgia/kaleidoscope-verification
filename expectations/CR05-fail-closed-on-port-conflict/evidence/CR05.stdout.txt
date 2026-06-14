@@ -1,0 +1,4 @@
+rt_exit=1
+rt1_still=200
+refused_event=1
+bind_reason=2

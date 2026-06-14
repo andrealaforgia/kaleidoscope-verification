@@ -1,0 +1,1 @@
+CR05 satisfied — consolidated runtime fails closed on a listener bind conflict: the second process exits 1 (non-zero, not a hang) with a refusal reason on its log (health.startup.refused=1, bind/in-use markers=2), no half-up serving, and the incumbent stays up (200). ADR-0076 DD3 wire->probe->use holds.

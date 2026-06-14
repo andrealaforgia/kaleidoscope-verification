@@ -1,0 +1,2 @@
+{"timestamp":"2026-06-14T09:14:43.991602Z","level":"ERROR","event":"health.startup.refused","reason":"metrics query listener bind failed on 0.0.0.0:9090: Address already in use (os error 98)"}
+Error: "consolidated runtime startup refused: metrics query listener bind failed on 0.0.0.0:9090: Address already in use (os error 98)"
