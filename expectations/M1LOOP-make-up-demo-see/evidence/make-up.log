@@ -1,0 +1,147 @@
+==> Building and starting the consolidated runtime ...
+docker compose up -d --build --wait --wait-timeout 180 runtime
+ Image kaleidoscope-runtime:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 641B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.runtime
+#2 transferring dockerfile: 8.44kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#3 DONE 0.7s
+
+#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#6 DONE 0.5s
+
+#7 [internal] load metadata for docker.io/library/rust:1.88-slim-bookworm
+#7 DONE 0.5s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.5s
+
+#8 [runtime 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:96e378d7e6531ac9a15ad505478fcc2e69f371b10f5cdf87857c4b8188404716
+#8 resolve docker.io/library/debian:bookworm-slim@sha256:96e378d7e6531ac9a15ad505478fcc2e69f371b10f5cdf87857c4b8188404716 done
+#8 DONE 0.0s
+
+#9 [prism-builder 1/7] FROM docker.io/library/node:22-bookworm-slim@sha256:e21fc383b50d5347dc7a9f1cae45b8f4e2f0d39f7ade28e4eef7d2934522b752
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:e21fc383b50d5347dc7a9f1cae45b8f4e2f0d39f7ade28e4eef7d2934522b752 0.0s done
+#9 DONE 0.0s
+
+#10 [rust-builder 1/6] FROM docker.io/library/rust:1.88-slim-bookworm@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
+#10 resolve docker.io/library/rust:1.88-slim-bookworm@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.0s done
+#10 DONE 0.0s
+
+#11 [internal] load build context
+#11 transferring context: 461.57kB 0.0s done
+#11 DONE 0.0s
+
+#12 [prism-builder 2/7] WORKDIR /workspace
+#12 CACHED
+
+#13 [prism-builder 3/7] RUN corepack enable && corepack prepare pnpm@9 --activate
+#13 CACHED
+
+#14 [prism-builder 4/7] COPY pnpm-workspace.yaml pnpm-lock.yaml ./
+#14 CACHED
+
+#15 [prism-builder 5/7] COPY apps ./apps
+#15 DONE 0.0s
+
+#16 [prism-builder 6/7] RUN pnpm install --frozen-lockfile --filter prism
+#16 0.515 Lockfile is up to date, resolution step is skipped
+#16 0.548 Progress: resolved 1, reused 0, downloaded 0, added 0
+#16 0.634 .                                        | +414 ++++++++++++++++++++++++++++++++
+#16 0.794 
+#16 0.794    ╭──────────────────────────────────────────────────────────────────╮
+#16 0.794    │                                                                  │
+#16 0.794    │                Update available! 9.15.9 → 11.6.0.                │
+#16 0.794    │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v11.6.0   │
+#16 0.794    │            Run "corepack use pnpm@11.6.0" to update.             │
+#16 0.794    │                                                                  │
+#16 0.794    ╰──────────────────────────────────────────────────────────────────╯
+#16 0.794 
+#16 1.550 Progress: resolved 414, reused 0, downloaded 108, added 108
+#16 2.549 Progress: resolved 414, reused 0, downloaded 395, added 396
+#16 2.742 Progress: resolved 414, reused 0, downloaded 413, added 414, done
+#16 2.848 .../esbuild@0.21.5/node_modules/esbuild postinstall$ node install.js
+#16 2.879 .../esbuild@0.21.5/node_modules/esbuild postinstall: Done
+#16 2.963 Done in 2.7s using pnpm v9.15.9
+#16 DONE 3.2s
+
+#17 [prism-builder 7/7] RUN pnpm --filter prism build
+#17 0.383 No projects matched the filters "/workspace" in "/workspace"
+#17 0.387 
+#17 0.387 > prism@0.1.0 build /workspace/apps/prism
+#17 0.387 > tsc -b && vite build
+#17 0.387 
+#17 2.066 vite v5.4.21 building for production...
+#17 2.095 transforming...
+#17 3.785 ✓ 598 modules transformed.
+#17 4.180 rendering chunks...
+#17 4.441 computing gzip size...
+#17 4.478 dist/index.html                   0.39 kB │ gzip:   0.26 kB
+#17 4.478 dist/assets/index-BiLGTODY.css    3.84 kB │ gzip:   1.21 kB
+#17 4.478 dist/assets/index-DdNYm95r.js   692.41 kB │ gzip: 228.68 kB │ map: 3,735.22 kB
+#17 4.478 
+#17 4.478 (!) Some chunks are larger than 500 kB after minification. Consider:
+#17 4.478 - Using dynamic import() to code-split the application
+#17 4.478 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+#17 4.478 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#17 4.479 ✓ built in 2.40s
+#17 DONE 4.5s
+
+#18 [rust-builder 3/6] COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+#18 CACHED
+
+#19 [rust-builder 5/6] COPY xtask ./xtask
+#19 CACHED
+
+#20 [rust-builder 6/6] RUN cargo build --release -p kaleidoscope-runtime --locked
+#20 CACHED
+
+#21 [runtime 2/4] COPY --from=rust-builder /workspace/target/release/kaleidoscope     /usr/local/bin/kaleidoscope
+#21 CACHED
+
+#22 [runtime 3/4] COPY --from=prism-builder /workspace/apps/prism/dist /srv/prism
+#22 CACHED
+
+#23 [rust-builder 4/6] COPY crates ./crates
+#23 CACHED
+
+#24 [rust-builder 2/6] WORKDIR /workspace
+#24 CACHED
+
+#25 [runtime 4/4] WORKDIR /data
+#25 CACHED
+
+#26 exporting to image
+#26 exporting layers done
+#26 exporting manifest sha256:3f3bb2318eb66835eda1c33df4566398c87181fd0c0b739d866f6f420b508f00 done
+#26 exporting config sha256:09d6631d1dd829eecfafbe3b02172e142aa2b69e58cb813fe372c89e8a87beb5 done
+#26 exporting attestation manifest sha256:3f49940ed9d7fc3a91d179df194859c63c9dd67633638a5b761082b53ac7c0ed 0.0s done
+#26 exporting manifest list sha256:9c19425dbce16fb4f5f9c07a83128a458a727615f8f5f70be3dabaa97887ac67 done
+#26 naming to docker.io/library/kaleidoscope-runtime:local done
+#26 unpacking to docker.io/library/kaleidoscope-runtime:local done
+#26 DONE 0.1s
+
+#27 resolving provenance for metadata file
+#27 DONE 0.0s
+ Image kaleidoscope-runtime:local Built 
+ Network snapshot_default Creating 
+ Network snapshot_default Created 
+ Volume snapshot_kaleidoscope-data Creating 
+ Volume snapshot_kaleidoscope-data Created 
+ Container snapshot-runtime-1 Creating 
+ Container snapshot-runtime-1 Created 
+ Container snapshot-runtime-1 Starting 
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint snapshot-runtime-1 (52633bb40898b6303ac39fe42564082b4c273354c2c5c4e518f50668144b5292): Bind for 0.0.0.0:4317 failed: port is already allocated
+make: *** [up] Error 1

@@ -1,0 +1,5 @@
+step: compose up (build runtime + Prism, start, wait healthy)
+prism_root=200 query_up=200
+step: seed (push sample telemetry via the generator service)
+demo_metrics=1 demo_logs=1 demo_traces=1
+M1LOOP satisfied — the stack comes up healthy with same-origin Prism (HTML on :9090) and the seed makes all three signals queryable (metrics 1, logs 1, traces 1). The one-command Milestone-1 loop holds.

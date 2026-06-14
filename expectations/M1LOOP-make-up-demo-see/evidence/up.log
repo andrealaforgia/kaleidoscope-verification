@@ -1,0 +1,109 @@
+ Image kaleidoscope-runtime:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 644B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.runtime
+#2 transferring dockerfile: 8.44kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#4 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/rust:1.88-slim-bookworm
+#6 DONE 0.4s
+
+#7 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#7 DONE 0.4s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.4s
+
+#8 [runtime 1/4] FROM docker.io/library/debian:bookworm-slim@sha256:96e378d7e6531ac9a15ad505478fcc2e69f371b10f5cdf87857c4b8188404716
+#8 resolve docker.io/library/debian:bookworm-slim@sha256:96e378d7e6531ac9a15ad505478fcc2e69f371b10f5cdf87857c4b8188404716 done
+#8 DONE 0.0s
+
+#9 [prism-builder 1/7] FROM docker.io/library/node:22-bookworm-slim@sha256:e21fc383b50d5347dc7a9f1cae45b8f4e2f0d39f7ade28e4eef7d2934522b752
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:e21fc383b50d5347dc7a9f1cae45b8f4e2f0d39f7ade28e4eef7d2934522b752 0.0s done
+#9 DONE 0.0s
+
+#10 [rust-builder 1/6] FROM docker.io/library/rust:1.88-slim-bookworm@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89
+#10 resolve docker.io/library/rust:1.88-slim-bookworm@sha256:38bc5a86d998772d4aec2348656ed21438d20fcdce2795b56ca434cf21430d89 0.0s done
+#10 DONE 0.0s
+
+#11 [internal] load build context
+#11 transferring context: 34.81kB 0.0s done
+#11 DONE 0.0s
+
+#12 [runtime 2/4] COPY --from=rust-builder /workspace/target/release/kaleidoscope     /usr/local/bin/kaleidoscope
+#12 CACHED
+
+#13 [rust-builder 4/6] COPY crates ./crates
+#13 CACHED
+
+#14 [prism-builder 5/7] COPY apps ./apps
+#14 CACHED
+
+#15 [prism-builder 3/7] RUN corepack enable && corepack prepare pnpm@9 --activate
+#15 CACHED
+
+#16 [rust-builder 3/6] COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+#16 CACHED
+
+#17 [rust-builder 5/6] COPY xtask ./xtask
+#17 CACHED
+
+#18 [prism-builder 4/7] COPY pnpm-workspace.yaml pnpm-lock.yaml ./
+#18 CACHED
+
+#19 [runtime 3/4] COPY --from=prism-builder /workspace/apps/prism/dist /srv/prism
+#19 CACHED
+
+#20 [prism-builder 7/7] RUN pnpm --filter prism build
+#20 CACHED
+
+#21 [prism-builder 6/7] RUN pnpm install --frozen-lockfile --filter prism
+#21 CACHED
+
+#22 [prism-builder 2/7] WORKDIR /workspace
+#22 CACHED
+
+#23 [rust-builder 6/6] RUN cargo build --release -p kaleidoscope-runtime --locked
+#23 CACHED
+
+#24 [rust-builder 2/6] WORKDIR /workspace
+#24 CACHED
+
+#25 [runtime 4/4] WORKDIR /data
+#25 CACHED
+
+#26 exporting to image
+#26 exporting layers done
+#26 exporting manifest sha256:fd722235e69225fb59740bc3bc6429dea71066da183285d56836cced8d9f8684 done
+#26 exporting config sha256:dac2e7f3a493466236515cb9782c510becc4a1e0a91607bbc7a88ba53f8a8dad done
+#26 exporting attestation manifest sha256:e031c86e79a44c89cb5070bea4057364b2139e60e256f74b44cf409cd261d6a2 0.0s done
+#26 exporting manifest list sha256:a70850312f4d6d02a84c67162a5c2b459fd8e708f45cc2167ad41c9c150faf16 done
+#26 naming to docker.io/library/kaleidoscope-runtime:local done
+#26 unpacking to docker.io/library/kaleidoscope-runtime:local done
+#26 DONE 0.0s
+
+#27 resolving provenance for metadata file
+#27 DONE 0.0s
+ Image kaleidoscope-runtime:local Built 
+ Network m1loop17574_default Creating 
+ Network m1loop17574_default Created 
+ Volume m1loop17574_kaleidoscope-data Creating 
+ Volume m1loop17574_kaleidoscope-data Created 
+ Container m1loop17574-runtime-1 Creating 
+ Container m1loop17574-runtime-1 Created 
+ Container m1loop17574-runtime-1 Starting 
+ Container m1loop17574-runtime-1 Started 
+ Container m1loop17574-runtime-1 Waiting 
+ Container m1loop17574-runtime-1 Healthy 

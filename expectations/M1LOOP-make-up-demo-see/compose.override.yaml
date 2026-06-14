@@ -1,0 +1,12 @@
+# Catalogue port-isolation override for M1-LOOP. The seed service reaches the
+# runtime over compose's internal network (runtime:4317), so the OTLP ingest
+# ports do NOT need host publishing — we drop them entirely (avoiding any
+# collision with a separately-running canonical stack) and remap only the three
+# query ports to high host ports for the black-box checks. Same-origin Prism is
+# preserved: Prism + /api/v1 still share one port (9090, here host 19390).
+services:
+  runtime:
+    ports: !override
+      - "19390:9090" # metrics query + Prism (same-origin)
+      - "19391:9091" # logs query
+      - "19392:9092" # traces query
