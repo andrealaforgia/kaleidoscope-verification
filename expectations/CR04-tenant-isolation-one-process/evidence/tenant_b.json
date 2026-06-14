@@ -1,0 +1,1 @@
+{"data":{"result":[{"metric":{"__name__":"gen","tenant.id":"tenant-b"},"values":[[1781397740,"0"],[1781397740,"1"]]}],"resultType":"matrix"},"status":"success"}

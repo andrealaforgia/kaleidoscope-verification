@@ -1,0 +1,2 @@
+tenant_a_view=1
+tenant_b_view=1

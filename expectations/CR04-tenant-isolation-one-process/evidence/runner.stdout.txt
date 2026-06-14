@@ -1,0 +1,1 @@
+CR04 satisfied — tenant isolation in the consolidated runtime's shared store: tenant-a sees only svcA (1 series, the tenant-b metric isolated out), tenant-b sees only svcB (1 series). No cross-tenant leak either direction.

@@ -1,0 +1,1 @@
+{"data":{"result":[{"metric":{"__name__":"gen","service.name":"cr04-svcA"},"values":[[1781397739,"0"],[1781397739,"1"]]}],"resultType":"matrix"},"status":"success"}
