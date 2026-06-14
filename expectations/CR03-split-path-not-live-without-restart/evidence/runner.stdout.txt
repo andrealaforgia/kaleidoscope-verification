@@ -1,0 +1,1 @@
+CR03 satisfied — split path is NOT live: a post-boot ingest is invisible to the already-running query-api (0 series) and only appears after a restart (1 series). This is the regression the consolidated runtime fixes; with CR01/CR02 (live, no restart) the differential is proven real.

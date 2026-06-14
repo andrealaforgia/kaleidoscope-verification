@@ -1,0 +1,1 @@
+{"data":{"result":[{"metric":{"__name__":"gen","service.name":"cr03-pilot"},"values":[[1781396827,"0"],[1781396827,"1"]]}],"resultType":"matrix"},"status":"success"}
