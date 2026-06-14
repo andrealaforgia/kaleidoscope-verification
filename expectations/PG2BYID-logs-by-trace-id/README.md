@@ -16,7 +16,9 @@ body, different trace_id). Then, from `:9091 /api/v1/logs`:
   log carries trace_id A, and NONE carries trace_id B (filters A in, excludes B);
 - the symmetric control: a query by trace_id B returns exactly trace B's log(s)
   and excludes A;
-- a query by a non-existent (well-formed) trace_id returns zero logs.
+- a query by a non-existent (well-formed) trace_id returns zero logs (empty 200);
+- a malformed trace_id (not a 32-hex id) returns `400`, the error names the
+  expected 32-hex format, and the raw bad input is not echoed back.
 
 So the correlated logs of one trace are retrievable in one query, scoped to that
 trace and no other.
@@ -34,10 +36,12 @@ trace and no other.
 - Status: `broken` (transition-proof; RED until the route lands).
 - Grounded RED: 2026-06-15 UTC at committed HEAD `4a8d2d8`. The logs query does
   not honour a `trace_id` filter: a query by trace_id A returned BOTH traces'
-  logs (trace_ids `59a1937a…6f76` and `b2ca6c22…8ce3`), and a query by a
-  non-existent trace_id also returned 2 logs — the parameter is ignored, no
-  filtering. Flips GREEN when one by-trace_id query returns exactly the matching
-  trace's log(s) and excludes the others.
+  logs (trace_ids `59a1937a…6f76` and `b2ca6c22…8ce3`), a query by a
+  non-existent trace_id also returned 2 logs, and a malformed trace_id returned
+  `200` with logs instead of `400` — the parameter is ignored, no filtering and
+  no validation. Flips GREEN when one by-trace_id query returns exactly the
+  matching trace's log(s), excludes the others, and a malformed id yields a
+  format-naming 400 with no raw echo.
 - Method: `harness/run-kaleidoscope-runtime.sh` builds the runtime from the HEAD
   snapshot; the runner boots one runtime, runs the external OTel app twice (two
   traces, two in-span logs), then queries `:9091` by trace_id A, by trace_id B,

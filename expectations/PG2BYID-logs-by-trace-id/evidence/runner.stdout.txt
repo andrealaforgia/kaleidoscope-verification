@@ -1,1 +1,1 @@
-FAIL: query by trace_id A returned logs from other traces too (trace_ids=['59a1937a943a79152399a4792d246f76', 'b2ca6c2202cf71c0b87cc4f9e0258ce3']) — filter not honoured (it must return ONLY trace A's logs)
+FAIL: query by trace_id A returned logs from other traces too (trace_ids=['220a7d4ee2250a1631fb38c3ed3b6cfe', 'aa798d922f145fdf024d84d7a3f125b6']) — filter not honoured (it must return ONLY trace A's logs)

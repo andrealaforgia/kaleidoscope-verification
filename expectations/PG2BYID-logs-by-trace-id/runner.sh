@@ -39,6 +39,7 @@ S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 curl -s -o "'"$EVIDENCE_DIR"'/by_a.json"   "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=${A}"
 curl -s -o "'"$EVIDENCE_DIR"'/by_b.json"   "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=${B}"
 curl -s -o "'"$EVIDENCE_DIR"'/by_bogus.json" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=00000000000000000000000000000000"
+curl -s -o "'"$EVIDENCE_DIR"'/malformed.body" -w "%{http_code}" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=NOT-A-HEX-TRACE-ID-zzz" > "'"$EVIDENCE_DIR"'/malformed.code"
 curl -s -o "'"$EVIDENCE_DIR"'/unfiltered.json" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&body_contains=customer"
 '
 "$HARNESS_DIR/run-kaleidoscope-runtime.sh" "$EVIDENCE_DIR" PG2BYID "$INLINE"
@@ -70,6 +71,15 @@ ids_b = {l.get("trace_id") for l in by_b}
 if not b_app or ids_b != {B}:
     fail("symmetric control failed: query by trace_id B did not return exactly trace B's logs (trace_ids=%r)" % (sorted(ids_b),))
 if len(bogus) != 0:
-    fail("query by a non-existent trace_id returned %d logs, expected 0" % (len(bogus),))
+    fail("query by a non-existent trace_id returned %d logs, expected 0 (empty 200)" % (len(bogus),))
+code = open(evid + "/malformed.code").read().strip()
+body = open(evid + "/malformed.body").read()
+raw = "NOT-A-HEX-TRACE-ID-zzz"
+if code != "400":
+    fail("a malformed trace_id returned HTTP %s, expected 400 (the input is not a 32-hex id)" % (code,))
+if "32" not in body or not re.search(r"hex", body, re.I):
+    fail("the 400 for a malformed trace_id does not name the expected 32-hex format (body=%r)" % (body[:200],))
+if raw in body:
+    fail("the 400 echoes the raw malformed input back (no-raw-echo violated): body=%r" % (body[:200],))
 print("PG2BYID satisfied — one query by trace_id returns exactly that trace's correlated log(s): by A -> only A (%s), by B -> only B (%s), by a non-existent id -> 0 logs. Cross-trace exclusion holds." % (A, B))
 PY
