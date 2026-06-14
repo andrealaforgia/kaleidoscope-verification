@@ -1,1 +1,1 @@
-FAIL: logs API trace_id is not a 32-char lowercase hex string (got [21, 180, 212, 232, 77, 221, 164, 237, 239, 240, 68, 197, 222, 73, 236, 253]) — still the byte-array shape
+PG2HEX satisfied — logs API exposes trace_id (51aff609dd94af6ed23cb39cafc594c0) and span_id (3e399f33595edbeb) as lowercase-hex strings, matching the traces API; the in-span log and its trace share the same id strings.

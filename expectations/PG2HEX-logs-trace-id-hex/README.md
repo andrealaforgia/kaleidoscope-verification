@@ -26,11 +26,16 @@ same characters), and its `span_id` matches a span id in that trace.
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the fix commits).
-- Grounded RED: 2026-06-14 UTC at committed HEAD `af00199`. The logs API returns
-  `trace_id` as a byte array (e.g. `[21,180,212,…]`) and `span_id` as
-  `[201,34,…]` — not hex strings. Flips GREEN when both are lowercase-hex strings
-  matching the traces API and equal to the same trace's ids.
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `4a8d2d8`. The logs API now
+  returns `trace_id` as a 32-char lowercase hex string
+  (`51aff609dd94af6ed23cb39cafc594c0`) and `span_id` as a 16-char lowercase hex
+  string (`3e399f33595edbeb`), the same shape as the traces API; both id strings
+  equal the same trace's ids from `:9092`. Flipped from RED on the implementer's
+  commit, exactly as pre-authored.
+- Previously `broken`: grounded RED 2026-06-14 UTC at committed HEAD `af00199` —
+  the logs API returned `trace_id` as a byte array (e.g. `[21,180,212,…]`) and
+  `span_id` as `[201,34,…]`, not hex strings.
 - Method: reuses the PG-1 external OTel app (a log emitted inside the span);
   builds the runtime from the HEAD snapshot, runs the app, queries `:9091` logs
   and `:9092` traces, and asserts the hex shape + cross-API id-string equality.
