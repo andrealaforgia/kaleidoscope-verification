@@ -49,6 +49,12 @@ then queries :9092 `/api/v1/traces/by_id` and checks the four criteria
 ## Verification
 
 - Status: `satisfied`
+- Re-verified GREEN: 2026-06-14 UTC at committed HEAD `af00199` (after the
+  implementer's own PG-1 deliverable — an external Python OTel app + a committed
+  acceptance test — landed). My independent net still passes all four criteria +
+  the bonus, so the external-SDK round-trip holds on the current tree and the
+  PG-1 work did not regress it. Two committed nets now exist: the implementer's
+  in the runtime crate, this one in the verification repo.
 - Grounded GREEN: 2026-06-14 UTC at committed HEAD `0d398b9` (runtime code
   `2a74e4f`; generator-independent — `make up` runtime only, the `seed`
   generator is not needed). A run retrieved 2 spans by-id; root + child with
