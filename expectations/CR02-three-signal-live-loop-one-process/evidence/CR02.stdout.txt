@@ -1,0 +1,9 @@
+m_pre=0
+m_after1=1
+m_after2=2
+l_pre=0
+l_after=6
+t_pre=0
+t_after=10
+started_before=2026-06-14T00:10:48.367985885Z
+started_after=2026-06-14T00:10:48.367985885Z

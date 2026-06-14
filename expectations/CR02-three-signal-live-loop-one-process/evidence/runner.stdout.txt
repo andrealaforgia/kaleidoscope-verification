@@ -1,0 +1,4 @@
+OK metrics: 0 before, 1 after first, 2 after second (continuous live state, no restart)
+OK logs: 0 before, 6 after (live on :9091)
+OK traces: 0 before, 10 after (live on :9092)
+CR02 satisfied — all three signals live in one process: metrics (continuous, two ingests visible no restart), logs and traces each empty-before / present-after, StartedAt unchanged (no restart). Shared lumen/ray/pulse Arc live visibility holds (ADR-0076).

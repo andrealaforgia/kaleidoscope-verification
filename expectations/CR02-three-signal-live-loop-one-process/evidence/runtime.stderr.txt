@@ -1,0 +1,16 @@
+{"timestamp":"2026-06-14T00:10:48.450078Z","level":"INFO","event":"startup","version":"0.1.0"}
+{"timestamp":"2026-06-14T00:10:48.450103Z","level":"INFO","event":"listener_bound","transport":"grpc","addr":"0.0.0.0:4317"}
+{"timestamp":"2026-06-14T00:10:48.450887Z","level":"INFO","event":"listener_bound","transport":"http","addr":"0.0.0.0:4318"}
+{"timestamp":"2026-06-14T00:10:48.450892Z","level":"INFO","event":"readiness_changed","ready":"true","reason":"listeners_bound"}
+{"timestamp":"2026-06-14T00:10:48.451290Z","level":"INFO","event":"ready"}
+{"timestamp":"2026-06-14T00:10:48.637109Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":106}
+{"timestamp":"2026-06-14T00:10:49.637959Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":106}
+{"timestamp":"2026-06-14T00:10:49.815876Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":106}
+{"timestamp":"2026-06-14T00:10:50.821735Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"metrics","bytes":106}
+{"timestamp":"2026-06-14T00:10:51.014425Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:51.217157Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:51.414620Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:51.619041Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:51.818342Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:52.018599Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"logs","bytes":135}
+{"timestamp":"2026-06-14T00:10:52.198568Z","level":"INFO","event":"request_received","transport":"http_protobuf","signal":"traces","bytes":1503}
