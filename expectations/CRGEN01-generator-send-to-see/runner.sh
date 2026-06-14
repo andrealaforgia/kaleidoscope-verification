@@ -43,7 +43,12 @@ sleep 2
 S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 echo "m_series=$(curl -s "http://localhost:19190/api/v1/query_range?query=request_count&start=${S}&end=${E}&step=15s" | tee "$EVIDENCE_DIR/metrics.json" | python3 -c 'import sys,json;print(len(json.load(sys.stdin)["data"]["result"]))' 2>/dev/null || echo NA)"
 echo "log_hits=$(curl -s "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&body_contains=declined" | tee "$EVIDENCE_DIR/logs.json" | python3 -c 'import sys,json;d=json.load(sys.stdin);print(sum(1 for r in (d if isinstance(d,list) else []) if "declined" in str(r.get("body",""))))' 2>/dev/null || echo NA)"
-TID=4bf92f3577b34da6a3ce929d0e0e4736
+# DISCOVER the trace id from the observable window (service=kaleidoscope-demo),
+# never a constant the implementer pins for us — assert the id the generator
+# actually emitted round-trips through by-id.
+curl -s -o "$EVIDENCE_DIR/window.json" "http://localhost:19192/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}"
+TID=$(python3 -c 'import json;s=json.load(open("'"$EVIDENCE_DIR"'/window.json"));ids=[x.get("trace_id") for x in (s if isinstance(s,list) else []) if x.get("trace_id")];print(ids[0] if ids else "")' 2>/dev/null || echo "")
+echo "discovered_trace_id=${TID}"
 curl -s -o "$EVIDENCE_DIR/byid.json" -w 'byid_code=%{http_code}\n' "http://localhost:19192/api/v1/traces/by_id?trace_id=${TID}"
 echo "span_count=$(python3 -c 'import json;s=json.load(open("'"$EVIDENCE_DIR"'/byid.json"));print(len(s) if isinstance(s,list) else 0)' 2>/dev/null || echo NA)"
 docker logs "$RT" > "$EVIDENCE_DIR/runtime.stderr.txt" 2>&1 || true
@@ -55,9 +60,13 @@ LH=$(python3 -c 'import json;d=json.load(open("'"$EVIDENCE_DIR"'/logs.json"));pr
 SC=$(python3 -c 'import json;s=json.load(open("'"$EVIDENCE_DIR"'/byid.json"));print(len(s) if isinstance(s,list) else 0)')
 SVC=$(python3 -c 'import json;s=json.load(open("'"$EVIDENCE_DIR"'/byid.json"));print(",".join(sorted({x.get("resource_attributes",{}).get("service.name","") for x in (s if isinstance(s,list) else [])})))' 2>/dev/null || echo "")
 
+BID_TID=$(python3 -c 'import json;s=json.load(open("'"$EVIDENCE_DIR"'/byid.json"));print(s[0].get("trace_id","") if isinstance(s,list) and s else "")' 2>/dev/null || echo "")
+
 [ "$MS" -ge 1 ] 2>/dev/null || fail "metric request_count not queryable on :9090 ($MS series)"
 [ "$LH" -ge 1 ] 2>/dev/null || fail "app log 'card declined' not queryable on :9091 ($LH hits)"
-[ "$SC" -ge 1 ] 2>/dev/null || fail "fixed-trace-id trace not retrievable by-id on :9092 ($SC spans)"
+[ -n "$TID" ] || fail "no trace discovered in the window query for service=kaleidoscope-demo — the generator's trace is not observable"
+[ "$SC" -ge 1 ] 2>/dev/null || fail "the discovered trace id did not retrieve by-id on :9092 ($SC spans)"
+[ "$BID_TID" = "$TID" ] || fail "by-id did not round-trip the discovered trace id (window $TID vs by-id $BID_TID)"
 echo "$SVC" | grep -q 'kaleidoscope-demo' || fail "by-id trace service is not kaleidoscope-demo (got '$SVC')"
 
-echo "CRGEN01 satisfied — first-party generator send-to-see: request_count on :9090 ($MS series), 'card declined' log on :9091 ($LH), fixed-id trace on :9092 ($SC spans, service kaleidoscope-demo). Our-generator->our-gateway self-compat."
+echo "CRGEN01 satisfied — first-party generator send-to-see: request_count on :9090 ($MS series), 'card declined' log on :9091 ($LH), and the trace DISCOVERED from the window (id $TID) round-trips by-id on :9092 ($SC spans, service kaleidoscope-demo). Our-generator->our-gateway self-compat; trace id observed at runtime, not pinned."

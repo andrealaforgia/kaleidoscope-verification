@@ -1,5 +1,6 @@
 m_series=1
 log_hits=1
+discovered_trace_id=4bf92f3577b34da6a3ce929d0e0e4736
 byid_code=200
 span_count=1
-CRGEN01 satisfied — first-party generator send-to-see: request_count on :9090 (1 series), 'card declined' log on :9091 (1), fixed-id trace on :9092 (1 spans, service kaleidoscope-demo). Our-generator->our-gateway self-compat.
+CRGEN01 satisfied — first-party generator send-to-see: request_count on :9090 (1 series), 'card declined' log on :9091 (1), and the trace DISCOVERED from the window (id 4bf92f3577b34da6a3ce929d0e0e4736) round-trips by-id on :9092 (1 spans, service kaleidoscope-demo). Our-generator->our-gateway self-compat; trace id observed at runtime, not pinned.

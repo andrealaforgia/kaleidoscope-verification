@@ -47,7 +47,7 @@ sleep 2
 S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 MS=$(curl -s "http://localhost:19290/api/v1/query_range?query=request_count&start=${S}&end=${E}&step=15s" | python3 -c 'import sys,json;print(len(json.load(sys.stdin)["data"]["result"]))' 2>/dev/null || echo NA)
 LH=$(curl -s "http://localhost:19291/api/v1/logs?start=${S}&end=${E}" | python3 -c 'import sys,json;d=json.load(sys.stdin);print(len(d) if isinstance(d,list) else 0)' 2>/dev/null || echo NA)
-SC=$(curl -s "http://localhost:19292/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736" | python3 -c 'import sys,json;s=json.load(sys.stdin);print(len(s) if isinstance(s,list) else 0)' 2>/dev/null || echo NA)
+SC=$(curl -s "http://localhost:19292/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}" | python3 -c 'import sys,json;s=json.load(sys.stdin);print(len(s) if isinstance(s,list) else 0)' 2>/dev/null || echo NA)
 echo "metrics_after=${MS} logs_after=${LH} spans_after=${SC}"
 cp "$EVIDENCE_DIR/gen.err" "$EVIDENCE_DIR/gen.err.txt"
 

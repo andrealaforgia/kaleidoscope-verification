@@ -16,14 +16,16 @@ signals queryable with no restart:
 - metric `request_count` on :9090 `/api/v1/query_range` (≥1 series).
 - app log `checkout failed: card declined` on :9091 `/api/v1/logs`
   (`body_contains=declined`).
-- trace span `GET /api/v1/query_range`, service `kaleidoscope-demo`, under the
-  fixed trace id `4bf92f3577b34da6a3ce929d0e0e4736` on :9092
-  `/api/v1/traces/by_id` (deterministic by design).
+- trace span `GET /api/v1/query_range`, service `kaleidoscope-demo`: discovered
+  from the window `/api/v1/traces?service=kaleidoscope-demo`, then its trace id
+  round-trips through :9092 `/api/v1/traces/by_id` (the id is observed at
+  runtime, never a pinned constant).
 
 ## Source
 
-- kaleidoscope generator deliver `4eacfb8` (slice 2), HEAD `3658376`.
-  Env-driven; mandatory pre-flight reachability probe before emitting.
+- kaleidoscope generator deliver `4eacfb8` (slice 2), HEAD `3658376`. Observable
+  contract only: env-driven endpoint/tenant; the three signal names/endpoints
+  above.
 
 ## Verification
 
@@ -40,7 +42,8 @@ signals queryable with no restart:
 ## Notes
 
 `.no-compose`: CRGEN01 manages its own runtime + generator containers. The
-fixed trace id makes the by-id assertion deterministic. Companions: CRGEN02
+trace id is discovered from the window and round-tripped through by-id — never a
+constant supplied by the implementer. Companions: CRGEN02
 (fail-closed reachability), CRGEN03 (tenant scoping), M1-LOOP (`make up` →
 `make demo`). FIX-A (log noise) is the unfiltered-`:9091` counterpart and is now
 gradeable since the generator is committed.

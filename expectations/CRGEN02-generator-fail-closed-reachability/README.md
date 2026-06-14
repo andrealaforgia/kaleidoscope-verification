@@ -26,8 +26,9 @@ and all three runtime stores stay empty.
 
 ## Source
 
-- kaleidoscope generator deliver `4eacfb8` (slice 2), HEAD `3658376`; the
-  `probe_reachable` seam runs before `spark::init` / any export.
+- kaleidoscope generator deliver `4eacfb8` (slice 2), HEAD `3658376`. Observable
+  contract only: a dead endpoint yields a non-zero exit, a named reason on
+  stderr, and no telemetry in the stores.
 
 ## Verification
 

@@ -3,8 +3,7 @@
 ## Surface
 
 Sprint item FIX-B.2 (onboarding ergonomics). The three query APIs' timestamp
-parsing, centralised in `query_http_common::parse_time_range` (shared by
-query-api / log-query-api / trace-query-api).
+handling, observed uniformly across :9090 / :9091 / :9092.
 
 ## Behaviour
 
@@ -18,8 +17,9 @@ NAMES both accepted formats — not the bare "is not a number".
 
 ## Source
 
-- Sprint requirement FIX-B.2 (PO, agreed with Customer). PO steer: fix once in
-  `query_http_common::parse_time_range`; all three APIs inherit it.
+- Sprint requirement FIX-B.2 (PO, agreed with Customer). Observable contract
+  only: the three query APIs accept the same timestamp formats and give the same
+  parse error.
 
 ## Verification
 
@@ -27,8 +27,8 @@ NAMES both accepted formats — not the bare "is not a number".
 - Grounded RED: 2026-06-14 UTC at committed HEAD `0d398b9`. On all three APIs:
   unix-seconds → `200`; **RFC3339 → `400`**; unparseable → `400` with body
   `{"status":"error","error":"invalid time bounds: start is not a number"}`
-  (does not name the accepted formats). So the symptom is uniform across the
-  three APIs, confirming the shared parser.
+  (does not name the accepted formats). The symptom is uniform across the three
+  APIs (observed identically on each).
 - Flips GREEN when `parse_time_range` accepts RFC3339 (RFC3339 window → `200` on
   all three) and the `400` message names both RFC3339 and unix-seconds.
 - Method: `harness/run-kaleidoscope-runtime.sh` builds the runtime from the HEAD
