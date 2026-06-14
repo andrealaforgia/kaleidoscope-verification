@@ -1,0 +1,3 @@
+gen_exit=1
+metrics_after=0 logs_after=0 spans_after=0
+CRGEN02 satisfied — generator fails closed on an unreachable endpoint: exit 1 (non-zero), endpoint :4399 named on stderr with an unreachable reason, and zero bytes emitted (all three runtime stores empty). Probe-before-emit holds.

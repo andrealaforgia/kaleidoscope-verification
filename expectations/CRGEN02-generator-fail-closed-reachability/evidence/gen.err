@@ -1,0 +1,1 @@
+kaleidoscope-telemetrygen: ingest endpoint http://crgen2-rt-11290:4399 is unreachable (Connection refused (os error 111)); bring the stack up first (for example `make up`) before generating telemetry
