@@ -1,0 +1,3 @@
+acme_metrics=1 acme_logs=219 acme_traces=1
+tenantb_metrics=0 tenantb_logs=0 tenantb_traces=0
+CRGEN03 satisfied — generated telemetry is tenant-scoped: acme sees all three signals (m=1 l=219 t=1), tenant-b sees none (0/0/0). No cross-tenant leak.
