@@ -1,3 +1,3 @@
-total_logs=217 app_logs=1 noise_logs=24
-noise_sample=['poll_ready; idle', 'poll_ready; connecting', 'poll_ready; not ready']
-FAIL: 24 transport-noise records present (must be 0); total log count is 217, expected exactly 1 (secondary)
+total_logs=1 app_logs=1 noise_logs=0
+noise_sample=[]
+FIXA satisfied — after the generator, :9091 returns only the application log (card declined), zero transport noise, count 1.
