@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1.7
+#
+# Kaleidoscope first-party telemetry generator image — CATALOGUE-AUTHORED.
+#
+# Builds the `kaleidoscope-telemetrygen` bin (consolidated-runtime /
+# experimentable-stack C3, ADR-0077) from the committed HEAD snapshot so the
+# CRGEN-* expectations can drive it black-box against a running consolidated
+# runtime. Env-driven: OTEL_EXPORTER_OTLP_ENDPOINT (OTLP/gRPC ingest),
+# KALEIDOSCOPE_TENANT, OTEL_SERVICE_NAME. It runs a MANDATORY pre-flight
+# reachability probe before emitting; a down endpoint is a non-zero exit.
+# Modelled verbatim on the project's Dockerfile.query-api (same builder,
+# same --locked release build).
+
+FROM rust:1.88-slim-bookworm AS builder
+WORKDIR /workspace
+COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+COPY crates ./crates
+COPY xtask ./xtask
+RUN cargo build --release -p kaleidoscope-telemetrygen --locked
+
+FROM debian:bookworm-slim AS runtime
+COPY --from=builder /workspace/target/release/kaleidoscope-telemetrygen \
+    /usr/local/bin/kaleidoscope-telemetrygen
+ENTRYPOINT ["/usr/local/bin/kaleidoscope-telemetrygen"]

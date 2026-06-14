@@ -1,0 +1,1 @@
+{"data":{"result":[{"metric":{"__name__":"request_count","service.name":"kaleidoscope-demo","tenant.id":"acme"},"values":[[1781460645,"1"]]}],"resultType":"matrix"},"status":"success"}
