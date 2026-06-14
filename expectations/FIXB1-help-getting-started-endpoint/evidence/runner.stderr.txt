@@ -1,0 +1,4 @@
+step 1: build kaleidoscope-runtime image (cache hit if no source change)
+FAIL: GET /help not 200 (got 404) — no plain-text getting-started endpoint
+help_code=404
+help_ctype=
