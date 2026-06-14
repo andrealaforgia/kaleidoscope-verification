@@ -22,10 +22,14 @@ route that wins over the Prism SPA fallback, so `GET /` stays the SPA while
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the endpoint lands).
-- Grounded RED: 2026-06-14 UTC at committed HEAD `0d398b9`. `GET /help` → `404`
-  (no such route; the runtime has no `/help`). Flips GREEN when `/help` returns
-  `200` plain text containing the four endpoints + the time format.
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-14 UTC at committed HEAD `2fd4daa` (FIX-B.1). `GET
+  :9090/help` → `200` plain text: "Kaleidoscope query API — usage" with the four
+  example curls (`/api/v1/query_range`, `/api/v1/logs`, `/api/v1/traces`,
+  `/api/v1/traces/by_id`) and "Accepted time format: RFC3339 … or unix seconds".
+  Flipped from RED on the implementer's commit, exactly as pre-authored.
+- Previously `broken`: grounded RED 2026-06-14 at HEAD `0d398b9` — `GET /help` →
+  `404` (no such route).
 - Method: `harness/run-kaleidoscope-runtime.sh` builds the runtime from the HEAD
   snapshot; the runner boots one runtime and probes `GET /help`.
 

@@ -1,2 +1,2 @@
-help_code=404
-help_ctype=
+help_code=200
+help_ctype=text/plain; charset=utf-8

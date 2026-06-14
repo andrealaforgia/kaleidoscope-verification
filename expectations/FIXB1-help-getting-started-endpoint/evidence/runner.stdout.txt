@@ -1,0 +1,1 @@
+FIXB1 satisfied — GET /help returns a plain-text getting-started with the four example endpoints and the time format.
