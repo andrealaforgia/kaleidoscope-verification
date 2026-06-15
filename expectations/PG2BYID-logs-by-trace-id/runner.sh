@@ -9,7 +9,10 @@
 #   - GET :9091 by trace_id A returns >=1 log, EVERY returned log has trace_id A,
 #     and NONE has trace_id B   (filters in A, excludes B);
 #   - GET :9091 by trace_id B is the symmetric control (returns B, excludes A);
-#   - GET :9091 by a bogus 32-hex trace_id returns zero logs.
+#   - GET :9091 by a bogus 32-hex trace_id returns zero logs;
+#   - GET :9091 by trace_id A WITHOUT a time window returns A's log(s) — a unique
+#     trace id alone suffices (no mandatory window), the customer's "one query by
+#     id", mirroring the traces/by_id route which needs no window.
 #
 # Transition-proof: RED now (the trace_id filter is not honoured — the query
 # either ignores it and returns both logs, or errors), GREEN when the single
@@ -41,6 +44,7 @@ curl -s -o "'"$EVIDENCE_DIR"'/by_b.json"   "http://localhost:19391/api/v1/logs?s
 curl -s -o "'"$EVIDENCE_DIR"'/by_bogus.json" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=00000000000000000000000000000000"
 curl -s -o "'"$EVIDENCE_DIR"'/malformed.body" -w "%{http_code}" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&trace_id=NOT-A-HEX-TRACE-ID-zzz" > "'"$EVIDENCE_DIR"'/malformed.code"
 curl -s -o "'"$EVIDENCE_DIR"'/unfiltered.json" "http://localhost:19391/api/v1/logs?start=${S}&end=${E}&body_contains=customer"
+curl -s -o "'"$EVIDENCE_DIR"'/by_a_nowin.body" -w "%{http_code}" "http://localhost:19391/api/v1/logs?trace_id=${A}" > "'"$EVIDENCE_DIR"'/by_a_nowin.code"
 '
 "$HARNESS_DIR/run-kaleidoscope-runtime.sh" "$EVIDENCE_DIR" PG2BYID "$INLINE"
 
@@ -81,5 +85,21 @@ if "32" not in body or not re.search(r"hex", body, re.I):
     fail("the 400 for a malformed trace_id does not name the expected 32-hex format (body=%r)" % (body[:200],))
 if raw in body:
     fail("the 400 echoes the raw malformed input back (no-raw-echo violated): body=%r" % (body[:200],))
-print("PG2BYID satisfied — one query by trace_id returns exactly that trace's correlated log(s): by A -> only A (%s), by B -> only B (%s), by a non-existent id -> 0 logs. Cross-trace exclusion holds." % (A, B))
+# A trace id is globally unique: asking for a trace's logs by id must NOT require
+# a time window (the traces/by_id route needs none). This is the customer's
+# "one query by id" — give a trace_id alone and get its logs back.
+nowin_code = open(evid + "/by_a_nowin.code").read().strip()
+nowin_raw = open(evid + "/by_a_nowin.body").read()
+if nowin_code != "200":
+    fail("by trace_id A WITHOUT a time window returned HTTP %s (%r) — the logs-by-trace_id query still DEMANDS a window; a unique trace id alone must return its logs, like traces/by_id does" % (nowin_code, nowin_raw[:160]))
+try:
+    nowin = json.loads(nowin_raw)
+except Exception:
+    fail("by trace_id A without a window did not return JSON (got %r)" % (nowin_raw[:160],))
+nowin = nowin if isinstance(nowin, list) else []
+nowin_app = [l for l in nowin if "checkout failed for customer" in str(l.get("body",""))]
+nowin_ids = {l.get("trace_id") for l in nowin}
+if not nowin_app or nowin_ids != {A}:
+    fail("by trace_id A without a window did not return exactly trace A's log(s) (trace_ids=%r)" % (sorted(nowin_ids),))
+print("PG2BYID satisfied — one query by trace_id returns exactly that trace's correlated log(s), WITH or WITHOUT a time window: by A -> only A (%s), by B -> only B (%s), non-existent id -> 0 logs, malformed -> 400 naming the format; a trace_id alone (no window) returns A's log. Cross-trace exclusion holds." % (A, B))
 PY

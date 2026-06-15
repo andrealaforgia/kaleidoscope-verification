@@ -1,1 +1,1 @@
-PG2BYID satisfied — one query by trace_id returns exactly that trace's correlated log(s): by A -> only A (1fc5fc4f83a4f234714c21dec71d00d5), by B -> only B (f7570dac818a648768a280a540fed9c0), by a non-existent id -> 0 logs. Cross-trace exclusion holds.
+FAIL: by trace_id A WITHOUT a time window returned HTTP 400 ('Failed to deserialize query string: missing field `start`') — the logs-by-trace_id query still DEMANDS a window; a unique trace id alone must return its logs, like traces/by_id does
