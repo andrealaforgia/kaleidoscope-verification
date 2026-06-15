@@ -64,7 +64,21 @@ viewable, but that supports, and never replaces, her cold run.
 
 ## Status
 
-Pending a viewable screen from delivery. The data items (FINDFAIL, TRACEERR,
-DEMOCAUSE, LINKEDVIEW) are tracked as their own expectations; FINDFAIL is red
-until the multi-trace seed and the discoverable error-find land. When delivery
-reports the view's URL/route, this gate is what the Customer's cold run checks.
+VIEWABLE (delivery, 2026-06-15): a "Traces" screen at `http://localhost:9090/traces`
+on the clean instance (SHA `21e1596` on the same-origin gateway `4ecaf18`), four-trace
+demo preserved. data-testid hooks: nav-traces, trace-service-input,
+errors-only-toggle, trace-run-button, trace-row, trace-error-badge, trace-detail,
+span-row, span-status-message, log-row, cause-log.
+
+Data items GREEN and confirmed live: DEMOCAUSE, LINKEDVIEW, TRACEERR, FINDFAIL
+(incl. the Customer's cause-only-on-failure check). The view's data substrate is
+confirmed reachable SAME-ORIGIN on :9090 — errors-only find returns exactly the
+failed checkout, filter-off returns all four (only the failed badged Error), and
+the failed checkout's WHERE (error message) + WHY (cause log) come together. The
+page is served (200, SPA shell + JS bundle).
+
+NOT yet proven: the on-screen RENDERING. The view is client-rendered; the only
+proof it renders is the Customer's cold browser run, which the PO sets against
+this checklist. (No Playwright/headless browser in the verifier environment, and
+her cold run is the gate regardless; delivery is adding their own Playwright e2e
+as a separate programmatic proof.)
