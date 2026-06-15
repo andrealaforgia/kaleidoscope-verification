@@ -1,7 +1,0 @@
-M  README.md
-M  crates/kaleidoscope-telemetrygen/src/lib.rs
-M  crates/kaleidoscope-telemetrygen/tests/slice_02_send_to_see.rs
-M  docs/feature/experimentable-stack-v0/discuss/shared-artifacts-registry.md
-M  docs/feature/experimentable-stack-v0/discuss/user-stories.md
-M  docs/product/architecture/adr-0077-experimentable-stack.md
-M  docs/product/architecture/brief.md

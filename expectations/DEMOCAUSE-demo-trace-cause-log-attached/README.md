@@ -36,15 +36,20 @@ fixed id — and then:
 
 ## Verification
 
-- Status: `broken` (strengthened to COHERENCE; my earlier "satisfied" was a
-  mechanical green and is corrected here).
-- Grounded RED: 2026-06-15 UTC at committed HEAD `622fe05`, on a FRESH clean build.
-  The demo trace's only span is `GET /api/v1/query_range`, and the error span is
-  that same query span carrying the message "checkout failed: card declined" — so
-  a newcomer opening it sees a generic query "failing" with a checkout error,
-  which does NOT read as a failed checkout. Flips GREEN when the demo trace is
-  checkout-shaped (the failing span represents the checkout), its cause log a
-  single clean copy attached to it, no orphaned/duplicate copies.
+- Status: `satisfied` on a FRESH CLEAN build at `34deafa`; the LIVE managed-instance
+  confirmation and the Customer's cold browser run still pend a fresh clean stand-up
+  (the current managed instance carries development re-seed residue).
+- Grounded RED first (strengthened to COHERENCE; my earlier "satisfied" was a
+  mechanical green and was corrected): 2026-06-15 UTC at committed HEAD `622fe05`,
+  on a FRESH clean build. The demo trace's only span was `GET /api/v1/query_range`,
+  and the error span was that same query span carrying "checkout failed: card
+  declined" — a newcomer saw a generic query "failing" with a checkout error,
+  which did NOT read as a failed checkout.
+- Flipped GREEN: 2026-06-15 UTC at committed `34deafa`, on a FRESH clean build.
+  The demo's failing span is now checkout-shaped (`POST /api/v1/checkout`) with
+  Error status and a readable message ("checkout failed: card declined"), its
+  cause log a single clean copy attached to that trace, no orphaned/duplicate
+  copies. A newcomer opening the demo trace reads a real failed checkout.
 - Earlier MECHANICAL greens (now seen as insufficient): the cause log was
   retrievable by the demo trace id (HEAD `2ea0077`) and an Error-status span
   existed (HEAD `622fe05`) — but neither asserted a COHERENT failed-checkout

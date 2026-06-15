@@ -35,14 +35,17 @@ returns one `{trace_id, spans, logs}` object in which:
 
 ## Verification
 
-- Status: `broken` (RED-grounded; flips GREEN with the demo coherence fix on a
-  clean instance).
-- Grounded RED: 2026-06-15 UTC at committed `83f4d84`, on a fresh clean build.
-  The discovered demo trace's only failing span is `GET /api/v1/query_range`
+- Status: `satisfied` on a FRESH CLEAN build at `34deafa`; the LIVE managed-instance
+  confirmation and the Customer's cold browser run still pend a fresh clean stand-up.
+- Grounded RED first: 2026-06-15 UTC at committed `83f4d84`, on a fresh clean
+  build. The discovered demo trace's only failing span was `GET /api/v1/query_range`
   carrying "checkout failed: card declined" — incoherent: the view would show a
-  generic query "failing" with a checkout error. Flips GREEN when the generator
-  emits a checkout-shaped failing span with one clean in-span cause log and the
-  combined endpoint returns both together.
+  generic query "failing" with a checkout error.
+- Flipped GREEN: 2026-06-15 UTC at committed `34deafa`, on a FRESH clean build.
+  The view's single `with_logs` call on the demo trace returns, in ONE response, a
+  checkout-shaped Error span (`POST /api/v1/checkout`, "checkout failed: card
+  declined") = WHERE AND its single clean cause log = WHY, both scoped, no
+  orphaned/duplicate copies.
 - Verify on a FRESH CLEAN instance, never the current managed instance (it
   carries stale/duplicate residue from when the Customer operated it; a green on
   polluted data proves nothing). Build-from-HEAD is clean by construction; the

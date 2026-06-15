@@ -1,7 +1,0 @@
- M Cargo.lock
- M crates/kaleidoscope-runtime/src/lib.rs
- M crates/log-query-api/src/lib.rs
- M crates/trace-query-api/Cargo.toml
- M crates/trace-query-api/src/lib.rs
-?? crates/kaleidoscope-runtime/tests/slice_03_traces_with_logs.rs
-?? crates/trace-query-api/tests/slice_08_traces_with_logs.rs
