@@ -21,7 +21,11 @@ Against the first-party demo seed, in the observable service+window
   trace;
 - DISCOVERABLE: the product's own `GET /help` advertises the error-find (a
   runnable traces example carrying `error=true`), so a newcomer learns it exists
-  without already knowing it.
+  without already knowing it;
+- CAUSE ONLY ON THE FAILURE (Customer-checked): the "card declined" cause log is
+  attached to the failed checkout and to NO successful trace — the successful
+  checkout (same operation, Ok) carries zero cause logs, so the cause does not
+  bleed onto a success.
 
 ## Source
 

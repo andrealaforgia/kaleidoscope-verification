@@ -50,6 +50,11 @@ S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 curl -s -o "$EVIDENCE_DIR/all_traces.json"  "http://localhost:19392/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}"
 curl -s -o "$EVIDENCE_DIR/err_traces.json"  "http://localhost:19392/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}&error=true"
 curl -s -o "$EVIDENCE_DIR/help.txt"         "http://localhost:19390/help"
+# per-trace logs, to assert the cause is attached ONLY to the failure (Customer's
+# check: the successful checkout carries zero logs, the cause doesn't bleed onto it)
+for TID in $(python3 -c 'import json;print(" ".join(sorted({s.get("trace_id") for s in json.load(open("'"$EVIDENCE_DIR"'/all_traces.json"))})))' 2>/dev/null); do
+    curl -s -o "$EVIDENCE_DIR/wl_${TID}.json" "http://localhost:19392/api/v1/traces/with_logs?trace_id=${TID}"
+done
 
 python3 - "$EVIDENCE_DIR" <<'PY'
 import json, re, sys
@@ -92,5 +97,21 @@ err_example = [u for u in traces_examples if "error=true" in u]
 if not err_example:
     fail("the product's /help does not advertise the error-find — a newcomer reading /help sees traces examples by service+window only (no error= filter), so cannot discover how to find a failure by its error state. /help traces examples: %r" % (traces_examples or "none",))
 
-print("FINDFAIL satisfied — find-by-error on the demo is real, non-vacuous and discoverable: %d successful traces + exactly 1 failed checkout; filtering to errors returns EXACTLY the failed checkout (%s), excluding all successes; and /help advertises the error-find (%s), so a newcomer discovers it without prior knowledge." % (len(success), ftid, err_example[0]))
+# 4. CAUSE ONLY ON THE FAILURE (Customer's check) — the cause log is attached to
+# the failed checkout and to NO successful trace; the successful checkout (same
+# operation, Ok) carries no cause log bleeding onto it.
+def cause_logs(tid):
+    try: o = json.load(open(evid + "/wl_%s.json" % tid))
+    except FileNotFoundError: return None
+    return [l for l in (o.get("logs") or []) if "declined" in str(l.get("body","")).lower()]
+fc = cause_logs(ftid)
+if not fc:
+    fail("the failed checkout %s carries no 'card declined' cause log in its combined view — WHY missing" % (ftid,))
+for stid in success:
+    sc = cause_logs(stid)
+    if sc:
+        nm = [s.get("name") for s in traces[stid]]
+        fail("a 'card declined' cause log is attached to a SUCCESSFUL trace %s (%r) — the cause is bleeding onto a success, not staying on the failure" % (stid, nm))
+
+print("FINDFAIL satisfied — find-by-error on the demo is real, non-vacuous and discoverable, and the cause stays on the failure: %d successful traces + exactly 1 failed checkout; filtering to errors returns EXACTLY the failed checkout (%s), excluding all successes; /help advertises the error-find (%s); and the 'card declined' cause is attached only to the failed checkout, with zero cause logs on any successful trace (incl. the successful checkout)." % (len(success), ftid, err_example[0]))
 PY
