@@ -1,0 +1,1 @@
+FAIL: the demo holds 0 successful trace(s) and 1 failed — find-by-error is VACUOUS without several successful traces to distinguish the failure from (need >=2 successful + 1 failed)

@@ -39,10 +39,15 @@ properties are both observable.
   GREEN at `0052cf9`: `error=true` returns only the failed checkout trace (all of
   its spans, Error present) and excludes the healthy trace; `error=false`/absent
   unchanged; malformed -> 400 no echo.
-- The exclusion-of-healthy property is proven here on a fresh build (the
-  single-seed managed instance has only the failed trace, so it cannot show the
-  exclusion live); the live instance confirms the failed checkout is surfaced and
-  the malformed edge holds.
+- The exclusion-of-healthy property is proven here on a fresh build with a
+  multi-trace emitter (healthy + failed). NOTE (Customer-caught, 2026-06-15): my
+  earlier "confirmed live on the managed instance" claim for the error-find was
+  VACUOUS — that demo service held a single trace, so any query returns it and the
+  filter distinguishes nothing there. The mechanism is proven by this build's
+  exclusion test, not by the single-trace live instance. Two follow-on gaps are
+  tracked separately: the demo seed must carry MULTIPLE traces (DEMOMULTI) and the
+  error-find must be DISCOVERABLE (DISCOVER); only then is the on-screen find-by-
+  error non-vacuous.
 - Method: `.no-compose`; builds the runtime from the HEAD snapshot, drives the
   external two-trace emitter over OTLP/HTTP, then exercises error=true / false /
   absent / malformed.
