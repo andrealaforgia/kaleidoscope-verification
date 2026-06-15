@@ -1,1 +1,1 @@
-FAIL: the demo failed-checkout trace 4bf92f3577b34da6a3ce929d0e0e4736 carries NO cause log — logs-by-trace_id (no window) returned no 'card declined' log; the demo's failure log is not attached to its trace, so a trace->logs view shows no WHY
+DEMOCAUSE satisfied — the bundled demo failed-checkout trace (4bf92f3577b34da6a3ce929d0e0e4736) carries its cause log: logs-by-trace_id with no window returns the 'checkout failed: card declined' log, scoped to that trace. A trace->its-logs view on the demo trace now shows WHY it failed.

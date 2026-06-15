@@ -26,12 +26,17 @@ that trace.
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the demo log is emitted in-span).
-- Grounded RED: 2026-06-15 UTC at committed HEAD `1a117b3`. The demo trace
-  (discovered: `4bf92f35…`) carries no cause log — logs-by-trace_id with no
-  window returned 0; the "card declined" log is not attached to its trace. Flips
-  GREEN when the generator emits its failure log inside the demo trace's span and
-  the cause log returns by the demo trace's id.
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `2ea0077`, AND confirmed live
+  on the managed instance after delivery re-seeded it with the new generator. On
+  a fresh committed-tree build the discovered demo trace (`4bf92f35…`) returns its
+  "checkout failed: card declined" cause log by trace id with no window, scoped to
+  that trace. On the live managed instance: logs-by-trace_id for the demo trace
+  returns exactly 1 log, the declined cause, scoped. (The fix was in the
+  generator, kaleidoscope-telemetrygen; the runtime image is unchanged — correct.)
+- Previously `broken`: grounded RED 2026-06-15 at committed HEAD `1a117b3` — the
+  demo trace carried no cause log (logs-by-trace_id returned 0; the "card declined"
+  log landed with `trace_id` null, unattached).
 - Method: `.no-compose`; builds runtime + first-party generator from the HEAD
   snapshot, boots one runtime, seeds the demo, discovers the demo trace from the
   window, and queries its logs by id with no window.
