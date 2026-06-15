@@ -1,2 +1,2 @@
-
-__HTTP__404__CT__
+[{"trace_id":"4bf92f3577b34da6a3ce929d0e0e4736","span_id":"bc6021d51d27c90f","parent_span_id":"00f067aa0ba902b7","name":"GET /api/v1/query_range","kind":"Internal","start_time_unix_nano":1781484296829619258,"end_time_unix_nano":1781484296829620091,"status":{"code":"Unset","message":""},"attributes":{},"resource_attributes":{"service.name":"kaleidoscope-demo","tenant.id":"acme"},"events":[],"links":[]}]
+__HTTP__200__CT__application/json

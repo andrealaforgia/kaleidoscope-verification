@@ -1,17 +1,20 @@
 Kaleidoscope query API — usage
 
-Examples (replace host/port, tenant bearer, and arguments as needed):
+Each example is runnable verbatim against a demo-seeded stack (run `make demo`
+first). Each signal answers on its own port: metrics :9090, logs :9091,
+traces :9092. The windows are computed relative to now (the demo seed lands at
+run time) and stay within the 24h maximum query window.
 
-# Metrics: range query over a service window
-curl 'http://localhost:9090/api/v1/query_range?query=process_cpu_utilization&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z&step=15s'
+# Metrics: range query for the demo metric over a window covering now
+NOW=$(date +%s); curl "http://localhost:9090/api/v1/query_range?query=request_count&start=$((NOW-82800))&end=$((NOW+1800))&step=15s"
 
-# Logs over a service window
-curl 'http://localhost:9090/api/v1/logs?service=checkout&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z'
+# Logs over a window covering now
+NOW=$(date +%s); curl "http://localhost:9091/api/v1/logs?start=$((NOW-82800))&end=$((NOW+1800))"
 
-# Traces over a service window
-curl 'http://localhost:9090/api/v1/traces?service=checkout&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z'
+# Traces for the demo service over a window covering now
+NOW=$(date +%s); curl "http://localhost:9092/api/v1/traces?service=kaleidoscope-demo&start=$((NOW-82800))&end=$((NOW+1800))"
 
-# A single trace by id
-curl 'http://localhost:9090/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736'
+# A single trace by id (the demo trace)
+curl "http://localhost:9092/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736"
 
 Accepted time format: RFC3339 (2026-06-14T00:00:00Z) or unix seconds (1718323200).

@@ -1,4 +1,4 @@
-http://localhost:9090/api/v1/query_range?query=process_cpu_utilization&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z&step=15s
-http://localhost:9090/api/v1/logs?service=checkout&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z
-http://localhost:9090/api/v1/traces?service=checkout&start=2026-06-14T00:00:00Z&end=2026-06-14T01:00:00Z
-http://localhost:9090/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736
+http://localhost:9090/api/v1/query_range?query=request_count&start=$((NOW-82800))&end=$((NOW+1800))&step=15s
+http://localhost:9091/api/v1/logs?start=$((NOW-82800))&end=$((NOW+1800))
+http://localhost:9092/api/v1/traces?service=kaleidoscope-demo&start=$((NOW-82800))&end=$((NOW+1800))
+http://localhost:9092/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736

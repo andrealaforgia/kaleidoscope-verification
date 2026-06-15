@@ -38,7 +38,21 @@ nothing is rewritten. This mirrors a newcomer's "the stack is on my localhost".
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the help examples are usable cold).
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `1a88b3d`, demo seeded via the
+  first-party generator. The help now prints each example as a runnable shell
+  command that addresses its own signal's port (metrics :9090, logs :9091,
+  traces :9092), uses demo-matching values (`request_count`, service
+  `kaleidoscope-demo`, the demo trace id), and computes a now-relative covering
+  window. Run verbatim, all four return their signal's data as JSON 200: metrics
+  1 series, logs 1, traces 1, single-trace-by-id 1 span. No example returned
+  HTML. Flipped from RED on the implementer's commit.
+- Harness note (my bug, not the product's): the examples are now shell commands
+  (`NOW=$(date +%s); curl "...$((NOW-N))..."`). My first run extracted the bare
+  URL and issued it without evaluating the shell arithmetic, so the runtime got a
+  literal `$((NOW-N))` and answered `400` — a false RED at `1a88b3d`. Fixed in
+  the runner by expanding the now-relative window exactly as the newcomer's shell
+  would before issuing the request; the runtime was correct. No product change.
 - Grounded RED: 2026-06-15 UTC at committed HEAD `4a8d2d8`, demo seeded via the
   first-party generator. The four printed examples all address `localhost:9090`
   with placeholder values and a fixed past window. Observed verbatim:

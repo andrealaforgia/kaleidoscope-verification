@@ -1,1 +1,1 @@
-FAIL: the metrics example, run verbatim, returned 0 metrics rows — a newcomer copying it as written gets no data
+HELPRUN satisfied — every /help example, copied verbatim against the demo-seeded stack, returns its signal's data: metrics 1 series, logs 1, traces 1, single-trace-by-id 1 spans. No example landed on an HTML dead end.

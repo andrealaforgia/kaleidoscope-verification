@@ -59,12 +59,16 @@ curl -s -o "$EVIDENCE_DIR/help.txt" "http://localhost:19490/help"
 # pull every example command's URL out of the help text, in order
 grep -oE "https?://[^'\" ]+" "$EVIDENCE_DIR/help.txt" > "$EVIDENCE_DIR/urls.txt" || true
 
-# run each example URL VERBATIM from inside the runtime's own network namespace,
-# so the example's localhost:<port> hits the matching per-signal service
+# run each example from inside the runtime's own network namespace, so the
+# example's localhost:<port> hits the matching per-signal service. The examples
+# are shell commands that compute a now-relative window (NOW=$(date +%s); curl
+# "...$((NOW-N))..."), so expand that arithmetic exactly as the newcomer's shell
+# would before issuing the request — running it truly as printed.
 run_verbatim() {
-    local url="$1" out="$2"
+    local url="$1" out="$2" expanded
+    expanded=$(NOW=$(date +%s); eval "printf '%s' \"$url\"")
     docker run --rm --network "container:$RT" curlimages/curl:latest \
-        -s -w '\n__HTTP__%{http_code}__CT__%{content_type}' "$url" > "$out" 2>/dev/null || true
+        -s -w '\n__HTTP__%{http_code}__CT__%{content_type}' "$expanded" > "$out" 2>/dev/null || true
 }
 
 i=0

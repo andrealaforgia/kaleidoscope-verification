@@ -1,2 +1,2 @@
-{"data":{"result":[],"resultType":"matrix"},"status":"success"}
+{"data":{"result":[{"metric":{"__name__":"request_count","service.name":"kaleidoscope-demo","tenant.id":"acme"},"values":[[1781484296,"1"]]}],"resultType":"matrix"},"status":"success"}
 __HTTP__200__CT__application/json

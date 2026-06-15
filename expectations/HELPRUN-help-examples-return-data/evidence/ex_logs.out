@@ -1,2 +1,2 @@
-
-__HTTP__404__CT__
+[{"observed_time_unix_nano":1781484296829606674,"severity_number":17,"severity_text":"ERROR","body":"checkout failed: card declined","attributes":{},"resource_attributes":{"service.name":"kaleidoscope-demo","tenant.id":"acme"},"trace_id":null,"span_id":null}]
+__HTTP__200__CT__application/json
