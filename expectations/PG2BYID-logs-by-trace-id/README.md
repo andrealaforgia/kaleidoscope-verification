@@ -37,15 +37,21 @@ trace and no other, by the id alone.
 
 ## Verification
 
-- Status: `broken` (strengthened — the no-window case the customer actually needs
-  is not yet satisfied).
-- Grounded RED: 2026-06-15 UTC at committed HEAD `1ed6381`. The windowed scoping
-  works, but a query by trace_id A **without** a time window returns `400 "Failed
-  to deserialize query string: missing field 'start'"` — the logs-by-trace_id
-  query still DEMANDS a `start`/`end` window. A unique trace id alone must return
-  its logs (the `:9092 traces/by_id` route needs no window); requiring a window
-  is exactly the Customer's blocker ("the logs query insists on a time window").
-  Flips GREEN when a trace_id alone returns that trace's log(s).
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `1a117b3`, AND confirmed live
+  on the customer's running instance. On a fresh committed-tree build, a query by
+  trace_id A **without** a time window returns 200 with exactly trace A's log(s)
+  (`2a019cd3…e892`), B->only B, non-existent->empty 200, malformed->400 naming
+  the 32-hex format, neither selector->400. On the actual customer instance
+  (redeployed to HEAD): an external-SDK trace `e131a26a…` queried by id with NO
+  window returned its in-span log, scoped to that trace — the Customer's blocker
+  ("the logs query insists on a time window") is resolved on the environment she
+  uses, not only an ephemeral build.
+- Previously `broken` (strengthened): grounded RED 2026-06-15 at committed HEAD
+  `1ed6381` — a query by trace_id A without a window returned `400 "missing field
+  'start'"`; the route still demanded a window. My earlier pass covered only the
+  windowed case (always supplied `start`/`end`), my blind spot, surfaced by the
+  Customer's real use and confirmed against a stale live deployment.
 - Partial GREEN (windowed scoping only) was grounded 2026-06-15 at HEAD `d92d3d5`:
   with `start`/`end` supplied, by trace A (`1fc5fc4f…00d5`) -> only A's log, by
   trace B (`f7570dac…d9c0`) -> only B's, non-existent id -> empty 200, malformed
