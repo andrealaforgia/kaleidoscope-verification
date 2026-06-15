@@ -77,8 +77,30 @@ failed checkout, filter-off returns all four (only the failed badged Error), and
 the failed checkout's WHERE (error message) + WHY (cause log) come together. The
 page is served (200, SPA shell + JS bundle).
 
-NOT yet proven: the on-screen RENDERING. The view is client-rendered; the only
-proof it renders is the Customer's cold browser run, which the PO sets against
-this checklist. (No Playwright/headless browser in the verifier environment, and
-her cold run is the gate regardless; delivery is adding their own Playwright e2e
-as a separate programmatic proof.)
+PASSED (Customer cold run, 2026-06-15) on BUNDLED data — rendering confirmed by
+her: the Traces screen in the nav, errors-only find surfacing just the failed
+checkout marked ERROR, opening it showing WHERE (the failed POST /checkout span +
+its error message) and WHY (the correlated "card declined" cause log) together on
+ONE screen, no second tab, one span + one cause, no dupes. So checklist items 1–4
+are met for bundled data.
+
+REMAINING: the own-app repeat (item: she repeats find -> open -> see-cause with
+her OWN telemetry). Blocked purely on the managed instance being back up.
+
+INCIDENT (2026-06-15): right after the bundled walk the managed instance went
+unreachable (all ports refused). Investigated: the runtime did NOT crash —
+ExitCode=0, OOMKilled=false, no panic; the logs show an orderly shutdown on a
+termination signal (shutdown_initiated -> drained -> shutdown_complete exit 0),
+and RestartPolicy=no so it stayed down. Open with delivery: what sent the signal
+during a normal walk, and why the always-current instance didn't auto-recover.
+Delivery to restart + confirm live; verifier to re-confirm clean before the
+own-app repeat.
+
+NON-BLOCKING UX follow-up: the default ~1h time range shows only the failed trace
+(the three successes are timestamped outside it); she had to widen to 24h to see
+the failure among the successes. errors-only works regardless. Flagged to delivery
+to seed the successes within the default window. Not blocking the close.
+
+(No Playwright/headless browser in the verifier environment; the Customer's cold
+run is the human gate, now passed for bundled data; delivery is adding their own
+Playwright e2e as a separate programmatic proof.)
