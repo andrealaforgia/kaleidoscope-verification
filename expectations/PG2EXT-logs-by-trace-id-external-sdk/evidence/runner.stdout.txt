@@ -1,0 +1,1 @@
+PG2EXT satisfied — a standard EXTERNAL OTel SDK's in-span log is retrievable in one query by the app's own trace id (d16733b14f515e1a95ac3c8ec6be6f03) on :9091, scoped to that trace only. The logs-by-trace_id capability is proven cross-SDK, not just first-party.
