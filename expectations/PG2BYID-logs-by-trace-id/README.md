@@ -33,15 +33,18 @@ trace and no other.
 
 ## Verification
 
-- Status: `broken` (transition-proof; RED until the route lands).
-- Grounded RED: 2026-06-15 UTC at committed HEAD `4a8d2d8`. The logs query does
-  not honour a `trace_id` filter: a query by trace_id A returned BOTH traces'
-  logs (trace_ids `59a1937a…6f76` and `b2ca6c22…8ce3`), a query by a
-  non-existent trace_id also returned 2 logs, and a malformed trace_id returned
-  `200` with logs instead of `400` — the parameter is ignored, no filtering and
-  no validation. Flips GREEN when one by-trace_id query returns exactly the
-  matching trace's log(s), excludes the others, and a malformed id yields a
-  format-naming 400 with no raw echo.
+- Status: `satisfied`
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `d92d3d5`. One query by
+  trace_id returns exactly that trace's correlated log(s): by trace A
+  (`1fc5fc4f…00d5`) -> only A's log, by trace B (`f7570dac…d9c0`) -> only B's,
+  cross-trace exclusion holds; a well-formed non-existent id -> empty 200 (0
+  logs); a malformed id -> `400` `{"error":"invalid trace_id: expected a
+  32-character hex string"}` (names the format, does not echo the raw input).
+  Flipped from RED on the implementer's commit, exactly as pre-authored.
+- Previously `broken`: grounded RED 2026-06-15 UTC at committed HEAD `4a8d2d8` —
+  the logs query did not honour a `trace_id` filter (a query by trace A returned
+  BOTH traces' logs, a non-existent id returned 2, and a malformed id returned
+  `200` with logs instead of `400`).
 - Method: `harness/run-kaleidoscope-runtime.sh` builds the runtime from the HEAD
   snapshot; the runner boots one runtime, runs the external OTel app twice (two
   traces, two in-span logs), then queries `:9091` by trace_id A, by trace_id B,
