@@ -46,8 +46,10 @@ S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 curl -s -o "$EVIDENCE_DIR/window.json" "http://localhost:19792/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}"
 DEMO_TID=$(python3 -c 'import json;d=json.load(open("'"$EVIDENCE_DIR"'/window.json"));ids=[x.get("trace_id") for x in (d if isinstance(d,list) else []) if x.get("trace_id")];print(ids[0] if ids else "")' 2>/dev/null || echo "")
 echo "DEMO_TRACE=$DEMO_TID" > "$EVIDENCE_DIR/demo.txt"
-# the cause log, by the demo trace's id, with NO window.
+# the cause log (WHY), by the demo trace's id, with NO window.
 curl -s -o "$EVIDENCE_DIR/cause_logs.json" "http://localhost:19791/api/v1/logs?trace_id=${DEMO_TID}"
+# the trace's spans (WHERE), by id.
+curl -s -o "$EVIDENCE_DIR/byid_trace.json" "http://localhost:19792/api/v1/traces/by_id?trace_id=${DEMO_TID}"
 
 python3 - "$EVIDENCE_DIR" <<'PY'
 import json, sys
@@ -56,12 +58,27 @@ def fail(m): print("FAIL: " + m); sys.exit(1)
 tid = open(evid + "/demo.txt").read().split("=")[1].strip()
 if not tid:
     fail("no kaleidoscope-demo trace was discoverable in the window — the demo seed did not produce a trace")
+# WHY — the cause log is attached to the demo trace.
 d = json.load(open(evid + "/cause_logs.json")); logs = d if isinstance(d, list) else []
 ids = {l.get("trace_id") for l in logs}
 cause = [l for l in logs if "declined" in str(l.get("body", "")).lower()]
 if not cause:
-    fail("the demo failed-checkout trace %s carries NO cause log — logs-by-trace_id (no window) returned no 'card declined' log; the demo's failure log is not attached to its trace, so a trace->logs view shows no WHY" % (tid,))
+    fail("the demo failed-checkout trace %s carries NO cause log (WHY) — logs-by-trace_id (no window) returned no 'card declined' log; the demo's failure log is not attached to its trace, so a trace->logs view shows no WHY" % (tid,))
 if ids != {tid}:
     fail("logs-by-trace_id for the demo trace returned other traces' logs too (%r), expected only %s" % (sorted(ids), tid))
-print("DEMOCAUSE satisfied — the bundled demo failed-checkout trace (%s) carries its cause log: logs-by-trace_id with no window returns the '%s' log, scoped to that trace. A trace->its-logs view on the demo trace now shows WHY it failed." % (tid, cause[0].get("body")))
+# WHERE — at least one span carries Error status with a readable message.
+sp = json.load(open(evid + "/byid_trace.json")); spans = sp if isinstance(sp, list) else []
+if not spans:
+    fail("the demo trace %s returned no spans by id — cannot show WHERE it failed" % (tid,))
+def err_msg(s):
+    st = s.get("status") or {}
+    code = str(st.get("code", "")).lower()
+    msg = str(st.get("message", "") or "")
+    return (code == "error" or code == "2" or "error" in code), msg
+errspans = [s for s in spans if err_msg(s)[0] and err_msg(s)[1].strip()]
+if not errspans:
+    have = [(str((s.get("status") or {}).get("code","")), str((s.get("status") or {}).get("message",""))[:40]) for s in spans]
+    fail("the demo failed-checkout trace %s has NO span with Error status AND a readable message (WHERE) — got statuses %r; a newcomer opening it sees no error span / no message saying where it failed" % (tid, have))
+where = err_msg(errspans[0])[1]
+print("DEMOCAUSE satisfied — the bundled demo failed-checkout trace (%s) shows BOTH halves: WHERE — a span with Error status and a readable message (%r); WHY — its cause log by trace id with no window (%r), scoped to that trace. Opening the demo trace shows where it failed and why." % (tid, where, cause[0].get("body")))
 PY

@@ -3,17 +3,23 @@
 ## Surface
 
 Demo-data prerequisite for the on-screen linked view: the BUNDLED demo's
-failed-checkout trace must carry its CAUSE log, so a "trace -> its logs" view on
-the demo trace shows WHY it failed. The first-party generator must emit its
-failure log ("checkout failed: card declined") INSIDE the demo trace's span.
+failed-checkout trace must show BOTH halves so a newcomer reading it sees a real
+failed checkout — WHERE it failed (a span with error status + a readable message)
+and WHY (the attached cause log). The first-party generator emits its failure log
+("checkout failed: card declined") INSIDE the demo trace's span AND marks the
+failing span with an error status + message.
 
 ## Behaviour
 
 After the demo is seeded, the demo trace is discovered from the observable window
 (`service=kaleidoscope-demo` on `:9092`) — never hardcoded from the generator's
-fixed id — and then `GET :9091/api/v1/logs?trace_id=<that demo trace>` with NO
-window returns the "card declined" cause log carrying that trace id, scoped to
-that trace.
+fixed id — and then:
+
+- WHERE: `GET :9092/api/v1/traces/by_id?trace_id=<demo trace>` returns its spans,
+  at least one carrying status code `Error` with a non-empty readable message
+  ("checkout failed: card declined");
+- WHY: `GET :9091/api/v1/logs?trace_id=<demo trace>` with NO window returns the
+  "card declined" cause log carrying that trace id, scoped to that trace.
 
 ## Source
 
@@ -26,17 +32,18 @@ that trace.
 
 ## Verification
 
-- Status: `satisfied`
-- Grounded GREEN: 2026-06-15 UTC at committed HEAD `2ea0077`, AND confirmed live
-  on the managed instance after delivery re-seeded it with the new generator. On
-  a fresh committed-tree build the discovered demo trace (`4bf92f35…`) returns its
-  "checkout failed: card declined" cause log by trace id with no window, scoped to
-  that trace. On the live managed instance: logs-by-trace_id for the demo trace
-  returns exactly 1 log, the declined cause, scoped. (The fix was in the
-  generator, kaleidoscope-telemetrygen; the runtime image is unchanged — correct.)
-- Previously `broken`: grounded RED 2026-06-15 at committed HEAD `1a117b3` — the
-  demo trace carried no cause log (logs-by-trace_id returned 0; the "card declined"
-  log landed with `trace_id` null, unattached).
+- Status: `satisfied` (both halves — WHERE + WHY).
+- Grounded GREEN: 2026-06-15 UTC at committed HEAD `622fe05`, AND confirmed live on
+  the managed instance. On a fresh committed-tree build the discovered demo trace
+  (`4bf92f35…`) shows a span with status `Error` and the readable message
+  "checkout failed: card declined" (WHERE), and returns that cause log by trace id
+  with no window (WHY), scoped to that trace. On the live managed instance
+  (delivery re-seeded append-only): the demo trace has a span with Error status +
+  that message among its spans, and the cause log attached by id. (The demo-data
+  fixes were in the generator/seed; the runtime image is unchanged — correct.)
+- WHY-only milestone: grounded GREEN at HEAD `2ea0077` (cause log attached).
+  Previously `broken` at `1a117b3` — the demo trace carried no cause log (the "card
+  declined" log landed with `trace_id` null) and no error span (spans were Unset).
 - Method: `.no-compose`; builds runtime + first-party generator from the HEAD
   snapshot, boots one runtime, seeds the demo, discovers the demo trace from the
   window, and queries its logs by id with no window.
