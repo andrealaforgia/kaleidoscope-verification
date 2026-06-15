@@ -1,0 +1,1 @@
+FAIL: INCOHERENT view: the failing span the view shows is 'GET /api/v1/query_range', not a checkout — a newcomer opening the linked view sees a generic operation 'failing' with the message 'checkout failed: card declined', which does not read as a failed checkout. The demo trace must be checkout-shaped.
