@@ -84,8 +84,17 @@ its error message) and WHY (the correlated "card declined" cause log) together o
 ONE screen, no second tab, one span + one cause, no dupes. So checklist items 1–4
 are met for bundled data.
 
-REMAINING: the own-app repeat (item: she repeats find -> open -> see-cause with
-her OWN telemetry). Blocked purely on the managed instance being back up.
+DONE (Customer cold run, 2026-06-15) — the own-app repeat PASSED on her OWN data:
+from her own failing checkout, errors-only surfaced it, and opening it showed
+WHERE (the full failing path down to the charge-card step) and WHY (the
+"insufficient funds" cause) together on one screen, rendering confirmed on her own
+data, not just bundled. The on-screen correlated view is done end to end on her
+terms — the Customer's core need is met.
+
+Next-iteration follow-ups she ranked (none blocking, the PO will shape these with
+her): default time range (so the failure shows among successes without widening),
+on-screen search/browse of logs and traces in their own right, and metrics in the
+same correlated picture.
 
 INCIDENT (2026-06-15): right after the bundled walk the managed instance went
 unreachable (all ports refused). Investigated: the runtime did NOT crash —
