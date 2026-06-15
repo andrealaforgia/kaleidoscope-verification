@@ -14,6 +14,9 @@ NOW=$(date +%s); curl "http://localhost:9091/api/v1/logs?start=$((NOW-82800))&en
 # Traces for the demo service over a window covering now
 NOW=$(date +%s); curl "http://localhost:9092/api/v1/traces?service=kaleidoscope-demo&start=$((NOW-82800))&end=$((NOW+1800))"
 
+# Find failed traces: the demo service's error traces over a window covering now
+NOW=$(date +%s); curl "http://localhost:9092/api/v1/traces?service=kaleidoscope-demo&start=$((NOW-82800))&end=$((NOW+1800))&error=true"
+
 # A single trace by id (the demo trace)
 curl "http://localhost:9092/api/v1/traces/by_id?trace_id=4bf92f3577b34da6a3ce929d0e0e4736"
 

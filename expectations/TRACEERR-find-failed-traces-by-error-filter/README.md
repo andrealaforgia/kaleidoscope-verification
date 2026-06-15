@@ -47,7 +47,10 @@ properties are both observable.
   exclusion test, not by the single-trace live instance. Two follow-on gaps are
   tracked separately: the demo seed must carry MULTIPLE traces (DEMOMULTI) and the
   error-find must be DISCOVERABLE (DISCOVER); only then is the on-screen find-by-
-  error non-vacuous.
+  error non-vacuous. Both are now covered by FINDFAIL, which is GREEN on a fresh
+  build at `4a647ad` and confirmed live on the re-seeded clean instance (3 healthy
+  + 1 failed; error=true returns exactly the failed; /help advertises the
+  error-find) — so the earlier single-trace vacuity is resolved.
 - Method: `.no-compose`; builds the runtime from the HEAD snapshot, drives the
   external two-trace emitter over OTLP/HTTP, then exercises error=true / false /
   absent / malformed.

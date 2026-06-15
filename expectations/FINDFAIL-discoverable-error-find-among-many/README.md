@@ -34,12 +34,20 @@ Against the first-party demo seed, in the observable service+window
 
 ## Verification
 
-- Status: `broken` (RED-grounded; flips GREEN when delivered).
-- Grounded RED: 2026-06-15 UTC at committed `0052cf9`, on a fresh clean build.
-  The demo holds 0 successful traces + 1 failed, so find-by-error is vacuous; and
-  `/help` lists service+window only, with no error filter to discover. Flips GREEN
-  when the demo seed carries several successful traces plus the failed checkout
-  AND `/help` advertises the error-find.
+- Status: `satisfied` on a fresh clean build at `4a647ad`, AND independently
+  confirmed LIVE on the re-seeded clean managed instance (2026-06-15).
+- Grounded RED first: 2026-06-15 UTC at committed `0052cf9`, on a fresh clean
+  build. The demo held 0 successful traces + 1 failed (find-by-error vacuous) and
+  `/help` listed service+window only (no discoverable error filter).
+- Flipped GREEN: at `4a647ad` (seed `af31955` + help `4a647ad`). Build: the demo
+  holds 3 successful traces + exactly 1 failed checkout; `error=true` returns
+  EXACTLY the failed checkout, excluding all successes; `/help` advertises a
+  runnable "find failed traces" error=true example. LIVE re-confirmation on the
+  re-seeded clean instance (traces discovered from the window, not trusted by id):
+  4 demo traces — 3 healthy (checkout Ok, products Ok, cart Ok) + 1 failed
+  checkout; `error=true` returns exactly the failed one; `/help` advertises the
+  error-find; the failed checkout's coherence is unchanged (one checkout-shaped
+  Error span + its one clean "card declined" cause log).
 - Companion to TRACEERR: TRACEERR proves the error filter's exclusion SEMANTICS on
   a multi-trace build; FINDFAIL proves those semantics are NON-VACUOUS and
   DISCOVERABLE on the actual demo the Customer and the view use.
