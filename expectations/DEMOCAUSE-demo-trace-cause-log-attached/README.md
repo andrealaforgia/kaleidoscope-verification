@@ -36,9 +36,12 @@ fixed id — and then:
 
 ## Verification
 
-- Status: `satisfied` on a FRESH CLEAN build at `34deafa`; the LIVE managed-instance
-  confirmation and the Customer's cold browser run still pend a fresh clean stand-up
-  (the current managed instance carries development re-seed residue).
+- Status: `satisfied` on a FRESH CLEAN build (`34deafa` and re-confirmed at the
+  live SHA `0052cf9`), AND independently confirmed LIVE on the fresh clean managed
+  instance (2026-06-15): the demo trace, discovered from the window, shows one
+  checkout-shaped Error span with its message, exactly one clean cause copy
+  attached, zero orphaned/duplicate copies — the residue is gone. The Customer's
+  cold browser run remains the on-screen view's done-gate.
 - Grounded RED first (strengthened to COHERENCE; my earlier "satisfied" was a
   mechanical green and was corrected): 2026-06-15 UTC at committed HEAD `622fe05`,
   on a FRESH clean build. The demo trace's only span was `GET /api/v1/query_range`,

@@ -35,8 +35,11 @@ returns one `{trace_id, spans, logs}` object in which:
 
 ## Verification
 
-- Status: `satisfied` on a FRESH CLEAN build at `34deafa`; the LIVE managed-instance
-  confirmation and the Customer's cold browser run still pend a fresh clean stand-up.
+- Status: `satisfied` on a FRESH CLEAN build (`34deafa` and re-confirmed at the
+  live SHA `0052cf9`), AND independently confirmed LIVE on the fresh clean managed
+  instance (2026-06-15): the view's one `with_logs` call on the demo trace returns
+  the whole coherent story scoped, one checkout-shaped Error span + its one clean
+  cause log. The Customer's cold browser run remains the on-screen view's done-gate.
 - Grounded RED first: 2026-06-15 UTC at committed `83f4d84`, on a fresh clean
   build. The discovered demo trace's only failing span was `GET /api/v1/query_range`
   carrying "checkout failed: card declined" — incoherent: the view would show a

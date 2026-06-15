@@ -1,0 +1,1 @@
+FAIL: error=true did NOT exclude the healthy trace — a 'show me failures' query returns a trace with no error span, so failed traces are not distinguishable
