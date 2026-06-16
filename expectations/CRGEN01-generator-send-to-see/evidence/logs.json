@@ -1,1 +1,1 @@
-[{"observed_time_unix_nano":1781461388647489170,"severity_number":17,"severity_text":"ERROR","body":"checkout failed: card declined","attributes":{},"resource_attributes":{"service.name":"kaleidoscope-demo","tenant.id":"acme"},"trace_id":null,"span_id":null}]
+[{"observed_time_unix_nano":1781605091334172387,"severity_number":17,"severity_text":"ERROR","body":"checkout failed: card declined","attributes":{},"resource_attributes":{"service.name":"kaleidoscope-demo","tenant.id":"acme"},"trace_id":"4bf92f3577b34da6a3ce929d0e0e4736","span_id":"1251b821de29ffda"}]

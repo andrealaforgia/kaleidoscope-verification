@@ -33,7 +33,7 @@ cleanup() { docker stop --time 5 "$CRT_NAME" >/dev/null 2>&1 || true; docker rm 
 trap cleanup EXIT
 
 docker run --rm -d --name "$CRT_NAME" -v "$DATA_HOST:/data" \
-    -e KALEIDOSCOPE_TENANT=acme -e RUST_LOG=info \
+    -e KALEIDOSCOPE_TENANT=acme -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=info \
     -p 14334:4318 -p 19110:9090 -p 19111:9091 -p 19112:9092 "$CRT_IMAGE" > /dev/null
 
 RNOW=$(date -u +%s)

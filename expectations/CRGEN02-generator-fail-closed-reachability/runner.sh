@@ -25,7 +25,7 @@ NET="crgen2-net-$$"; RT="crgen2-rt-$$"
 cleanup() { docker stop "$RT" >/dev/null 2>&1 || true; docker rm "$RT" >/dev/null 2>&1 || true; docker network rm "$NET" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 docker network create "$NET" >/dev/null
-docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e RUST_LOG=warn \
+docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=warn \
     -p 19290:9090 -p 19291:9091 -p 19292:9092 kx-runtime:crgen > /dev/null
 RNOW=$(date -u +%s)
 for _ in $(seq 1 40); do

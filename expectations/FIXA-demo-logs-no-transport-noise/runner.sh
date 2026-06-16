@@ -25,7 +25,7 @@ NET="fixa-net-$$"; RT="fixa-rt-$$"
 cleanup() { docker stop "$RT" >/dev/null 2>&1 || true; docker rm "$RT" >/dev/null 2>&1 || true; docker network rm "$NET" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 docker network create "$NET" >/dev/null
-docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e RUST_LOG=warn -p 19490:9090 -p 19491:9091 kx-runtime:crgen > /dev/null
+docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=warn -p 19490:9090 -p 19491:9091 kx-runtime:crgen > /dev/null
 S=$(( $(date -u +%s) - 300 )); E=$(( $(date -u +%s) + 300 ))
 for _ in $(seq 1 40); do [ "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:19490/api/v1/query_range?query=request_count&start=${S}&end=${E}&step=15s" 2>/dev/null)" = "200" ] && { R=ok; break; }; sleep 1; done
 [ "${R:-}" = ok ] || { echo "runtime never ready" >&2; docker logs "$RT" >&2 || true; exit 1; }

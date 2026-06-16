@@ -26,7 +26,7 @@ logs()    { curl -s "http://localhost:$1/api/v1/logs?start=${S}&end=${E}" | pyth
 traces()  { curl -s "http://localhost:$1/api/v1/traces?service=kaleidoscope-demo&start=${S}&end=${E}" | python3 -c 'import sys,json;s=json.load(sys.stdin);print(len(s) if isinstance(s,list) else 0)' 2>/dev/null || echo NA; }
 ready()   { for _ in $(seq 1 40); do [ "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:$1/api/v1/query_range?query=request_count&start=${S}&end=${E}&step=15s" 2>/dev/null)" = "200" ] && return 0; sleep 1; done; return 1; }
 
-docker run -d --name "$RA" --network "$NET" -v "$DATA:/data" -e KALEIDOSCOPE_TENANT=acme -e RUST_LOG=warn -p 19390:9090 -p 19391:9091 -p 19392:9092 kx-runtime:crgen > /dev/null
+docker run -d --name "$RA" --network "$NET" -v "$DATA:/data" -e KALEIDOSCOPE_TENANT=acme -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=warn -p 19390:9090 -p 19391:9091 -p 19392:9092 kx-runtime:crgen > /dev/null
 ready 19390 || { echo "runtime(acme) never ready" >&2; docker logs "$RA" >&2 || true; exit 1; }
 docker run --rm --network "$NET" -e OTEL_EXPORTER_OTLP_ENDPOINT="http://$RA:4317" -e KALEIDOSCOPE_TENANT=acme kx-gen:crgen > "$EVIDENCE_DIR/gen.out" 2> "$EVIDENCE_DIR/gen.err" || { echo "generator failed vs live runtime" >&2; cat "$EVIDENCE_DIR/gen.err" >&2; exit 1; }
 sleep 2
@@ -34,7 +34,7 @@ AM=$(metrics 19390); AL=$(logs 19391); AT=$(traces 19392)
 echo "acme_metrics=$AM acme_logs=$AL acme_traces=$AT"
 docker stop "$RA" >/dev/null 2>&1 || true; docker rm "$RA" >/dev/null 2>&1 || true
 
-docker run -d --name "$RB" --network "$NET" -v "$DATA:/data" -e KALEIDOSCOPE_TENANT=tenant-b -e RUST_LOG=warn -p 19393:9090 -p 19394:9091 -p 19395:9092 kx-runtime:crgen > /dev/null
+docker run -d --name "$RB" --network "$NET" -v "$DATA:/data" -e KALEIDOSCOPE_TENANT=tenant-b -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=warn -p 19393:9090 -p 19394:9091 -p 19395:9092 kx-runtime:crgen > /dev/null
 ready 19393 || { echo "runtime(tenant-b) never ready" >&2; docker logs "$RB" >&2 || true; exit 1; }
 BM=$(metrics 19393); BL=$(logs 19394); BT=$(traces 19395)
 echo "tenantb_metrics=$BM tenantb_logs=$BL tenantb_traces=$BT"
