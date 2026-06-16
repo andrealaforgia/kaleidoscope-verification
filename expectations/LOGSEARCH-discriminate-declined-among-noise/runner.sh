@@ -43,6 +43,11 @@ echo "DECLINED_TRACE=$DTID" > "$EVIDENCE_DIR/declined.txt"
 curl -s -o "$EVIDENCE_DIR/all_logs.json"      "http://localhost:19191/api/v1/logs?start=${S}&end=${E}"
 curl -s -o "$EVIDENCE_DIR/bc_declined.json"   "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&body_contains=declined"
 curl -s -o "$EVIDENCE_DIR/bc_capital.json"    "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&body_contains=Declined"
+# body_regex with the (?i) flag is what the on-screen search box ACTUALLY issues
+# (ADR-0056) for its case-insensitive UX — verify the real backend honours it,
+# capital query against a lowercase body, so the view is not a mocked-only green.
+curl -s -o "$EVIDENCE_DIR/rx_lower.json"   "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&body_regex=%28%3Fi%29declined"
+curl -s -o "$EVIDENCE_DIR/rx_capital.json" "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&body_regex=%28%3Fi%29DECLINED"
 curl -s -o "$EVIDENCE_DIR/sev_error.json"     "http://localhost:19191/api/v1/logs?start=${S}&end=${E}&min_severity=error"
 curl -s -o "$EVIDENCE_DIR/pivot_withlogs.json" "http://localhost:19192/api/v1/traces/with_logs?trace_id=${DTID}"
 
@@ -71,10 +76,18 @@ if not bc[0].get("trace_id"):
 if bc[0].get("trace_id") != dtid:
     fail("the matched declined log's trace_id %r != the emitter's declined trace %r" % (bc[0].get("trace_id"), dtid))
 
-# CASE-SENSITIVE (grounded: capital 'Declined' must not match a lowercase body).
+# CASE-SENSITIVE substring (body_contains): capital 'Declined' must not match.
 cap = load("bc_capital.json")
 if len(cap) != 0:
     fail("body_contains is not case-sensitive as documented — 'Declined' matched %d (expected 0)" % (len(cap),))
+
+# body_regex (?i) — what the on-screen search ACTUALLY issues for case-insensitive
+# UX: capital AND lowercase must each find the one lowercase-bodied declined log.
+rxl = load("rx_lower.json"); rxc = load("rx_capital.json")
+if not (len(rxl) == 1 and is_decl(rxl[0])):
+    fail("body_regex=(?i)declined did not return the one declined log (got %d) — the case-insensitive search the view issues does not work on the real backend" % (len(rxl),))
+if not (len(rxc) == 1 and is_decl(rxc[0])):
+    fail("body_regex=(?i)DECLINED (capital) did not find the lowercase-bodied declined log (got %d) — the view's case-insensitive search would silently empty on a capital query on the REAL backend (mocked-e2e-only green)" % (len(rxc),))
 
 # SEVERITY floor discriminates the error out of the info noise.
 sev = load("sev_error.json")
@@ -90,5 +103,5 @@ if not es:
 if not any(is_decl(l) for l in logs):
     fail("pivoting on the declined log's trace shows no cause log (WHY) — the pivot data is incomplete")
 
-print("LOGSEARCH satisfied — searching logs by text and severity discriminates the failure out of noise, and the match pivots: %d logs in window, exactly 1 declined; body_contains=declined -> that one log only (carrying its trace_id, %s), case-sensitive ('Declined' -> 0); min_severity=error -> the one error out of the info noise; and the matched log's trace resolves to WHERE (an Error span) + WHY (the cause log). The on-screen Logs view + pivot rest on this; her cold run is the gate." % (len(alll), dtid))
+print("LOGSEARCH satisfied — log search discriminates the failure out of noise and pivots: %d logs, exactly 1 declined; body_contains=declined -> that one (with trace_id %s), case-sensitive ('Declined'->0); body_regex=(?i)declined AND (?i)DECLINED each -> that one (the CASE-INSENSITIVE search the view issues, verified on the REAL backend, not mocked); min_severity=error -> the one error out of INFO noise; the matched log's trace resolves to WHERE + WHY. The on-screen Logs view + pivot rest on this; her cold run is the gate." % (len(alll), dtid))
 PY
