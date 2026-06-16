@@ -1,0 +1,1 @@
+200200FAIL: attr_key=customer.id&attr_value=bea-test returned customers ['alice', 'bea-test', 'bob', 'carol', 'dave'], expected only bea-test — it also returned other customers ['alice', 'bob', 'carol', 'dave'], so it does not discriminate (filter ignored?)
