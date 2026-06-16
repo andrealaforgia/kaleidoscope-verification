@@ -31,7 +31,12 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.trace import Status, StatusCode
 
 ENDPOINT = os.environ["OTEL_HTTP_ENDPOINT"].rstrip("/")
-SERVICE = os.environ.get("NOISY_SERVICE", "kaleidoscope-demo")
+# IMPORTANT: NOT "kaleidoscope-demo" — the runtime's demo overlay (ADR-0079, now
+# default-on in the binary) SYNTHESISES extra demo traces/logs for service.name
+# "kaleidoscope-demo", which would inject a SECOND declined record and contaminate
+# the discrimination test. Use a non-demo service so the overlay passes through and
+# the noisy mix is exactly what this emitter produces (one declined = bea-test).
+SERVICE = os.environ.get("NOISY_SERVICE", "bea-shop")
 
 _captured = []
 
