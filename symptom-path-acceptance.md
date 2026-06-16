@@ -51,18 +51,28 @@ Delivery's Playwright e2e on an ISOLATED/ephemeral stack (never the managed
 instance) is the programmatic backup. The data substrate above is "search + pivot
 data ready", never "the view is done".
 
-## Genuine ambiguities flagged to the PO (proposed defaults; confirm before build)
+## Ambiguities — RESOLVED by the PO (2026-06-16)
 
-1. Text-match semantics — assumed CASE-INSENSITIVE SUBSTRING ("declined" matches
-   "checkout failed: card declined"). If it should be token/full-text or
-   case-sensitive, the noise must be designed to match; confirm.
-2. Severity scheme — assumed the declined cause log is emitted at ERROR severity
-   and the noise mostly below it, so severity=error discriminates; and the filter
-   is "this severity or higher". If the cause log is not ERROR-severity, only the
-   text search discriminates. Confirm the severity values and exact-vs-minimum.
-3. Noise floor for the bundled demo — assumed a realistic floor (>= ~12 logs,
-   >= 3 customers, >= 2 request types, mostly non-error, EXACTLY one "declined").
-   Confirm if she wants a specific shape; otherwise I proceed with that floor.
+1. Text match — CASE-INSENSITIVE from the user's point of view: typing "declined"
+   OR "Declined" both find "checkout failed: card declined". IMPORTANT: the backend
+   `body_contains` is CASE-SENSITIVE (verified — "Declined" -> 0, LOGSEARCH). So the
+   ON-SCREEN search box MUST normalise case (client lowercase or equivalent) so a
+   case mismatch does NOT silently return empty — that empty-looks-like-worked trap
+   is explicitly in scope to avoid. Acceptance: in her cold run, "Declined" (capital)
+   finds the declined log. If case-insensitive proves non-trivial, flag it — it
+   becomes a fast-follow, but the target is case-insensitive.
+2. Severity — "this level or higher" floor; the declined cause is ERROR, so
+   severity=error discriminates. Accepted.
+3. Combined text+severity — NOT this iteration: text-alone OR severity-alone each
+   suffices for her run. Do not build the combined "errors containing declined"
+   query (deferred to broader filter ergonomics).
+4. Demo noise floor — accepted: about a dozen logs across >= 3 customers and >= 2
+   request types, mostly non-error, EXACTLY one "declined" (the noisy emitter
+   already meets this).
+
+Pre-cold-run: the bundled demo must be RE-SEEDED fresh with the noisy log set
+before her symptom-path cold run (the managed demo has aged out). Tell the PO when
+the view is live AND freshly seeded; her cold run is the gate.
 
 ## Then (identifier path, fast-follow this iteration)
 
