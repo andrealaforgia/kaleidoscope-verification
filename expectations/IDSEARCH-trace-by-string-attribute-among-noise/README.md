@@ -26,11 +26,13 @@ customers: alice/bob/carol/dave/bea-test):
 
 ## Verification
 
-- Status: `broken` (RED-grounded; flips GREEN when the attribute filter is built).
-- Grounded RED: 2026-06-16 at the current HEAD on a fresh build. The attr filter is
-  not yet built — it is ignored, so the query returns ALL five customers' traces,
-  not just bea-test's (and key/value-alone return 200, not 400). Flips GREEN when
-  the filter discriminates and the both-or-neither edge holds.
+- Status: `satisfied` at `0e97db5` on a fresh build.
+- Grounded RED first: 2026-06-16 at the prior HEAD — the attr filter was ignored,
+  returning ALL five customers' traces (key/value-alone returned 200 not 400).
+- Flipped GREEN at `0e97db5`: attr_key=customer.id&attr_value=bea-test returns ONLY
+  bea-test's traces (excluding the other four); composed with error=true it narrows
+  to her ONE failed checkout, which pivots to WHERE (Error span) + WHY (cause log);
+  attr_key-alone or attr_value-alone -> 400 (both-or-neither). Transition-proof.
 - Method: `.no-compose`; builds the runtime from the HEAD snapshot, runs it
   overlay-OFF (so the default-on demo overlay injects nothing), drives the noisy
   emitter on a NON-demo service, and exercises the attribute filter + edges.

@@ -40,8 +40,14 @@ docker run --rm --network "$NET" -v "$EVIDENCE_DIR/noisy_app.py:/noisy_app.py:ro
 sleep 2
 S=$((RNOW-300)); E=$(( $(date -u +%s) + 120 ))
 B="http://localhost:19292/api/v1/traces?service=bea-shop&start=${S}&end=${E}"
-curl -s -o "$EVIDENCE_DIR/all.json"    "${B}"
-curl -s -o "$EVIDENCE_DIR/byattr.json" "${B}&attr_key=customer.id&attr_value=bea-test"
+DTID=$(grep -o "NOISY_REPORT=.*" "$EVIDENCE_DIR/noisy.out" | sed "s/NOISY_REPORT=//" | python3 -c "import sys,json;print(json.load(sys.stdin)['declined_trace'])")
+echo "DECLINED_TRACE=$DTID" > "$EVIDENCE_DIR/declined.txt"
+curl -s -o "$EVIDENCE_DIR/all.json"      "${B}"
+curl -s -o "$EVIDENCE_DIR/byattr.json"   "${B}&attr_key=customer.id&attr_value=bea-test"
+# compose with error=true (AND): her id + failures -> her ONE failed checkout
+curl -s -o "$EVIDENCE_DIR/byattr_err.json" "${B}&attr_key=customer.id&attr_value=bea-test&error=true"
+# pivot: her failed trace resolves to where->why
+curl -s -o "$EVIDENCE_DIR/pivot.json"    "http://localhost:19292/api/v1/traces/with_logs?trace_id=${DTID}"
 curl -s -o /dev/null -w '%{http_code}' "${B}&attr_key=customer.id" > "$EVIDENCE_DIR/key_only.code"
 curl -s -o /dev/null -w '%{http_code}' "${B}&attr_value=bea-test"  > "$EVIDENCE_DIR/val_only.code"
 
@@ -78,5 +84,20 @@ if ko != "400":
 if vo != "400":
     fail("attr_value without attr_key returned %s, expected 400 (both-or-neither)" % (vo,))
 
-print("IDSEARCH satisfied — trace search by a string attribute discriminates one customer out of noise: %d distinct customers in the window, attr_key=customer.id&attr_value=bea-test returns ONLY bea-test's traces (excluding %s); a key or value alone -> 400. The on-screen identifier search + pivot rest on this; her cold run is the gate." % (len(ac), sorted(ac - {"bea-test"})))
+# COMPOSE with error=true (AND) — her id + failures -> her ONE failed checkout.
+dtid = open(evid + "/declined.txt").read().split("=")[1].strip()
+be = load("byattr_err.json")
+be_ids = {s.get("trace_id") for s in be}
+if be_ids != {dtid}:
+    fail("attr_value=bea-test composed with error=true returned %r, expected only her failed checkout %s (the AND of id + error)" % (sorted(be_ids), dtid))
+
+# PIVOT — her failed trace resolves to WHERE + WHY.
+o = json.load(open(evid + "/pivot.json"))
+spans = o.get("spans") or []; logs = o.get("logs") or []
+if not any(str((s.get("status") or {}).get("code","")).lower() == "error" for s in spans):
+    fail("pivoting on bea-test's failed trace shows no Error span (WHERE)")
+if not any("declined" in str(l.get("body","")).lower() for l in logs):
+    fail("pivoting on bea-test's failed trace shows no cause log (WHY)")
+
+print("IDSEARCH satisfied — trace search by a string attribute finds one customer's failure out of noise: %d distinct customers, attr_key=customer.id&attr_value=bea-test returns ONLY bea-test's traces (excluding %s); composed with error=true it narrows to her ONE failed checkout (%s), which pivots to WHERE (Error span) + WHY (cause log); a key or value alone -> 400. The on-screen identifier search + pivot rest on this; her cold run is the gate." % (len(ac), sorted(ac - {"bea-test"}), dtid))
 PY
