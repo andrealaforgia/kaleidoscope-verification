@@ -1,0 +1,1 @@
+NOISY_REPORT={"declined_trace": "0c49b573f01e41deb23354e24296dbe1", "declined_customer": "bea-test", "service": "bea-shop", "customers": ["alice", "bob", "carol", "dave", "bea-test"], "types": ["GET /api/v1/products", "GET /api/v1/cart", "POST /api/v1/checkout", "GET /api/v1/search"], "total_requests": 12, "declined_count": 1}
