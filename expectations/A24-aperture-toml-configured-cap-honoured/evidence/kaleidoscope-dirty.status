@@ -1,1 +1,7 @@
-?? docs/feature/aperture-tls-fail-closed-v0/
+ M Cargo.lock
+ M crates/kaleidoscope-demo-overlay/Cargo.toml
+ M crates/kaleidoscope-demo-overlay/src/lib.rs
+ M crates/kaleidoscope-demo-overlay/src/trace.rs
+?? crates/kaleidoscope-demo-overlay/src/identity.rs
+?? crates/kaleidoscope-demo-overlay/src/log.rs
+?? crates/kaleidoscope-demo-overlay/src/metric.rs

@@ -67,3 +67,24 @@ DEMOCAUSE single-copy), relocated to the synthesis/seed boundary. When this is a
 goal, lead with always-current + no-accumulation + these two duplication cases +
 the coherent story + real-data pass-through; the Customer's cold run stays the
 gate for anything she sees on screen.
+
+## SOURCE-CONFIRMED at slice A (4c070ca) — risk is real at code level
+
+Slice A landed: `crates/kaleidoscope-demo-overlay` (trace half only). NOTE it is
+the crate ALONE — NOT yet wired into `kaleidoscope-runtime` (the commit touches no
+runtime composition root), so there is NO observable HTTP surface yet; it's library
+code with unit tests. Black-box verification waits for the wiring slice. Holding —
+not flagging as a defect (premature, partial slice, pre-goal).
+
+The merge is a BLIND MERGE with no dedup against stored demo records
+(`crates/kaleidoscope-demo-overlay/src/trace.rs`):
+- `get_trace`: `let mut spans = self.inner.get_trace(...)?; spans.push(synthesize_span(...))`
+  — appends the synthesised span onto whatever the store already holds for that id.
+- `query`: `let mut spans = self.inner.query(...)?; spans.extend(synthesize_all(...).filter(in range))`
+  — extends the store's results with all synthesised demo spans.
+So if the inner store already contains the real demo seed for those ids (the
+CURRENT managed instance does; or after `make demo`), the demo doubles. Steady
+state (empty store + overlay) is clean — the unit tests use an empty inner.
+WHEN WIRED: verify the cutover on an instance that held a real seed does not double
+the demo (seed cleared at cutover, or overlay dedups), plus the always-current /
+no-accumulation / coherent-story / pass-through acceptance above.

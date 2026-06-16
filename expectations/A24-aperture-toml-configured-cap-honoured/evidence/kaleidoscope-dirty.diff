@@ -1,0 +1,202 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 513c0ab..28c691c 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1152,6 +1152,8 @@ name = "kaleidoscope-demo-overlay"
+ version = "0.1.0"
+ dependencies = [
+  "aegis",
++ "lumen",
++ "pulse",
+  "ray",
+ ]
+ 
+diff --git a/crates/kaleidoscope-demo-overlay/Cargo.toml b/crates/kaleidoscope-demo-overlay/Cargo.toml
+index 2aacba6..8d2e67f 100644
+--- a/crates/kaleidoscope-demo-overlay/Cargo.toml
++++ b/crates/kaleidoscope-demo-overlay/Cargo.toml
+@@ -21,6 +21,12 @@ path = "src/lib.rs"
+ # synthesises. The overlay reuses ray::{TraceStore, Span, ...} verbatim; it adds
+ # no store capability and touches no ingest/WAL/snapshot code.
+ ray = { path = "../ray", version = "0.1.0" }
++# The log-store read trait + OTLP-shaped log types the log overlay (slice B)
++# decorates and synthesises. Read-side only; no ingest/WAL/snapshot code.
++lumen = { path = "../lumen", version = "0.1.0" }
++# The metric-store read trait + OTLP-shaped metric types the metric overlay
++# (slice C) decorates and synthesises. Read-side only; no store-core code.
++pulse = { path = "../pulse", version = "0.1.0" }
+ # `TenantId` — the demo is scoped to the demo service identity under the single
+ # local tenant; the read methods key on `aegis::TenantId` exactly as the trait does.
+ aegis = { path = "../aegis", version = "0.1.0" }
+diff --git a/crates/kaleidoscope-demo-overlay/src/lib.rs b/crates/kaleidoscope-demo-overlay/src/lib.rs
+index acaaf4e..ea61286 100644
+--- a/crates/kaleidoscope-demo-overlay/src/lib.rs
++++ b/crates/kaleidoscope-demo-overlay/src/lib.rs
+@@ -26,8 +26,13 @@
+ //! has **no write path**, so it cannot physically reach the durable stores.
+ //!
+ //! Slice A ships the **trace** half: [`DemoTraceOverlay`] over ray's
+-//! [`ray::TraceStore`]. The log and metric overlays (slices B/C) reuse the same
+-//! [`Clock`] seam.
++//! [`ray::TraceStore`]. Slice B adds the **log** half: [`DemoLogOverlay`] over
++//! lumen's [`lumen::LogStore`]. Slice C adds the **metric** half:
++//! [`DemoMetricOverlay`] over pulse's [`pulse::MetricStore`]. All three reuse the
++//! same [`Clock`] seam and the same demo identity (the log overlay's cause log
++//! carries the IDENTICAL trace id + failed-checkout error span id the trace
++//! overlay synthesises, so `with_logs` correlates the failing span with its
++//! cause log).
+ //!
+ //! Determinism: time enters through the injected [`Clock`] seam, never through
+ //! ambient `SystemTime`, so synthesis is fully testable.
+@@ -35,7 +40,87 @@
+ #![forbid(unsafe_code)]
+ 
+ mod clock;
++mod identity;
++mod log;
++mod metric;
+ mod trace;
+ 
+ pub use clock::{Clock, SystemClock};
++pub use log::DemoLogOverlay;
++pub use metric::DemoMetricOverlay;
+ pub use trace::{DemoTraceOverlay, DEMO_SERVICE_NAME, DEMO_TENANT};
++
++#[cfg(test)]
++mod cross_overlay_coherence {
++    //! The demo trace overlay and the demo log overlay must agree on the demo
++    //! identity: the cause log the log overlay synthesises must carry the SAME
++    //! trace id AND span id as the failed-checkout ERROR span the trace overlay
++    //! synthesises. This is what lets the linked `with_logs` view (logs filtered
++    //! by trace id, attached to a span by span id) correlate the failing span
++    //! with its cause log. This test reads through BOTH overlays' driving ports
++    //! and asserts the ids line up — purely behavioural, no constant peeking.
++
++    use aegis::TenantId;
++
++    use crate::{Clock, DemoLogOverlay, DemoTraceOverlay, DEMO_SERVICE_NAME, DEMO_TENANT};
++
++    const NOW: u64 = 1_700_000_000_000_000_000;
++
++    struct FixedClock {
++        now_unix_nano: u64,
++    }
++
++    impl Clock for FixedClock {
++        fn now_unix_nano(&self) -> u64 {
++            self.now_unix_nano
++        }
++    }
++
++    fn acme() -> TenantId {
++        TenantId(DEMO_TENANT.to_string())
++    }
++
++    #[test]
++    fn cause_log_trace_id_and_span_id_match_the_failed_checkout_error_span() {
++        // Read the failed-checkout ERROR span through the trace overlay.
++        let trace_overlay = DemoTraceOverlay::new(
++            ray::InMemoryTraceStore::new(Box::new(ray::NoopRecorder)),
++            FixedClock { now_unix_nano: NOW },
++        );
++        let spans = ray::TraceStore::query(
++            &trace_overlay,
++            &acme(),
++            &ray::ServiceName::new(DEMO_SERVICE_NAME),
++            ray::TimeRange::all(),
++        )
++        .expect("trace overlay demo query succeeds");
++        let error_span = spans
++            .iter()
++            .find(|span| span.status.code == ray::StatusCode::Error)
++            .expect("the failed-checkout error span is present");
++
++        // Read the cause log through the log overlay (the by-trace_id read path
++        // is `query(tenant, all)` then a trace_id filter).
++        let log_overlay = DemoLogOverlay::new(
++            lumen::InMemoryLogStore::new(Box::new(lumen::NoopRecorder)),
++            FixedClock { now_unix_nano: NOW },
++        );
++        let records = lumen::LogStore::query(&log_overlay, &acme(), lumen::TimeRange::all())
++            .expect("log overlay demo query succeeds");
++        let cause_log = records
++            .iter()
++            .find(|record| record.trace_id == Some(error_span.trace_id.0))
++            .expect("a cause log carrying the failed-checkout trace id is present");
++
++        assert_eq!(
++            cause_log.trace_id,
++            Some(error_span.trace_id.0),
++            "the cause log carries the failed-checkout trace id (with_logs filters on this)"
++        );
++        assert_eq!(
++            cause_log.span_id,
++            Some(error_span.span_id.0),
++            "the cause log carries the failed-checkout ERROR span id (with_logs attaches on this)"
++        );
++    }
++}
+diff --git a/crates/kaleidoscope-demo-overlay/src/trace.rs b/crates/kaleidoscope-demo-overlay/src/trace.rs
+index d889b27..a85ce7d 100644
+--- a/crates/kaleidoscope-demo-overlay/src/trace.rs
++++ b/crates/kaleidoscope-demo-overlay/src/trace.rs
+@@ -33,21 +33,15 @@ use ray::{
+ };
+ 
+ use crate::clock::{Clock, SystemClock};
++use crate::identity::{
++    is_demo_tenant, FAILED_CHECKOUT_ERROR_MESSAGE, FAILED_CHECKOUT_SPAN_ID,
++    FAILED_CHECKOUT_TRACE_ID,
++};
+ 
+-/// The single local tenant the managed instance runs under (W3, ADR-0077). The
+-/// demo is scoped by SERVICE identity within this tenant, not by a separate
+-/// tenant (the auth-off read path is pinned to one query tenant; ADR-0078/0079).
+-pub const DEMO_TENANT: &str = "acme";
+-
+-/// The `service.name` the demo telemetry is filed under (matches the
+-/// `telemetrygen` seed's `DEFAULT_SERVICE_NAME`). The traces `service` query
+-/// parameter must equal this for synthesis to engage.
+-pub const DEMO_SERVICE_NAME: &str = "kaleidoscope-demo";
+-
+-/// The human-readable Error status message on the failed-checkout demo span —
+-/// the WHERE of the failure, reused verbatim from the seed vocabulary
+-/// (ADR-0077). A by-id read shows the failing span marked failed with this.
+-const FAILED_CHECKOUT_ERROR_MESSAGE: &str = "checkout failed: card declined";
++// The demo identity is shared across every overlay (slices A/B/C); re-export the
++// trace overlay's slice of it from here so the crate's established public path
++// (`kaleidoscope_demo_overlay::{DEMO_TENANT, DEMO_SERVICE_NAME}`) is unchanged.
++pub use crate::identity::{DEMO_SERVICE_NAME, DEMO_TENANT};
+ 
+ /// One synthesised demo span's fixed identity + now-relative time shape. The
+ /// trace/span ids and names are the ADR-0077 sample vocabulary, reused verbatim
+@@ -75,12 +69,11 @@ struct DemoSpanSpec {
+ /// any reasonable rolling window.
+ const DEMO_SPANS: [DemoSpanSpec; 4] = [
+     // The failed checkout — the pinned demo trace id `4bf92f…`, status Error.
++    // Trace id + error span id come from the SHARED demo identity so the log
++    // overlay's cause log correlates against the identical pair.
+     DemoSpanSpec {
+-        trace_id: TraceId([
+-            0x4b, 0xf9, 0x2f, 0x35, 0x77, 0xb3, 0x4d, 0xa6, 0xa3, 0xce, 0x92, 0x9d, 0x0e, 0x0e,
+-            0x47, 0x36,
+-        ]),
+-        span_id: SpanId([0x00, 0xf0, 0x67, 0xaa, 0x0b, 0xa9, 0x02, 0xb8]),
++        trace_id: FAILED_CHECKOUT_TRACE_ID,
++        span_id: FAILED_CHECKOUT_SPAN_ID,
+         parent_span_id: SpanId([0x00, 0xf0, 0x67, 0xaa, 0x0b, 0xa9, 0x02, 0xb7]),
+         name: "POST /api/v1/checkout",
+         status_code: StatusCode::Error,
+@@ -151,12 +144,6 @@ impl<S, C> DemoTraceOverlay<S, C> {
+     }
+ }
+ 
+-/// True when `tenant` is the demo tenant — the cheap half of the O(1) demo
+-/// identity short-circuit.
+-fn is_demo_tenant(tenant: &TenantId) -> bool {
+-    tenant.0 == DEMO_TENANT
+-}
+-
+ /// True when `service` is the demo service.
+ fn is_demo_service(service: &ServiceName) -> bool {
+     service.as_str() == DEMO_SERVICE_NAME
