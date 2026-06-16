@@ -55,3 +55,21 @@ on an ISOLATED/ephemeral stack is the programmatic backup. The data substrate is
 Shared with the symptom path: the same noisy emitter (`_emitters/noisy_app.py`)
 drives both; her cold runs are the gate for both; the on-screen render is never
 claimed from the data substrate.
+
+## GROUNDED 2026-06-16 — the trace attribute-search is NET-NEW (unlike the log search)
+
+Probed on a fresh build with the noisy emitter (12 spans across 5 customers:
+alice/bob/carol/dave/bea-test). Every attribute-filter param variant I tried
+(`customer.id=bea-test`, `attr.customer.id=...`, `attribute.customer.id=...`,
+`customer_id=...`) returned 200 with ALL five customers' traces — the filter is
+IGNORED today. So trace attribute-search genuinely does not exist yet (contrast the
+log search, which already discriminates — see LOGSEARCH). This is real build work
+this iteration.
+
+I have NOT written a runner yet: the query param name is delivery's to choose, and
+grounding against a guessed name would be a false RED. When delivery names the
+attribute-filter surface, I RED-ground IDSEARCH with the noisy emitter ready:
+`traces?service=bea-shop&<attr-filter for customer.id=bea-test>` must return ONLY
+bea-test's traces, excluding the other four customers (transition-proof — RED now
+since the filter is ignored). Plus: the type-fidelity caveat (numeric attributes
+come back as strings) means STRING attribute only this iteration.
