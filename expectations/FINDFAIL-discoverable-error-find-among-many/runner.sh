@@ -32,7 +32,9 @@ NET="findfail-net-$$"; RT="findfail-rt-$$"
 cleanup() { docker stop "$RT" >/dev/null 2>&1 || true; docker rm "$RT" >/dev/null 2>&1 || true; docker network rm "$NET" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 docker network create "$NET" >/dev/null
-docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e RUST_LOG=warn \
+# KALEIDOSCOPE_DEMO_OVERLAY=0 turns the default-on always-current overlay OFF so this
+# expectation verifies the telemetrygen SEED in isolation (else seed + overlay double).
+docker run -d --name "$RT" --network "$NET" -e KALEIDOSCOPE_TENANT=acme -e KALEIDOSCOPE_DEMO_OVERLAY=0 -e RUST_LOG=warn \
     -p 19390:9090 -p 19391:9091 -p 19392:9092 kx-runtime:findfail > /dev/null
 RNOW=$(date -u +%s)
 for _ in $(seq 1 40); do
