@@ -1,0 +1,1 @@
+NUM_REPORT={"service": "bea-shop", "amounts": [9, 90, 100, 250, 1500], "by_amount": {"9": "65f51cea17147ace721107036becfaa9", "90": "caa1fb120b61e84036ef2e66578b2a16", "100": "abaaaf1f03cea41852be88ba48929364", "250": "cb59f925fd7b44e9b2a276b082207dc6", "1500": "efa8e90c47fbf254f3a03111a082244c"}}
