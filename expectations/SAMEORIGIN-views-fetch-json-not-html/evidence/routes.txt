@@ -1,5 +1,5 @@
 metrics|application/json|{"data":{"result":[{"metric":{"__name__"
-logs||
-logs_rx||
+logs|application/json|[{"observed_time_unix_nano":178168613821
+logs_rx|application/json|[{"observed_time_unix_nano":178168617822
 traces|application/json|[{"trace_id":"c3c3c3c3c3c3c3c3c3c3c3c3c3
 with_logs|application/json|{"trace_id":"4bf92f3577b34da6a3ce929d0e0

@@ -30,15 +30,18 @@ route is simply not served same-origin) is the bug the view chokes on.
 
 ## Verification
 
-- Status: `broken` (RED-grounded; flips GREEN when the logs routes are merged
-  same-origin on :9090).
-- Grounded RED: 2026-06-16 at the current HEAD on a fresh build. metrics, traces
-  and with_logs return JSON on :9090; the LOGS routes return non-JSON (here empty —
-  the runtime image does not serve the SPA catch-all, so it surfaces as an unserved
-  route rather than the HTML symptom). On the live deployed instance the same gap
-  surfaces as the SPA HTML page (content-type text/html), which is what the Logs
-  view actually received ("Unexpected token '<'"). Same root cause: the logs routes
-  were not extended into the :9090 same-origin merge that traces/metrics have.
+- Status: `satisfied` at `0ee0aeb` on a fresh build AND confirmed live on the
+  redeployed cutover instance.
+- Grounded RED first: 2026-06-16 — metrics/traces/with_logs returned JSON on :9090
+  but the LOGS routes returned non-JSON (empty on the runtime image; SPA HTML on
+  the deployed instance — what the Logs view received, "Unexpected token '<'").
+- Flipped GREEN: `0ee0aeb` merged the log query routes onto the :9090 metrics+SPA
+  origin (mirroring the trace merge, ADR-0078). Build: all five view routes return
+  application/json on :9090. Live on the cutover instance: :9090/api/v1/logs and
+  :9090/api/v1/logs?body_regex=(?i)DECLINED return application/json (the one declined
+  log, carrying its trace_id), min_severity=error returns the one, and the pivot
+  with_logs returns WHERE+WHY — the whole symptom journey works same-origin. Delivery
+  also added their own runtime test (slice_08_spa_origin_log_routes). Transition-proof.
 - Honest scope: a fresh runtime image reproduces the ROOT CAUSE (logs not merged
   on :9090) as empty/non-JSON; the exact HTML symptom needs the served SPA (the
   deployed stack), which the live instance shows. Both are the same gap; this
