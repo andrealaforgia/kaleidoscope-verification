@@ -1,0 +1,1 @@
+FAIL: attr_gte=100 did not filter NUMERICALLY: returned amounts [], expected exactly [100.0, 250.0, 250.5, 500.0] (excluding [9.0, 90.0, 99.99]). leaked-below=[] missing=[100.0, 250.0, 250.5, 500.0]
