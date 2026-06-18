@@ -1,1 +1,1 @@
-FAIL: payment.amount comes back as a STRING, not a number: ["'100'", "'1500'", "'250'", "'9'", "'90'"]. The platform coerces numeric attribute values to strings; a numeric >= comparison cannot be genuine until this is fixed.
+FAIL: payment.amount comes back as a STRING, not a number: ["'100'", "'250'", "'250.5'", "'500'", "'9'", "'90'"]. The platform coerces numeric attribute values to strings; a numeric >= comparison cannot be genuine until this is fixed.

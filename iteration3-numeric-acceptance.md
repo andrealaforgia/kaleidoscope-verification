@@ -3,12 +3,20 @@
 Correctness-first. TRACE attributes only this iteration (logs/metrics typing
 deferred). The done-gate is the Customer's cold browser run on her noisy numeric mix.
 
-## Done-gate (Customer cold run, her own noisy mix)
+## Done-gate (Customer cold run, her own noisy mix) — FINALISED 2026-06-18
 
-Checkouts carry payment.amount across a digit-boundary spread (9, 90, 100, 250,
-and a couple more) as REAL NUMERIC attributes; on the Traces screen,
-payment.amount >= 100 returns exactly {100, 250, ...} and EXCLUDES {9, 90}, and
-the values render as numbers (250, not "250").
+Checkouts carry payment.amount across the spread 9, 90, 99.99, 100, 250, 250.50,
+500 as REAL NUMERIC attributes (INTS and FLOATS). On the Traces screen,
+payment.amount >= 100 returns exactly {100, 250, 250.50, 500} and EXCLUDES
+{9, 90, 99.99}, and the values render as numbers (250, and 250.50 as 250.5),
+not strings.
+
+## Resolved (PO + Customer, 2026-06-18)
+
+- Operator: ">=", INCLUSIVE — the threshold value is included (>=100 returns 100).
+- Floats: IN SCOPE — payment.amount is money; 250.50 -> 250.5 (a number), not
+  "250.50"; integer-only would re-open next week.
+- Threshold query route/param: delivery's to name (THRESHOLD RED-grounds when named).
 
 ## Two observable parts
 
@@ -24,13 +32,18 @@ the values render as numbers (250, not "250").
 
 ## The correctness discriminator (non-negotiable)
 
-The comparison must be NUMERIC, not a lexical string sort. A string sort ranks "9"
-and "90" ABOVE "100"/"250", so the digit-boundary spread is the real test: verify
-SPECIFICALLY that 9 and 90 are EXCLUDED by >=100 while 100 and 250 are INCLUDED.
-That working across the boundary IS the proof the value is numeric end to end
-(ingest -> query -> screen), not display-only. A green that only uses an
-all-same-digit-count spread (e.g. 100/200/300) would be a blind spot and must NOT
-be accepted.
+The comparison must be NUMERIC, not a lexical string sort. Two anti-lexical
+boundaries, both held hard:
+- DIGIT-COUNT: "9" and "90" sort ABOVE "100" as strings, so >=100 must EXCLUDE
+  9 and 90.
+- DECIMAL (the Customer's sharper probe): "99.99" sorts ABOVE "100" too (9 > 1),
+  so a string-comparison bug would wrongly INCLUDE 99.99 in >=100. Numeric must
+  EXCLUDE 99.99. And 250.50 must be INCLUDED and read as 250.5.
+Verify SPECIFICALLY that {9, 90, 99.99} are excluded by >=100 and {100, 250,
+250.50, 500} included. That, across both boundaries on ints AND floats, IS the
+proof the value is genuinely numeric end to end (ingest -> query -> screen), not
+display-only. A green WITHOUT 99.99 (or using an all-same-digit spread) is a blind
+spot and must NOT be accepted.
 
 ## What the verifier confirms (data substrate; ephemeral/isolated, read-only on live)
 

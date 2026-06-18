@@ -46,5 +46,11 @@ if not vals:
 stringy = [v for v in vals if not isinstance(v, (int, float)) or isinstance(v, bool)]
 if stringy:
     fail("payment.amount comes back as a STRING, not a number: %r. The platform coerces numeric attribute values to strings; a numeric >= comparison cannot be genuine until this is fixed." % (sorted(set(map(repr, stringy)))[:6],))
-print("FIDELITY satisfied — a numeric attribute stays numeric end to end: payment.amount values %r come back as JSON numbers (not strings), so a >= comparison can be genuinely numeric." % (sorted(set(vals)),))
+# FLOAT fidelity specifically: a decimal amount must round-trip as a number with its
+# decimal preserved (250.50 -> 250.5), not truncated to an int and not stringified.
+numeric = {float(v) for v in vals}
+for expect in (99.99, 250.5):
+    if expect not in numeric:
+        fail("the float amount %s did not round-trip as a number (got %r) — float fidelity is broken (truncated, rounded, or stringified)" % (expect, sorted(numeric)))
+print("FIDELITY satisfied — a numeric attribute stays numeric end to end, ints AND floats: payment.amount values %r come back as JSON numbers (99.99 and 250.5 with decimals preserved), not strings, so a >= comparison can be genuinely numeric." % (sorted(numeric),))
 PY

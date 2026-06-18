@@ -12,9 +12,16 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 
 ENDPOINT = os.environ["OTEL_HTTP_ENDPOINT"].rstrip("/")
 SERVICE = os.environ.get("NUM_SERVICE", "bea-shop")
-# digit-boundary spread: 9 and 90 are BELOW 100 but sort ABOVE "100"/"250" lexically,
-# so >=100 returning exactly {100,250,1500} and excluding {9,90} proves numeric, not string.
-AMOUNTS = [int(a) for a in os.environ.get("NUM_AMOUNTS", "9,90,100,250,1500").split(",")]
+# Finalised spread (PO + Customer, 2026-06-18), INTS and FLOATS:
+#   9, 90, 99.99, 100, 250, 250.50, 500
+# Anti-lexical boundaries that prove the comparison is genuinely numeric, not a
+# string sort: 9 and 90 sort ABOVE "100" (digit-count), and 99.99 sorts ABOVE "100"
+# too (9 > 1) — so >=100 must return exactly {100,250,250.50,500} and EXCLUDE
+# {9,90,99.99}. Floats must round-trip as numbers (250.50 -> 250.5), not strings.
+def _num(tok):
+    tok = tok.strip()
+    return float(tok) if "." in tok else int(tok)
+AMOUNTS = [_num(a) for a in os.environ.get("NUM_AMOUNTS", "9,90,99.99,100,250,250.50,500").split(",")]
 
 p = TracerProvider(resource=Resource.create({"service.name": SERVICE}))
 p.add_span_processor(SimpleSpanProcessor(OTLPSpanExporter(endpoint=ENDPOINT + "/v1/traces")))
